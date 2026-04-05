@@ -1,0 +1,11 @@
+class: ChildProfileOverview
+
+fields:
+  child: Child
+  activeClassroomId: int?
+  activeClassroomName: String?
+  guardianUserIds: List<int>
+  guardianDisplayNames: List<String>
+  documentsCount: int
+  reportsCount: int
+  lastHabitAt: DateTime?

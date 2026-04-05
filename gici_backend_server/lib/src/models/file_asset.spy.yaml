@@ -1,0 +1,33 @@
+# File asset metadata for stored files
+
+class: FileAsset
+
+table: file_asset
+
+fields:
+  organizationId: int
+  uploadedByUserId: int
+  fileName: String
+  originalName: String
+  mimeType: String
+  sizeBytes: int
+  storageProvider: String
+  storageBucket: String
+  storagePath: String
+  publicUrl: String?
+  thumbnailUrl: String?
+  fileType: String
+  isPublic: bool
+  expiresAt: DateTime?
+  createdAt: DateTime
+  updatedAt: DateTime
+  deletedAt: DateTime?
+
+indexes:
+  file_org_idx:
+    fields: organizationId
+  file_type_idx:
+    fields: fileType
+  file_uploader_idx:
+    fields: uploadedByUserId
+

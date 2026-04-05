@@ -1,0 +1,30 @@
+# Push notification device tokens
+
+class: PushDeviceToken
+
+table: push_device_token
+
+fields:
+  organizationId: int
+  userId: int
+  token: String
+  platform: String
+  deviceId: String?
+  deviceModel: String?
+  appVersion: String?
+  isActive: bool
+  lastUsedAt: DateTime
+  createdAt: DateTime
+  updatedAt: DateTime
+
+indexes:
+  push_org_idx:
+    fields: organizationId
+  push_user_idx:
+    fields: userId
+  push_token_idx:
+    fields: token
+    unique: true
+  push_user_platform_idx:
+    fields: userId, platform
+

@@ -1,0 +1,30 @@
+# Platform / Tenant Models
+# Organization is the root tenant entity
+
+class: Organization
+
+table: organization
+
+fields:
+  name: String
+  legalName: String?
+  slug: String
+  contactEmail: String
+  contactPhone: String?
+  address: String?
+  city: String?
+  postalCode: String?
+  country: String?
+  taxId: String?
+  status: String
+  createdAt: DateTime
+  updatedAt: DateTime
+  deletedAt: DateTime?
+
+indexes:
+  organization_slug_idx:
+    fields: slug
+    unique: true
+  organization_status_idx:
+    fields: status
+

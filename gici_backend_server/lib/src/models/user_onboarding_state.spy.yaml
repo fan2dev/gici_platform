@@ -1,0 +1,19 @@
+class: UserOnboardingState
+
+table: user_onboarding_state
+
+fields:
+  organizationId: int?
+  userId: int
+  introCompletedAt: DateTime?
+  termsAcceptedAt: DateTime?
+  completedAt: DateTime?
+  createdAt: DateTime
+  updatedAt: DateTime
+
+indexes:
+  onboarding_user_idx:
+    fields: userId
+    unique: true
+  onboarding_org_idx:
+    fields: organizationId

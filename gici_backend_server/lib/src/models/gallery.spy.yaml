@@ -1,0 +1,22 @@
+class: Gallery
+
+table: gallery
+
+fields:
+  organizationId: int
+  title: String
+  description: String?
+  audienceType: String
+  audienceClassroomId: int?
+  audienceChildId: int?
+  createdByUserId: int
+  isPublished: bool
+  createdAt: DateTime
+  updatedAt: DateTime
+  deletedAt: DateTime?
+
+indexes:
+  gallery_org_idx:
+    fields: organizationId
+  gallery_audience_idx:
+    fields: audienceType

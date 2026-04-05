@@ -1,0 +1,33 @@
+# Child entity representing enrolled children
+
+class: Child
+
+table: child
+
+fields:
+  organizationId: int
+  firstName: String
+  lastName: String
+  dateOfBirth: DateTime
+  gender: String?
+  photoUrl: String?
+  medicalNotes: String?
+  dietaryNotes: String?
+  allergies: String?
+  emergencyContactName: String?
+  emergencyContactPhone: String?
+  enrollmentDate: DateTime?
+  status: String
+  createdAt: DateTime
+  updatedAt: DateTime
+  deletedAt: DateTime?
+
+indexes:
+  child_org_idx:
+    fields: organizationId
+  child_status_idx:
+    fields: status
+  child_name_idx:
+    fields: lastName, firstName
+
+

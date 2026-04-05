@@ -1,0 +1,32 @@
+# Time tracking entry for staff check-in/check-out
+
+class: TimeEntry
+
+table: time_entry
+
+fields:
+  organizationId: int
+  userId: int
+  entryType: String
+  recordedAt: DateTime
+  parentEntryId: int?
+  correctionReason: String?
+  locationData: String?
+  deviceInfo: String?
+  notes: String?
+  isManualEntry: bool
+  createdByUserId: int
+  createdAt: DateTime
+
+indexes:
+  time_org_idx:
+    fields: organizationId
+  time_user_idx:
+    fields: userId
+  time_date_idx:
+    fields: recordedAt
+  time_user_date_idx:
+    fields: userId, recordedAt
+  time_parent_idx:
+    fields: parentEntryId
+

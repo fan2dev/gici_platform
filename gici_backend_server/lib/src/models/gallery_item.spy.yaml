@@ -1,0 +1,22 @@
+class: GalleryItem
+
+table: gallery_item
+
+fields:
+  organizationId: int
+  galleryId: int
+  fileAssetId: int
+  caption: String?
+  sortOrder: int
+  createdByUserId: int
+  createdAt: DateTime
+  updatedAt: DateTime
+  deletedAt: DateTime?
+
+indexes:
+  galleryitem_org_idx:
+    fields: organizationId
+  galleryitem_gallery_idx:
+    fields: galleryId
+  galleryitem_sort_idx:
+    fields: galleryId, sortOrder

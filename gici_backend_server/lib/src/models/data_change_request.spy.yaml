@@ -1,0 +1,28 @@
+class: DataChangeRequest
+
+table: data_change_request
+
+fields:
+  organizationId: int
+  requesterUserId: int
+  targetChildId: int?
+  requestType: String
+  requestPayload: String
+  status: String
+  resolutionNote: String?
+  reviewedByUserId: int?
+  reviewedAt: DateTime?
+  createdAt: DateTime
+  updatedAt: DateTime
+
+indexes:
+  dcr_org_idx:
+    fields: organizationId
+  dcr_requester_idx:
+    fields: requesterUserId
+  dcr_target_child_idx:
+    fields: targetChildId
+  dcr_status_idx:
+    fields: status
+  dcr_created_idx:
+    fields: createdAt

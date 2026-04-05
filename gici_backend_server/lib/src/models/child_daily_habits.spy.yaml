@@ -1,0 +1,8 @@
+class: ChildDailyHabits
+
+fields:
+  childId: int
+  day: DateTime
+  meals: List<MealEntry>
+  naps: List<NapEntry>
+  bowelMovements: List<BowelMovementEntry>

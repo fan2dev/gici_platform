@@ -1,0 +1,31 @@
+# Extended user information linked to Serverpod Auth
+
+class: AppUser
+
+table: app_user
+
+fields:
+  organizationId: int?
+  email: String
+  passwordHash: String
+  firstName: String
+  lastName: String
+  phone: String?
+  avatarUrl: String?
+  role: String
+  isActive: bool
+  emailVerified: bool
+  phoneVerified: bool
+  lastLoginAt: DateTime?
+  createdAt: DateTime
+  updatedAt: DateTime
+  deletedAt: DateTime?
+
+indexes:
+  appuser_email_idx:
+    fields: email
+    unique: true
+  appuser_org_idx:
+    fields: organizationId
+  appuser_role_idx:
+    fields: role

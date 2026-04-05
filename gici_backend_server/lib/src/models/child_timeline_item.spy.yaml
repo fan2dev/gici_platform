@@ -1,0 +1,10 @@
+class: ChildTimelineItem
+
+fields:
+  childId: int
+  eventAt: DateTime
+  eventType: String
+  title: String
+  description: String?
+  referenceType: String?
+  referenceId: int?

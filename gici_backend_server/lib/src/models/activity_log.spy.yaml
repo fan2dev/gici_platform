@@ -1,0 +1,30 @@
+# Activity log for audit trail
+
+class: ActivityLog
+
+table: activity_log
+
+fields:
+  organizationId: int
+  userId: int?
+  action: String
+  entityType: String?
+  entityId: int?
+  oldValues: String?
+  newValues: String?
+  ipAddress: String?
+  userAgent: String?
+  metadata: String?
+  createdAt: DateTime
+
+indexes:
+  log_org_idx:
+    fields: organizationId
+  log_user_idx:
+    fields: userId
+  log_action_idx:
+    fields: action
+  log_entity_idx:
+    fields: entityType, entityId
+  log_created_idx:
+    fields: createdAt

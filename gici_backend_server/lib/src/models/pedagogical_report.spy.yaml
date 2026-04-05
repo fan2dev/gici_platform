@@ -1,0 +1,28 @@
+class: PedagogicalReport
+
+table: pedagogical_report
+
+fields:
+  organizationId: int
+  childId: int
+  reportDate: DateTime
+  title: String
+  summary: String
+  body: String
+  status: String
+  visibility: String
+  createdByUserId: int
+  updatedByUserId: int?
+  createdAt: DateTime
+  updatedAt: DateTime
+  deletedAt: DateTime?
+
+indexes:
+  report_org_idx:
+    fields: organizationId
+  report_child_idx:
+    fields: childId
+  report_date_idx:
+    fields: reportDate
+  report_status_idx:
+    fields: status

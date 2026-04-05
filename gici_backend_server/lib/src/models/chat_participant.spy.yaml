@@ -1,0 +1,27 @@
+# Chat conversation participants
+
+class: ChatParticipant
+
+table: chat_participant
+
+fields:
+  organizationId: int
+  conversationId: int
+  userId: int
+  joinedAt: DateTime
+  lastReadMessageId: int?
+  lastReadAt: DateTime?
+  isActive: bool
+  createdAt: DateTime
+  updatedAt: DateTime
+
+indexes:
+  cp_org_idx:
+    fields: organizationId
+  cp_conversation_idx:
+    fields: conversationId
+  cp_user_idx:
+    fields: userId
+  cp_unique_participant:
+    fields: conversationId, userId
+    unique: true

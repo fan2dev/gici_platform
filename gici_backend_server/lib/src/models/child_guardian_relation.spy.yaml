@@ -1,0 +1,30 @@
+# Relationship between children and their guardians
+
+class: ChildGuardianRelation
+
+table: child_guardian_relation
+
+fields:
+  organizationId: int
+  childId: int
+  guardianUserId: int
+  relation: String
+  isPrimary: bool
+  canPickup: bool
+  canViewReports: bool
+  canViewPhotos: bool
+  emergencyContactOrder: int?
+  createdAt: DateTime
+  updatedAt: DateTime
+
+indexes:
+  cgr_org_idx:
+    fields: organizationId
+  cgr_child_idx:
+    fields: childId
+  cgr_guardian_idx:
+    fields: guardianUserId
+  cgr_unique_relation:
+    fields: childId, guardianUserId
+    unique: true
+

@@ -1,0 +1,28 @@
+# Organization Settings and Configuration
+
+class: OrganizationSettings
+
+table: organization_settings
+
+fields:
+  organizationId: int
+  defaultLanguage: String
+  timezone: String
+  dateFormat: String
+  timeFormat: String
+  workingHoursStart: String
+  workingHoursEnd: String
+  maxChildrenPerClassroom: int
+  earlyCheckInMinutes: int
+  lateCheckOutMinutes: int
+  guardianPhotoUploadEnabled: bool
+  chatEnabled: bool
+  pushNotificationsEnabled: bool
+  requireGuardianUploadApproval: bool
+  createdAt: DateTime
+  updatedAt: DateTime
+
+indexes:
+  settings_org_idx:
+    fields: organizationId
+    unique: true

@@ -1,0 +1,21 @@
+# Organization Branding and Visual Identity
+
+class: OrganizationBranding
+
+table: organization_branding
+
+fields:
+  organizationId: int
+  primaryColor: String?
+  secondaryColor: String?
+  logoUrl: String?
+  logoDarkUrl: String?
+  faviconUrl: String?
+  customCss: String?
+  createdAt: DateTime
+  updatedAt: DateTime
+
+indexes:
+  branding_org_idx:
+    fields: organizationId
+    unique: true

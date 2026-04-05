@@ -1,0 +1,23 @@
+class: ChildDocument
+
+table: child_document
+
+fields:
+  organizationId: int
+  childId: int
+  fileAssetId: int
+  title: String
+  description: String?
+  visibleToGuardians: bool
+  createdByUserId: int
+  createdAt: DateTime
+  updatedAt: DateTime
+  deletedAt: DateTime?
+
+indexes:
+  childdoc_org_idx:
+    fields: organizationId
+  childdoc_child_idx:
+    fields: childId
+  childdoc_file_idx:
+    fields: fileAssetId

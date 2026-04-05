@@ -1,0 +1,28 @@
+class: NotificationRecord
+
+table: notification_record
+
+fields:
+  organizationId: int
+  userId: int
+  title: String
+  body: String
+  category: String
+  targetScope: String
+  targetClassroomId: int?
+  targetChildId: int?
+  targetUserId: int?
+  createdByUserId: int
+  isRead: bool
+  readAt: DateTime?
+  createdAt: DateTime
+
+indexes:
+  notification_org_idx:
+    fields: organizationId
+  notification_user_idx:
+    fields: userId
+  notification_created_idx:
+    fields: createdAt
+  notification_scope_idx:
+    fields: targetScope

@@ -1,0 +1,23 @@
+class: MenuEntry
+
+table: menu_entry
+
+fields:
+  organizationId: int
+  menuDate: DateTime
+  mealType: String
+  title: String
+  description: String?
+  classroomId: int?
+  createdByUserId: int
+  createdAt: DateTime
+  updatedAt: DateTime
+  deletedAt: DateTime?
+
+indexes:
+  menu_org_idx:
+    fields: organizationId
+  menu_date_idx:
+    fields: menuDate
+  menu_org_date_idx:
+    fields: organizationId, menuDate

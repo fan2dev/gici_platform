@@ -1,0 +1,24 @@
+class: BowelMovementEntry
+
+table: bowel_movement_entry
+
+fields:
+  organizationId: int
+  childId: int
+  recordedByUserId: int
+  eventAt: DateTime
+  eventType: String
+  consistency: String?
+  notes: String?
+  createdAt: DateTime
+  updatedAt: DateTime
+
+indexes:
+  bowel_org_idx:
+    fields: organizationId
+  bowel_child_idx:
+    fields: childId
+  bowel_event_idx:
+    fields: eventAt
+  bowel_child_event_idx:
+    fields: childId, eventAt

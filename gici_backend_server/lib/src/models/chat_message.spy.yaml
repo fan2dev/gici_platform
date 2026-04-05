@@ -1,0 +1,27 @@
+# Chat message entity
+
+class: ChatMessage
+
+table: chat_message
+
+fields:
+  organizationId: int
+  conversationId: int
+  senderUserId: int
+  body: String
+  messageType: String
+  metadataJson: String?
+  deletedAt: DateTime?
+  sentAt: DateTime
+  createdAt: DateTime
+
+indexes:
+  msg_org_idx:
+    fields: organizationId
+  msg_conversation_idx:
+    fields: conversationId
+  msg_sender_idx:
+    fields: senderUserId
+  msg_sent_idx:
+    fields: sentAt
+

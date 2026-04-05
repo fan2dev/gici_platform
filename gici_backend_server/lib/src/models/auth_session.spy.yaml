@@ -1,0 +1,9 @@
+class: AuthSession
+
+fields:
+  appUserId: int
+  organizationId: int?
+  email: String
+  role: String
+  firstName: String
+  lastName: String

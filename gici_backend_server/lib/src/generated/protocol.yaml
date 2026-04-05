@@ -1,0 +1,87 @@
+auth:
+  - signInWithEmailPassword:
+  - me:
+bootstrap:
+  - seedDemoData:
+chat:
+  - listConversations:
+  - getConversation:
+  - createConversation:
+  - sendMessage:
+  - listMessages:
+  - markConversationRead:
+  - unreadCounts:
+child:
+  - listChildren:
+  - createChild:
+  - getChild:
+  - updateChild:
+  - getChildProfileOverview:
+childTimeline:
+  - getChildTimeline:
+classroom:
+  - listClassrooms:
+  - createClassroom:
+  - updateClassroom:
+  - assignChildToClassroom:
+  - listAssignments:
+dataChangeRequest:
+  - createRequest:
+  - myRequests:
+  - listRequestsForReview:
+  - getRequest:
+  - updateRequestStatus:
+document:
+  - listOrganizationDocuments:
+  - createOrganizationDocument:
+  - listChildDocuments:
+  - createChildDocument:
+  - resolveFileDownloadUrl:
+experience:
+  - getOnboardingState:
+  - completeOnboarding:
+  - getCenterInfo:
+  - listMenuEntries:
+  - getMenuEntry:
+  - createMenuEntry:
+  - updateMenuEntry:
+gallery:
+  - listGalleries:
+  - getGallery:
+  - createGallery:
+  - updateGallery:
+  - addGalleryItem:
+  - listGalleryItems:
+habit:
+  - listMealsByChild:
+  - createMealEntry:
+  - updateMealEntry:
+  - listNapsByChild:
+  - createNapEntry:
+  - updateNapEntry:
+  - listBowelMovementsByChild:
+  - createBowelMovementEntry:
+  - updateBowelMovementEntry:
+  - getChildDailyHabits:
+notification:
+  - registerDeviceToken:
+  - removeDeviceToken:
+  - myNotifications:
+  - markNotificationRead:
+  - createSegmentedNotification:
+organization:
+  - listOrganizations:
+  - getOrganization:
+  - createOrganization:
+pedagogicalReport:
+  - listReportsByChild:
+  - getReport:
+  - createReport:
+  - updateReport:
+timeTracking:
+  - checkIn:
+  - checkOut:
+  - myEntries:
+  - listEntries:
+  - getEntry:
+  - correctEntry:

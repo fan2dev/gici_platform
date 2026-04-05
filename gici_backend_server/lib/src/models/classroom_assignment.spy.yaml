@@ -1,0 +1,30 @@
+# Assignment of children to classrooms
+
+class: ClassroomAssignment
+
+table: classroom_assignment
+
+fields:
+  organizationId: int
+  classroomId: int
+  childId: int
+  assignedAt: DateTime
+  assignedByUserId: int?
+  withdrawnAt: DateTime?
+  withdrawnByUserId: int?
+  withdrawnReason: String?
+  status: String
+  createdAt: DateTime
+  updatedAt: DateTime
+
+indexes:
+  ca_org_idx:
+    fields: organizationId
+  ca_classroom_idx:
+    fields: classroomId
+  ca_child_idx:
+    fields: childId
+  ca_unique_active:
+    fields: classroomId, childId
+    unique: true
+

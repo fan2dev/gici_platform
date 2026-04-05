@@ -1,0 +1,30 @@
+# Chat conversation entity
+
+class: ChatConversation
+
+table: chat_conversation
+
+fields:
+  organizationId: int
+  title: String?
+  conversationType: String
+  relatedChildId: int?
+  relatedClassroomId: int?
+  createdByUserId: int
+  isArchived: bool
+  lastMessageAt: DateTime?
+  createdAt: DateTime
+  updatedAt: DateTime
+
+indexes:
+  conv_org_idx:
+    fields: organizationId
+  conv_type_idx:
+    fields: conversationType
+  conv_child_idx:
+    fields: relatedChildId
+  conv_classroom_idx:
+    fields: relatedClassroomId
+  conv_last_message_idx:
+    fields: lastMessageAt
+

@@ -1,0 +1,28 @@
+# Nap/sleep entry for habit tracking
+
+class: NapEntry
+
+table: nap_entry
+
+fields:
+  organizationId: int
+  childId: int
+  recordedByUserId: int
+  startedAt: DateTime
+  endedAt: DateTime?
+  durationMinutes: int?
+  sleepQuality: String?
+  notes: String?
+  createdAt: DateTime
+  updatedAt: DateTime
+
+indexes:
+  nap_org_idx:
+    fields: organizationId
+  nap_child_idx:
+    fields: childId
+  nap_date_idx:
+    fields: startedAt
+  nap_child_date_idx:
+    fields: childId, startedAt
+

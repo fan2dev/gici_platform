@@ -1,0 +1,26 @@
+# Classroom / Group entity
+
+class: Classroom
+
+table: classroom
+
+fields:
+  organizationId: int
+  name: String
+  description: String?
+  ageGroupMin: int?
+  ageGroupMax: int?
+  capacity: int
+  color: String?
+  photoUrl: String?
+  status: String
+  createdAt: DateTime
+  updatedAt: DateTime
+  deletedAt: DateTime?
+
+indexes:
+  classroom_org_idx:
+    fields: organizationId
+  classroom_status_idx:
+    fields: status
+

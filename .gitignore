@@ -1,0 +1,32 @@
+# OS / Editor
+.DS_Store
+*.swp
+*.log
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+
+# Dart / Flutter / Pub (monorepo-wide)
+**/.dart_tool/
+**/.packages
+**/.pub/
+**/.pub-cache/
+**/build/
+**/coverage/
+**/doc/api/
+**/.flutter-plugins
+**/.flutter-plugins-dependencies
+**/ios/Flutter/.last_build_id
+**/app.*.symbols
+**/app.*.map.json
+
+# Android Flutter build outputs
+**/android/app/debug/
+**/android/app/profile/
+**/android/app/release/
+
+# Server-side local secrets
+**/config/passwords.yaml
+**/config/firebase_service_account_key.json

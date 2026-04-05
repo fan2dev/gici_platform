@@ -7,8 +7,8 @@ class ExperienceService {
 
   Future<UserOnboardingState> completeOnboarding(
     Session session, {
-    required int userId,
-    int? organizationId,
+    required UuidValue userId,
+    UuidValue? organizationId,
     bool acceptTerms = true,
   }) async {
     final now = DateTime.now().toUtc();
@@ -46,7 +46,7 @@ class ExperienceService {
 
   Future<UserOnboardingState?> getOnboardingState(
     Session session, {
-    required int userId,
+    required UuidValue userId,
   }) {
     return UserOnboardingState.db.findFirstRow(
       session,
@@ -56,7 +56,7 @@ class ExperienceService {
 
   Future<List<MenuEntry>> listMenuEntries(
     Session session, {
-    required int organizationId,
+    required UuidValue organizationId,
     DateTime? from,
     DateTime? to,
     required int limit,
@@ -89,13 +89,13 @@ class ExperienceService {
 
   Future<MenuEntry> createMenuEntry(
     Session session, {
-    required int organizationId,
-    required int createdByUserId,
+    required UuidValue organizationId,
+    required UuidValue createdByUserId,
     required DateTime menuDate,
     required String mealType,
     required String title,
     String? description,
-    int? classroomId,
+    UuidValue? classroomId,
   }) {
     final now = DateTime.now().toUtc();
     return MenuEntry.db.insertRow(
@@ -117,8 +117,8 @@ class ExperienceService {
 
   Future<MenuEntry?> getMenuEntry(
     Session session, {
-    required int organizationId,
-    required int menuEntryId,
+    required UuidValue organizationId,
+    required UuidValue menuEntryId,
   }) {
     return MenuEntry.db.findFirstRow(
       session,
@@ -136,7 +136,7 @@ class ExperienceService {
     String? mealType,
     String? title,
     String? description,
-    int? classroomId,
+    UuidValue? classroomId,
   }) {
     return MenuEntry.db.updateRow(
       session,

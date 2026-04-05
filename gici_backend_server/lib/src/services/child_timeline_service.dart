@@ -7,8 +7,8 @@ class ChildTimelineService {
 
   Future<List<ChildTimelineItem>> buildTimeline(
     Session session, {
-    required int organizationId,
-    required int childId,
+    required UuidValue organizationId,
+    required UuidValue childId,
     required int limit,
     required int offset,
   }) async {
@@ -76,7 +76,7 @@ class ChildTimelineService {
           title: 'Meal: ${m.mealType}',
           description: 'Consumption: ${m.consumptionLevel}${m.notes == null ? '' : ' · ${m.notes}'}',
           referenceType: 'meal_entry',
-          referenceId: m.id,
+          referenceId: m.id?.toString(),
         ),
       ),
       ...naps.map(
@@ -88,7 +88,7 @@ class ChildTimelineService {
           description:
               'Start: ${n.startedAt.toIso8601String()}${n.endedAt == null ? '' : ' · End: ${n.endedAt!.toIso8601String()}'}${n.notes == null ? '' : ' · ${n.notes}'}',
           referenceType: 'nap_entry',
-          referenceId: n.id,
+          referenceId: n.id?.toString(),
         ),
       ),
       ...bowelMovements.map(
@@ -100,7 +100,7 @@ class ChildTimelineService {
           description:
               '${b.eventType}${b.consistency == null ? '' : ' · ${b.consistency}'}${b.notes == null ? '' : ' · ${b.notes}'}',
           referenceType: 'bowel_movement_entry',
-          referenceId: b.id,
+          referenceId: b.id?.toString(),
         ),
       ),
       ...reports.map(
@@ -111,7 +111,7 @@ class ChildTimelineService {
           title: r.title,
           description: r.summary,
           referenceType: 'pedagogical_report',
-          referenceId: r.id,
+          referenceId: r.id?.toString(),
         ),
       ),
       ...documents.map(
@@ -122,7 +122,7 @@ class ChildTimelineService {
           title: 'Document added: ${d.title}',
           description: d.description,
           referenceType: 'child_document',
-          referenceId: d.id,
+          referenceId: d.id?.toString(),
         ),
       ),
     ];

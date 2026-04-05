@@ -7,11 +7,11 @@ class ActivityLogService {
 
   Future<void> log(
     Session session, {
-    required int organizationId,
+    required UuidValue organizationId,
     required String action,
     String? entityType,
-    int? entityId,
-    int? userId,
+    String? entityId,
+    UuidValue? userId,
     String? oldValues,
     String? newValues,
     String? metadata,

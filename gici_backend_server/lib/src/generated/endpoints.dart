@@ -25,7 +25,8 @@ import '../endpoints/notification_endpoint.dart' as _i13;
 import '../endpoints/organization_endpoint.dart' as _i14;
 import '../endpoints/pedagogical_report_endpoint.dart' as _i15;
 import '../endpoints/time_tracking_endpoint.dart' as _i16;
-import 'package:serverpod_auth_server/serverpod_auth_server.dart' as _i17;
+import 'package:uuid/uuid_value.dart' as _i17;
+import 'package:serverpod_auth_server/serverpod_auth_server.dart' as _i18;
 
 class Endpoints extends _i1.EndpointDispatch {
   @override
@@ -152,10 +153,19 @@ class Endpoints extends _i1.EndpointDispatch {
         ),
         'me': _i1.MethodConnector(
           name: 'me',
+          params: {},
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['auth'] as _i2.AuthEndpoint).me(session),
+        ),
+        'requestPasswordReset': _i1.MethodConnector(
+          name: 'requestPasswordReset',
           params: {
-            'appUserId': _i1.ParameterDescription(
-              name: 'appUserId',
-              type: _i1.getType<int>(),
+            'email': _i1.ParameterDescription(
+              name: 'email',
+              type: _i1.getType<String>(),
               nullable: false,
             )
           },
@@ -163,9 +173,39 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['auth'] as _i2.AuthEndpoint).me(
+              (endpoints['auth'] as _i2.AuthEndpoint).requestPasswordReset(
             session,
-            appUserId: params['appUserId'],
+            email: params['email'],
+          ),
+        ),
+        'resetPassword': _i1.MethodConnector(
+          name: 'resetPassword',
+          params: {
+            'email': _i1.ParameterDescription(
+              name: 'email',
+              type: _i1.getType<String>(),
+              nullable: false,
+            ),
+            'code': _i1.ParameterDescription(
+              name: 'code',
+              type: _i1.getType<String>(),
+              nullable: false,
+            ),
+            'newPassword': _i1.ParameterDescription(
+              name: 'newPassword',
+              type: _i1.getType<String>(),
+              nullable: false,
+            ),
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['auth'] as _i2.AuthEndpoint).resetPassword(
+            session,
+            email: params['email'],
+            code: params['code'],
+            newPassword: params['newPassword'],
           ),
         ),
       },
@@ -201,16 +241,6 @@ class Endpoints extends _i1.EndpointDispatch {
         'listConversations': _i1.MethodConnector(
           name: 'listConversations',
           params: {
-            'organizationId': _i1.ParameterDescription(
-              name: 'organizationId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
-            'actorId': _i1.ParameterDescription(
-              name: 'actorId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
             'page': _i1.ParameterDescription(
               name: 'page',
               type: _i1.getType<int>(),
@@ -228,8 +258,6 @@ class Endpoints extends _i1.EndpointDispatch {
           ) async =>
               (endpoints['chat'] as _i4.ChatEndpoint).listConversations(
             session,
-            organizationId: params['organizationId'],
-            actorId: params['actorId'],
             page: params['page'],
             pageSize: params['pageSize'],
           ),
@@ -237,21 +265,11 @@ class Endpoints extends _i1.EndpointDispatch {
         'getConversation': _i1.MethodConnector(
           name: 'getConversation',
           params: {
-            'organizationId': _i1.ParameterDescription(
-              name: 'organizationId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
-            'actorId': _i1.ParameterDescription(
-              name: 'actorId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
             'conversationId': _i1.ParameterDescription(
               name: 'conversationId',
-              type: _i1.getType<int>(),
+              type: _i1.getType<_i17.UuidValue>(),
               nullable: false,
-            ),
+            )
           },
           call: (
             _i1.Session session,
@@ -259,24 +277,12 @@ class Endpoints extends _i1.EndpointDispatch {
           ) async =>
               (endpoints['chat'] as _i4.ChatEndpoint).getConversation(
             session,
-            organizationId: params['organizationId'],
-            actorId: params['actorId'],
             conversationId: params['conversationId'],
           ),
         ),
         'createConversation': _i1.MethodConnector(
           name: 'createConversation',
           params: {
-            'organizationId': _i1.ParameterDescription(
-              name: 'organizationId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
-            'actorId': _i1.ParameterDescription(
-              name: 'actorId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
             'conversationType': _i1.ParameterDescription(
               name: 'conversationType',
               type: _i1.getType<String>(),
@@ -289,17 +295,17 @@ class Endpoints extends _i1.EndpointDispatch {
             ),
             'relatedChildId': _i1.ParameterDescription(
               name: 'relatedChildId',
-              type: _i1.getType<int?>(),
+              type: _i1.getType<_i17.UuidValue?>(),
               nullable: true,
             ),
             'relatedClassroomId': _i1.ParameterDescription(
               name: 'relatedClassroomId',
-              type: _i1.getType<int?>(),
+              type: _i1.getType<_i17.UuidValue?>(),
               nullable: true,
             ),
             'participantUserIds': _i1.ParameterDescription(
               name: 'participantUserIds',
-              type: _i1.getType<List<int>>(),
+              type: _i1.getType<List<_i17.UuidValue>>(),
               nullable: false,
             ),
           },
@@ -309,8 +315,6 @@ class Endpoints extends _i1.EndpointDispatch {
           ) async =>
               (endpoints['chat'] as _i4.ChatEndpoint).createConversation(
             session,
-            organizationId: params['organizationId'],
-            actorId: params['actorId'],
             conversationType: params['conversationType'],
             title: params['title'],
             relatedChildId: params['relatedChildId'],
@@ -321,19 +325,9 @@ class Endpoints extends _i1.EndpointDispatch {
         'sendMessage': _i1.MethodConnector(
           name: 'sendMessage',
           params: {
-            'organizationId': _i1.ParameterDescription(
-              name: 'organizationId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
-            'actorId': _i1.ParameterDescription(
-              name: 'actorId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
             'conversationId': _i1.ParameterDescription(
               name: 'conversationId',
-              type: _i1.getType<String>(),
+              type: _i1.getType<_i17.UuidValue>(),
               nullable: false,
             ),
             'content': _i1.ParameterDescription(
@@ -348,8 +342,6 @@ class Endpoints extends _i1.EndpointDispatch {
           ) async =>
               (endpoints['chat'] as _i4.ChatEndpoint).sendMessage(
             session,
-            organizationId: params['organizationId'],
-            actorId: params['actorId'],
             conversationId: params['conversationId'],
             content: params['content'],
           ),
@@ -357,19 +349,9 @@ class Endpoints extends _i1.EndpointDispatch {
         'listMessages': _i1.MethodConnector(
           name: 'listMessages',
           params: {
-            'organizationId': _i1.ParameterDescription(
-              name: 'organizationId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
-            'actorId': _i1.ParameterDescription(
-              name: 'actorId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
             'conversationId': _i1.ParameterDescription(
               name: 'conversationId',
-              type: _i1.getType<String>(),
+              type: _i1.getType<_i17.UuidValue>(),
               nullable: false,
             ),
             'page': _i1.ParameterDescription(
@@ -389,8 +371,6 @@ class Endpoints extends _i1.EndpointDispatch {
           ) async =>
               (endpoints['chat'] as _i4.ChatEndpoint).listMessages(
             session,
-            organizationId: params['organizationId'],
-            actorId: params['actorId'],
             conversationId: params['conversationId'],
             page: params['page'],
             pageSize: params['pageSize'],
@@ -399,24 +379,14 @@ class Endpoints extends _i1.EndpointDispatch {
         'markConversationRead': _i1.MethodConnector(
           name: 'markConversationRead',
           params: {
-            'organizationId': _i1.ParameterDescription(
-              name: 'organizationId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
-            'actorId': _i1.ParameterDescription(
-              name: 'actorId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
             'conversationId': _i1.ParameterDescription(
               name: 'conversationId',
-              type: _i1.getType<int>(),
+              type: _i1.getType<_i17.UuidValue>(),
               nullable: false,
             ),
             'lastReadMessageId': _i1.ParameterDescription(
               name: 'lastReadMessageId',
-              type: _i1.getType<int?>(),
+              type: _i1.getType<_i17.UuidValue?>(),
               nullable: true,
             ),
           },
@@ -426,35 +396,18 @@ class Endpoints extends _i1.EndpointDispatch {
           ) async =>
               (endpoints['chat'] as _i4.ChatEndpoint).markConversationRead(
             session,
-            organizationId: params['organizationId'],
-            actorId: params['actorId'],
             conversationId: params['conversationId'],
             lastReadMessageId: params['lastReadMessageId'],
           ),
         ),
         'unreadCounts': _i1.MethodConnector(
           name: 'unreadCounts',
-          params: {
-            'organizationId': _i1.ParameterDescription(
-              name: 'organizationId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
-            'actorId': _i1.ParameterDescription(
-              name: 'actorId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
-          },
+          params: {},
           call: (
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['chat'] as _i4.ChatEndpoint).unreadCounts(
-            session,
-            organizationId: params['organizationId'],
-            actorId: params['actorId'],
-          ),
+              (endpoints['chat'] as _i4.ChatEndpoint).unreadCounts(session),
         ),
       },
     );
@@ -465,16 +418,6 @@ class Endpoints extends _i1.EndpointDispatch {
         'listChildren': _i1.MethodConnector(
           name: 'listChildren',
           params: {
-            'organizationId': _i1.ParameterDescription(
-              name: 'organizationId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
-            'actorId': _i1.ParameterDescription(
-              name: 'actorId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
             'page': _i1.ParameterDescription(
               name: 'page',
               type: _i1.getType<int>(),
@@ -492,8 +435,6 @@ class Endpoints extends _i1.EndpointDispatch {
           ) async =>
               (endpoints['child'] as _i5.ChildEndpoint).listChildren(
             session,
-            organizationId: params['organizationId'],
-            actorId: params['actorId'],
             page: params['page'],
             pageSize: params['pageSize'],
           ),
@@ -501,16 +442,6 @@ class Endpoints extends _i1.EndpointDispatch {
         'createChild': _i1.MethodConnector(
           name: 'createChild',
           params: {
-            'organizationId': _i1.ParameterDescription(
-              name: 'organizationId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
-            'actorId': _i1.ParameterDescription(
-              name: 'actorId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
             'firstName': _i1.ParameterDescription(
               name: 'firstName',
               type: _i1.getType<String>(),
@@ -533,8 +464,6 @@ class Endpoints extends _i1.EndpointDispatch {
           ) async =>
               (endpoints['child'] as _i5.ChildEndpoint).createChild(
             session,
-            organizationId: params['organizationId'],
-            actorId: params['actorId'],
             firstName: params['firstName'],
             lastName: params['lastName'],
             dateOfBirth: params['dateOfBirth'],
@@ -543,21 +472,11 @@ class Endpoints extends _i1.EndpointDispatch {
         'getChild': _i1.MethodConnector(
           name: 'getChild',
           params: {
-            'organizationId': _i1.ParameterDescription(
-              name: 'organizationId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
-            'actorId': _i1.ParameterDescription(
-              name: 'actorId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
             'childId': _i1.ParameterDescription(
               name: 'childId',
-              type: _i1.getType<int>(),
+              type: _i1.getType<_i17.UuidValue>(),
               nullable: false,
-            ),
+            )
           },
           call: (
             _i1.Session session,
@@ -565,27 +484,15 @@ class Endpoints extends _i1.EndpointDispatch {
           ) async =>
               (endpoints['child'] as _i5.ChildEndpoint).getChild(
             session,
-            organizationId: params['organizationId'],
-            actorId: params['actorId'],
             childId: params['childId'],
           ),
         ),
         'updateChild': _i1.MethodConnector(
           name: 'updateChild',
           params: {
-            'organizationId': _i1.ParameterDescription(
-              name: 'organizationId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
-            'actorId': _i1.ParameterDescription(
-              name: 'actorId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
             'childId': _i1.ParameterDescription(
               name: 'childId',
-              type: _i1.getType<int>(),
+              type: _i1.getType<_i17.UuidValue>(),
               nullable: false,
             ),
             'firstName': _i1.ParameterDescription(
@@ -630,8 +537,6 @@ class Endpoints extends _i1.EndpointDispatch {
           ) async =>
               (endpoints['child'] as _i5.ChildEndpoint).updateChild(
             session,
-            organizationId: params['organizationId'],
-            actorId: params['actorId'],
             childId: params['childId'],
             firstName: params['firstName'],
             lastName: params['lastName'],
@@ -645,21 +550,11 @@ class Endpoints extends _i1.EndpointDispatch {
         'getChildProfileOverview': _i1.MethodConnector(
           name: 'getChildProfileOverview',
           params: {
-            'organizationId': _i1.ParameterDescription(
-              name: 'organizationId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
-            'actorId': _i1.ParameterDescription(
-              name: 'actorId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
             'childId': _i1.ParameterDescription(
               name: 'childId',
-              type: _i1.getType<int>(),
+              type: _i1.getType<_i17.UuidValue>(),
               nullable: false,
-            ),
+            )
           },
           call: (
             _i1.Session session,
@@ -667,8 +562,6 @@ class Endpoints extends _i1.EndpointDispatch {
           ) async =>
               (endpoints['child'] as _i5.ChildEndpoint).getChildProfileOverview(
             session,
-            organizationId: params['organizationId'],
-            actorId: params['actorId'],
             childId: params['childId'],
           ),
         ),
@@ -681,19 +574,9 @@ class Endpoints extends _i1.EndpointDispatch {
         'getChildTimeline': _i1.MethodConnector(
           name: 'getChildTimeline',
           params: {
-            'organizationId': _i1.ParameterDescription(
-              name: 'organizationId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
-            'actorId': _i1.ParameterDescription(
-              name: 'actorId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
             'childId': _i1.ParameterDescription(
               name: 'childId',
-              type: _i1.getType<int>(),
+              type: _i1.getType<_i17.UuidValue>(),
               nullable: false,
             ),
             'page': _i1.ParameterDescription(
@@ -714,8 +597,6 @@ class Endpoints extends _i1.EndpointDispatch {
               (endpoints['childTimeline'] as _i6.ChildTimelineEndpoint)
                   .getChildTimeline(
             session,
-            organizationId: params['organizationId'],
-            actorId: params['actorId'],
             childId: params['childId'],
             page: params['page'],
             pageSize: params['pageSize'],
@@ -730,16 +611,6 @@ class Endpoints extends _i1.EndpointDispatch {
         'listClassrooms': _i1.MethodConnector(
           name: 'listClassrooms',
           params: {
-            'organizationId': _i1.ParameterDescription(
-              name: 'organizationId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
-            'actorId': _i1.ParameterDescription(
-              name: 'actorId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
             'page': _i1.ParameterDescription(
               name: 'page',
               type: _i1.getType<int>(),
@@ -757,8 +628,6 @@ class Endpoints extends _i1.EndpointDispatch {
           ) async =>
               (endpoints['classroom'] as _i7.ClassroomEndpoint).listClassrooms(
             session,
-            organizationId: params['organizationId'],
-            actorId: params['actorId'],
             page: params['page'],
             pageSize: params['pageSize'],
           ),
@@ -766,16 +635,6 @@ class Endpoints extends _i1.EndpointDispatch {
         'createClassroom': _i1.MethodConnector(
           name: 'createClassroom',
           params: {
-            'organizationId': _i1.ParameterDescription(
-              name: 'organizationId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
-            'actorId': _i1.ParameterDescription(
-              name: 'actorId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
             'name': _i1.ParameterDescription(
               name: 'name',
               type: _i1.getType<String>(),
@@ -813,8 +672,6 @@ class Endpoints extends _i1.EndpointDispatch {
           ) async =>
               (endpoints['classroom'] as _i7.ClassroomEndpoint).createClassroom(
             session,
-            organizationId: params['organizationId'],
-            actorId: params['actorId'],
             name: params['name'],
             description: params['description'],
             ageGroupMin: params['ageGroupMin'],
@@ -826,19 +683,9 @@ class Endpoints extends _i1.EndpointDispatch {
         'updateClassroom': _i1.MethodConnector(
           name: 'updateClassroom',
           params: {
-            'organizationId': _i1.ParameterDescription(
-              name: 'organizationId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
-            'actorId': _i1.ParameterDescription(
-              name: 'actorId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
             'classroomId': _i1.ParameterDescription(
               name: 'classroomId',
-              type: _i1.getType<int>(),
+              type: _i1.getType<_i17.UuidValue>(),
               nullable: false,
             ),
             'name': _i1.ParameterDescription(
@@ -883,8 +730,6 @@ class Endpoints extends _i1.EndpointDispatch {
           ) async =>
               (endpoints['classroom'] as _i7.ClassroomEndpoint).updateClassroom(
             session,
-            organizationId: params['organizationId'],
-            actorId: params['actorId'],
             classroomId: params['classroomId'],
             name: params['name'],
             description: params['description'],
@@ -898,24 +743,14 @@ class Endpoints extends _i1.EndpointDispatch {
         'assignChildToClassroom': _i1.MethodConnector(
           name: 'assignChildToClassroom',
           params: {
-            'organizationId': _i1.ParameterDescription(
-              name: 'organizationId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
-            'actorId': _i1.ParameterDescription(
-              name: 'actorId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
             'classroomId': _i1.ParameterDescription(
               name: 'classroomId',
-              type: _i1.getType<int>(),
+              type: _i1.getType<_i17.UuidValue>(),
               nullable: false,
             ),
             'childId': _i1.ParameterDescription(
               name: 'childId',
-              type: _i1.getType<int>(),
+              type: _i1.getType<_i17.UuidValue>(),
               nullable: false,
             ),
           },
@@ -926,8 +761,6 @@ class Endpoints extends _i1.EndpointDispatch {
               (endpoints['classroom'] as _i7.ClassroomEndpoint)
                   .assignChildToClassroom(
             session,
-            organizationId: params['organizationId'],
-            actorId: params['actorId'],
             classroomId: params['classroomId'],
             childId: params['childId'],
           ),
@@ -935,24 +768,14 @@ class Endpoints extends _i1.EndpointDispatch {
         'listAssignments': _i1.MethodConnector(
           name: 'listAssignments',
           params: {
-            'organizationId': _i1.ParameterDescription(
-              name: 'organizationId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
-            'actorId': _i1.ParameterDescription(
-              name: 'actorId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
             'classroomId': _i1.ParameterDescription(
               name: 'classroomId',
-              type: _i1.getType<int?>(),
+              type: _i1.getType<_i17.UuidValue?>(),
               nullable: true,
             ),
             'childId': _i1.ParameterDescription(
               name: 'childId',
-              type: _i1.getType<int?>(),
+              type: _i1.getType<_i17.UuidValue?>(),
               nullable: true,
             ),
             'onlyActive': _i1.ParameterDescription(
@@ -977,8 +800,6 @@ class Endpoints extends _i1.EndpointDispatch {
           ) async =>
               (endpoints['classroom'] as _i7.ClassroomEndpoint).listAssignments(
             session,
-            organizationId: params['organizationId'],
-            actorId: params['actorId'],
             classroomId: params['classroomId'],
             childId: params['childId'],
             onlyActive: params['onlyActive'],
@@ -995,19 +816,9 @@ class Endpoints extends _i1.EndpointDispatch {
         'createRequest': _i1.MethodConnector(
           name: 'createRequest',
           params: {
-            'organizationId': _i1.ParameterDescription(
-              name: 'organizationId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
-            'actorId': _i1.ParameterDescription(
-              name: 'actorId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
             'targetChildId': _i1.ParameterDescription(
               name: 'targetChildId',
-              type: _i1.getType<int?>(),
+              type: _i1.getType<_i17.UuidValue?>(),
               nullable: true,
             ),
             'requestType': _i1.ParameterDescription(
@@ -1028,8 +839,6 @@ class Endpoints extends _i1.EndpointDispatch {
               (endpoints['dataChangeRequest'] as _i8.DataChangeRequestEndpoint)
                   .createRequest(
             session,
-            organizationId: params['organizationId'],
-            actorId: params['actorId'],
             targetChildId: params['targetChildId'],
             requestType: params['requestType'],
             requestPayload: params['requestPayload'],
@@ -1038,16 +847,6 @@ class Endpoints extends _i1.EndpointDispatch {
         'myRequests': _i1.MethodConnector(
           name: 'myRequests',
           params: {
-            'organizationId': _i1.ParameterDescription(
-              name: 'organizationId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
-            'actorId': _i1.ParameterDescription(
-              name: 'actorId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
             'page': _i1.ParameterDescription(
               name: 'page',
               type: _i1.getType<int>(),
@@ -1066,8 +865,6 @@ class Endpoints extends _i1.EndpointDispatch {
               (endpoints['dataChangeRequest'] as _i8.DataChangeRequestEndpoint)
                   .myRequests(
             session,
-            organizationId: params['organizationId'],
-            actorId: params['actorId'],
             page: params['page'],
             pageSize: params['pageSize'],
           ),
@@ -1075,16 +872,6 @@ class Endpoints extends _i1.EndpointDispatch {
         'listRequestsForReview': _i1.MethodConnector(
           name: 'listRequestsForReview',
           params: {
-            'organizationId': _i1.ParameterDescription(
-              name: 'organizationId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
-            'actorId': _i1.ParameterDescription(
-              name: 'actorId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
             'status': _i1.ParameterDescription(
               name: 'status',
               type: _i1.getType<String?>(),
@@ -1108,8 +895,6 @@ class Endpoints extends _i1.EndpointDispatch {
               (endpoints['dataChangeRequest'] as _i8.DataChangeRequestEndpoint)
                   .listRequestsForReview(
             session,
-            organizationId: params['organizationId'],
-            actorId: params['actorId'],
             status: params['status'],
             page: params['page'],
             pageSize: params['pageSize'],
@@ -1118,21 +903,11 @@ class Endpoints extends _i1.EndpointDispatch {
         'getRequest': _i1.MethodConnector(
           name: 'getRequest',
           params: {
-            'organizationId': _i1.ParameterDescription(
-              name: 'organizationId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
-            'actorId': _i1.ParameterDescription(
-              name: 'actorId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
             'requestId': _i1.ParameterDescription(
               name: 'requestId',
-              type: _i1.getType<int>(),
+              type: _i1.getType<_i17.UuidValue>(),
               nullable: false,
-            ),
+            )
           },
           call: (
             _i1.Session session,
@@ -1141,27 +916,15 @@ class Endpoints extends _i1.EndpointDispatch {
               (endpoints['dataChangeRequest'] as _i8.DataChangeRequestEndpoint)
                   .getRequest(
             session,
-            organizationId: params['organizationId'],
-            actorId: params['actorId'],
             requestId: params['requestId'],
           ),
         ),
         'updateRequestStatus': _i1.MethodConnector(
           name: 'updateRequestStatus',
           params: {
-            'organizationId': _i1.ParameterDescription(
-              name: 'organizationId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
-            'actorId': _i1.ParameterDescription(
-              name: 'actorId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
             'requestId': _i1.ParameterDescription(
               name: 'requestId',
-              type: _i1.getType<int>(),
+              type: _i1.getType<_i17.UuidValue>(),
               nullable: false,
             ),
             'status': _i1.ParameterDescription(
@@ -1182,8 +945,6 @@ class Endpoints extends _i1.EndpointDispatch {
               (endpoints['dataChangeRequest'] as _i8.DataChangeRequestEndpoint)
                   .updateRequestStatus(
             session,
-            organizationId: params['organizationId'],
-            actorId: params['actorId'],
             requestId: params['requestId'],
             status: params['status'],
             resolutionNote: params['resolutionNote'],
@@ -1198,16 +959,6 @@ class Endpoints extends _i1.EndpointDispatch {
         'listOrganizationDocuments': _i1.MethodConnector(
           name: 'listOrganizationDocuments',
           params: {
-            'organizationId': _i1.ParameterDescription(
-              name: 'organizationId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
-            'actorId': _i1.ParameterDescription(
-              name: 'actorId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
             'page': _i1.ParameterDescription(
               name: 'page',
               type: _i1.getType<int>(),
@@ -1226,8 +977,6 @@ class Endpoints extends _i1.EndpointDispatch {
               (endpoints['document'] as _i9.DocumentEndpoint)
                   .listOrganizationDocuments(
             session,
-            organizationId: params['organizationId'],
-            actorId: params['actorId'],
             page: params['page'],
             pageSize: params['pageSize'],
           ),
@@ -1235,16 +984,6 @@ class Endpoints extends _i1.EndpointDispatch {
         'createOrganizationDocument': _i1.MethodConnector(
           name: 'createOrganizationDocument',
           params: {
-            'organizationId': _i1.ParameterDescription(
-              name: 'organizationId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
-            'actorId': _i1.ParameterDescription(
-              name: 'actorId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
             'title': _i1.ParameterDescription(
               name: 'title',
               type: _i1.getType<String>(),
@@ -1288,8 +1027,6 @@ class Endpoints extends _i1.EndpointDispatch {
               (endpoints['document'] as _i9.DocumentEndpoint)
                   .createOrganizationDocument(
             session,
-            organizationId: params['organizationId'],
-            actorId: params['actorId'],
             title: params['title'],
             description: params['description'],
             visibility: params['visibility'],
@@ -1302,19 +1039,9 @@ class Endpoints extends _i1.EndpointDispatch {
         'listChildDocuments': _i1.MethodConnector(
           name: 'listChildDocuments',
           params: {
-            'organizationId': _i1.ParameterDescription(
-              name: 'organizationId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
-            'actorId': _i1.ParameterDescription(
-              name: 'actorId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
             'childId': _i1.ParameterDescription(
               name: 'childId',
-              type: _i1.getType<int>(),
+              type: _i1.getType<_i17.UuidValue>(),
               nullable: false,
             ),
             'page': _i1.ParameterDescription(
@@ -1335,8 +1062,6 @@ class Endpoints extends _i1.EndpointDispatch {
               (endpoints['document'] as _i9.DocumentEndpoint)
                   .listChildDocuments(
             session,
-            organizationId: params['organizationId'],
-            actorId: params['actorId'],
             childId: params['childId'],
             page: params['page'],
             pageSize: params['pageSize'],
@@ -1345,19 +1070,9 @@ class Endpoints extends _i1.EndpointDispatch {
         'createChildDocument': _i1.MethodConnector(
           name: 'createChildDocument',
           params: {
-            'organizationId': _i1.ParameterDescription(
-              name: 'organizationId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
-            'actorId': _i1.ParameterDescription(
-              name: 'actorId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
             'childId': _i1.ParameterDescription(
               name: 'childId',
-              type: _i1.getType<int>(),
+              type: _i1.getType<_i17.UuidValue>(),
               nullable: false,
             ),
             'title': _i1.ParameterDescription(
@@ -1403,8 +1118,6 @@ class Endpoints extends _i1.EndpointDispatch {
               (endpoints['document'] as _i9.DocumentEndpoint)
                   .createChildDocument(
             session,
-            organizationId: params['organizationId'],
-            actorId: params['actorId'],
             childId: params['childId'],
             title: params['title'],
             description: params['description'],
@@ -1418,21 +1131,11 @@ class Endpoints extends _i1.EndpointDispatch {
         'resolveFileDownloadUrl': _i1.MethodConnector(
           name: 'resolveFileDownloadUrl',
           params: {
-            'organizationId': _i1.ParameterDescription(
-              name: 'organizationId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
-            'actorId': _i1.ParameterDescription(
-              name: 'actorId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
             'fileAssetId': _i1.ParameterDescription(
               name: 'fileAssetId',
-              type: _i1.getType<int>(),
+              type: _i1.getType<_i17.UuidValue>(),
               nullable: false,
-            ),
+            )
           },
           call: (
             _i1.Session session,
@@ -1441,8 +1144,6 @@ class Endpoints extends _i1.EndpointDispatch {
               (endpoints['document'] as _i9.DocumentEndpoint)
                   .resolveFileDownloadUrl(
             session,
-            organizationId: params['organizationId'],
-            actorId: params['actorId'],
             fileAssetId: params['fileAssetId'],
           ),
         ),
@@ -1454,47 +1155,22 @@ class Endpoints extends _i1.EndpointDispatch {
       methodConnectors: {
         'getOnboardingState': _i1.MethodConnector(
           name: 'getOnboardingState',
-          params: {
-            'organizationId': _i1.ParameterDescription(
-              name: 'organizationId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
-            'actorId': _i1.ParameterDescription(
-              name: 'actorId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
-          },
+          params: {},
           call: (
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
               (endpoints['experience'] as _i10.ExperienceEndpoint)
-                  .getOnboardingState(
-            session,
-            organizationId: params['organizationId'],
-            actorId: params['actorId'],
-          ),
+                  .getOnboardingState(session),
         ),
         'completeOnboarding': _i1.MethodConnector(
           name: 'completeOnboarding',
           params: {
-            'organizationId': _i1.ParameterDescription(
-              name: 'organizationId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
-            'actorId': _i1.ParameterDescription(
-              name: 'actorId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
             'acceptTerms': _i1.ParameterDescription(
               name: 'acceptTerms',
               type: _i1.getType<bool>(),
               nullable: false,
-            ),
+            )
           },
           call: (
             _i1.Session session,
@@ -1503,49 +1179,22 @@ class Endpoints extends _i1.EndpointDispatch {
               (endpoints['experience'] as _i10.ExperienceEndpoint)
                   .completeOnboarding(
             session,
-            organizationId: params['organizationId'],
-            actorId: params['actorId'],
             acceptTerms: params['acceptTerms'],
           ),
         ),
         'getCenterInfo': _i1.MethodConnector(
           name: 'getCenterInfo',
-          params: {
-            'organizationId': _i1.ParameterDescription(
-              name: 'organizationId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
-            'actorId': _i1.ParameterDescription(
-              name: 'actorId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
-          },
+          params: {},
           call: (
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
               (endpoints['experience'] as _i10.ExperienceEndpoint)
-                  .getCenterInfo(
-            session,
-            organizationId: params['organizationId'],
-            actorId: params['actorId'],
-          ),
+                  .getCenterInfo(session),
         ),
         'listMenuEntries': _i1.MethodConnector(
           name: 'listMenuEntries',
           params: {
-            'organizationId': _i1.ParameterDescription(
-              name: 'organizationId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
-            'actorId': _i1.ParameterDescription(
-              name: 'actorId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
             'from': _i1.ParameterDescription(
               name: 'from',
               type: _i1.getType<DateTime?>(),
@@ -1574,8 +1223,6 @@ class Endpoints extends _i1.EndpointDispatch {
               (endpoints['experience'] as _i10.ExperienceEndpoint)
                   .listMenuEntries(
             session,
-            organizationId: params['organizationId'],
-            actorId: params['actorId'],
             from: params['from'],
             to: params['to'],
             page: params['page'],
@@ -1585,21 +1232,11 @@ class Endpoints extends _i1.EndpointDispatch {
         'getMenuEntry': _i1.MethodConnector(
           name: 'getMenuEntry',
           params: {
-            'organizationId': _i1.ParameterDescription(
-              name: 'organizationId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
-            'actorId': _i1.ParameterDescription(
-              name: 'actorId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
             'menuEntryId': _i1.ParameterDescription(
               name: 'menuEntryId',
-              type: _i1.getType<int>(),
+              type: _i1.getType<_i17.UuidValue>(),
               nullable: false,
-            ),
+            )
           },
           call: (
             _i1.Session session,
@@ -1607,24 +1244,12 @@ class Endpoints extends _i1.EndpointDispatch {
           ) async =>
               (endpoints['experience'] as _i10.ExperienceEndpoint).getMenuEntry(
             session,
-            organizationId: params['organizationId'],
-            actorId: params['actorId'],
             menuEntryId: params['menuEntryId'],
           ),
         ),
         'createMenuEntry': _i1.MethodConnector(
           name: 'createMenuEntry',
           params: {
-            'organizationId': _i1.ParameterDescription(
-              name: 'organizationId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
-            'actorId': _i1.ParameterDescription(
-              name: 'actorId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
             'menuDate': _i1.ParameterDescription(
               name: 'menuDate',
               type: _i1.getType<DateTime>(),
@@ -1647,7 +1272,7 @@ class Endpoints extends _i1.EndpointDispatch {
             ),
             'classroomId': _i1.ParameterDescription(
               name: 'classroomId',
-              type: _i1.getType<int?>(),
+              type: _i1.getType<_i17.UuidValue?>(),
               nullable: true,
             ),
           },
@@ -1658,8 +1283,6 @@ class Endpoints extends _i1.EndpointDispatch {
               (endpoints['experience'] as _i10.ExperienceEndpoint)
                   .createMenuEntry(
             session,
-            organizationId: params['organizationId'],
-            actorId: params['actorId'],
             menuDate: params['menuDate'],
             mealType: params['mealType'],
             title: params['title'],
@@ -1670,19 +1293,9 @@ class Endpoints extends _i1.EndpointDispatch {
         'updateMenuEntry': _i1.MethodConnector(
           name: 'updateMenuEntry',
           params: {
-            'organizationId': _i1.ParameterDescription(
-              name: 'organizationId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
-            'actorId': _i1.ParameterDescription(
-              name: 'actorId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
             'menuEntryId': _i1.ParameterDescription(
               name: 'menuEntryId',
-              type: _i1.getType<int>(),
+              type: _i1.getType<_i17.UuidValue>(),
               nullable: false,
             ),
             'menuDate': _i1.ParameterDescription(
@@ -1707,7 +1320,7 @@ class Endpoints extends _i1.EndpointDispatch {
             ),
             'classroomId': _i1.ParameterDescription(
               name: 'classroomId',
-              type: _i1.getType<int?>(),
+              type: _i1.getType<_i17.UuidValue?>(),
               nullable: true,
             ),
           },
@@ -1718,8 +1331,6 @@ class Endpoints extends _i1.EndpointDispatch {
               (endpoints['experience'] as _i10.ExperienceEndpoint)
                   .updateMenuEntry(
             session,
-            organizationId: params['organizationId'],
-            actorId: params['actorId'],
             menuEntryId: params['menuEntryId'],
             menuDate: params['menuDate'],
             mealType: params['mealType'],
@@ -1737,16 +1348,6 @@ class Endpoints extends _i1.EndpointDispatch {
         'listGalleries': _i1.MethodConnector(
           name: 'listGalleries',
           params: {
-            'organizationId': _i1.ParameterDescription(
-              name: 'organizationId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
-            'actorId': _i1.ParameterDescription(
-              name: 'actorId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
             'page': _i1.ParameterDescription(
               name: 'page',
               type: _i1.getType<int>(),
@@ -1764,8 +1365,6 @@ class Endpoints extends _i1.EndpointDispatch {
           ) async =>
               (endpoints['gallery'] as _i11.GalleryEndpoint).listGalleries(
             session,
-            organizationId: params['organizationId'],
-            actorId: params['actorId'],
             page: params['page'],
             pageSize: params['pageSize'],
           ),
@@ -1773,21 +1372,11 @@ class Endpoints extends _i1.EndpointDispatch {
         'getGallery': _i1.MethodConnector(
           name: 'getGallery',
           params: {
-            'organizationId': _i1.ParameterDescription(
-              name: 'organizationId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
-            'actorId': _i1.ParameterDescription(
-              name: 'actorId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
             'galleryId': _i1.ParameterDescription(
               name: 'galleryId',
-              type: _i1.getType<int>(),
+              type: _i1.getType<_i17.UuidValue>(),
               nullable: false,
-            ),
+            )
           },
           call: (
             _i1.Session session,
@@ -1795,24 +1384,12 @@ class Endpoints extends _i1.EndpointDispatch {
           ) async =>
               (endpoints['gallery'] as _i11.GalleryEndpoint).getGallery(
             session,
-            organizationId: params['organizationId'],
-            actorId: params['actorId'],
             galleryId: params['galleryId'],
           ),
         ),
         'createGallery': _i1.MethodConnector(
           name: 'createGallery',
           params: {
-            'organizationId': _i1.ParameterDescription(
-              name: 'organizationId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
-            'actorId': _i1.ParameterDescription(
-              name: 'actorId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
             'title': _i1.ParameterDescription(
               name: 'title',
               type: _i1.getType<String>(),
@@ -1830,12 +1407,12 @@ class Endpoints extends _i1.EndpointDispatch {
             ),
             'audienceClassroomId': _i1.ParameterDescription(
               name: 'audienceClassroomId',
-              type: _i1.getType<int?>(),
+              type: _i1.getType<_i17.UuidValue?>(),
               nullable: true,
             ),
             'audienceChildId': _i1.ParameterDescription(
               name: 'audienceChildId',
-              type: _i1.getType<int?>(),
+              type: _i1.getType<_i17.UuidValue?>(),
               nullable: true,
             ),
           },
@@ -1845,8 +1422,6 @@ class Endpoints extends _i1.EndpointDispatch {
           ) async =>
               (endpoints['gallery'] as _i11.GalleryEndpoint).createGallery(
             session,
-            organizationId: params['organizationId'],
-            actorId: params['actorId'],
             title: params['title'],
             description: params['description'],
             audienceType: params['audienceType'],
@@ -1857,19 +1432,9 @@ class Endpoints extends _i1.EndpointDispatch {
         'updateGallery': _i1.MethodConnector(
           name: 'updateGallery',
           params: {
-            'organizationId': _i1.ParameterDescription(
-              name: 'organizationId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
-            'actorId': _i1.ParameterDescription(
-              name: 'actorId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
             'galleryId': _i1.ParameterDescription(
               name: 'galleryId',
-              type: _i1.getType<int>(),
+              type: _i1.getType<_i17.UuidValue>(),
               nullable: false,
             ),
             'title': _i1.ParameterDescription(
@@ -1889,12 +1454,12 @@ class Endpoints extends _i1.EndpointDispatch {
             ),
             'audienceClassroomId': _i1.ParameterDescription(
               name: 'audienceClassroomId',
-              type: _i1.getType<int?>(),
+              type: _i1.getType<_i17.UuidValue?>(),
               nullable: true,
             ),
             'audienceChildId': _i1.ParameterDescription(
               name: 'audienceChildId',
-              type: _i1.getType<int?>(),
+              type: _i1.getType<_i17.UuidValue?>(),
               nullable: true,
             ),
             'isPublished': _i1.ParameterDescription(
@@ -1909,8 +1474,6 @@ class Endpoints extends _i1.EndpointDispatch {
           ) async =>
               (endpoints['gallery'] as _i11.GalleryEndpoint).updateGallery(
             session,
-            organizationId: params['organizationId'],
-            actorId: params['actorId'],
             galleryId: params['galleryId'],
             title: params['title'],
             description: params['description'],
@@ -1923,24 +1486,14 @@ class Endpoints extends _i1.EndpointDispatch {
         'addGalleryItem': _i1.MethodConnector(
           name: 'addGalleryItem',
           params: {
-            'organizationId': _i1.ParameterDescription(
-              name: 'organizationId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
-            'actorId': _i1.ParameterDescription(
-              name: 'actorId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
             'galleryId': _i1.ParameterDescription(
               name: 'galleryId',
-              type: _i1.getType<int>(),
+              type: _i1.getType<_i17.UuidValue>(),
               nullable: false,
             ),
             'fileAssetId': _i1.ParameterDescription(
               name: 'fileAssetId',
-              type: _i1.getType<int>(),
+              type: _i1.getType<_i17.UuidValue>(),
               nullable: false,
             ),
             'caption': _i1.ParameterDescription(
@@ -1960,8 +1513,6 @@ class Endpoints extends _i1.EndpointDispatch {
           ) async =>
               (endpoints['gallery'] as _i11.GalleryEndpoint).addGalleryItem(
             session,
-            organizationId: params['organizationId'],
-            actorId: params['actorId'],
             galleryId: params['galleryId'],
             fileAssetId: params['fileAssetId'],
             caption: params['caption'],
@@ -1971,19 +1522,9 @@ class Endpoints extends _i1.EndpointDispatch {
         'listGalleryItems': _i1.MethodConnector(
           name: 'listGalleryItems',
           params: {
-            'organizationId': _i1.ParameterDescription(
-              name: 'organizationId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
-            'actorId': _i1.ParameterDescription(
-              name: 'actorId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
             'galleryId': _i1.ParameterDescription(
               name: 'galleryId',
-              type: _i1.getType<int>(),
+              type: _i1.getType<_i17.UuidValue>(),
               nullable: false,
             ),
             'page': _i1.ParameterDescription(
@@ -2003,8 +1544,6 @@ class Endpoints extends _i1.EndpointDispatch {
           ) async =>
               (endpoints['gallery'] as _i11.GalleryEndpoint).listGalleryItems(
             session,
-            organizationId: params['organizationId'],
-            actorId: params['actorId'],
             galleryId: params['galleryId'],
             page: params['page'],
             pageSize: params['pageSize'],
@@ -2019,19 +1558,9 @@ class Endpoints extends _i1.EndpointDispatch {
         'listMealsByChild': _i1.MethodConnector(
           name: 'listMealsByChild',
           params: {
-            'organizationId': _i1.ParameterDescription(
-              name: 'organizationId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
-            'actorId': _i1.ParameterDescription(
-              name: 'actorId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
             'childId': _i1.ParameterDescription(
               name: 'childId',
-              type: _i1.getType<int>(),
+              type: _i1.getType<_i17.UuidValue>(),
               nullable: false,
             ),
             'page': _i1.ParameterDescription(
@@ -2051,8 +1580,6 @@ class Endpoints extends _i1.EndpointDispatch {
           ) async =>
               (endpoints['habit'] as _i12.HabitEndpoint).listMealsByChild(
             session,
-            organizationId: params['organizationId'],
-            actorId: params['actorId'],
             childId: params['childId'],
             page: params['page'],
             pageSize: params['pageSize'],
@@ -2061,19 +1588,9 @@ class Endpoints extends _i1.EndpointDispatch {
         'createMealEntry': _i1.MethodConnector(
           name: 'createMealEntry',
           params: {
-            'organizationId': _i1.ParameterDescription(
-              name: 'organizationId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
-            'actorId': _i1.ParameterDescription(
-              name: 'actorId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
             'childId': _i1.ParameterDescription(
               name: 'childId',
-              type: _i1.getType<int>(),
+              type: _i1.getType<_i17.UuidValue>(),
               nullable: false,
             ),
             'mealType': _i1.ParameterDescription(
@@ -2108,8 +1625,6 @@ class Endpoints extends _i1.EndpointDispatch {
           ) async =>
               (endpoints['habit'] as _i12.HabitEndpoint).createMealEntry(
             session,
-            organizationId: params['organizationId'],
-            actorId: params['actorId'],
             childId: params['childId'],
             mealType: params['mealType'],
             consumptionLevel: params['consumptionLevel'],
@@ -2121,19 +1636,9 @@ class Endpoints extends _i1.EndpointDispatch {
         'updateMealEntry': _i1.MethodConnector(
           name: 'updateMealEntry',
           params: {
-            'organizationId': _i1.ParameterDescription(
-              name: 'organizationId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
-            'actorId': _i1.ParameterDescription(
-              name: 'actorId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
             'mealEntryId': _i1.ParameterDescription(
               name: 'mealEntryId',
-              type: _i1.getType<int>(),
+              type: _i1.getType<_i17.UuidValue>(),
               nullable: false,
             ),
             'mealType': _i1.ParameterDescription(
@@ -2168,8 +1673,6 @@ class Endpoints extends _i1.EndpointDispatch {
           ) async =>
               (endpoints['habit'] as _i12.HabitEndpoint).updateMealEntry(
             session,
-            organizationId: params['organizationId'],
-            actorId: params['actorId'],
             mealEntryId: params['mealEntryId'],
             mealType: params['mealType'],
             consumptionLevel: params['consumptionLevel'],
@@ -2181,19 +1684,9 @@ class Endpoints extends _i1.EndpointDispatch {
         'listNapsByChild': _i1.MethodConnector(
           name: 'listNapsByChild',
           params: {
-            'organizationId': _i1.ParameterDescription(
-              name: 'organizationId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
-            'actorId': _i1.ParameterDescription(
-              name: 'actorId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
             'childId': _i1.ParameterDescription(
               name: 'childId',
-              type: _i1.getType<int>(),
+              type: _i1.getType<_i17.UuidValue>(),
               nullable: false,
             ),
             'page': _i1.ParameterDescription(
@@ -2213,8 +1706,6 @@ class Endpoints extends _i1.EndpointDispatch {
           ) async =>
               (endpoints['habit'] as _i12.HabitEndpoint).listNapsByChild(
             session,
-            organizationId: params['organizationId'],
-            actorId: params['actorId'],
             childId: params['childId'],
             page: params['page'],
             pageSize: params['pageSize'],
@@ -2223,19 +1714,9 @@ class Endpoints extends _i1.EndpointDispatch {
         'createNapEntry': _i1.MethodConnector(
           name: 'createNapEntry',
           params: {
-            'organizationId': _i1.ParameterDescription(
-              name: 'organizationId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
-            'actorId': _i1.ParameterDescription(
-              name: 'actorId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
             'childId': _i1.ParameterDescription(
               name: 'childId',
-              type: _i1.getType<int>(),
+              type: _i1.getType<_i17.UuidValue>(),
               nullable: false,
             ),
             'startedAt': _i1.ParameterDescription(
@@ -2270,8 +1751,6 @@ class Endpoints extends _i1.EndpointDispatch {
           ) async =>
               (endpoints['habit'] as _i12.HabitEndpoint).createNapEntry(
             session,
-            organizationId: params['organizationId'],
-            actorId: params['actorId'],
             childId: params['childId'],
             startedAt: params['startedAt'],
             endedAt: params['endedAt'],
@@ -2283,19 +1762,9 @@ class Endpoints extends _i1.EndpointDispatch {
         'updateNapEntry': _i1.MethodConnector(
           name: 'updateNapEntry',
           params: {
-            'organizationId': _i1.ParameterDescription(
-              name: 'organizationId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
-            'actorId': _i1.ParameterDescription(
-              name: 'actorId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
             'napEntryId': _i1.ParameterDescription(
               name: 'napEntryId',
-              type: _i1.getType<int>(),
+              type: _i1.getType<_i17.UuidValue>(),
               nullable: false,
             ),
             'startedAt': _i1.ParameterDescription(
@@ -2330,8 +1799,6 @@ class Endpoints extends _i1.EndpointDispatch {
           ) async =>
               (endpoints['habit'] as _i12.HabitEndpoint).updateNapEntry(
             session,
-            organizationId: params['organizationId'],
-            actorId: params['actorId'],
             napEntryId: params['napEntryId'],
             startedAt: params['startedAt'],
             endedAt: params['endedAt'],
@@ -2343,19 +1810,9 @@ class Endpoints extends _i1.EndpointDispatch {
         'listBowelMovementsByChild': _i1.MethodConnector(
           name: 'listBowelMovementsByChild',
           params: {
-            'organizationId': _i1.ParameterDescription(
-              name: 'organizationId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
-            'actorId': _i1.ParameterDescription(
-              name: 'actorId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
             'childId': _i1.ParameterDescription(
               name: 'childId',
-              type: _i1.getType<int>(),
+              type: _i1.getType<_i17.UuidValue>(),
               nullable: false,
             ),
             'page': _i1.ParameterDescription(
@@ -2376,8 +1833,6 @@ class Endpoints extends _i1.EndpointDispatch {
               (endpoints['habit'] as _i12.HabitEndpoint)
                   .listBowelMovementsByChild(
             session,
-            organizationId: params['organizationId'],
-            actorId: params['actorId'],
             childId: params['childId'],
             page: params['page'],
             pageSize: params['pageSize'],
@@ -2386,19 +1841,9 @@ class Endpoints extends _i1.EndpointDispatch {
         'createBowelMovementEntry': _i1.MethodConnector(
           name: 'createBowelMovementEntry',
           params: {
-            'organizationId': _i1.ParameterDescription(
-              name: 'organizationId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
-            'actorId': _i1.ParameterDescription(
-              name: 'actorId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
             'childId': _i1.ParameterDescription(
               name: 'childId',
-              type: _i1.getType<int>(),
+              type: _i1.getType<_i17.UuidValue>(),
               nullable: false,
             ),
             'eventAt': _i1.ParameterDescription(
@@ -2429,8 +1874,6 @@ class Endpoints extends _i1.EndpointDispatch {
               (endpoints['habit'] as _i12.HabitEndpoint)
                   .createBowelMovementEntry(
             session,
-            organizationId: params['organizationId'],
-            actorId: params['actorId'],
             childId: params['childId'],
             eventAt: params['eventAt'],
             eventType: params['eventType'],
@@ -2441,19 +1884,9 @@ class Endpoints extends _i1.EndpointDispatch {
         'updateBowelMovementEntry': _i1.MethodConnector(
           name: 'updateBowelMovementEntry',
           params: {
-            'organizationId': _i1.ParameterDescription(
-              name: 'organizationId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
-            'actorId': _i1.ParameterDescription(
-              name: 'actorId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
             'entryId': _i1.ParameterDescription(
               name: 'entryId',
-              type: _i1.getType<int>(),
+              type: _i1.getType<_i17.UuidValue>(),
               nullable: false,
             ),
             'eventAt': _i1.ParameterDescription(
@@ -2484,8 +1917,6 @@ class Endpoints extends _i1.EndpointDispatch {
               (endpoints['habit'] as _i12.HabitEndpoint)
                   .updateBowelMovementEntry(
             session,
-            organizationId: params['organizationId'],
-            actorId: params['actorId'],
             entryId: params['entryId'],
             eventAt: params['eventAt'],
             eventType: params['eventType'],
@@ -2496,19 +1927,9 @@ class Endpoints extends _i1.EndpointDispatch {
         'getChildDailyHabits': _i1.MethodConnector(
           name: 'getChildDailyHabits',
           params: {
-            'organizationId': _i1.ParameterDescription(
-              name: 'organizationId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
-            'actorId': _i1.ParameterDescription(
-              name: 'actorId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
             'childId': _i1.ParameterDescription(
               name: 'childId',
-              type: _i1.getType<int>(),
+              type: _i1.getType<_i17.UuidValue>(),
               nullable: false,
             ),
             'day': _i1.ParameterDescription(
@@ -2523,8 +1944,6 @@ class Endpoints extends _i1.EndpointDispatch {
           ) async =>
               (endpoints['habit'] as _i12.HabitEndpoint).getChildDailyHabits(
             session,
-            organizationId: params['organizationId'],
-            actorId: params['actorId'],
             childId: params['childId'],
             day: params['day'],
           ),
@@ -2538,16 +1957,6 @@ class Endpoints extends _i1.EndpointDispatch {
         'registerDeviceToken': _i1.MethodConnector(
           name: 'registerDeviceToken',
           params: {
-            'organizationId': _i1.ParameterDescription(
-              name: 'organizationId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
-            'actorId': _i1.ParameterDescription(
-              name: 'actorId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
             'token': _i1.ParameterDescription(
               name: 'token',
               type: _i1.getType<String>(),
@@ -2581,8 +1990,6 @@ class Endpoints extends _i1.EndpointDispatch {
               (endpoints['notification'] as _i13.NotificationEndpoint)
                   .registerDeviceToken(
             session,
-            organizationId: params['organizationId'],
-            actorId: params['actorId'],
             token: params['token'],
             platform: params['platform'],
             deviceId: params['deviceId'],
@@ -2593,21 +2000,11 @@ class Endpoints extends _i1.EndpointDispatch {
         'removeDeviceToken': _i1.MethodConnector(
           name: 'removeDeviceToken',
           params: {
-            'organizationId': _i1.ParameterDescription(
-              name: 'organizationId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
-            'actorId': _i1.ParameterDescription(
-              name: 'actorId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
             'token': _i1.ParameterDescription(
               name: 'token',
               type: _i1.getType<String>(),
               nullable: false,
-            ),
+            )
           },
           call: (
             _i1.Session session,
@@ -2616,24 +2013,12 @@ class Endpoints extends _i1.EndpointDispatch {
               (endpoints['notification'] as _i13.NotificationEndpoint)
                   .removeDeviceToken(
             session,
-            organizationId: params['organizationId'],
-            actorId: params['actorId'],
             token: params['token'],
           ),
         ),
         'myNotifications': _i1.MethodConnector(
           name: 'myNotifications',
           params: {
-            'organizationId': _i1.ParameterDescription(
-              name: 'organizationId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
-            'actorId': _i1.ParameterDescription(
-              name: 'actorId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
             'page': _i1.ParameterDescription(
               name: 'page',
               type: _i1.getType<int>(),
@@ -2652,8 +2037,6 @@ class Endpoints extends _i1.EndpointDispatch {
               (endpoints['notification'] as _i13.NotificationEndpoint)
                   .myNotifications(
             session,
-            organizationId: params['organizationId'],
-            actorId: params['actorId'],
             page: params['page'],
             pageSize: params['pageSize'],
           ),
@@ -2661,21 +2044,11 @@ class Endpoints extends _i1.EndpointDispatch {
         'markNotificationRead': _i1.MethodConnector(
           name: 'markNotificationRead',
           params: {
-            'organizationId': _i1.ParameterDescription(
-              name: 'organizationId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
-            'actorId': _i1.ParameterDescription(
-              name: 'actorId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
             'notificationId': _i1.ParameterDescription(
               name: 'notificationId',
-              type: _i1.getType<int>(),
+              type: _i1.getType<_i17.UuidValue>(),
               nullable: false,
-            ),
+            )
           },
           call: (
             _i1.Session session,
@@ -2684,24 +2057,12 @@ class Endpoints extends _i1.EndpointDispatch {
               (endpoints['notification'] as _i13.NotificationEndpoint)
                   .markNotificationRead(
             session,
-            organizationId: params['organizationId'],
-            actorId: params['actorId'],
             notificationId: params['notificationId'],
           ),
         ),
         'createSegmentedNotification': _i1.MethodConnector(
           name: 'createSegmentedNotification',
           params: {
-            'organizationId': _i1.ParameterDescription(
-              name: 'organizationId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
-            'actorId': _i1.ParameterDescription(
-              name: 'actorId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
             'title': _i1.ParameterDescription(
               name: 'title',
               type: _i1.getType<String>(),
@@ -2724,17 +2085,17 @@ class Endpoints extends _i1.EndpointDispatch {
             ),
             'targetClassroomId': _i1.ParameterDescription(
               name: 'targetClassroomId',
-              type: _i1.getType<int?>(),
+              type: _i1.getType<_i17.UuidValue?>(),
               nullable: true,
             ),
             'targetChildId': _i1.ParameterDescription(
               name: 'targetChildId',
-              type: _i1.getType<int?>(),
+              type: _i1.getType<_i17.UuidValue?>(),
               nullable: true,
             ),
             'targetUserId': _i1.ParameterDescription(
               name: 'targetUserId',
-              type: _i1.getType<int?>(),
+              type: _i1.getType<_i17.UuidValue?>(),
               nullable: true,
             ),
           },
@@ -2745,8 +2106,6 @@ class Endpoints extends _i1.EndpointDispatch {
               (endpoints['notification'] as _i13.NotificationEndpoint)
                   .createSegmentedNotification(
             session,
-            organizationId: params['organizationId'],
-            actorId: params['actorId'],
             title: params['title'],
             body: params['body'],
             category: params['category'],
@@ -2765,11 +2124,6 @@ class Endpoints extends _i1.EndpointDispatch {
         'listOrganizations': _i1.MethodConnector(
           name: 'listOrganizations',
           params: {
-            'actorRole': _i1.ParameterDescription(
-              name: 'actorRole',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
             'page': _i1.ParameterDescription(
               name: 'page',
               type: _i1.getType<int>(),
@@ -2788,7 +2142,6 @@ class Endpoints extends _i1.EndpointDispatch {
               (endpoints['organization'] as _i14.OrganizationEndpoint)
                   .listOrganizations(
             session,
-            actorRole: params['actorRole'],
             page: params['page'],
             pageSize: params['pageSize'],
           ),
@@ -2798,14 +2151,9 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'organizationId': _i1.ParameterDescription(
               name: 'organizationId',
-              type: _i1.getType<String>(),
+              type: _i1.getType<_i17.UuidValue>(),
               nullable: false,
-            ),
-            'actorRole': _i1.ParameterDescription(
-              name: 'actorRole',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
+            )
           },
           call: (
             _i1.Session session,
@@ -2815,17 +2163,11 @@ class Endpoints extends _i1.EndpointDispatch {
                   .getOrganization(
             session,
             organizationId: params['organizationId'],
-            actorRole: params['actorRole'],
           ),
         ),
         'createOrganization': _i1.MethodConnector(
           name: 'createOrganization',
           params: {
-            'actorRole': _i1.ParameterDescription(
-              name: 'actorRole',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
             'name': _i1.ParameterDescription(
               name: 'name',
               type: _i1.getType<String>(),
@@ -2849,7 +2191,6 @@ class Endpoints extends _i1.EndpointDispatch {
               (endpoints['organization'] as _i14.OrganizationEndpoint)
                   .createOrganization(
             session,
-            actorRole: params['actorRole'],
             name: params['name'],
             slug: params['slug'],
             contactEmail: params['contactEmail'],
@@ -2864,19 +2205,9 @@ class Endpoints extends _i1.EndpointDispatch {
         'listReportsByChild': _i1.MethodConnector(
           name: 'listReportsByChild',
           params: {
-            'organizationId': _i1.ParameterDescription(
-              name: 'organizationId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
-            'actorId': _i1.ParameterDescription(
-              name: 'actorId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
             'childId': _i1.ParameterDescription(
               name: 'childId',
-              type: _i1.getType<int>(),
+              type: _i1.getType<_i17.UuidValue>(),
               nullable: false,
             ),
             'page': _i1.ParameterDescription(
@@ -2897,8 +2228,6 @@ class Endpoints extends _i1.EndpointDispatch {
               (endpoints['pedagogicalReport'] as _i15.PedagogicalReportEndpoint)
                   .listReportsByChild(
             session,
-            organizationId: params['organizationId'],
-            actorId: params['actorId'],
             childId: params['childId'],
             page: params['page'],
             pageSize: params['pageSize'],
@@ -2907,21 +2236,11 @@ class Endpoints extends _i1.EndpointDispatch {
         'getReport': _i1.MethodConnector(
           name: 'getReport',
           params: {
-            'organizationId': _i1.ParameterDescription(
-              name: 'organizationId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
-            'actorId': _i1.ParameterDescription(
-              name: 'actorId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
             'reportId': _i1.ParameterDescription(
               name: 'reportId',
-              type: _i1.getType<int>(),
+              type: _i1.getType<_i17.UuidValue>(),
               nullable: false,
-            ),
+            )
           },
           call: (
             _i1.Session session,
@@ -2930,27 +2249,15 @@ class Endpoints extends _i1.EndpointDispatch {
               (endpoints['pedagogicalReport'] as _i15.PedagogicalReportEndpoint)
                   .getReport(
             session,
-            organizationId: params['organizationId'],
-            actorId: params['actorId'],
             reportId: params['reportId'],
           ),
         ),
         'createReport': _i1.MethodConnector(
           name: 'createReport',
           params: {
-            'organizationId': _i1.ParameterDescription(
-              name: 'organizationId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
-            'actorId': _i1.ParameterDescription(
-              name: 'actorId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
             'childId': _i1.ParameterDescription(
               name: 'childId',
-              type: _i1.getType<int>(),
+              type: _i1.getType<_i17.UuidValue>(),
               nullable: false,
             ),
             'reportDate': _i1.ParameterDescription(
@@ -2991,8 +2298,6 @@ class Endpoints extends _i1.EndpointDispatch {
               (endpoints['pedagogicalReport'] as _i15.PedagogicalReportEndpoint)
                   .createReport(
             session,
-            organizationId: params['organizationId'],
-            actorId: params['actorId'],
             childId: params['childId'],
             reportDate: params['reportDate'],
             title: params['title'],
@@ -3005,19 +2310,9 @@ class Endpoints extends _i1.EndpointDispatch {
         'updateReport': _i1.MethodConnector(
           name: 'updateReport',
           params: {
-            'organizationId': _i1.ParameterDescription(
-              name: 'organizationId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
-            'actorId': _i1.ParameterDescription(
-              name: 'actorId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
             'reportId': _i1.ParameterDescription(
               name: 'reportId',
-              type: _i1.getType<int>(),
+              type: _i1.getType<_i17.UuidValue>(),
               nullable: false,
             ),
             'reportDate': _i1.ParameterDescription(
@@ -3058,8 +2353,6 @@ class Endpoints extends _i1.EndpointDispatch {
               (endpoints['pedagogicalReport'] as _i15.PedagogicalReportEndpoint)
                   .updateReport(
             session,
-            organizationId: params['organizationId'],
-            actorId: params['actorId'],
             reportId: params['reportId'],
             reportDate: params['reportDate'],
             title: params['title'],
@@ -3078,21 +2371,11 @@ class Endpoints extends _i1.EndpointDispatch {
         'checkIn': _i1.MethodConnector(
           name: 'checkIn',
           params: {
-            'organizationId': _i1.ParameterDescription(
-              name: 'organizationId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
-            'actorId': _i1.ParameterDescription(
-              name: 'actorId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
             'notes': _i1.ParameterDescription(
               name: 'notes',
               type: _i1.getType<String?>(),
               nullable: true,
-            ),
+            )
           },
           call: (
             _i1.Session session,
@@ -3100,29 +2383,17 @@ class Endpoints extends _i1.EndpointDispatch {
           ) async =>
               (endpoints['timeTracking'] as _i16.TimeTrackingEndpoint).checkIn(
             session,
-            organizationId: params['organizationId'],
-            actorId: params['actorId'],
             notes: params['notes'],
           ),
         ),
         'checkOut': _i1.MethodConnector(
           name: 'checkOut',
           params: {
-            'organizationId': _i1.ParameterDescription(
-              name: 'organizationId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
-            'actorId': _i1.ParameterDescription(
-              name: 'actorId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
             'notes': _i1.ParameterDescription(
               name: 'notes',
               type: _i1.getType<String?>(),
               nullable: true,
-            ),
+            )
           },
           call: (
             _i1.Session session,
@@ -3130,24 +2401,12 @@ class Endpoints extends _i1.EndpointDispatch {
           ) async =>
               (endpoints['timeTracking'] as _i16.TimeTrackingEndpoint).checkOut(
             session,
-            organizationId: params['organizationId'],
-            actorId: params['actorId'],
             notes: params['notes'],
           ),
         ),
         'myEntries': _i1.MethodConnector(
           name: 'myEntries',
           params: {
-            'organizationId': _i1.ParameterDescription(
-              name: 'organizationId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
-            'actorId': _i1.ParameterDescription(
-              name: 'actorId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
             'page': _i1.ParameterDescription(
               name: 'page',
               type: _i1.getType<int>(),
@@ -3166,8 +2425,6 @@ class Endpoints extends _i1.EndpointDispatch {
               (endpoints['timeTracking'] as _i16.TimeTrackingEndpoint)
                   .myEntries(
             session,
-            organizationId: params['organizationId'],
-            actorId: params['actorId'],
             page: params['page'],
             pageSize: params['pageSize'],
           ),
@@ -3175,19 +2432,9 @@ class Endpoints extends _i1.EndpointDispatch {
         'listEntries': _i1.MethodConnector(
           name: 'listEntries',
           params: {
-            'organizationId': _i1.ParameterDescription(
-              name: 'organizationId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
-            'actorId': _i1.ParameterDescription(
-              name: 'actorId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
             'userId': _i1.ParameterDescription(
               name: 'userId',
-              type: _i1.getType<String?>(),
+              type: _i1.getType<_i17.UuidValue?>(),
               nullable: true,
             ),
             'from': _i1.ParameterDescription(
@@ -3218,8 +2465,6 @@ class Endpoints extends _i1.EndpointDispatch {
               (endpoints['timeTracking'] as _i16.TimeTrackingEndpoint)
                   .listEntries(
             session,
-            organizationId: params['organizationId'],
-            actorId: params['actorId'],
             userId: params['userId'],
             from: params['from'],
             to: params['to'],
@@ -3230,21 +2475,11 @@ class Endpoints extends _i1.EndpointDispatch {
         'getEntry': _i1.MethodConnector(
           name: 'getEntry',
           params: {
-            'organizationId': _i1.ParameterDescription(
-              name: 'organizationId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
-            'actorId': _i1.ParameterDescription(
-              name: 'actorId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
             'entryId': _i1.ParameterDescription(
               name: 'entryId',
-              type: _i1.getType<int>(),
+              type: _i1.getType<_i17.UuidValue>(),
               nullable: false,
-            ),
+            )
           },
           call: (
             _i1.Session session,
@@ -3252,27 +2487,15 @@ class Endpoints extends _i1.EndpointDispatch {
           ) async =>
               (endpoints['timeTracking'] as _i16.TimeTrackingEndpoint).getEntry(
             session,
-            organizationId: params['organizationId'],
-            actorId: params['actorId'],
             entryId: params['entryId'],
           ),
         ),
         'correctEntry': _i1.MethodConnector(
           name: 'correctEntry',
           params: {
-            'organizationId': _i1.ParameterDescription(
-              name: 'organizationId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
-            'actorId': _i1.ParameterDescription(
-              name: 'actorId',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
             'targetEntryId': _i1.ParameterDescription(
               name: 'targetEntryId',
-              type: _i1.getType<int>(),
+              type: _i1.getType<_i17.UuidValue>(),
               nullable: false,
             ),
             'correctedEntryType': _i1.ParameterDescription(
@@ -3298,8 +2521,6 @@ class Endpoints extends _i1.EndpointDispatch {
               (endpoints['timeTracking'] as _i16.TimeTrackingEndpoint)
                   .correctEntry(
             session,
-            organizationId: params['organizationId'],
-            actorId: params['actorId'],
             targetEntryId: params['targetEntryId'],
             correctedEntryType: params['correctedEntryType'],
             correctionReason: params['correctionReason'],
@@ -3308,6 +2529,6 @@ class Endpoints extends _i1.EndpointDispatch {
         ),
       },
     );
-    modules['serverpod_auth'] = _i17.Endpoints()..initializeEndpoints(server);
+    modules['serverpod_auth'] = _i18.Endpoints()..initializeEndpoints(server);
   }
 }

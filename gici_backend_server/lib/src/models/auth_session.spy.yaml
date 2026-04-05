@@ -1,8 +1,10 @@
+# Auth session DTO (transfer object, no database table)
+
 class: AuthSession
 
 fields:
-  appUserId: int
-  organizationId: int?
+  appUserId: UuidValue
+  organizationId: UuidValue?
   email: String
   role: String
   firstName: String

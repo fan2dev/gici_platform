@@ -33,8 +33,8 @@ abstract class Child implements _i1.SerializableModel {
   });
 
   factory Child({
-    int? id,
-    required int organizationId,
+    _i1.UuidValue? id,
+    required _i1.UuidValue organizationId,
     required String firstName,
     required String lastName,
     required DateTime dateOfBirth,
@@ -54,8 +54,11 @@ abstract class Child implements _i1.SerializableModel {
 
   factory Child.fromJson(Map<String, dynamic> jsonSerialization) {
     return Child(
-      id: jsonSerialization['id'] as int?,
-      organizationId: jsonSerialization['organizationId'] as int,
+      id: jsonSerialization['id'] == null
+          ? null
+          : _i1.UuidValueJsonExtension.fromJson(jsonSerialization['id']),
+      organizationId: _i1.UuidValueJsonExtension.fromJson(
+          jsonSerialization['organizationId']),
       firstName: jsonSerialization['firstName'] as String,
       lastName: jsonSerialization['lastName'] as String,
       dateOfBirth:
@@ -87,9 +90,9 @@ abstract class Child implements _i1.SerializableModel {
   /// The database id, set if the object has been inserted into the
   /// database or if it has been fetched from the database. Otherwise,
   /// the id will be null.
-  int? id;
+  _i1.UuidValue? id;
 
-  int organizationId;
+  _i1.UuidValue organizationId;
 
   String firstName;
 
@@ -125,8 +128,8 @@ abstract class Child implements _i1.SerializableModel {
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
   Child copyWith({
-    int? id,
-    int? organizationId,
+    _i1.UuidValue? id,
+    _i1.UuidValue? organizationId,
     String? firstName,
     String? lastName,
     DateTime? dateOfBirth,
@@ -146,8 +149,8 @@ abstract class Child implements _i1.SerializableModel {
   @override
   Map<String, dynamic> toJson() {
     return {
-      if (id != null) 'id': id,
-      'organizationId': organizationId,
+      if (id != null) 'id': id?.toJson(),
+      'organizationId': organizationId.toJson(),
       'firstName': firstName,
       'lastName': lastName,
       'dateOfBirth': dateOfBirth.toJson(),
@@ -178,8 +181,8 @@ class _Undefined {}
 
 class _ChildImpl extends Child {
   _ChildImpl({
-    int? id,
-    required int organizationId,
+    _i1.UuidValue? id,
+    required _i1.UuidValue organizationId,
     required String firstName,
     required String lastName,
     required DateTime dateOfBirth,
@@ -221,7 +224,7 @@ class _ChildImpl extends Child {
   @override
   Child copyWith({
     Object? id = _Undefined,
-    int? organizationId,
+    _i1.UuidValue? organizationId,
     String? firstName,
     String? lastName,
     DateTime? dateOfBirth,
@@ -239,7 +242,7 @@ class _ChildImpl extends Child {
     Object? deletedAt = _Undefined,
   }) {
     return Child(
-      id: id is int? ? id : this.id,
+      id: id is _i1.UuidValue? ? id : this.id,
       organizationId: organizationId ?? this.organizationId,
       firstName: firstName ?? this.firstName,
       lastName: lastName ?? this.lastName,

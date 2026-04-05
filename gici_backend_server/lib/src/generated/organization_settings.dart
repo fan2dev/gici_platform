@@ -12,7 +12,7 @@
 import 'package:serverpod/serverpod.dart' as _i1;
 
 abstract class OrganizationSettings
-    implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
+    implements _i1.TableRow<_i1.UuidValue?>, _i1.ProtocolSerialization {
   OrganizationSettings._({
     this.id,
     required this.organizationId,
@@ -34,8 +34,8 @@ abstract class OrganizationSettings
   });
 
   factory OrganizationSettings({
-    int? id,
-    required int organizationId,
+    _i1.UuidValue? id,
+    required _i1.UuidValue organizationId,
     required String defaultLanguage,
     required String timezone,
     required String dateFormat,
@@ -56,8 +56,11 @@ abstract class OrganizationSettings
   factory OrganizationSettings.fromJson(
       Map<String, dynamic> jsonSerialization) {
     return OrganizationSettings(
-      id: jsonSerialization['id'] as int?,
-      organizationId: jsonSerialization['organizationId'] as int,
+      id: jsonSerialization['id'] == null
+          ? null
+          : _i1.UuidValueJsonExtension.fromJson(jsonSerialization['id']),
+      organizationId: _i1.UuidValueJsonExtension.fromJson(
+          jsonSerialization['organizationId']),
       defaultLanguage: jsonSerialization['defaultLanguage'] as String,
       timezone: jsonSerialization['timezone'] as String,
       dateFormat: jsonSerialization['dateFormat'] as String,
@@ -87,9 +90,9 @@ abstract class OrganizationSettings
   static const db = OrganizationSettingsRepository._();
 
   @override
-  int? id;
+  _i1.UuidValue? id;
 
-  int organizationId;
+  _i1.UuidValue organizationId;
 
   String defaultLanguage;
 
@@ -122,14 +125,14 @@ abstract class OrganizationSettings
   DateTime updatedAt;
 
   @override
-  _i1.Table<int?> get table => t;
+  _i1.Table<_i1.UuidValue?> get table => t;
 
   /// Returns a shallow copy of this [OrganizationSettings]
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
   OrganizationSettings copyWith({
-    int? id,
-    int? organizationId,
+    _i1.UuidValue? id,
+    _i1.UuidValue? organizationId,
     String? defaultLanguage,
     String? timezone,
     String? dateFormat,
@@ -149,8 +152,8 @@ abstract class OrganizationSettings
   @override
   Map<String, dynamic> toJson() {
     return {
-      if (id != null) 'id': id,
-      'organizationId': organizationId,
+      if (id != null) 'id': id?.toJson(),
+      'organizationId': organizationId.toJson(),
       'defaultLanguage': defaultLanguage,
       'timezone': timezone,
       'dateFormat': dateFormat,
@@ -172,8 +175,8 @@ abstract class OrganizationSettings
   @override
   Map<String, dynamic> toJsonForProtocol() {
     return {
-      if (id != null) 'id': id,
-      'organizationId': organizationId,
+      if (id != null) 'id': id?.toJson(),
+      'organizationId': organizationId.toJson(),
       'defaultLanguage': defaultLanguage,
       'timezone': timezone,
       'dateFormat': dateFormat,
@@ -226,8 +229,8 @@ class _Undefined {}
 
 class _OrganizationSettingsImpl extends OrganizationSettings {
   _OrganizationSettingsImpl({
-    int? id,
-    required int organizationId,
+    _i1.UuidValue? id,
+    required _i1.UuidValue organizationId,
     required String defaultLanguage,
     required String timezone,
     required String dateFormat,
@@ -269,7 +272,7 @@ class _OrganizationSettingsImpl extends OrganizationSettings {
   @override
   OrganizationSettings copyWith({
     Object? id = _Undefined,
-    int? organizationId,
+    _i1.UuidValue? organizationId,
     String? defaultLanguage,
     String? timezone,
     String? dateFormat,
@@ -287,7 +290,7 @@ class _OrganizationSettingsImpl extends OrganizationSettings {
     DateTime? updatedAt,
   }) {
     return OrganizationSettings(
-      id: id is int? ? id : this.id,
+      id: id is _i1.UuidValue? ? id : this.id,
       organizationId: organizationId ?? this.organizationId,
       defaultLanguage: defaultLanguage ?? this.defaultLanguage,
       timezone: timezone ?? this.timezone,
@@ -312,10 +315,10 @@ class _OrganizationSettingsImpl extends OrganizationSettings {
   }
 }
 
-class OrganizationSettingsTable extends _i1.Table<int?> {
+class OrganizationSettingsTable extends _i1.Table<_i1.UuidValue?> {
   OrganizationSettingsTable({super.tableRelation})
       : super(tableName: 'organization_settings') {
-    organizationId = _i1.ColumnInt(
+    organizationId = _i1.ColumnUuid(
       'organizationId',
       this,
     );
@@ -381,7 +384,7 @@ class OrganizationSettingsTable extends _i1.Table<int?> {
     );
   }
 
-  late final _i1.ColumnInt organizationId;
+  late final _i1.ColumnUuid organizationId;
 
   late final _i1.ColumnString defaultLanguage;
 
@@ -442,7 +445,7 @@ class OrganizationSettingsInclude extends _i1.IncludeObject {
   Map<String, _i1.Include?> get includes => {};
 
   @override
-  _i1.Table<int?> get table => OrganizationSettings.t;
+  _i1.Table<_i1.UuidValue?> get table => OrganizationSettings.t;
 }
 
 class OrganizationSettingsIncludeList extends _i1.IncludeList {
@@ -462,7 +465,7 @@ class OrganizationSettingsIncludeList extends _i1.IncludeList {
   Map<String, _i1.Include?> get includes => include?.includes ?? {};
 
   @override
-  _i1.Table<int?> get table => OrganizationSettings.t;
+  _i1.Table<_i1.UuidValue?> get table => OrganizationSettings.t;
 }
 
 class OrganizationSettingsRepository {
@@ -550,7 +553,7 @@ class OrganizationSettingsRepository {
   /// Finds a single [OrganizationSettings] by its [id] or null if no such row exists.
   Future<OrganizationSettings?> findById(
     _i1.Session session,
-    int id, {
+    _i1.UuidValue id, {
     _i1.Transaction? transaction,
   }) async {
     return session.db.findById<OrganizationSettings>(

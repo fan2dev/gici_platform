@@ -7,8 +7,8 @@ class PedagogicalReportService {
 
   Future<List<PedagogicalReport>> listByChild(
     Session session, {
-    required int organizationId,
-    required int childId,
+    required UuidValue organizationId,
+    required UuidValue childId,
     required bool guardianView,
     required int limit,
     required int offset,
@@ -34,16 +34,16 @@ class PedagogicalReportService {
 
   Future<PedagogicalReport?> getById(
     Session session, {
-    required int reportId,
+    required UuidValue reportId,
   }) {
     return PedagogicalReport.db.findById(session, reportId);
   }
 
   Future<PedagogicalReport> create(
     Session session, {
-    required int organizationId,
-    required int childId,
-    required int createdByUserId,
+    required UuidValue organizationId,
+    required UuidValue childId,
+    required UuidValue createdByUserId,
     required DateTime reportDate,
     required String title,
     required String summary,
@@ -75,7 +75,7 @@ class PedagogicalReportService {
   Future<PedagogicalReport> update(
     Session session, {
     required PedagogicalReport report,
-    required int updatedByUserId,
+    required UuidValue updatedByUserId,
     DateTime? reportDate,
     String? title,
     String? summary,

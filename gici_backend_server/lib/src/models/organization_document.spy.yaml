@@ -1,14 +1,17 @@
+# Organization-level document
+
 class: OrganizationDocument
 
 table: organization_document
 
 fields:
-  organizationId: int
-  fileAssetId: int
+  id: UuidValue?, defaultPersist=random
+  organizationId: UuidValue
+  fileAssetId: UuidValue
   title: String
   description: String?
   visibility: String
-  createdByUserId: int
+  createdByUserId: UuidValue
   createdAt: DateTime
   updatedAt: DateTime
   deletedAt: DateTime?

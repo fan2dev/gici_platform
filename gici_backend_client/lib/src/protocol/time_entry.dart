@@ -29,36 +29,43 @@ abstract class TimeEntry implements _i1.SerializableModel {
   });
 
   factory TimeEntry({
-    int? id,
-    required int organizationId,
-    required int userId,
+    _i1.UuidValue? id,
+    required _i1.UuidValue organizationId,
+    required _i1.UuidValue userId,
     required String entryType,
     required DateTime recordedAt,
-    int? parentEntryId,
+    _i1.UuidValue? parentEntryId,
     String? correctionReason,
     String? locationData,
     String? deviceInfo,
     String? notes,
     required bool isManualEntry,
-    required int createdByUserId,
+    required _i1.UuidValue createdByUserId,
     required DateTime createdAt,
   }) = _TimeEntryImpl;
 
   factory TimeEntry.fromJson(Map<String, dynamic> jsonSerialization) {
     return TimeEntry(
-      id: jsonSerialization['id'] as int?,
-      organizationId: jsonSerialization['organizationId'] as int,
-      userId: jsonSerialization['userId'] as int,
+      id: jsonSerialization['id'] == null
+          ? null
+          : _i1.UuidValueJsonExtension.fromJson(jsonSerialization['id']),
+      organizationId: _i1.UuidValueJsonExtension.fromJson(
+          jsonSerialization['organizationId']),
+      userId: _i1.UuidValueJsonExtension.fromJson(jsonSerialization['userId']),
       entryType: jsonSerialization['entryType'] as String,
       recordedAt:
           _i1.DateTimeJsonExtension.fromJson(jsonSerialization['recordedAt']),
-      parentEntryId: jsonSerialization['parentEntryId'] as int?,
+      parentEntryId: jsonSerialization['parentEntryId'] == null
+          ? null
+          : _i1.UuidValueJsonExtension.fromJson(
+              jsonSerialization['parentEntryId']),
       correctionReason: jsonSerialization['correctionReason'] as String?,
       locationData: jsonSerialization['locationData'] as String?,
       deviceInfo: jsonSerialization['deviceInfo'] as String?,
       notes: jsonSerialization['notes'] as String?,
       isManualEntry: jsonSerialization['isManualEntry'] as bool,
-      createdByUserId: jsonSerialization['createdByUserId'] as int,
+      createdByUserId: _i1.UuidValueJsonExtension.fromJson(
+          jsonSerialization['createdByUserId']),
       createdAt:
           _i1.DateTimeJsonExtension.fromJson(jsonSerialization['createdAt']),
     );
@@ -67,17 +74,17 @@ abstract class TimeEntry implements _i1.SerializableModel {
   /// The database id, set if the object has been inserted into the
   /// database or if it has been fetched from the database. Otherwise,
   /// the id will be null.
-  int? id;
+  _i1.UuidValue? id;
 
-  int organizationId;
+  _i1.UuidValue organizationId;
 
-  int userId;
+  _i1.UuidValue userId;
 
   String entryType;
 
   DateTime recordedAt;
 
-  int? parentEntryId;
+  _i1.UuidValue? parentEntryId;
 
   String? correctionReason;
 
@@ -89,7 +96,7 @@ abstract class TimeEntry implements _i1.SerializableModel {
 
   bool isManualEntry;
 
-  int createdByUserId;
+  _i1.UuidValue createdByUserId;
 
   DateTime createdAt;
 
@@ -97,35 +104,35 @@ abstract class TimeEntry implements _i1.SerializableModel {
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
   TimeEntry copyWith({
-    int? id,
-    int? organizationId,
-    int? userId,
+    _i1.UuidValue? id,
+    _i1.UuidValue? organizationId,
+    _i1.UuidValue? userId,
     String? entryType,
     DateTime? recordedAt,
-    int? parentEntryId,
+    _i1.UuidValue? parentEntryId,
     String? correctionReason,
     String? locationData,
     String? deviceInfo,
     String? notes,
     bool? isManualEntry,
-    int? createdByUserId,
+    _i1.UuidValue? createdByUserId,
     DateTime? createdAt,
   });
   @override
   Map<String, dynamic> toJson() {
     return {
-      if (id != null) 'id': id,
-      'organizationId': organizationId,
-      'userId': userId,
+      if (id != null) 'id': id?.toJson(),
+      'organizationId': organizationId.toJson(),
+      'userId': userId.toJson(),
       'entryType': entryType,
       'recordedAt': recordedAt.toJson(),
-      if (parentEntryId != null) 'parentEntryId': parentEntryId,
+      if (parentEntryId != null) 'parentEntryId': parentEntryId?.toJson(),
       if (correctionReason != null) 'correctionReason': correctionReason,
       if (locationData != null) 'locationData': locationData,
       if (deviceInfo != null) 'deviceInfo': deviceInfo,
       if (notes != null) 'notes': notes,
       'isManualEntry': isManualEntry,
-      'createdByUserId': createdByUserId,
+      'createdByUserId': createdByUserId.toJson(),
       'createdAt': createdAt.toJson(),
     };
   }
@@ -140,18 +147,18 @@ class _Undefined {}
 
 class _TimeEntryImpl extends TimeEntry {
   _TimeEntryImpl({
-    int? id,
-    required int organizationId,
-    required int userId,
+    _i1.UuidValue? id,
+    required _i1.UuidValue organizationId,
+    required _i1.UuidValue userId,
     required String entryType,
     required DateTime recordedAt,
-    int? parentEntryId,
+    _i1.UuidValue? parentEntryId,
     String? correctionReason,
     String? locationData,
     String? deviceInfo,
     String? notes,
     required bool isManualEntry,
-    required int createdByUserId,
+    required _i1.UuidValue createdByUserId,
     required DateTime createdAt,
   }) : super._(
           id: id,
@@ -175,8 +182,8 @@ class _TimeEntryImpl extends TimeEntry {
   @override
   TimeEntry copyWith({
     Object? id = _Undefined,
-    int? organizationId,
-    int? userId,
+    _i1.UuidValue? organizationId,
+    _i1.UuidValue? userId,
     String? entryType,
     DateTime? recordedAt,
     Object? parentEntryId = _Undefined,
@@ -185,16 +192,17 @@ class _TimeEntryImpl extends TimeEntry {
     Object? deviceInfo = _Undefined,
     Object? notes = _Undefined,
     bool? isManualEntry,
-    int? createdByUserId,
+    _i1.UuidValue? createdByUserId,
     DateTime? createdAt,
   }) {
     return TimeEntry(
-      id: id is int? ? id : this.id,
+      id: id is _i1.UuidValue? ? id : this.id,
       organizationId: organizationId ?? this.organizationId,
       userId: userId ?? this.userId,
       entryType: entryType ?? this.entryType,
       recordedAt: recordedAt ?? this.recordedAt,
-      parentEntryId: parentEntryId is int? ? parentEntryId : this.parentEntryId,
+      parentEntryId:
+          parentEntryId is _i1.UuidValue? ? parentEntryId : this.parentEntryId,
       correctionReason: correctionReason is String?
           ? correctionReason
           : this.correctionReason,

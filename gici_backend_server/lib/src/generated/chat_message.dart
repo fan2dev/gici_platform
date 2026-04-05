@@ -12,7 +12,7 @@
 import 'package:serverpod/serverpod.dart' as _i1;
 
 abstract class ChatMessage
-    implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
+    implements _i1.TableRow<_i1.UuidValue?>, _i1.ProtocolSerialization {
   ChatMessage._({
     this.id,
     required this.organizationId,
@@ -27,10 +27,10 @@ abstract class ChatMessage
   });
 
   factory ChatMessage({
-    int? id,
-    required int organizationId,
-    required int conversationId,
-    required int senderUserId,
+    _i1.UuidValue? id,
+    required _i1.UuidValue organizationId,
+    required _i1.UuidValue conversationId,
+    required _i1.UuidValue senderUserId,
     required String body,
     required String messageType,
     String? metadataJson,
@@ -41,10 +41,15 @@ abstract class ChatMessage
 
   factory ChatMessage.fromJson(Map<String, dynamic> jsonSerialization) {
     return ChatMessage(
-      id: jsonSerialization['id'] as int?,
-      organizationId: jsonSerialization['organizationId'] as int,
-      conversationId: jsonSerialization['conversationId'] as int,
-      senderUserId: jsonSerialization['senderUserId'] as int,
+      id: jsonSerialization['id'] == null
+          ? null
+          : _i1.UuidValueJsonExtension.fromJson(jsonSerialization['id']),
+      organizationId: _i1.UuidValueJsonExtension.fromJson(
+          jsonSerialization['organizationId']),
+      conversationId: _i1.UuidValueJsonExtension.fromJson(
+          jsonSerialization['conversationId']),
+      senderUserId: _i1.UuidValueJsonExtension.fromJson(
+          jsonSerialization['senderUserId']),
       body: jsonSerialization['body'] as String,
       messageType: jsonSerialization['messageType'] as String,
       metadataJson: jsonSerialization['metadataJson'] as String?,
@@ -62,13 +67,13 @@ abstract class ChatMessage
   static const db = ChatMessageRepository._();
 
   @override
-  int? id;
+  _i1.UuidValue? id;
 
-  int organizationId;
+  _i1.UuidValue organizationId;
 
-  int conversationId;
+  _i1.UuidValue conversationId;
 
-  int senderUserId;
+  _i1.UuidValue senderUserId;
 
   String body;
 
@@ -83,16 +88,16 @@ abstract class ChatMessage
   DateTime createdAt;
 
   @override
-  _i1.Table<int?> get table => t;
+  _i1.Table<_i1.UuidValue?> get table => t;
 
   /// Returns a shallow copy of this [ChatMessage]
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
   ChatMessage copyWith({
-    int? id,
-    int? organizationId,
-    int? conversationId,
-    int? senderUserId,
+    _i1.UuidValue? id,
+    _i1.UuidValue? organizationId,
+    _i1.UuidValue? conversationId,
+    _i1.UuidValue? senderUserId,
     String? body,
     String? messageType,
     String? metadataJson,
@@ -103,10 +108,10 @@ abstract class ChatMessage
   @override
   Map<String, dynamic> toJson() {
     return {
-      if (id != null) 'id': id,
-      'organizationId': organizationId,
-      'conversationId': conversationId,
-      'senderUserId': senderUserId,
+      if (id != null) 'id': id?.toJson(),
+      'organizationId': organizationId.toJson(),
+      'conversationId': conversationId.toJson(),
+      'senderUserId': senderUserId.toJson(),
       'body': body,
       'messageType': messageType,
       if (metadataJson != null) 'metadataJson': metadataJson,
@@ -119,10 +124,10 @@ abstract class ChatMessage
   @override
   Map<String, dynamic> toJsonForProtocol() {
     return {
-      if (id != null) 'id': id,
-      'organizationId': organizationId,
-      'conversationId': conversationId,
-      'senderUserId': senderUserId,
+      if (id != null) 'id': id?.toJson(),
+      'organizationId': organizationId.toJson(),
+      'conversationId': conversationId.toJson(),
+      'senderUserId': senderUserId.toJson(),
       'body': body,
       'messageType': messageType,
       if (metadataJson != null) 'metadataJson': metadataJson,
@@ -166,10 +171,10 @@ class _Undefined {}
 
 class _ChatMessageImpl extends ChatMessage {
   _ChatMessageImpl({
-    int? id,
-    required int organizationId,
-    required int conversationId,
-    required int senderUserId,
+    _i1.UuidValue? id,
+    required _i1.UuidValue organizationId,
+    required _i1.UuidValue conversationId,
+    required _i1.UuidValue senderUserId,
     required String body,
     required String messageType,
     String? metadataJson,
@@ -195,9 +200,9 @@ class _ChatMessageImpl extends ChatMessage {
   @override
   ChatMessage copyWith({
     Object? id = _Undefined,
-    int? organizationId,
-    int? conversationId,
-    int? senderUserId,
+    _i1.UuidValue? organizationId,
+    _i1.UuidValue? conversationId,
+    _i1.UuidValue? senderUserId,
     String? body,
     String? messageType,
     Object? metadataJson = _Undefined,
@@ -206,7 +211,7 @@ class _ChatMessageImpl extends ChatMessage {
     DateTime? createdAt,
   }) {
     return ChatMessage(
-      id: id is int? ? id : this.id,
+      id: id is _i1.UuidValue? ? id : this.id,
       organizationId: organizationId ?? this.organizationId,
       conversationId: conversationId ?? this.conversationId,
       senderUserId: senderUserId ?? this.senderUserId,
@@ -220,17 +225,17 @@ class _ChatMessageImpl extends ChatMessage {
   }
 }
 
-class ChatMessageTable extends _i1.Table<int?> {
+class ChatMessageTable extends _i1.Table<_i1.UuidValue?> {
   ChatMessageTable({super.tableRelation}) : super(tableName: 'chat_message') {
-    organizationId = _i1.ColumnInt(
+    organizationId = _i1.ColumnUuid(
       'organizationId',
       this,
     );
-    conversationId = _i1.ColumnInt(
+    conversationId = _i1.ColumnUuid(
       'conversationId',
       this,
     );
-    senderUserId = _i1.ColumnInt(
+    senderUserId = _i1.ColumnUuid(
       'senderUserId',
       this,
     );
@@ -260,11 +265,11 @@ class ChatMessageTable extends _i1.Table<int?> {
     );
   }
 
-  late final _i1.ColumnInt organizationId;
+  late final _i1.ColumnUuid organizationId;
 
-  late final _i1.ColumnInt conversationId;
+  late final _i1.ColumnUuid conversationId;
 
-  late final _i1.ColumnInt senderUserId;
+  late final _i1.ColumnUuid senderUserId;
 
   late final _i1.ColumnString body;
 
@@ -300,7 +305,7 @@ class ChatMessageInclude extends _i1.IncludeObject {
   Map<String, _i1.Include?> get includes => {};
 
   @override
-  _i1.Table<int?> get table => ChatMessage.t;
+  _i1.Table<_i1.UuidValue?> get table => ChatMessage.t;
 }
 
 class ChatMessageIncludeList extends _i1.IncludeList {
@@ -320,7 +325,7 @@ class ChatMessageIncludeList extends _i1.IncludeList {
   Map<String, _i1.Include?> get includes => include?.includes ?? {};
 
   @override
-  _i1.Table<int?> get table => ChatMessage.t;
+  _i1.Table<_i1.UuidValue?> get table => ChatMessage.t;
 }
 
 class ChatMessageRepository {
@@ -408,7 +413,7 @@ class ChatMessageRepository {
   /// Finds a single [ChatMessage] by its [id] or null if no such row exists.
   Future<ChatMessage?> findById(
     _i1.Session session,
-    int id, {
+    _i1.UuidValue id, {
     _i1.Transaction? transaction,
   }) async {
     return session.db.findById<ChatMessage>(

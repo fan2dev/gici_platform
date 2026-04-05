@@ -1,7 +1,7 @@
 import 'package:serverpod/serverpod.dart';
 
 import '../generated/protocol.dart';
-import '../helpers/request_scope.dart';
+import '../helpers/session_user_helper.dart';
 import '../services/access_control_service.dart';
 import '../services/activity_log_service.dart';
 import '../services/experience_service.dart';
@@ -14,22 +14,15 @@ class ExperienceEndpoint extends Endpoint {
   final _activityLogService = const ActivityLogService();
 
   Future<UserOnboardingState?> getOnboardingState(
-    Session session, {
-    required String organizationId,
-    required String actorId,
-  }) async {
-    final orgId = parseOrganizationId(organizationId);
-    final actor = await _accessControl.requireActor(
-      session,
-      actorId: parseActorId(actorId),
-      organizationId: orgId,
-      allowedRoles: const [
-        'platform_super_admin',
-        'organization_admin',
-        'staff',
-        'guardian',
-      ],
-    );
+    Session session,
+  ) async {
+    final actor = await getAuthenticatedUser(session);
+    _accessControl.requireRole(actor, allowedRoles: const [
+      'platform_super_admin',
+      'organization_admin',
+      'staff',
+      'guardian',
+    ]);
 
     return _experienceService.getOnboardingState(
       session,
@@ -39,22 +32,16 @@ class ExperienceEndpoint extends Endpoint {
 
   Future<UserOnboardingState> completeOnboarding(
     Session session, {
-    required String organizationId,
-    required String actorId,
     bool acceptTerms = true,
   }) async {
-    final orgId = parseOrganizationId(organizationId);
-    final actor = await _accessControl.requireActor(
-      session,
-      actorId: parseActorId(actorId),
-      organizationId: orgId,
-      allowedRoles: const [
-        'platform_super_admin',
-        'organization_admin',
-        'staff',
-        'guardian',
-      ],
-    );
+    final actor = await getAuthenticatedUser(session);
+    _accessControl.requireRole(actor, allowedRoles: const [
+      'platform_super_admin',
+      'organization_admin',
+      'staff',
+      'guardian',
+    ]);
+    final orgId = actor.organizationId!;
 
     final onboarding = await _experienceService.completeOnboarding(
       session,
@@ -69,7 +56,7 @@ class ExperienceEndpoint extends Endpoint {
       userId: actor.id,
       action: 'onboarding.complete',
       entityType: 'user_onboarding_state',
-      entityId: onboarding.id,
+      entityId: onboarding.id?.toString(),
       metadata: 'acceptTerms=$acceptTerms',
     );
 
@@ -77,22 +64,16 @@ class ExperienceEndpoint extends Endpoint {
   }
 
   Future<Organization> getCenterInfo(
-    Session session, {
-    required String organizationId,
-    required String actorId,
-  }) async {
-    final orgId = parseOrganizationId(organizationId);
-    await _accessControl.requireActor(
-      session,
-      actorId: parseActorId(actorId),
-      organizationId: orgId,
-      allowedRoles: const [
-        'platform_super_admin',
-        'organization_admin',
-        'staff',
-        'guardian',
-      ],
-    );
+    Session session,
+  ) async {
+    final actor = await getAuthenticatedUser(session);
+    _accessControl.requireRole(actor, allowedRoles: const [
+      'platform_super_admin',
+      'organization_admin',
+      'staff',
+      'guardian',
+    ]);
+    final orgId = actor.organizationId!;
 
     final org = await Organization.db.findFirstRow(
       session,
@@ -106,25 +87,19 @@ class ExperienceEndpoint extends Endpoint {
 
   Future<List<MenuEntry>> listMenuEntries(
     Session session, {
-    required String organizationId,
-    required String actorId,
     DateTime? from,
     DateTime? to,
     int page = 0,
     int pageSize = 30,
   }) async {
-    final orgId = parseOrganizationId(organizationId);
-    await _accessControl.requireActor(
-      session,
-      actorId: parseActorId(actorId),
-      organizationId: orgId,
-      allowedRoles: const [
-        'platform_super_admin',
-        'organization_admin',
-        'staff',
-        'guardian',
-      ],
-    );
+    final actor = await getAuthenticatedUser(session);
+    _accessControl.requireRole(actor, allowedRoles: const [
+      'platform_super_admin',
+      'organization_admin',
+      'staff',
+      'guardian',
+    ]);
+    final orgId = actor.organizationId!;
 
     final safePage = page < 0 ? 0 : page;
     final safePageSize = pageSize.clamp(1, 100);
@@ -141,22 +116,16 @@ class ExperienceEndpoint extends Endpoint {
 
   Future<MenuEntry?> getMenuEntry(
     Session session, {
-    required String organizationId,
-    required String actorId,
-    required int menuEntryId,
+    required UuidValue menuEntryId,
   }) async {
-    final orgId = parseOrganizationId(organizationId);
-    await _accessControl.requireActor(
-      session,
-      actorId: parseActorId(actorId),
-      organizationId: orgId,
-      allowedRoles: const [
-        'platform_super_admin',
-        'organization_admin',
-        'staff',
-        'guardian',
-      ],
-    );
+    final actor = await getAuthenticatedUser(session);
+    _accessControl.requireRole(actor, allowedRoles: const [
+      'platform_super_admin',
+      'organization_admin',
+      'staff',
+      'guardian',
+    ]);
+    final orgId = actor.organizationId!;
 
     return _experienceService.getMenuEntry(
       session,
@@ -167,21 +136,19 @@ class ExperienceEndpoint extends Endpoint {
 
   Future<MenuEntry> createMenuEntry(
     Session session, {
-    required String organizationId,
-    required String actorId,
     required DateTime menuDate,
     required String mealType,
     required String title,
     String? description,
-    int? classroomId,
+    UuidValue? classroomId,
   }) async {
-    final orgId = parseOrganizationId(organizationId);
-    final actor = await _accessControl.requireActor(
-      session,
-      actorId: parseActorId(actorId),
-      organizationId: orgId,
-      allowedRoles: const ['platform_super_admin', 'organization_admin', 'staff'],
-    );
+    final actor = await getAuthenticatedUser(session);
+    _accessControl.requireRole(actor, allowedRoles: const [
+      'platform_super_admin',
+      'organization_admin',
+      'staff',
+    ]);
+    final orgId = actor.organizationId!;
 
     final menuEntry = await _experienceService.createMenuEntry(
       session,
@@ -200,7 +167,7 @@ class ExperienceEndpoint extends Endpoint {
       userId: actor.id,
       action: 'menu.create',
       entityType: 'menu_entry',
-      entityId: menuEntry.id,
+      entityId: menuEntry.id?.toString(),
       metadata: 'mealType=$mealType;title=$title',
     );
 
@@ -209,22 +176,20 @@ class ExperienceEndpoint extends Endpoint {
 
   Future<MenuEntry> updateMenuEntry(
     Session session, {
-    required String organizationId,
-    required String actorId,
-    required int menuEntryId,
+    required UuidValue menuEntryId,
     DateTime? menuDate,
     String? mealType,
     String? title,
     String? description,
-    int? classroomId,
+    UuidValue? classroomId,
   }) async {
-    final orgId = parseOrganizationId(organizationId);
-    final actor = await _accessControl.requireActor(
-      session,
-      actorId: parseActorId(actorId),
-      organizationId: orgId,
-      allowedRoles: const ['platform_super_admin', 'organization_admin', 'staff'],
-    );
+    final actor = await getAuthenticatedUser(session);
+    _accessControl.requireRole(actor, allowedRoles: const [
+      'platform_super_admin',
+      'organization_admin',
+      'staff',
+    ]);
+    final orgId = actor.organizationId!;
 
     final existing = await _experienceService.getMenuEntry(
       session,
@@ -251,7 +216,7 @@ class ExperienceEndpoint extends Endpoint {
       userId: actor.id,
       action: 'menu.update',
       entityType: 'menu_entry',
-      entityId: updated.id,
+      entityId: updated.id?.toString(),
       metadata: 'menuEntryId=$menuEntryId',
     );
 

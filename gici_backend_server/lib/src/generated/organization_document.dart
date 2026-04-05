@@ -12,7 +12,7 @@
 import 'package:serverpod/serverpod.dart' as _i1;
 
 abstract class OrganizationDocument
-    implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
+    implements _i1.TableRow<_i1.UuidValue?>, _i1.ProtocolSerialization {
   OrganizationDocument._({
     this.id,
     required this.organizationId,
@@ -27,13 +27,13 @@ abstract class OrganizationDocument
   });
 
   factory OrganizationDocument({
-    int? id,
-    required int organizationId,
-    required int fileAssetId,
+    _i1.UuidValue? id,
+    required _i1.UuidValue organizationId,
+    required _i1.UuidValue fileAssetId,
     required String title,
     String? description,
     required String visibility,
-    required int createdByUserId,
+    required _i1.UuidValue createdByUserId,
     required DateTime createdAt,
     required DateTime updatedAt,
     DateTime? deletedAt,
@@ -42,13 +42,18 @@ abstract class OrganizationDocument
   factory OrganizationDocument.fromJson(
       Map<String, dynamic> jsonSerialization) {
     return OrganizationDocument(
-      id: jsonSerialization['id'] as int?,
-      organizationId: jsonSerialization['organizationId'] as int,
-      fileAssetId: jsonSerialization['fileAssetId'] as int,
+      id: jsonSerialization['id'] == null
+          ? null
+          : _i1.UuidValueJsonExtension.fromJson(jsonSerialization['id']),
+      organizationId: _i1.UuidValueJsonExtension.fromJson(
+          jsonSerialization['organizationId']),
+      fileAssetId:
+          _i1.UuidValueJsonExtension.fromJson(jsonSerialization['fileAssetId']),
       title: jsonSerialization['title'] as String,
       description: jsonSerialization['description'] as String?,
       visibility: jsonSerialization['visibility'] as String,
-      createdByUserId: jsonSerialization['createdByUserId'] as int,
+      createdByUserId: _i1.UuidValueJsonExtension.fromJson(
+          jsonSerialization['createdByUserId']),
       createdAt:
           _i1.DateTimeJsonExtension.fromJson(jsonSerialization['createdAt']),
       updatedAt:
@@ -64,11 +69,11 @@ abstract class OrganizationDocument
   static const db = OrganizationDocumentRepository._();
 
   @override
-  int? id;
+  _i1.UuidValue? id;
 
-  int organizationId;
+  _i1.UuidValue organizationId;
 
-  int fileAssetId;
+  _i1.UuidValue fileAssetId;
 
   String title;
 
@@ -76,7 +81,7 @@ abstract class OrganizationDocument
 
   String visibility;
 
-  int createdByUserId;
+  _i1.UuidValue createdByUserId;
 
   DateTime createdAt;
 
@@ -85,19 +90,19 @@ abstract class OrganizationDocument
   DateTime? deletedAt;
 
   @override
-  _i1.Table<int?> get table => t;
+  _i1.Table<_i1.UuidValue?> get table => t;
 
   /// Returns a shallow copy of this [OrganizationDocument]
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
   OrganizationDocument copyWith({
-    int? id,
-    int? organizationId,
-    int? fileAssetId,
+    _i1.UuidValue? id,
+    _i1.UuidValue? organizationId,
+    _i1.UuidValue? fileAssetId,
     String? title,
     String? description,
     String? visibility,
-    int? createdByUserId,
+    _i1.UuidValue? createdByUserId,
     DateTime? createdAt,
     DateTime? updatedAt,
     DateTime? deletedAt,
@@ -105,13 +110,13 @@ abstract class OrganizationDocument
   @override
   Map<String, dynamic> toJson() {
     return {
-      if (id != null) 'id': id,
-      'organizationId': organizationId,
-      'fileAssetId': fileAssetId,
+      if (id != null) 'id': id?.toJson(),
+      'organizationId': organizationId.toJson(),
+      'fileAssetId': fileAssetId.toJson(),
       'title': title,
       if (description != null) 'description': description,
       'visibility': visibility,
-      'createdByUserId': createdByUserId,
+      'createdByUserId': createdByUserId.toJson(),
       'createdAt': createdAt.toJson(),
       'updatedAt': updatedAt.toJson(),
       if (deletedAt != null) 'deletedAt': deletedAt?.toJson(),
@@ -121,13 +126,13 @@ abstract class OrganizationDocument
   @override
   Map<String, dynamic> toJsonForProtocol() {
     return {
-      if (id != null) 'id': id,
-      'organizationId': organizationId,
-      'fileAssetId': fileAssetId,
+      if (id != null) 'id': id?.toJson(),
+      'organizationId': organizationId.toJson(),
+      'fileAssetId': fileAssetId.toJson(),
       'title': title,
       if (description != null) 'description': description,
       'visibility': visibility,
-      'createdByUserId': createdByUserId,
+      'createdByUserId': createdByUserId.toJson(),
       'createdAt': createdAt.toJson(),
       'updatedAt': updatedAt.toJson(),
       if (deletedAt != null) 'deletedAt': deletedAt?.toJson(),
@@ -168,13 +173,13 @@ class _Undefined {}
 
 class _OrganizationDocumentImpl extends OrganizationDocument {
   _OrganizationDocumentImpl({
-    int? id,
-    required int organizationId,
-    required int fileAssetId,
+    _i1.UuidValue? id,
+    required _i1.UuidValue organizationId,
+    required _i1.UuidValue fileAssetId,
     required String title,
     String? description,
     required String visibility,
-    required int createdByUserId,
+    required _i1.UuidValue createdByUserId,
     required DateTime createdAt,
     required DateTime updatedAt,
     DateTime? deletedAt,
@@ -197,18 +202,18 @@ class _OrganizationDocumentImpl extends OrganizationDocument {
   @override
   OrganizationDocument copyWith({
     Object? id = _Undefined,
-    int? organizationId,
-    int? fileAssetId,
+    _i1.UuidValue? organizationId,
+    _i1.UuidValue? fileAssetId,
     String? title,
     Object? description = _Undefined,
     String? visibility,
-    int? createdByUserId,
+    _i1.UuidValue? createdByUserId,
     DateTime? createdAt,
     DateTime? updatedAt,
     Object? deletedAt = _Undefined,
   }) {
     return OrganizationDocument(
-      id: id is int? ? id : this.id,
+      id: id is _i1.UuidValue? ? id : this.id,
       organizationId: organizationId ?? this.organizationId,
       fileAssetId: fileAssetId ?? this.fileAssetId,
       title: title ?? this.title,
@@ -222,14 +227,14 @@ class _OrganizationDocumentImpl extends OrganizationDocument {
   }
 }
 
-class OrganizationDocumentTable extends _i1.Table<int?> {
+class OrganizationDocumentTable extends _i1.Table<_i1.UuidValue?> {
   OrganizationDocumentTable({super.tableRelation})
       : super(tableName: 'organization_document') {
-    organizationId = _i1.ColumnInt(
+    organizationId = _i1.ColumnUuid(
       'organizationId',
       this,
     );
-    fileAssetId = _i1.ColumnInt(
+    fileAssetId = _i1.ColumnUuid(
       'fileAssetId',
       this,
     );
@@ -245,7 +250,7 @@ class OrganizationDocumentTable extends _i1.Table<int?> {
       'visibility',
       this,
     );
-    createdByUserId = _i1.ColumnInt(
+    createdByUserId = _i1.ColumnUuid(
       'createdByUserId',
       this,
     );
@@ -263,9 +268,9 @@ class OrganizationDocumentTable extends _i1.Table<int?> {
     );
   }
 
-  late final _i1.ColumnInt organizationId;
+  late final _i1.ColumnUuid organizationId;
 
-  late final _i1.ColumnInt fileAssetId;
+  late final _i1.ColumnUuid fileAssetId;
 
   late final _i1.ColumnString title;
 
@@ -273,7 +278,7 @@ class OrganizationDocumentTable extends _i1.Table<int?> {
 
   late final _i1.ColumnString visibility;
 
-  late final _i1.ColumnInt createdByUserId;
+  late final _i1.ColumnUuid createdByUserId;
 
   late final _i1.ColumnDateTime createdAt;
 
@@ -303,7 +308,7 @@ class OrganizationDocumentInclude extends _i1.IncludeObject {
   Map<String, _i1.Include?> get includes => {};
 
   @override
-  _i1.Table<int?> get table => OrganizationDocument.t;
+  _i1.Table<_i1.UuidValue?> get table => OrganizationDocument.t;
 }
 
 class OrganizationDocumentIncludeList extends _i1.IncludeList {
@@ -323,7 +328,7 @@ class OrganizationDocumentIncludeList extends _i1.IncludeList {
   Map<String, _i1.Include?> get includes => include?.includes ?? {};
 
   @override
-  _i1.Table<int?> get table => OrganizationDocument.t;
+  _i1.Table<_i1.UuidValue?> get table => OrganizationDocument.t;
 }
 
 class OrganizationDocumentRepository {
@@ -411,7 +416,7 @@ class OrganizationDocumentRepository {
   /// Finds a single [OrganizationDocument] by its [id] or null if no such row exists.
   Future<OrganizationDocument?> findById(
     _i1.Session session,
-    int id, {
+    _i1.UuidValue id, {
     _i1.Transaction? transaction,
   }) async {
     return session.db.findById<OrganizationDocument>(

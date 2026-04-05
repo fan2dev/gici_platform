@@ -26,8 +26,8 @@ abstract class OrganizationBranding implements _i1.SerializableModel {
   });
 
   factory OrganizationBranding({
-    int? id,
-    required int organizationId,
+    _i1.UuidValue? id,
+    required _i1.UuidValue organizationId,
     String? primaryColor,
     String? secondaryColor,
     String? logoUrl,
@@ -41,8 +41,11 @@ abstract class OrganizationBranding implements _i1.SerializableModel {
   factory OrganizationBranding.fromJson(
       Map<String, dynamic> jsonSerialization) {
     return OrganizationBranding(
-      id: jsonSerialization['id'] as int?,
-      organizationId: jsonSerialization['organizationId'] as int,
+      id: jsonSerialization['id'] == null
+          ? null
+          : _i1.UuidValueJsonExtension.fromJson(jsonSerialization['id']),
+      organizationId: _i1.UuidValueJsonExtension.fromJson(
+          jsonSerialization['organizationId']),
       primaryColor: jsonSerialization['primaryColor'] as String?,
       secondaryColor: jsonSerialization['secondaryColor'] as String?,
       logoUrl: jsonSerialization['logoUrl'] as String?,
@@ -59,9 +62,9 @@ abstract class OrganizationBranding implements _i1.SerializableModel {
   /// The database id, set if the object has been inserted into the
   /// database or if it has been fetched from the database. Otherwise,
   /// the id will be null.
-  int? id;
+  _i1.UuidValue? id;
 
-  int organizationId;
+  _i1.UuidValue organizationId;
 
   String? primaryColor;
 
@@ -83,8 +86,8 @@ abstract class OrganizationBranding implements _i1.SerializableModel {
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
   OrganizationBranding copyWith({
-    int? id,
-    int? organizationId,
+    _i1.UuidValue? id,
+    _i1.UuidValue? organizationId,
     String? primaryColor,
     String? secondaryColor,
     String? logoUrl,
@@ -97,8 +100,8 @@ abstract class OrganizationBranding implements _i1.SerializableModel {
   @override
   Map<String, dynamic> toJson() {
     return {
-      if (id != null) 'id': id,
-      'organizationId': organizationId,
+      if (id != null) 'id': id?.toJson(),
+      'organizationId': organizationId.toJson(),
       if (primaryColor != null) 'primaryColor': primaryColor,
       if (secondaryColor != null) 'secondaryColor': secondaryColor,
       if (logoUrl != null) 'logoUrl': logoUrl,
@@ -120,8 +123,8 @@ class _Undefined {}
 
 class _OrganizationBrandingImpl extends OrganizationBranding {
   _OrganizationBrandingImpl({
-    int? id,
-    required int organizationId,
+    _i1.UuidValue? id,
+    required _i1.UuidValue organizationId,
     String? primaryColor,
     String? secondaryColor,
     String? logoUrl,
@@ -149,7 +152,7 @@ class _OrganizationBrandingImpl extends OrganizationBranding {
   @override
   OrganizationBranding copyWith({
     Object? id = _Undefined,
-    int? organizationId,
+    _i1.UuidValue? organizationId,
     Object? primaryColor = _Undefined,
     Object? secondaryColor = _Undefined,
     Object? logoUrl = _Undefined,
@@ -160,7 +163,7 @@ class _OrganizationBrandingImpl extends OrganizationBranding {
     DateTime? updatedAt,
   }) {
     return OrganizationBranding(
-      id: id is int? ? id : this.id,
+      id: id is _i1.UuidValue? ? id : this.id,
       organizationId: organizationId ?? this.organizationId,
       primaryColor: primaryColor is String? ? primaryColor : this.primaryColor,
       secondaryColor:

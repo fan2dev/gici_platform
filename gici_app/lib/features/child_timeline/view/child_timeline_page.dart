@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:uuid/uuid_value.dart';
 
 import '../../../core/di/injection.dart';
 import '../../auth/cubit/auth_cubit.dart';
@@ -9,16 +10,14 @@ import '../data/child_timeline_repository.dart';
 class ChildTimelinePage extends StatelessWidget {
   const ChildTimelinePage({super.key, required this.childId});
 
-  final int childId;
+  final UuidValue childId;
 
   @override
   Widget build(BuildContext context) {
     final auth = context.watch<AuthCubit>().state;
     final repo = sl<ChildTimelineRepository>();
 
-    if (!auth.isAuthenticated ||
-        auth.organizationId == null ||
-        auth.actorId == null) {
+    if (!auth.isAuthenticated || auth.organizationId == null) {
       return const Scaffold(body: Center(child: Text('Unauthorized')));
     }
 
@@ -32,8 +31,6 @@ class ChildTimelinePage extends StatelessWidget {
       ),
       body: FutureBuilder(
         future: repo.getChildTimeline(
-          organizationId: auth.organizationId!,
-          actorId: auth.actorId!,
           childId: childId,
           page: 0,
           pageSize: 80,

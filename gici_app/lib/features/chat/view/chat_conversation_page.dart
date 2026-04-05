@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gici_backend_client/gici_backend_server_client.dart';
 import 'package:go_router/go_router.dart';
+import 'package:uuid/uuid_value.dart';
 
 import '../../../core/di/injection.dart';
 import '../../auth/cubit/auth_cubit.dart';
@@ -10,7 +11,7 @@ import '../data/chat_repository.dart';
 class ChatConversationPage extends StatefulWidget {
   const ChatConversationPage({super.key, required this.conversationId});
 
-  final int conversationId;
+  final UuidValue conversationId;
 
   @override
   State<ChatConversationPage> createState() => _ChatConversationPageState();
@@ -30,9 +31,7 @@ class _ChatConversationPageState extends State<ChatConversationPage> {
     final auth = context.watch<AuthCubit>().state;
     final repo = sl<ChatRepository>();
 
-    if (!auth.isAuthenticated ||
-        auth.organizationId == null ||
-        auth.actorId == null) {
+    if (!auth.isAuthenticated || auth.organizationId == null) {
       return const Scaffold(body: Center(child: Text('Unauthorized')));
     }
 
@@ -49,9 +48,7 @@ class _ChatConversationPageState extends State<ChatConversationPage> {
           Expanded(
             child: FutureBuilder<List<ChatMessage>>(
               future: repo.listMessages(
-                organizationId: auth.organizationId!,
-                actorId: auth.actorId!,
-                conversationId: widget.conversationId.toString(),
+                conversationId: widget.conversationId,
                 page: 0,
                 pageSize: 200,
               ),
@@ -66,8 +63,6 @@ class _ChatConversationPageState extends State<ChatConversationPage> {
                 final messages = snapshot.data ?? const <ChatMessage>[];
                 if (messages.isNotEmpty) {
                   repo.markConversationRead(
-                    organizationId: auth.organizationId!,
-                    actorId: auth.actorId!,
                     conversationId: widget.conversationId,
                     lastReadMessageId: messages.last.id,
                   );
@@ -79,7 +74,7 @@ class _ChatConversationPageState extends State<ChatConversationPage> {
                   itemBuilder: (context, index) {
                     final message = messages[index];
                     final isMine =
-                        message.senderUserId.toString() == auth.actorId;
+                        message.senderUserId == auth.userId;
                     return Align(
                       alignment: isMine
                           ? Alignment.centerRight
@@ -137,8 +132,6 @@ class _ChatConversationPageState extends State<ChatConversationPage> {
                       final content = _composerController.text.trim();
                       if (content.isEmpty) return;
                       await repo.sendMessage(
-                        organizationId: auth.organizationId!,
-                        actorId: auth.actorId!,
                         conversationId: widget.conversationId,
                         content: content,
                       );

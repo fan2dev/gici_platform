@@ -12,7 +12,7 @@
 import 'package:serverpod/serverpod.dart' as _i1;
 
 abstract class GalleryItem
-    implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
+    implements _i1.TableRow<_i1.UuidValue?>, _i1.ProtocolSerialization {
   GalleryItem._({
     this.id,
     required this.organizationId,
@@ -27,13 +27,13 @@ abstract class GalleryItem
   });
 
   factory GalleryItem({
-    int? id,
-    required int organizationId,
-    required int galleryId,
-    required int fileAssetId,
+    _i1.UuidValue? id,
+    required _i1.UuidValue organizationId,
+    required _i1.UuidValue galleryId,
+    required _i1.UuidValue fileAssetId,
     String? caption,
     required int sortOrder,
-    required int createdByUserId,
+    required _i1.UuidValue createdByUserId,
     required DateTime createdAt,
     required DateTime updatedAt,
     DateTime? deletedAt,
@@ -41,13 +41,19 @@ abstract class GalleryItem
 
   factory GalleryItem.fromJson(Map<String, dynamic> jsonSerialization) {
     return GalleryItem(
-      id: jsonSerialization['id'] as int?,
-      organizationId: jsonSerialization['organizationId'] as int,
-      galleryId: jsonSerialization['galleryId'] as int,
-      fileAssetId: jsonSerialization['fileAssetId'] as int,
+      id: jsonSerialization['id'] == null
+          ? null
+          : _i1.UuidValueJsonExtension.fromJson(jsonSerialization['id']),
+      organizationId: _i1.UuidValueJsonExtension.fromJson(
+          jsonSerialization['organizationId']),
+      galleryId:
+          _i1.UuidValueJsonExtension.fromJson(jsonSerialization['galleryId']),
+      fileAssetId:
+          _i1.UuidValueJsonExtension.fromJson(jsonSerialization['fileAssetId']),
       caption: jsonSerialization['caption'] as String?,
       sortOrder: jsonSerialization['sortOrder'] as int,
-      createdByUserId: jsonSerialization['createdByUserId'] as int,
+      createdByUserId: _i1.UuidValueJsonExtension.fromJson(
+          jsonSerialization['createdByUserId']),
       createdAt:
           _i1.DateTimeJsonExtension.fromJson(jsonSerialization['createdAt']),
       updatedAt:
@@ -63,19 +69,19 @@ abstract class GalleryItem
   static const db = GalleryItemRepository._();
 
   @override
-  int? id;
+  _i1.UuidValue? id;
 
-  int organizationId;
+  _i1.UuidValue organizationId;
 
-  int galleryId;
+  _i1.UuidValue galleryId;
 
-  int fileAssetId;
+  _i1.UuidValue fileAssetId;
 
   String? caption;
 
   int sortOrder;
 
-  int createdByUserId;
+  _i1.UuidValue createdByUserId;
 
   DateTime createdAt;
 
@@ -84,19 +90,19 @@ abstract class GalleryItem
   DateTime? deletedAt;
 
   @override
-  _i1.Table<int?> get table => t;
+  _i1.Table<_i1.UuidValue?> get table => t;
 
   /// Returns a shallow copy of this [GalleryItem]
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
   GalleryItem copyWith({
-    int? id,
-    int? organizationId,
-    int? galleryId,
-    int? fileAssetId,
+    _i1.UuidValue? id,
+    _i1.UuidValue? organizationId,
+    _i1.UuidValue? galleryId,
+    _i1.UuidValue? fileAssetId,
     String? caption,
     int? sortOrder,
-    int? createdByUserId,
+    _i1.UuidValue? createdByUserId,
     DateTime? createdAt,
     DateTime? updatedAt,
     DateTime? deletedAt,
@@ -104,13 +110,13 @@ abstract class GalleryItem
   @override
   Map<String, dynamic> toJson() {
     return {
-      if (id != null) 'id': id,
-      'organizationId': organizationId,
-      'galleryId': galleryId,
-      'fileAssetId': fileAssetId,
+      if (id != null) 'id': id?.toJson(),
+      'organizationId': organizationId.toJson(),
+      'galleryId': galleryId.toJson(),
+      'fileAssetId': fileAssetId.toJson(),
       if (caption != null) 'caption': caption,
       'sortOrder': sortOrder,
-      'createdByUserId': createdByUserId,
+      'createdByUserId': createdByUserId.toJson(),
       'createdAt': createdAt.toJson(),
       'updatedAt': updatedAt.toJson(),
       if (deletedAt != null) 'deletedAt': deletedAt?.toJson(),
@@ -120,13 +126,13 @@ abstract class GalleryItem
   @override
   Map<String, dynamic> toJsonForProtocol() {
     return {
-      if (id != null) 'id': id,
-      'organizationId': organizationId,
-      'galleryId': galleryId,
-      'fileAssetId': fileAssetId,
+      if (id != null) 'id': id?.toJson(),
+      'organizationId': organizationId.toJson(),
+      'galleryId': galleryId.toJson(),
+      'fileAssetId': fileAssetId.toJson(),
       if (caption != null) 'caption': caption,
       'sortOrder': sortOrder,
-      'createdByUserId': createdByUserId,
+      'createdByUserId': createdByUserId.toJson(),
       'createdAt': createdAt.toJson(),
       'updatedAt': updatedAt.toJson(),
       if (deletedAt != null) 'deletedAt': deletedAt?.toJson(),
@@ -167,13 +173,13 @@ class _Undefined {}
 
 class _GalleryItemImpl extends GalleryItem {
   _GalleryItemImpl({
-    int? id,
-    required int organizationId,
-    required int galleryId,
-    required int fileAssetId,
+    _i1.UuidValue? id,
+    required _i1.UuidValue organizationId,
+    required _i1.UuidValue galleryId,
+    required _i1.UuidValue fileAssetId,
     String? caption,
     required int sortOrder,
-    required int createdByUserId,
+    required _i1.UuidValue createdByUserId,
     required DateTime createdAt,
     required DateTime updatedAt,
     DateTime? deletedAt,
@@ -196,18 +202,18 @@ class _GalleryItemImpl extends GalleryItem {
   @override
   GalleryItem copyWith({
     Object? id = _Undefined,
-    int? organizationId,
-    int? galleryId,
-    int? fileAssetId,
+    _i1.UuidValue? organizationId,
+    _i1.UuidValue? galleryId,
+    _i1.UuidValue? fileAssetId,
     Object? caption = _Undefined,
     int? sortOrder,
-    int? createdByUserId,
+    _i1.UuidValue? createdByUserId,
     DateTime? createdAt,
     DateTime? updatedAt,
     Object? deletedAt = _Undefined,
   }) {
     return GalleryItem(
-      id: id is int? ? id : this.id,
+      id: id is _i1.UuidValue? ? id : this.id,
       organizationId: organizationId ?? this.organizationId,
       galleryId: galleryId ?? this.galleryId,
       fileAssetId: fileAssetId ?? this.fileAssetId,
@@ -221,17 +227,17 @@ class _GalleryItemImpl extends GalleryItem {
   }
 }
 
-class GalleryItemTable extends _i1.Table<int?> {
+class GalleryItemTable extends _i1.Table<_i1.UuidValue?> {
   GalleryItemTable({super.tableRelation}) : super(tableName: 'gallery_item') {
-    organizationId = _i1.ColumnInt(
+    organizationId = _i1.ColumnUuid(
       'organizationId',
       this,
     );
-    galleryId = _i1.ColumnInt(
+    galleryId = _i1.ColumnUuid(
       'galleryId',
       this,
     );
-    fileAssetId = _i1.ColumnInt(
+    fileAssetId = _i1.ColumnUuid(
       'fileAssetId',
       this,
     );
@@ -243,7 +249,7 @@ class GalleryItemTable extends _i1.Table<int?> {
       'sortOrder',
       this,
     );
-    createdByUserId = _i1.ColumnInt(
+    createdByUserId = _i1.ColumnUuid(
       'createdByUserId',
       this,
     );
@@ -261,17 +267,17 @@ class GalleryItemTable extends _i1.Table<int?> {
     );
   }
 
-  late final _i1.ColumnInt organizationId;
+  late final _i1.ColumnUuid organizationId;
 
-  late final _i1.ColumnInt galleryId;
+  late final _i1.ColumnUuid galleryId;
 
-  late final _i1.ColumnInt fileAssetId;
+  late final _i1.ColumnUuid fileAssetId;
 
   late final _i1.ColumnString caption;
 
   late final _i1.ColumnInt sortOrder;
 
-  late final _i1.ColumnInt createdByUserId;
+  late final _i1.ColumnUuid createdByUserId;
 
   late final _i1.ColumnDateTime createdAt;
 
@@ -301,7 +307,7 @@ class GalleryItemInclude extends _i1.IncludeObject {
   Map<String, _i1.Include?> get includes => {};
 
   @override
-  _i1.Table<int?> get table => GalleryItem.t;
+  _i1.Table<_i1.UuidValue?> get table => GalleryItem.t;
 }
 
 class GalleryItemIncludeList extends _i1.IncludeList {
@@ -321,7 +327,7 @@ class GalleryItemIncludeList extends _i1.IncludeList {
   Map<String, _i1.Include?> get includes => include?.includes ?? {};
 
   @override
-  _i1.Table<int?> get table => GalleryItem.t;
+  _i1.Table<_i1.UuidValue?> get table => GalleryItem.t;
 }
 
 class GalleryItemRepository {
@@ -409,7 +415,7 @@ class GalleryItemRepository {
   /// Finds a single [GalleryItem] by its [id] or null if no such row exists.
   Future<GalleryItem?> findById(
     _i1.Session session,
-    int id, {
+    _i1.UuidValue id, {
     _i1.Transaction? transaction,
   }) async {
     return session.db.findById<GalleryItem>(

@@ -27,10 +27,10 @@ abstract class NapEntry implements _i1.SerializableModel {
   });
 
   factory NapEntry({
-    int? id,
-    required int organizationId,
-    required int childId,
-    required int recordedByUserId,
+    _i1.UuidValue? id,
+    required _i1.UuidValue organizationId,
+    required _i1.UuidValue childId,
+    required _i1.UuidValue recordedByUserId,
     required DateTime startedAt,
     DateTime? endedAt,
     int? durationMinutes,
@@ -42,10 +42,15 @@ abstract class NapEntry implements _i1.SerializableModel {
 
   factory NapEntry.fromJson(Map<String, dynamic> jsonSerialization) {
     return NapEntry(
-      id: jsonSerialization['id'] as int?,
-      organizationId: jsonSerialization['organizationId'] as int,
-      childId: jsonSerialization['childId'] as int,
-      recordedByUserId: jsonSerialization['recordedByUserId'] as int,
+      id: jsonSerialization['id'] == null
+          ? null
+          : _i1.UuidValueJsonExtension.fromJson(jsonSerialization['id']),
+      organizationId: _i1.UuidValueJsonExtension.fromJson(
+          jsonSerialization['organizationId']),
+      childId:
+          _i1.UuidValueJsonExtension.fromJson(jsonSerialization['childId']),
+      recordedByUserId: _i1.UuidValueJsonExtension.fromJson(
+          jsonSerialization['recordedByUserId']),
       startedAt:
           _i1.DateTimeJsonExtension.fromJson(jsonSerialization['startedAt']),
       endedAt: jsonSerialization['endedAt'] == null
@@ -64,13 +69,13 @@ abstract class NapEntry implements _i1.SerializableModel {
   /// The database id, set if the object has been inserted into the
   /// database or if it has been fetched from the database. Otherwise,
   /// the id will be null.
-  int? id;
+  _i1.UuidValue? id;
 
-  int organizationId;
+  _i1.UuidValue organizationId;
 
-  int childId;
+  _i1.UuidValue childId;
 
-  int recordedByUserId;
+  _i1.UuidValue recordedByUserId;
 
   DateTime startedAt;
 
@@ -90,10 +95,10 @@ abstract class NapEntry implements _i1.SerializableModel {
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
   NapEntry copyWith({
-    int? id,
-    int? organizationId,
-    int? childId,
-    int? recordedByUserId,
+    _i1.UuidValue? id,
+    _i1.UuidValue? organizationId,
+    _i1.UuidValue? childId,
+    _i1.UuidValue? recordedByUserId,
     DateTime? startedAt,
     DateTime? endedAt,
     int? durationMinutes,
@@ -105,10 +110,10 @@ abstract class NapEntry implements _i1.SerializableModel {
   @override
   Map<String, dynamic> toJson() {
     return {
-      if (id != null) 'id': id,
-      'organizationId': organizationId,
-      'childId': childId,
-      'recordedByUserId': recordedByUserId,
+      if (id != null) 'id': id?.toJson(),
+      'organizationId': organizationId.toJson(),
+      'childId': childId.toJson(),
+      'recordedByUserId': recordedByUserId.toJson(),
       'startedAt': startedAt.toJson(),
       if (endedAt != null) 'endedAt': endedAt?.toJson(),
       if (durationMinutes != null) 'durationMinutes': durationMinutes,
@@ -129,10 +134,10 @@ class _Undefined {}
 
 class _NapEntryImpl extends NapEntry {
   _NapEntryImpl({
-    int? id,
-    required int organizationId,
-    required int childId,
-    required int recordedByUserId,
+    _i1.UuidValue? id,
+    required _i1.UuidValue organizationId,
+    required _i1.UuidValue childId,
+    required _i1.UuidValue recordedByUserId,
     required DateTime startedAt,
     DateTime? endedAt,
     int? durationMinutes,
@@ -160,9 +165,9 @@ class _NapEntryImpl extends NapEntry {
   @override
   NapEntry copyWith({
     Object? id = _Undefined,
-    int? organizationId,
-    int? childId,
-    int? recordedByUserId,
+    _i1.UuidValue? organizationId,
+    _i1.UuidValue? childId,
+    _i1.UuidValue? recordedByUserId,
     DateTime? startedAt,
     Object? endedAt = _Undefined,
     Object? durationMinutes = _Undefined,
@@ -172,7 +177,7 @@ class _NapEntryImpl extends NapEntry {
     DateTime? updatedAt,
   }) {
     return NapEntry(
-      id: id is int? ? id : this.id,
+      id: id is _i1.UuidValue? ? id : this.id,
       organizationId: organizationId ?? this.organizationId,
       childId: childId ?? this.childId,
       recordedByUserId: recordedByUserId ?? this.recordedByUserId,

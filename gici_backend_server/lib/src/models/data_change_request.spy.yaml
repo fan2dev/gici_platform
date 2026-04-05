@@ -1,16 +1,19 @@
+# Data change request (guardian requests, staff reviews)
+
 class: DataChangeRequest
 
 table: data_change_request
 
 fields:
-  organizationId: int
-  requesterUserId: int
-  targetChildId: int?
+  id: UuidValue?, defaultPersist=random
+  organizationId: UuidValue
+  requesterUserId: UuidValue
+  targetChildId: UuidValue?
   requestType: String
   requestPayload: String
   status: String
   resolutionNote: String?
-  reviewedByUserId: int?
+  reviewedByUserId: UuidValue?
   reviewedAt: DateTime?
   createdAt: DateTime
   updatedAt: DateTime

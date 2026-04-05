@@ -12,7 +12,7 @@
 import 'package:serverpod/serverpod.dart' as _i1;
 
 abstract class ChatConversation
-    implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
+    implements _i1.TableRow<_i1.UuidValue?>, _i1.ProtocolSerialization {
   ChatConversation._({
     this.id,
     required this.organizationId,
@@ -28,13 +28,13 @@ abstract class ChatConversation
   });
 
   factory ChatConversation({
-    int? id,
-    required int organizationId,
+    _i1.UuidValue? id,
+    required _i1.UuidValue organizationId,
     String? title,
     required String conversationType,
-    int? relatedChildId,
-    int? relatedClassroomId,
-    required int createdByUserId,
+    _i1.UuidValue? relatedChildId,
+    _i1.UuidValue? relatedClassroomId,
+    required _i1.UuidValue createdByUserId,
     required bool isArchived,
     DateTime? lastMessageAt,
     required DateTime createdAt,
@@ -43,13 +43,23 @@ abstract class ChatConversation
 
   factory ChatConversation.fromJson(Map<String, dynamic> jsonSerialization) {
     return ChatConversation(
-      id: jsonSerialization['id'] as int?,
-      organizationId: jsonSerialization['organizationId'] as int,
+      id: jsonSerialization['id'] == null
+          ? null
+          : _i1.UuidValueJsonExtension.fromJson(jsonSerialization['id']),
+      organizationId: _i1.UuidValueJsonExtension.fromJson(
+          jsonSerialization['organizationId']),
       title: jsonSerialization['title'] as String?,
       conversationType: jsonSerialization['conversationType'] as String,
-      relatedChildId: jsonSerialization['relatedChildId'] as int?,
-      relatedClassroomId: jsonSerialization['relatedClassroomId'] as int?,
-      createdByUserId: jsonSerialization['createdByUserId'] as int,
+      relatedChildId: jsonSerialization['relatedChildId'] == null
+          ? null
+          : _i1.UuidValueJsonExtension.fromJson(
+              jsonSerialization['relatedChildId']),
+      relatedClassroomId: jsonSerialization['relatedClassroomId'] == null
+          ? null
+          : _i1.UuidValueJsonExtension.fromJson(
+              jsonSerialization['relatedClassroomId']),
+      createdByUserId: _i1.UuidValueJsonExtension.fromJson(
+          jsonSerialization['createdByUserId']),
       isArchived: jsonSerialization['isArchived'] as bool,
       lastMessageAt: jsonSerialization['lastMessageAt'] == null
           ? null
@@ -67,19 +77,19 @@ abstract class ChatConversation
   static const db = ChatConversationRepository._();
 
   @override
-  int? id;
+  _i1.UuidValue? id;
 
-  int organizationId;
+  _i1.UuidValue organizationId;
 
   String? title;
 
   String conversationType;
 
-  int? relatedChildId;
+  _i1.UuidValue? relatedChildId;
 
-  int? relatedClassroomId;
+  _i1.UuidValue? relatedClassroomId;
 
-  int createdByUserId;
+  _i1.UuidValue createdByUserId;
 
   bool isArchived;
 
@@ -90,19 +100,19 @@ abstract class ChatConversation
   DateTime updatedAt;
 
   @override
-  _i1.Table<int?> get table => t;
+  _i1.Table<_i1.UuidValue?> get table => t;
 
   /// Returns a shallow copy of this [ChatConversation]
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
   ChatConversation copyWith({
-    int? id,
-    int? organizationId,
+    _i1.UuidValue? id,
+    _i1.UuidValue? organizationId,
     String? title,
     String? conversationType,
-    int? relatedChildId,
-    int? relatedClassroomId,
-    int? createdByUserId,
+    _i1.UuidValue? relatedChildId,
+    _i1.UuidValue? relatedClassroomId,
+    _i1.UuidValue? createdByUserId,
     bool? isArchived,
     DateTime? lastMessageAt,
     DateTime? createdAt,
@@ -111,13 +121,14 @@ abstract class ChatConversation
   @override
   Map<String, dynamic> toJson() {
     return {
-      if (id != null) 'id': id,
-      'organizationId': organizationId,
+      if (id != null) 'id': id?.toJson(),
+      'organizationId': organizationId.toJson(),
       if (title != null) 'title': title,
       'conversationType': conversationType,
-      if (relatedChildId != null) 'relatedChildId': relatedChildId,
-      if (relatedClassroomId != null) 'relatedClassroomId': relatedClassroomId,
-      'createdByUserId': createdByUserId,
+      if (relatedChildId != null) 'relatedChildId': relatedChildId?.toJson(),
+      if (relatedClassroomId != null)
+        'relatedClassroomId': relatedClassroomId?.toJson(),
+      'createdByUserId': createdByUserId.toJson(),
       'isArchived': isArchived,
       if (lastMessageAt != null) 'lastMessageAt': lastMessageAt?.toJson(),
       'createdAt': createdAt.toJson(),
@@ -128,13 +139,14 @@ abstract class ChatConversation
   @override
   Map<String, dynamic> toJsonForProtocol() {
     return {
-      if (id != null) 'id': id,
-      'organizationId': organizationId,
+      if (id != null) 'id': id?.toJson(),
+      'organizationId': organizationId.toJson(),
       if (title != null) 'title': title,
       'conversationType': conversationType,
-      if (relatedChildId != null) 'relatedChildId': relatedChildId,
-      if (relatedClassroomId != null) 'relatedClassroomId': relatedClassroomId,
-      'createdByUserId': createdByUserId,
+      if (relatedChildId != null) 'relatedChildId': relatedChildId?.toJson(),
+      if (relatedClassroomId != null)
+        'relatedClassroomId': relatedClassroomId?.toJson(),
+      'createdByUserId': createdByUserId.toJson(),
       'isArchived': isArchived,
       if (lastMessageAt != null) 'lastMessageAt': lastMessageAt?.toJson(),
       'createdAt': createdAt.toJson(),
@@ -176,13 +188,13 @@ class _Undefined {}
 
 class _ChatConversationImpl extends ChatConversation {
   _ChatConversationImpl({
-    int? id,
-    required int organizationId,
+    _i1.UuidValue? id,
+    required _i1.UuidValue organizationId,
     String? title,
     required String conversationType,
-    int? relatedChildId,
-    int? relatedClassroomId,
-    required int createdByUserId,
+    _i1.UuidValue? relatedChildId,
+    _i1.UuidValue? relatedClassroomId,
+    required _i1.UuidValue createdByUserId,
     required bool isArchived,
     DateTime? lastMessageAt,
     required DateTime createdAt,
@@ -207,25 +219,26 @@ class _ChatConversationImpl extends ChatConversation {
   @override
   ChatConversation copyWith({
     Object? id = _Undefined,
-    int? organizationId,
+    _i1.UuidValue? organizationId,
     Object? title = _Undefined,
     String? conversationType,
     Object? relatedChildId = _Undefined,
     Object? relatedClassroomId = _Undefined,
-    int? createdByUserId,
+    _i1.UuidValue? createdByUserId,
     bool? isArchived,
     Object? lastMessageAt = _Undefined,
     DateTime? createdAt,
     DateTime? updatedAt,
   }) {
     return ChatConversation(
-      id: id is int? ? id : this.id,
+      id: id is _i1.UuidValue? ? id : this.id,
       organizationId: organizationId ?? this.organizationId,
       title: title is String? ? title : this.title,
       conversationType: conversationType ?? this.conversationType,
-      relatedChildId:
-          relatedChildId is int? ? relatedChildId : this.relatedChildId,
-      relatedClassroomId: relatedClassroomId is int?
+      relatedChildId: relatedChildId is _i1.UuidValue?
+          ? relatedChildId
+          : this.relatedChildId,
+      relatedClassroomId: relatedClassroomId is _i1.UuidValue?
           ? relatedClassroomId
           : this.relatedClassroomId,
       createdByUserId: createdByUserId ?? this.createdByUserId,
@@ -238,10 +251,10 @@ class _ChatConversationImpl extends ChatConversation {
   }
 }
 
-class ChatConversationTable extends _i1.Table<int?> {
+class ChatConversationTable extends _i1.Table<_i1.UuidValue?> {
   ChatConversationTable({super.tableRelation})
       : super(tableName: 'chat_conversation') {
-    organizationId = _i1.ColumnInt(
+    organizationId = _i1.ColumnUuid(
       'organizationId',
       this,
     );
@@ -253,15 +266,15 @@ class ChatConversationTable extends _i1.Table<int?> {
       'conversationType',
       this,
     );
-    relatedChildId = _i1.ColumnInt(
+    relatedChildId = _i1.ColumnUuid(
       'relatedChildId',
       this,
     );
-    relatedClassroomId = _i1.ColumnInt(
+    relatedClassroomId = _i1.ColumnUuid(
       'relatedClassroomId',
       this,
     );
-    createdByUserId = _i1.ColumnInt(
+    createdByUserId = _i1.ColumnUuid(
       'createdByUserId',
       this,
     );
@@ -283,17 +296,17 @@ class ChatConversationTable extends _i1.Table<int?> {
     );
   }
 
-  late final _i1.ColumnInt organizationId;
+  late final _i1.ColumnUuid organizationId;
 
   late final _i1.ColumnString title;
 
   late final _i1.ColumnString conversationType;
 
-  late final _i1.ColumnInt relatedChildId;
+  late final _i1.ColumnUuid relatedChildId;
 
-  late final _i1.ColumnInt relatedClassroomId;
+  late final _i1.ColumnUuid relatedClassroomId;
 
-  late final _i1.ColumnInt createdByUserId;
+  late final _i1.ColumnUuid createdByUserId;
 
   late final _i1.ColumnBool isArchived;
 
@@ -326,7 +339,7 @@ class ChatConversationInclude extends _i1.IncludeObject {
   Map<String, _i1.Include?> get includes => {};
 
   @override
-  _i1.Table<int?> get table => ChatConversation.t;
+  _i1.Table<_i1.UuidValue?> get table => ChatConversation.t;
 }
 
 class ChatConversationIncludeList extends _i1.IncludeList {
@@ -346,7 +359,7 @@ class ChatConversationIncludeList extends _i1.IncludeList {
   Map<String, _i1.Include?> get includes => include?.includes ?? {};
 
   @override
-  _i1.Table<int?> get table => ChatConversation.t;
+  _i1.Table<_i1.UuidValue?> get table => ChatConversation.t;
 }
 
 class ChatConversationRepository {
@@ -434,7 +447,7 @@ class ChatConversationRepository {
   /// Finds a single [ChatConversation] by its [id] or null if no such row exists.
   Future<ChatConversation?> findById(
     _i1.Session session,
-    int id, {
+    _i1.UuidValue id, {
     _i1.Transaction? transaction,
   }) async {
     return session.db.findById<ChatConversation>(

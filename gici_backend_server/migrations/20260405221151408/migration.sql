@@ -1,15 +1,15 @@
 BEGIN;
 
 --
--- Class ActivityLog as table activity_log
+-- ACTION CREATE TABLE
 --
 CREATE TABLE "activity_log" (
-    "id" bigserial PRIMARY KEY,
-    "organizationId" bigint NOT NULL,
-    "userId" bigint,
+    "id" uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    "organizationId" uuid NOT NULL,
+    "userId" uuid,
     "action" text NOT NULL,
     "entityType" text,
-    "entityId" bigint,
+    "entityId" text,
     "oldValues" text,
     "newValues" text,
     "ipAddress" text,
@@ -26,11 +26,12 @@ CREATE INDEX "log_entity_idx" ON "activity_log" USING btree ("entityType", "enti
 CREATE INDEX "log_created_idx" ON "activity_log" USING btree ("createdAt");
 
 --
--- Class AppUser as table app_user
+-- ACTION CREATE TABLE
 --
 CREATE TABLE "app_user" (
-    "id" bigserial PRIMARY KEY,
-    "organizationId" bigint,
+    "id" uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    "serverpodUserId" bigint,
+    "organizationId" uuid,
     "email" text NOT NULL,
     "passwordHash" text NOT NULL,
     "firstName" text NOT NULL,
@@ -51,15 +52,16 @@ CREATE TABLE "app_user" (
 CREATE UNIQUE INDEX "appuser_email_idx" ON "app_user" USING btree ("email");
 CREATE INDEX "appuser_org_idx" ON "app_user" USING btree ("organizationId");
 CREATE INDEX "appuser_role_idx" ON "app_user" USING btree ("role");
+CREATE UNIQUE INDEX "appuser_serverpod_idx" ON "app_user" USING btree ("serverpodUserId");
 
 --
--- Class BowelMovementEntry as table bowel_movement_entry
+-- ACTION CREATE TABLE
 --
 CREATE TABLE "bowel_movement_entry" (
-    "id" bigserial PRIMARY KEY,
-    "organizationId" bigint NOT NULL,
-    "childId" bigint NOT NULL,
-    "recordedByUserId" bigint NOT NULL,
+    "id" uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    "organizationId" uuid NOT NULL,
+    "childId" uuid NOT NULL,
+    "recordedByUserId" uuid NOT NULL,
     "eventAt" timestamp without time zone NOT NULL,
     "eventType" text NOT NULL,
     "consistency" text,
@@ -75,16 +77,16 @@ CREATE INDEX "bowel_event_idx" ON "bowel_movement_entry" USING btree ("eventAt")
 CREATE INDEX "bowel_child_event_idx" ON "bowel_movement_entry" USING btree ("childId", "eventAt");
 
 --
--- Class ChatConversation as table chat_conversation
+-- ACTION CREATE TABLE
 --
 CREATE TABLE "chat_conversation" (
-    "id" bigserial PRIMARY KEY,
-    "organizationId" bigint NOT NULL,
+    "id" uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    "organizationId" uuid NOT NULL,
     "title" text,
     "conversationType" text NOT NULL,
-    "relatedChildId" bigint,
-    "relatedClassroomId" bigint,
-    "createdByUserId" bigint NOT NULL,
+    "relatedChildId" uuid,
+    "relatedClassroomId" uuid,
+    "createdByUserId" uuid NOT NULL,
     "isArchived" boolean NOT NULL,
     "lastMessageAt" timestamp without time zone,
     "createdAt" timestamp without time zone NOT NULL,
@@ -99,13 +101,13 @@ CREATE INDEX "conv_classroom_idx" ON "chat_conversation" USING btree ("relatedCl
 CREATE INDEX "conv_last_message_idx" ON "chat_conversation" USING btree ("lastMessageAt");
 
 --
--- Class ChatMessage as table chat_message
+-- ACTION CREATE TABLE
 --
 CREATE TABLE "chat_message" (
-    "id" bigserial PRIMARY KEY,
-    "organizationId" bigint NOT NULL,
-    "conversationId" bigint NOT NULL,
-    "senderUserId" bigint NOT NULL,
+    "id" uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    "organizationId" uuid NOT NULL,
+    "conversationId" uuid NOT NULL,
+    "senderUserId" uuid NOT NULL,
     "body" text NOT NULL,
     "messageType" text NOT NULL,
     "metadataJson" text,
@@ -121,15 +123,15 @@ CREATE INDEX "msg_sender_idx" ON "chat_message" USING btree ("senderUserId");
 CREATE INDEX "msg_sent_idx" ON "chat_message" USING btree ("sentAt");
 
 --
--- Class ChatParticipant as table chat_participant
+-- ACTION CREATE TABLE
 --
 CREATE TABLE "chat_participant" (
-    "id" bigserial PRIMARY KEY,
-    "organizationId" bigint NOT NULL,
-    "conversationId" bigint NOT NULL,
-    "userId" bigint NOT NULL,
+    "id" uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    "organizationId" uuid NOT NULL,
+    "conversationId" uuid NOT NULL,
+    "userId" uuid NOT NULL,
     "joinedAt" timestamp without time zone NOT NULL,
-    "lastReadMessageId" bigint,
+    "lastReadMessageId" uuid,
     "lastReadAt" timestamp without time zone,
     "isActive" boolean NOT NULL,
     "createdAt" timestamp without time zone NOT NULL,
@@ -143,11 +145,11 @@ CREATE INDEX "cp_user_idx" ON "chat_participant" USING btree ("userId");
 CREATE UNIQUE INDEX "cp_unique_participant" ON "chat_participant" USING btree ("conversationId", "userId");
 
 --
--- Class Child as table child
+-- ACTION CREATE TABLE
 --
 CREATE TABLE "child" (
-    "id" bigserial PRIMARY KEY,
-    "organizationId" bigint NOT NULL,
+    "id" uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    "organizationId" uuid NOT NULL,
     "firstName" text NOT NULL,
     "lastName" text NOT NULL,
     "dateOfBirth" timestamp without time zone NOT NULL,
@@ -171,17 +173,17 @@ CREATE INDEX "child_status_idx" ON "child" USING btree ("status");
 CREATE INDEX "child_name_idx" ON "child" USING btree ("lastName", "firstName");
 
 --
--- Class ChildDocument as table child_document
+-- ACTION CREATE TABLE
 --
 CREATE TABLE "child_document" (
-    "id" bigserial PRIMARY KEY,
-    "organizationId" bigint NOT NULL,
-    "childId" bigint NOT NULL,
-    "fileAssetId" bigint NOT NULL,
+    "id" uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    "organizationId" uuid NOT NULL,
+    "childId" uuid NOT NULL,
+    "fileAssetId" uuid NOT NULL,
     "title" text NOT NULL,
     "description" text,
     "visibleToGuardians" boolean NOT NULL,
-    "createdByUserId" bigint NOT NULL,
+    "createdByUserId" uuid NOT NULL,
     "createdAt" timestamp without time zone NOT NULL,
     "updatedAt" timestamp without time zone NOT NULL,
     "deletedAt" timestamp without time zone
@@ -193,13 +195,13 @@ CREATE INDEX "childdoc_child_idx" ON "child_document" USING btree ("childId");
 CREATE INDEX "childdoc_file_idx" ON "child_document" USING btree ("fileAssetId");
 
 --
--- Class ChildGuardianRelation as table child_guardian_relation
+-- ACTION CREATE TABLE
 --
 CREATE TABLE "child_guardian_relation" (
-    "id" bigserial PRIMARY KEY,
-    "organizationId" bigint NOT NULL,
-    "childId" bigint NOT NULL,
-    "guardianUserId" bigint NOT NULL,
+    "id" uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    "organizationId" uuid NOT NULL,
+    "childId" uuid NOT NULL,
+    "guardianUserId" uuid NOT NULL,
     "relation" text NOT NULL,
     "isPrimary" boolean NOT NULL,
     "canPickup" boolean NOT NULL,
@@ -217,11 +219,11 @@ CREATE INDEX "cgr_guardian_idx" ON "child_guardian_relation" USING btree ("guard
 CREATE UNIQUE INDEX "cgr_unique_relation" ON "child_guardian_relation" USING btree ("childId", "guardianUserId");
 
 --
--- Class Classroom as table classroom
+-- ACTION CREATE TABLE
 --
 CREATE TABLE "classroom" (
-    "id" bigserial PRIMARY KEY,
-    "organizationId" bigint NOT NULL,
+    "id" uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    "organizationId" uuid NOT NULL,
     "name" text NOT NULL,
     "description" text,
     "ageGroupMin" bigint,
@@ -240,17 +242,17 @@ CREATE INDEX "classroom_org_idx" ON "classroom" USING btree ("organizationId");
 CREATE INDEX "classroom_status_idx" ON "classroom" USING btree ("status");
 
 --
--- Class ClassroomAssignment as table classroom_assignment
+-- ACTION CREATE TABLE
 --
 CREATE TABLE "classroom_assignment" (
-    "id" bigserial PRIMARY KEY,
-    "organizationId" bigint NOT NULL,
-    "classroomId" bigint NOT NULL,
-    "childId" bigint NOT NULL,
+    "id" uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    "organizationId" uuid NOT NULL,
+    "classroomId" uuid NOT NULL,
+    "childId" uuid NOT NULL,
     "assignedAt" timestamp without time zone NOT NULL,
-    "assignedByUserId" bigint,
+    "assignedByUserId" uuid,
     "withdrawnAt" timestamp without time zone,
-    "withdrawnByUserId" bigint,
+    "withdrawnByUserId" uuid,
     "withdrawnReason" text,
     "status" text NOT NULL,
     "createdAt" timestamp without time zone NOT NULL,
@@ -264,18 +266,18 @@ CREATE INDEX "ca_child_idx" ON "classroom_assignment" USING btree ("childId");
 CREATE UNIQUE INDEX "ca_unique_active" ON "classroom_assignment" USING btree ("classroomId", "childId");
 
 --
--- Class DataChangeRequest as table data_change_request
+-- ACTION CREATE TABLE
 --
 CREATE TABLE "data_change_request" (
-    "id" bigserial PRIMARY KEY,
-    "organizationId" bigint NOT NULL,
-    "requesterUserId" bigint NOT NULL,
-    "targetChildId" bigint,
+    "id" uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    "organizationId" uuid NOT NULL,
+    "requesterUserId" uuid NOT NULL,
+    "targetChildId" uuid,
     "requestType" text NOT NULL,
     "requestPayload" text NOT NULL,
     "status" text NOT NULL,
     "resolutionNote" text,
-    "reviewedByUserId" bigint,
+    "reviewedByUserId" uuid,
     "reviewedAt" timestamp without time zone,
     "createdAt" timestamp without time zone NOT NULL,
     "updatedAt" timestamp without time zone NOT NULL
@@ -289,12 +291,12 @@ CREATE INDEX "dcr_status_idx" ON "data_change_request" USING btree ("status");
 CREATE INDEX "dcr_created_idx" ON "data_change_request" USING btree ("createdAt");
 
 --
--- Class FileAsset as table file_asset
+-- ACTION CREATE TABLE
 --
 CREATE TABLE "file_asset" (
-    "id" bigserial PRIMARY KEY,
-    "organizationId" bigint NOT NULL,
-    "uploadedByUserId" bigint NOT NULL,
+    "id" uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    "organizationId" uuid NOT NULL,
+    "uploadedByUserId" uuid NOT NULL,
     "fileName" text NOT NULL,
     "originalName" text NOT NULL,
     "mimeType" text NOT NULL,
@@ -318,17 +320,17 @@ CREATE INDEX "file_type_idx" ON "file_asset" USING btree ("fileType");
 CREATE INDEX "file_uploader_idx" ON "file_asset" USING btree ("uploadedByUserId");
 
 --
--- Class Gallery as table gallery
+-- ACTION CREATE TABLE
 --
 CREATE TABLE "gallery" (
-    "id" bigserial PRIMARY KEY,
-    "organizationId" bigint NOT NULL,
+    "id" uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    "organizationId" uuid NOT NULL,
     "title" text NOT NULL,
     "description" text,
     "audienceType" text NOT NULL,
-    "audienceClassroomId" bigint,
-    "audienceChildId" bigint,
-    "createdByUserId" bigint NOT NULL,
+    "audienceClassroomId" uuid,
+    "audienceChildId" uuid,
+    "createdByUserId" uuid NOT NULL,
     "isPublished" boolean NOT NULL,
     "createdAt" timestamp without time zone NOT NULL,
     "updatedAt" timestamp without time zone NOT NULL,
@@ -340,16 +342,16 @@ CREATE INDEX "gallery_org_idx" ON "gallery" USING btree ("organizationId");
 CREATE INDEX "gallery_audience_idx" ON "gallery" USING btree ("audienceType");
 
 --
--- Class GalleryItem as table gallery_item
+-- ACTION CREATE TABLE
 --
 CREATE TABLE "gallery_item" (
-    "id" bigserial PRIMARY KEY,
-    "organizationId" bigint NOT NULL,
-    "galleryId" bigint NOT NULL,
-    "fileAssetId" bigint NOT NULL,
+    "id" uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    "organizationId" uuid NOT NULL,
+    "galleryId" uuid NOT NULL,
+    "fileAssetId" uuid NOT NULL,
     "caption" text,
     "sortOrder" bigint NOT NULL,
-    "createdByUserId" bigint NOT NULL,
+    "createdByUserId" uuid NOT NULL,
     "createdAt" timestamp without time zone NOT NULL,
     "updatedAt" timestamp without time zone NOT NULL,
     "deletedAt" timestamp without time zone
@@ -361,13 +363,13 @@ CREATE INDEX "galleryitem_gallery_idx" ON "gallery_item" USING btree ("galleryId
 CREATE INDEX "galleryitem_sort_idx" ON "gallery_item" USING btree ("galleryId", "sortOrder");
 
 --
--- Class MealEntry as table meal_entry
+-- ACTION CREATE TABLE
 --
 CREATE TABLE "meal_entry" (
-    "id" bigserial PRIMARY KEY,
-    "organizationId" bigint NOT NULL,
-    "childId" bigint NOT NULL,
-    "recordedByUserId" bigint NOT NULL,
+    "id" uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    "organizationId" uuid NOT NULL,
+    "childId" uuid NOT NULL,
+    "recordedByUserId" uuid NOT NULL,
     "mealType" text NOT NULL,
     "consumptionLevel" text NOT NULL,
     "recordedAt" timestamp without time zone NOT NULL,
@@ -385,17 +387,17 @@ CREATE INDEX "meal_date_idx" ON "meal_entry" USING btree ("recordedAt");
 CREATE INDEX "meal_child_date_idx" ON "meal_entry" USING btree ("childId", "recordedAt");
 
 --
--- Class MenuEntry as table menu_entry
+-- ACTION CREATE TABLE
 --
 CREATE TABLE "menu_entry" (
-    "id" bigserial PRIMARY KEY,
-    "organizationId" bigint NOT NULL,
+    "id" uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    "organizationId" uuid NOT NULL,
     "menuDate" timestamp without time zone NOT NULL,
     "mealType" text NOT NULL,
     "title" text NOT NULL,
     "description" text,
-    "classroomId" bigint,
-    "createdByUserId" bigint NOT NULL,
+    "classroomId" uuid,
+    "createdByUserId" uuid NOT NULL,
     "createdAt" timestamp without time zone NOT NULL,
     "updatedAt" timestamp without time zone NOT NULL,
     "deletedAt" timestamp without time zone
@@ -407,13 +409,13 @@ CREATE INDEX "menu_date_idx" ON "menu_entry" USING btree ("menuDate");
 CREATE INDEX "menu_org_date_idx" ON "menu_entry" USING btree ("organizationId", "menuDate");
 
 --
--- Class NapEntry as table nap_entry
+-- ACTION CREATE TABLE
 --
 CREATE TABLE "nap_entry" (
-    "id" bigserial PRIMARY KEY,
-    "organizationId" bigint NOT NULL,
-    "childId" bigint NOT NULL,
-    "recordedByUserId" bigint NOT NULL,
+    "id" uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    "organizationId" uuid NOT NULL,
+    "childId" uuid NOT NULL,
+    "recordedByUserId" uuid NOT NULL,
     "startedAt" timestamp without time zone NOT NULL,
     "endedAt" timestamp without time zone,
     "durationMinutes" bigint,
@@ -430,20 +432,20 @@ CREATE INDEX "nap_date_idx" ON "nap_entry" USING btree ("startedAt");
 CREATE INDEX "nap_child_date_idx" ON "nap_entry" USING btree ("childId", "startedAt");
 
 --
--- Class NotificationRecord as table notification_record
+-- ACTION CREATE TABLE
 --
 CREATE TABLE "notification_record" (
-    "id" bigserial PRIMARY KEY,
-    "organizationId" bigint NOT NULL,
-    "userId" bigint NOT NULL,
+    "id" uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    "organizationId" uuid NOT NULL,
+    "userId" uuid NOT NULL,
     "title" text NOT NULL,
     "body" text NOT NULL,
     "category" text NOT NULL,
     "targetScope" text NOT NULL,
-    "targetClassroomId" bigint,
-    "targetChildId" bigint,
-    "targetUserId" bigint,
-    "createdByUserId" bigint NOT NULL,
+    "targetClassroomId" uuid,
+    "targetChildId" uuid,
+    "targetUserId" uuid,
+    "createdByUserId" uuid NOT NULL,
     "isRead" boolean NOT NULL,
     "readAt" timestamp without time zone,
     "createdAt" timestamp without time zone NOT NULL
@@ -456,10 +458,10 @@ CREATE INDEX "notification_created_idx" ON "notification_record" USING btree ("c
 CREATE INDEX "notification_scope_idx" ON "notification_record" USING btree ("targetScope");
 
 --
--- Class Organization as table organization
+-- ACTION CREATE TABLE
 --
 CREATE TABLE "organization" (
-    "id" bigserial PRIMARY KEY,
+    "id" uuid PRIMARY KEY DEFAULT gen_random_uuid(),
     "name" text NOT NULL,
     "legalName" text,
     "slug" text NOT NULL,
@@ -481,11 +483,11 @@ CREATE UNIQUE INDEX "organization_slug_idx" ON "organization" USING btree ("slug
 CREATE INDEX "organization_status_idx" ON "organization" USING btree ("status");
 
 --
--- Class OrganizationBranding as table organization_branding
+-- ACTION CREATE TABLE
 --
 CREATE TABLE "organization_branding" (
-    "id" bigserial PRIMARY KEY,
-    "organizationId" bigint NOT NULL,
+    "id" uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    "organizationId" uuid NOT NULL,
     "primaryColor" text,
     "secondaryColor" text,
     "logoUrl" text,
@@ -500,16 +502,16 @@ CREATE TABLE "organization_branding" (
 CREATE UNIQUE INDEX "branding_org_idx" ON "organization_branding" USING btree ("organizationId");
 
 --
--- Class OrganizationDocument as table organization_document
+-- ACTION CREATE TABLE
 --
 CREATE TABLE "organization_document" (
-    "id" bigserial PRIMARY KEY,
-    "organizationId" bigint NOT NULL,
-    "fileAssetId" bigint NOT NULL,
+    "id" uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    "organizationId" uuid NOT NULL,
+    "fileAssetId" uuid NOT NULL,
     "title" text NOT NULL,
     "description" text,
     "visibility" text NOT NULL,
-    "createdByUserId" bigint NOT NULL,
+    "createdByUserId" uuid NOT NULL,
     "createdAt" timestamp without time zone NOT NULL,
     "updatedAt" timestamp without time zone NOT NULL,
     "deletedAt" timestamp without time zone
@@ -521,11 +523,11 @@ CREATE INDEX "orgdoc_file_idx" ON "organization_document" USING btree ("fileAsse
 CREATE INDEX "orgdoc_visibility_idx" ON "organization_document" USING btree ("visibility");
 
 --
--- Class OrganizationSettings as table organization_settings
+-- ACTION CREATE TABLE
 --
 CREATE TABLE "organization_settings" (
-    "id" bigserial PRIMARY KEY,
-    "organizationId" bigint NOT NULL,
+    "id" uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    "organizationId" uuid NOT NULL,
     "defaultLanguage" text NOT NULL,
     "timezone" text NOT NULL,
     "dateFormat" text NOT NULL,
@@ -547,20 +549,20 @@ CREATE TABLE "organization_settings" (
 CREATE UNIQUE INDEX "settings_org_idx" ON "organization_settings" USING btree ("organizationId");
 
 --
--- Class PedagogicalReport as table pedagogical_report
+-- ACTION CREATE TABLE
 --
 CREATE TABLE "pedagogical_report" (
-    "id" bigserial PRIMARY KEY,
-    "organizationId" bigint NOT NULL,
-    "childId" bigint NOT NULL,
+    "id" uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    "organizationId" uuid NOT NULL,
+    "childId" uuid NOT NULL,
     "reportDate" timestamp without time zone NOT NULL,
     "title" text NOT NULL,
     "summary" text NOT NULL,
     "body" text NOT NULL,
     "status" text NOT NULL,
     "visibility" text NOT NULL,
-    "createdByUserId" bigint NOT NULL,
-    "updatedByUserId" bigint,
+    "createdByUserId" uuid NOT NULL,
+    "updatedByUserId" uuid,
     "createdAt" timestamp without time zone NOT NULL,
     "updatedAt" timestamp without time zone NOT NULL,
     "deletedAt" timestamp without time zone
@@ -573,12 +575,12 @@ CREATE INDEX "report_date_idx" ON "pedagogical_report" USING btree ("reportDate"
 CREATE INDEX "report_status_idx" ON "pedagogical_report" USING btree ("status");
 
 --
--- Class PushDeviceToken as table push_device_token
+-- ACTION CREATE TABLE
 --
 CREATE TABLE "push_device_token" (
-    "id" bigserial PRIMARY KEY,
-    "organizationId" bigint NOT NULL,
-    "userId" bigint NOT NULL,
+    "id" uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    "organizationId" uuid NOT NULL,
+    "userId" uuid NOT NULL,
     "token" text NOT NULL,
     "platform" text NOT NULL,
     "deviceId" text,
@@ -597,21 +599,21 @@ CREATE UNIQUE INDEX "push_token_idx" ON "push_device_token" USING btree ("token"
 CREATE INDEX "push_user_platform_idx" ON "push_device_token" USING btree ("userId", "platform");
 
 --
--- Class TimeEntry as table time_entry
+-- ACTION CREATE TABLE
 --
 CREATE TABLE "time_entry" (
-    "id" bigserial PRIMARY KEY,
-    "organizationId" bigint NOT NULL,
-    "userId" bigint NOT NULL,
+    "id" uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    "organizationId" uuid NOT NULL,
+    "userId" uuid NOT NULL,
     "entryType" text NOT NULL,
     "recordedAt" timestamp without time zone NOT NULL,
-    "parentEntryId" bigint,
+    "parentEntryId" uuid,
     "correctionReason" text,
     "locationData" text,
     "deviceInfo" text,
     "notes" text,
     "isManualEntry" boolean NOT NULL,
-    "createdByUserId" bigint NOT NULL,
+    "createdByUserId" uuid NOT NULL,
     "createdAt" timestamp without time zone NOT NULL
 );
 
@@ -623,12 +625,12 @@ CREATE INDEX "time_user_date_idx" ON "time_entry" USING btree ("userId", "record
 CREATE INDEX "time_parent_idx" ON "time_entry" USING btree ("parentEntryId");
 
 --
--- Class UserOnboardingState as table user_onboarding_state
+-- ACTION CREATE TABLE
 --
 CREATE TABLE "user_onboarding_state" (
-    "id" bigserial PRIMARY KEY,
-    "organizationId" bigint,
-    "userId" bigint NOT NULL,
+    "id" uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    "organizationId" uuid,
+    "userId" uuid NOT NULL,
     "introCompletedAt" timestamp without time zone,
     "termsAcceptedAt" timestamp without time zone,
     "completedAt" timestamp without time zone,
@@ -641,7 +643,7 @@ CREATE UNIQUE INDEX "onboarding_user_idx" ON "user_onboarding_state" USING btree
 CREATE INDEX "onboarding_org_idx" ON "user_onboarding_state" USING btree ("organizationId");
 
 --
--- Class CloudStorageEntry as table serverpod_cloud_storage
+-- ACTION CREATE TABLE
 --
 CREATE TABLE "serverpod_cloud_storage" (
     "id" bigserial PRIMARY KEY,
@@ -658,7 +660,7 @@ CREATE UNIQUE INDEX "serverpod_cloud_storage_path_idx" ON "serverpod_cloud_stora
 CREATE INDEX "serverpod_cloud_storage_expiration" ON "serverpod_cloud_storage" USING btree ("expiration");
 
 --
--- Class CloudStorageDirectUploadEntry as table serverpod_cloud_storage_direct_upload
+-- ACTION CREATE TABLE
 --
 CREATE TABLE "serverpod_cloud_storage_direct_upload" (
     "id" bigserial PRIMARY KEY,
@@ -672,7 +674,7 @@ CREATE TABLE "serverpod_cloud_storage_direct_upload" (
 CREATE UNIQUE INDEX "serverpod_cloud_storage_direct_upload_storage_path" ON "serverpod_cloud_storage_direct_upload" USING btree ("storageId", "path");
 
 --
--- Class FutureCallEntry as table serverpod_future_call
+-- ACTION CREATE TABLE
 --
 CREATE TABLE "serverpod_future_call" (
     "id" bigserial PRIMARY KEY,
@@ -689,7 +691,7 @@ CREATE INDEX "serverpod_future_call_serverId_idx" ON "serverpod_future_call" USI
 CREATE INDEX "serverpod_future_call_identifier_idx" ON "serverpod_future_call" USING btree ("identifier");
 
 --
--- Class ServerHealthConnectionInfo as table serverpod_health_connection_info
+-- ACTION CREATE TABLE
 --
 CREATE TABLE "serverpod_health_connection_info" (
     "id" bigserial PRIMARY KEY,
@@ -705,7 +707,7 @@ CREATE TABLE "serverpod_health_connection_info" (
 CREATE UNIQUE INDEX "serverpod_health_connection_info_timestamp_idx" ON "serverpod_health_connection_info" USING btree ("timestamp", "serverId", "granularity");
 
 --
--- Class ServerHealthMetric as table serverpod_health_metric
+-- ACTION CREATE TABLE
 --
 CREATE TABLE "serverpod_health_metric" (
     "id" bigserial PRIMARY KEY,
@@ -721,7 +723,7 @@ CREATE TABLE "serverpod_health_metric" (
 CREATE UNIQUE INDEX "serverpod_health_metric_timestamp_idx" ON "serverpod_health_metric" USING btree ("timestamp", "serverId", "name", "granularity");
 
 --
--- Class LogEntry as table serverpod_log
+-- ACTION CREATE TABLE
 --
 CREATE TABLE "serverpod_log" (
     "id" bigserial PRIMARY KEY,
@@ -741,7 +743,7 @@ CREATE TABLE "serverpod_log" (
 CREATE INDEX "serverpod_log_sessionLogId_idx" ON "serverpod_log" USING btree ("sessionLogId");
 
 --
--- Class MessageLogEntry as table serverpod_message_log
+-- ACTION CREATE TABLE
 --
 CREATE TABLE "serverpod_message_log" (
     "id" bigserial PRIMARY KEY,
@@ -758,7 +760,7 @@ CREATE TABLE "serverpod_message_log" (
 );
 
 --
--- Class MethodInfo as table serverpod_method
+-- ACTION CREATE TABLE
 --
 CREATE TABLE "serverpod_method" (
     "id" bigserial PRIMARY KEY,
@@ -770,7 +772,7 @@ CREATE TABLE "serverpod_method" (
 CREATE UNIQUE INDEX "serverpod_method_endpoint_method_idx" ON "serverpod_method" USING btree ("endpoint", "method");
 
 --
--- Class DatabaseMigrationVersion as table serverpod_migrations
+-- ACTION CREATE TABLE
 --
 CREATE TABLE "serverpod_migrations" (
     "id" bigserial PRIMARY KEY,
@@ -783,7 +785,7 @@ CREATE TABLE "serverpod_migrations" (
 CREATE UNIQUE INDEX "serverpod_migrations_ids" ON "serverpod_migrations" USING btree ("module");
 
 --
--- Class QueryLogEntry as table serverpod_query_log
+-- ACTION CREATE TABLE
 --
 CREATE TABLE "serverpod_query_log" (
     "id" bigserial PRIMARY KEY,
@@ -803,7 +805,7 @@ CREATE TABLE "serverpod_query_log" (
 CREATE INDEX "serverpod_query_log_sessionLogId_idx" ON "serverpod_query_log" USING btree ("sessionLogId");
 
 --
--- Class ReadWriteTestEntry as table serverpod_readwrite_test
+-- ACTION CREATE TABLE
 --
 CREATE TABLE "serverpod_readwrite_test" (
     "id" bigserial PRIMARY KEY,
@@ -811,7 +813,7 @@ CREATE TABLE "serverpod_readwrite_test" (
 );
 
 --
--- Class RuntimeSettings as table serverpod_runtime_settings
+-- ACTION CREATE TABLE
 --
 CREATE TABLE "serverpod_runtime_settings" (
     "id" bigserial PRIMARY KEY,
@@ -822,7 +824,7 @@ CREATE TABLE "serverpod_runtime_settings" (
 );
 
 --
--- Class SessionLogEntry as table serverpod_session_log
+-- ACTION CREATE TABLE
 --
 CREATE TABLE "serverpod_session_log" (
     "id" bigserial PRIMARY KEY,
@@ -847,7 +849,7 @@ CREATE INDEX "serverpod_session_log_touched_idx" ON "serverpod_session_log" USIN
 CREATE INDEX "serverpod_session_log_isopen_idx" ON "serverpod_session_log" USING btree ("isOpen");
 
 --
--- Class AuthKey as table serverpod_auth_key
+-- ACTION CREATE TABLE
 --
 CREATE TABLE "serverpod_auth_key" (
     "id" bigserial PRIMARY KEY,
@@ -861,7 +863,7 @@ CREATE TABLE "serverpod_auth_key" (
 CREATE INDEX "serverpod_auth_key_userId_idx" ON "serverpod_auth_key" USING btree ("userId");
 
 --
--- Class EmailAuth as table serverpod_email_auth
+-- ACTION CREATE TABLE
 --
 CREATE TABLE "serverpod_email_auth" (
     "id" bigserial PRIMARY KEY,
@@ -874,7 +876,7 @@ CREATE TABLE "serverpod_email_auth" (
 CREATE UNIQUE INDEX "serverpod_email_auth_email" ON "serverpod_email_auth" USING btree ("email");
 
 --
--- Class EmailCreateAccountRequest as table serverpod_email_create_request
+-- ACTION CREATE TABLE
 --
 CREATE TABLE "serverpod_email_create_request" (
     "id" bigserial PRIMARY KEY,
@@ -888,7 +890,7 @@ CREATE TABLE "serverpod_email_create_request" (
 CREATE UNIQUE INDEX "serverpod_email_auth_create_account_request_idx" ON "serverpod_email_create_request" USING btree ("email");
 
 --
--- Class EmailFailedSignIn as table serverpod_email_failed_sign_in
+-- ACTION CREATE TABLE
 --
 CREATE TABLE "serverpod_email_failed_sign_in" (
     "id" bigserial PRIMARY KEY,
@@ -902,7 +904,7 @@ CREATE INDEX "serverpod_email_failed_sign_in_email_idx" ON "serverpod_email_fail
 CREATE INDEX "serverpod_email_failed_sign_in_time_idx" ON "serverpod_email_failed_sign_in" USING btree ("time");
 
 --
--- Class EmailReset as table serverpod_email_reset
+-- ACTION CREATE TABLE
 --
 CREATE TABLE "serverpod_email_reset" (
     "id" bigserial PRIMARY KEY,
@@ -915,7 +917,7 @@ CREATE TABLE "serverpod_email_reset" (
 CREATE UNIQUE INDEX "serverpod_email_reset_verification_idx" ON "serverpod_email_reset" USING btree ("verificationCode");
 
 --
--- Class GoogleRefreshToken as table serverpod_google_refresh_token
+-- ACTION CREATE TABLE
 --
 CREATE TABLE "serverpod_google_refresh_token" (
     "id" bigserial PRIMARY KEY,
@@ -927,7 +929,7 @@ CREATE TABLE "serverpod_google_refresh_token" (
 CREATE UNIQUE INDEX "serverpod_google_refresh_token_userId_idx" ON "serverpod_google_refresh_token" USING btree ("userId");
 
 --
--- Class UserImage as table serverpod_user_image
+-- ACTION CREATE TABLE
 --
 CREATE TABLE "serverpod_user_image" (
     "id" bigserial PRIMARY KEY,
@@ -940,7 +942,7 @@ CREATE TABLE "serverpod_user_image" (
 CREATE INDEX "serverpod_user_image_user_id" ON "serverpod_user_image" USING btree ("userId", "version");
 
 --
--- Class UserInfo as table serverpod_user_info
+-- ACTION CREATE TABLE
 --
 CREATE TABLE "serverpod_user_info" (
     "id" bigserial PRIMARY KEY,
@@ -959,7 +961,7 @@ CREATE UNIQUE INDEX "serverpod_user_info_user_identifier" ON "serverpod_user_inf
 CREATE INDEX "serverpod_user_info_email" ON "serverpod_user_info" USING btree ("email");
 
 --
--- Foreign relations for "serverpod_log" table
+-- ACTION CREATE FOREIGN KEY
 --
 ALTER TABLE ONLY "serverpod_log"
     ADD CONSTRAINT "serverpod_log_fk_0"
@@ -969,7 +971,7 @@ ALTER TABLE ONLY "serverpod_log"
     ON UPDATE NO ACTION;
 
 --
--- Foreign relations for "serverpod_message_log" table
+-- ACTION CREATE FOREIGN KEY
 --
 ALTER TABLE ONLY "serverpod_message_log"
     ADD CONSTRAINT "serverpod_message_log_fk_0"
@@ -979,7 +981,7 @@ ALTER TABLE ONLY "serverpod_message_log"
     ON UPDATE NO ACTION;
 
 --
--- Foreign relations for "serverpod_query_log" table
+-- ACTION CREATE FOREIGN KEY
 --
 ALTER TABLE ONLY "serverpod_query_log"
     ADD CONSTRAINT "serverpod_query_log_fk_0"
@@ -993,9 +995,9 @@ ALTER TABLE ONLY "serverpod_query_log"
 -- MIGRATION VERSION FOR gici_backend
 --
 INSERT INTO "serverpod_migrations" ("module", "version", "timestamp")
-    VALUES ('gici_backend', '20260405180554045-add-missing-tables', now())
+    VALUES ('gici_backend', '20260405221151408', now())
     ON CONFLICT ("module")
-    DO UPDATE SET "version" = '20260405180554045-add-missing-tables', "timestamp" = now();
+    DO UPDATE SET "version" = '20260405221151408', "timestamp" = now();
 
 --
 -- MIGRATION VERSION FOR serverpod

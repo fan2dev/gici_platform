@@ -16,8 +16,8 @@ class HabitService {
 
   Future<List<MealEntry>> listMealsByChild(
     Session session, {
-    required int organizationId,
-    required int childId,
+    required UuidValue organizationId,
+    required UuidValue childId,
     required int limit,
     required int offset,
   }) {
@@ -34,16 +34,16 @@ class HabitService {
 
   Future<MealEntry?> getMealById(
     Session session, {
-    required int mealEntryId,
+    required UuidValue mealEntryId,
   }) {
     return MealEntry.db.findById(session, mealEntryId);
   }
 
   Future<MealEntry> createMeal(
     Session session, {
-    required int organizationId,
-    required int childId,
-    required int recordedByUserId,
+    required UuidValue organizationId,
+    required UuidValue childId,
+    required UuidValue recordedByUserId,
     required String mealType,
     required String consumptionLevel,
     DateTime? recordedAt,
@@ -93,8 +93,8 @@ class HabitService {
 
   Future<List<NapEntry>> listNapsByChild(
     Session session, {
-    required int organizationId,
-    required int childId,
+    required UuidValue organizationId,
+    required UuidValue childId,
     required int limit,
     required int offset,
   }) {
@@ -111,16 +111,16 @@ class HabitService {
 
   Future<NapEntry?> getNapById(
     Session session, {
-    required int napEntryId,
+    required UuidValue napEntryId,
   }) {
     return NapEntry.db.findById(session, napEntryId);
   }
 
   Future<NapEntry> createNap(
     Session session, {
-    required int organizationId,
-    required int childId,
-    required int recordedByUserId,
+    required UuidValue organizationId,
+    required UuidValue childId,
+    required UuidValue recordedByUserId,
     required DateTime startedAt,
     DateTime? endedAt,
     int? durationMinutes,
@@ -169,8 +169,8 @@ class HabitService {
 
   Future<List<BowelMovementEntry>> listBowelMovementsByChild(
     Session session, {
-    required int organizationId,
-    required int childId,
+    required UuidValue organizationId,
+    required UuidValue childId,
     required int limit,
     required int offset,
   }) {
@@ -187,16 +187,16 @@ class HabitService {
 
   Future<BowelMovementEntry?> getBowelMovementById(
     Session session, {
-    required int entryId,
+    required UuidValue entryId,
   }) {
     return BowelMovementEntry.db.findById(session, entryId);
   }
 
   Future<BowelMovementEntry> createBowelMovement(
     Session session, {
-    required int organizationId,
-    required int childId,
-    required int recordedByUserId,
+    required UuidValue organizationId,
+    required UuidValue childId,
+    required UuidValue recordedByUserId,
     DateTime? eventAt,
     required String eventType,
     String? consistency,
@@ -241,8 +241,8 @@ class HabitService {
 
   Future<ChildDailyHabits> getChildDailyHabits(
     Session session, {
-    required int organizationId,
-    required int childId,
+    required UuidValue organizationId,
+    required UuidValue childId,
     required DateTime day,
   }) async {
     final start = _dayStartUtc(day);

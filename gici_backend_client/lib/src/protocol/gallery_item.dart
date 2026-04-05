@@ -26,13 +26,13 @@ abstract class GalleryItem implements _i1.SerializableModel {
   });
 
   factory GalleryItem({
-    int? id,
-    required int organizationId,
-    required int galleryId,
-    required int fileAssetId,
+    _i1.UuidValue? id,
+    required _i1.UuidValue organizationId,
+    required _i1.UuidValue galleryId,
+    required _i1.UuidValue fileAssetId,
     String? caption,
     required int sortOrder,
-    required int createdByUserId,
+    required _i1.UuidValue createdByUserId,
     required DateTime createdAt,
     required DateTime updatedAt,
     DateTime? deletedAt,
@@ -40,13 +40,19 @@ abstract class GalleryItem implements _i1.SerializableModel {
 
   factory GalleryItem.fromJson(Map<String, dynamic> jsonSerialization) {
     return GalleryItem(
-      id: jsonSerialization['id'] as int?,
-      organizationId: jsonSerialization['organizationId'] as int,
-      galleryId: jsonSerialization['galleryId'] as int,
-      fileAssetId: jsonSerialization['fileAssetId'] as int,
+      id: jsonSerialization['id'] == null
+          ? null
+          : _i1.UuidValueJsonExtension.fromJson(jsonSerialization['id']),
+      organizationId: _i1.UuidValueJsonExtension.fromJson(
+          jsonSerialization['organizationId']),
+      galleryId:
+          _i1.UuidValueJsonExtension.fromJson(jsonSerialization['galleryId']),
+      fileAssetId:
+          _i1.UuidValueJsonExtension.fromJson(jsonSerialization['fileAssetId']),
       caption: jsonSerialization['caption'] as String?,
       sortOrder: jsonSerialization['sortOrder'] as int,
-      createdByUserId: jsonSerialization['createdByUserId'] as int,
+      createdByUserId: _i1.UuidValueJsonExtension.fromJson(
+          jsonSerialization['createdByUserId']),
       createdAt:
           _i1.DateTimeJsonExtension.fromJson(jsonSerialization['createdAt']),
       updatedAt:
@@ -60,19 +66,19 @@ abstract class GalleryItem implements _i1.SerializableModel {
   /// The database id, set if the object has been inserted into the
   /// database or if it has been fetched from the database. Otherwise,
   /// the id will be null.
-  int? id;
+  _i1.UuidValue? id;
 
-  int organizationId;
+  _i1.UuidValue organizationId;
 
-  int galleryId;
+  _i1.UuidValue galleryId;
 
-  int fileAssetId;
+  _i1.UuidValue fileAssetId;
 
   String? caption;
 
   int sortOrder;
 
-  int createdByUserId;
+  _i1.UuidValue createdByUserId;
 
   DateTime createdAt;
 
@@ -84,13 +90,13 @@ abstract class GalleryItem implements _i1.SerializableModel {
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
   GalleryItem copyWith({
-    int? id,
-    int? organizationId,
-    int? galleryId,
-    int? fileAssetId,
+    _i1.UuidValue? id,
+    _i1.UuidValue? organizationId,
+    _i1.UuidValue? galleryId,
+    _i1.UuidValue? fileAssetId,
     String? caption,
     int? sortOrder,
-    int? createdByUserId,
+    _i1.UuidValue? createdByUserId,
     DateTime? createdAt,
     DateTime? updatedAt,
     DateTime? deletedAt,
@@ -98,13 +104,13 @@ abstract class GalleryItem implements _i1.SerializableModel {
   @override
   Map<String, dynamic> toJson() {
     return {
-      if (id != null) 'id': id,
-      'organizationId': organizationId,
-      'galleryId': galleryId,
-      'fileAssetId': fileAssetId,
+      if (id != null) 'id': id?.toJson(),
+      'organizationId': organizationId.toJson(),
+      'galleryId': galleryId.toJson(),
+      'fileAssetId': fileAssetId.toJson(),
       if (caption != null) 'caption': caption,
       'sortOrder': sortOrder,
-      'createdByUserId': createdByUserId,
+      'createdByUserId': createdByUserId.toJson(),
       'createdAt': createdAt.toJson(),
       'updatedAt': updatedAt.toJson(),
       if (deletedAt != null) 'deletedAt': deletedAt?.toJson(),
@@ -121,13 +127,13 @@ class _Undefined {}
 
 class _GalleryItemImpl extends GalleryItem {
   _GalleryItemImpl({
-    int? id,
-    required int organizationId,
-    required int galleryId,
-    required int fileAssetId,
+    _i1.UuidValue? id,
+    required _i1.UuidValue organizationId,
+    required _i1.UuidValue galleryId,
+    required _i1.UuidValue fileAssetId,
     String? caption,
     required int sortOrder,
-    required int createdByUserId,
+    required _i1.UuidValue createdByUserId,
     required DateTime createdAt,
     required DateTime updatedAt,
     DateTime? deletedAt,
@@ -150,18 +156,18 @@ class _GalleryItemImpl extends GalleryItem {
   @override
   GalleryItem copyWith({
     Object? id = _Undefined,
-    int? organizationId,
-    int? galleryId,
-    int? fileAssetId,
+    _i1.UuidValue? organizationId,
+    _i1.UuidValue? galleryId,
+    _i1.UuidValue? fileAssetId,
     Object? caption = _Undefined,
     int? sortOrder,
-    int? createdByUserId,
+    _i1.UuidValue? createdByUserId,
     DateTime? createdAt,
     DateTime? updatedAt,
     Object? deletedAt = _Undefined,
   }) {
     return GalleryItem(
-      id: id is int? ? id : this.id,
+      id: id is _i1.UuidValue? ? id : this.id,
       organizationId: organizationId ?? this.organizationId,
       galleryId: galleryId ?? this.galleryId,
       fileAssetId: fileAssetId ?? this.fileAssetId,

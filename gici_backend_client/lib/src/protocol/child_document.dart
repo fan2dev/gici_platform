@@ -27,14 +27,14 @@ abstract class ChildDocument implements _i1.SerializableModel {
   });
 
   factory ChildDocument({
-    int? id,
-    required int organizationId,
-    required int childId,
-    required int fileAssetId,
+    _i1.UuidValue? id,
+    required _i1.UuidValue organizationId,
+    required _i1.UuidValue childId,
+    required _i1.UuidValue fileAssetId,
     required String title,
     String? description,
     required bool visibleToGuardians,
-    required int createdByUserId,
+    required _i1.UuidValue createdByUserId,
     required DateTime createdAt,
     required DateTime updatedAt,
     DateTime? deletedAt,
@@ -42,14 +42,20 @@ abstract class ChildDocument implements _i1.SerializableModel {
 
   factory ChildDocument.fromJson(Map<String, dynamic> jsonSerialization) {
     return ChildDocument(
-      id: jsonSerialization['id'] as int?,
-      organizationId: jsonSerialization['organizationId'] as int,
-      childId: jsonSerialization['childId'] as int,
-      fileAssetId: jsonSerialization['fileAssetId'] as int,
+      id: jsonSerialization['id'] == null
+          ? null
+          : _i1.UuidValueJsonExtension.fromJson(jsonSerialization['id']),
+      organizationId: _i1.UuidValueJsonExtension.fromJson(
+          jsonSerialization['organizationId']),
+      childId:
+          _i1.UuidValueJsonExtension.fromJson(jsonSerialization['childId']),
+      fileAssetId:
+          _i1.UuidValueJsonExtension.fromJson(jsonSerialization['fileAssetId']),
       title: jsonSerialization['title'] as String,
       description: jsonSerialization['description'] as String?,
       visibleToGuardians: jsonSerialization['visibleToGuardians'] as bool,
-      createdByUserId: jsonSerialization['createdByUserId'] as int,
+      createdByUserId: _i1.UuidValueJsonExtension.fromJson(
+          jsonSerialization['createdByUserId']),
       createdAt:
           _i1.DateTimeJsonExtension.fromJson(jsonSerialization['createdAt']),
       updatedAt:
@@ -63,13 +69,13 @@ abstract class ChildDocument implements _i1.SerializableModel {
   /// The database id, set if the object has been inserted into the
   /// database or if it has been fetched from the database. Otherwise,
   /// the id will be null.
-  int? id;
+  _i1.UuidValue? id;
 
-  int organizationId;
+  _i1.UuidValue organizationId;
 
-  int childId;
+  _i1.UuidValue childId;
 
-  int fileAssetId;
+  _i1.UuidValue fileAssetId;
 
   String title;
 
@@ -77,7 +83,7 @@ abstract class ChildDocument implements _i1.SerializableModel {
 
   bool visibleToGuardians;
 
-  int createdByUserId;
+  _i1.UuidValue createdByUserId;
 
   DateTime createdAt;
 
@@ -89,14 +95,14 @@ abstract class ChildDocument implements _i1.SerializableModel {
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
   ChildDocument copyWith({
-    int? id,
-    int? organizationId,
-    int? childId,
-    int? fileAssetId,
+    _i1.UuidValue? id,
+    _i1.UuidValue? organizationId,
+    _i1.UuidValue? childId,
+    _i1.UuidValue? fileAssetId,
     String? title,
     String? description,
     bool? visibleToGuardians,
-    int? createdByUserId,
+    _i1.UuidValue? createdByUserId,
     DateTime? createdAt,
     DateTime? updatedAt,
     DateTime? deletedAt,
@@ -104,14 +110,14 @@ abstract class ChildDocument implements _i1.SerializableModel {
   @override
   Map<String, dynamic> toJson() {
     return {
-      if (id != null) 'id': id,
-      'organizationId': organizationId,
-      'childId': childId,
-      'fileAssetId': fileAssetId,
+      if (id != null) 'id': id?.toJson(),
+      'organizationId': organizationId.toJson(),
+      'childId': childId.toJson(),
+      'fileAssetId': fileAssetId.toJson(),
       'title': title,
       if (description != null) 'description': description,
       'visibleToGuardians': visibleToGuardians,
-      'createdByUserId': createdByUserId,
+      'createdByUserId': createdByUserId.toJson(),
       'createdAt': createdAt.toJson(),
       'updatedAt': updatedAt.toJson(),
       if (deletedAt != null) 'deletedAt': deletedAt?.toJson(),
@@ -128,14 +134,14 @@ class _Undefined {}
 
 class _ChildDocumentImpl extends ChildDocument {
   _ChildDocumentImpl({
-    int? id,
-    required int organizationId,
-    required int childId,
-    required int fileAssetId,
+    _i1.UuidValue? id,
+    required _i1.UuidValue organizationId,
+    required _i1.UuidValue childId,
+    required _i1.UuidValue fileAssetId,
     required String title,
     String? description,
     required bool visibleToGuardians,
-    required int createdByUserId,
+    required _i1.UuidValue createdByUserId,
     required DateTime createdAt,
     required DateTime updatedAt,
     DateTime? deletedAt,
@@ -159,19 +165,19 @@ class _ChildDocumentImpl extends ChildDocument {
   @override
   ChildDocument copyWith({
     Object? id = _Undefined,
-    int? organizationId,
-    int? childId,
-    int? fileAssetId,
+    _i1.UuidValue? organizationId,
+    _i1.UuidValue? childId,
+    _i1.UuidValue? fileAssetId,
     String? title,
     Object? description = _Undefined,
     bool? visibleToGuardians,
-    int? createdByUserId,
+    _i1.UuidValue? createdByUserId,
     DateTime? createdAt,
     DateTime? updatedAt,
     Object? deletedAt = _Undefined,
   }) {
     return ChildDocument(
-      id: id is int? ? id : this.id,
+      id: id is _i1.UuidValue? ? id : this.id,
       organizationId: organizationId ?? this.organizationId,
       childId: childId ?? this.childId,
       fileAssetId: fileAssetId ?? this.fileAssetId,

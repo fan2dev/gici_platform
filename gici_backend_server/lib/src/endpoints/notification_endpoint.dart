@@ -1,7 +1,7 @@
 import 'package:serverpod/serverpod.dart';
 
 import '../generated/protocol.dart';
-import '../helpers/request_scope.dart';
+import '../helpers/session_user_helper.dart';
 import '../services/access_control_service.dart';
 import '../services/activity_log_service.dart';
 import '../services/notification_service.dart';
@@ -15,26 +15,20 @@ class NotificationEndpoint extends Endpoint {
 
   Future<PushDeviceToken> registerDeviceToken(
     Session session, {
-    required String organizationId,
-    required String actorId,
     required String token,
     required String platform,
     String? deviceId,
     String? deviceModel,
     String? appVersion,
   }) async {
-    final orgId = parseOrganizationId(organizationId);
-    final actor = await _accessControl.requireActor(
-      session,
-      actorId: parseActorId(actorId),
-      organizationId: orgId,
-      allowedRoles: const [
-        'platform_super_admin',
-        'organization_admin',
-        'staff',
-        'guardian',
-      ],
-    );
+    final actor = await getAuthenticatedUser(session);
+    _accessControl.requireRole(actor, allowedRoles: [
+      'platform_super_admin',
+      'organization_admin',
+      'staff',
+      'guardian',
+    ]);
+    final orgId = actor.organizationId!;
 
     return _notificationService.registerDeviceToken(
       session,
@@ -50,22 +44,16 @@ class NotificationEndpoint extends Endpoint {
 
   Future<void> removeDeviceToken(
     Session session, {
-    required String organizationId,
-    required String actorId,
     required String token,
   }) async {
-    final orgId = parseOrganizationId(organizationId);
-    final actor = await _accessControl.requireActor(
-      session,
-      actorId: parseActorId(actorId),
-      organizationId: orgId,
-      allowedRoles: const [
-        'platform_super_admin',
-        'organization_admin',
-        'staff',
-        'guardian',
-      ],
-    );
+    final actor = await getAuthenticatedUser(session);
+    _accessControl.requireRole(actor, allowedRoles: [
+      'platform_super_admin',
+      'organization_admin',
+      'staff',
+      'guardian',
+    ]);
+    final orgId = actor.organizationId!;
 
     await _notificationService.removeDeviceToken(
       session,
@@ -77,23 +65,17 @@ class NotificationEndpoint extends Endpoint {
 
   Future<List<NotificationRecord>> myNotifications(
     Session session, {
-    required String organizationId,
-    required String actorId,
     int page = 0,
     int pageSize = 30,
   }) async {
-    final orgId = parseOrganizationId(organizationId);
-    final actor = await _accessControl.requireActor(
-      session,
-      actorId: parseActorId(actorId),
-      organizationId: orgId,
-      allowedRoles: const [
-        'platform_super_admin',
-        'organization_admin',
-        'staff',
-        'guardian',
-      ],
-    );
+    final actor = await getAuthenticatedUser(session);
+    _accessControl.requireRole(actor, allowedRoles: [
+      'platform_super_admin',
+      'organization_admin',
+      'staff',
+      'guardian',
+    ]);
+    final orgId = actor.organizationId!;
 
     final safePage = page < 0 ? 0 : page;
     final safePageSize = pageSize.clamp(1, 100);
@@ -109,22 +91,16 @@ class NotificationEndpoint extends Endpoint {
 
   Future<void> markNotificationRead(
     Session session, {
-    required String organizationId,
-    required String actorId,
-    required int notificationId,
+    required UuidValue notificationId,
   }) async {
-    final orgId = parseOrganizationId(organizationId);
-    final actor = await _accessControl.requireActor(
-      session,
-      actorId: parseActorId(actorId),
-      organizationId: orgId,
-      allowedRoles: const [
-        'platform_super_admin',
-        'organization_admin',
-        'staff',
-        'guardian',
-      ],
-    );
+    final actor = await getAuthenticatedUser(session);
+    _accessControl.requireRole(actor, allowedRoles: [
+      'platform_super_admin',
+      'organization_admin',
+      'staff',
+      'guardian',
+    ]);
+    final orgId = actor.organizationId!;
 
     await _notificationService.markAsRead(
       session,
@@ -136,23 +112,17 @@ class NotificationEndpoint extends Endpoint {
 
   Future<int> createSegmentedNotification(
     Session session, {
-    required String organizationId,
-    required String actorId,
     required String title,
     required String body,
     required String category,
     required String targetScope,
-    int? targetClassroomId,
-    int? targetChildId,
-    int? targetUserId,
+    UuidValue? targetClassroomId,
+    UuidValue? targetChildId,
+    UuidValue? targetUserId,
   }) async {
-    final orgId = parseOrganizationId(organizationId);
-    final actor = await _accessControl.requireActor(
-      session,
-      actorId: parseActorId(actorId),
-      organizationId: orgId,
-      allowedRoles: const ['platform_super_admin', 'organization_admin', 'staff'],
-    );
+    final actor = await getAuthenticatedUser(session);
+    _accessControl.requireRole(actor, allowedRoles: ['platform_super_admin', 'organization_admin', 'staff']);
+    final orgId = actor.organizationId!;
 
     final createdCount = await _notificationService.createSegmentedNotification(
       session,
@@ -170,7 +140,7 @@ class NotificationEndpoint extends Endpoint {
     await _activityLogService.log(
       session,
       organizationId: orgId,
-      userId: actor.id,
+      userId: actor.id!,
       action: 'notification.create_segmented',
       entityType: 'notification_record',
       metadata: 'targetScope=$targetScope;count=$createdCount',

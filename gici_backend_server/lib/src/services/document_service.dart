@@ -11,8 +11,8 @@ class DocumentService {
 
   Future<FileAsset> createFileAsset(
     Session session, {
-    required int organizationId,
-    required int uploadedByUserId,
+    required UuidValue organizationId,
+    required UuidValue uploadedByUserId,
     required String originalName,
     required String mimeType,
     required int sizeBytes,
@@ -54,7 +54,7 @@ class DocumentService {
 
   Future<List<OrganizationDocument>> listOrganizationDocuments(
     Session session, {
-    required int organizationId,
+    required UuidValue organizationId,
     required bool guardianView,
     required int limit,
     required int offset,
@@ -78,9 +78,9 @@ class DocumentService {
 
   Future<OrganizationDocument> createOrganizationDocument(
     Session session, {
-    required int organizationId,
-    required int createdByUserId,
-    required int fileAssetId,
+    required UuidValue organizationId,
+    required UuidValue createdByUserId,
+    required UuidValue fileAssetId,
     required String title,
     String? description,
     required String visibility,
@@ -104,8 +104,8 @@ class DocumentService {
 
   Future<List<ChildDocument>> listChildDocuments(
     Session session, {
-    required int organizationId,
-    required int childId,
+    required UuidValue organizationId,
+    required UuidValue childId,
     required bool guardianView,
     required int limit,
     required int offset,
@@ -131,10 +131,10 @@ class DocumentService {
 
   Future<ChildDocument> createChildDocument(
     Session session, {
-    required int organizationId,
-    required int childId,
-    required int fileAssetId,
-    required int createdByUserId,
+    required UuidValue organizationId,
+    required UuidValue childId,
+    required UuidValue fileAssetId,
+    required UuidValue createdByUserId,
     required String title,
     String? description,
     required bool visibleToGuardians,
@@ -159,8 +159,8 @@ class DocumentService {
 
   Future<String> resolveFileUrl(
     Session session, {
-    required int organizationId,
-    required int fileAssetId,
+    required UuidValue organizationId,
+    required UuidValue fileAssetId,
   }) async {
     final asset = await FileAsset.db.findById(session, fileAssetId);
     if (asset == null || asset.organizationId != organizationId || asset.deletedAt != null) {

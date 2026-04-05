@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:uuid/uuid_value.dart';
 
 import '../../../core/di/injection.dart';
 import '../../auth/cubit/auth_cubit.dart';
@@ -13,8 +14,8 @@ class PedagogicalReportDetailPage extends StatefulWidget {
     required this.reportId,
   });
 
-  final int childId;
-  final int reportId;
+  final UuidValue childId;
+  final UuidValue reportId;
 
   @override
   State<PedagogicalReportDetailPage> createState() => _PedagogicalReportDetailPageState();
@@ -31,22 +32,16 @@ class _PedagogicalReportDetailPageState extends State<PedagogicalReportDetailPag
     super.dispose();
   }
 
-  bool _canManage(AppRole? role) {
-    return role == AppRole.organizationAdmin ||
-        role == AppRole.platformSuperAdmin ||
-        role == AppRole.staff;
-  }
-
   @override
   Widget build(BuildContext context) {
     final auth = context.watch<AuthCubit>().state;
     final repo = sl<PedagogicalReportRepository>();
 
-    if (!auth.isAuthenticated || auth.organizationId == null || auth.actorId == null) {
+    if (!auth.isAuthenticated || auth.organizationId == null) {
       return const Scaffold(body: Center(child: Text('Unauthorized')));
     }
 
-    final canManage = _canManage(auth.role);
+    final canManage = auth.isStaffOrAbove;
 
     return Scaffold(
       appBar: AppBar(
@@ -58,8 +53,6 @@ class _PedagogicalReportDetailPageState extends State<PedagogicalReportDetailPag
       ),
       body: FutureBuilder(
         future: repo.getReport(
-          organizationId: auth.organizationId!,
-          actorId: auth.actorId!,
           reportId: widget.reportId,
         ),
         builder: (context, snapshot) {
@@ -105,8 +98,6 @@ class _PedagogicalReportDetailPageState extends State<PedagogicalReportDetailPag
                     child: FilledButton(
                       onPressed: () async {
                         await repo.updateReport(
-                          organizationId: auth.organizationId!,
-                          actorId: auth.actorId!,
                           reportId: report.id!,
                           summary: _summaryController.text.trim(),
                           body: _bodyController.text.trim(),

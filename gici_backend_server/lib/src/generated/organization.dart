@@ -12,7 +12,7 @@
 import 'package:serverpod/serverpod.dart' as _i1;
 
 abstract class Organization
-    implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
+    implements _i1.TableRow<_i1.UuidValue?>, _i1.ProtocolSerialization {
   Organization._({
     this.id,
     required this.name,
@@ -32,7 +32,7 @@ abstract class Organization
   });
 
   factory Organization({
-    int? id,
+    _i1.UuidValue? id,
     required String name,
     String? legalName,
     required String slug,
@@ -51,7 +51,9 @@ abstract class Organization
 
   factory Organization.fromJson(Map<String, dynamic> jsonSerialization) {
     return Organization(
-      id: jsonSerialization['id'] as int?,
+      id: jsonSerialization['id'] == null
+          ? null
+          : _i1.UuidValueJsonExtension.fromJson(jsonSerialization['id']),
       name: jsonSerialization['name'] as String,
       legalName: jsonSerialization['legalName'] as String?,
       slug: jsonSerialization['slug'] as String,
@@ -78,7 +80,7 @@ abstract class Organization
   static const db = OrganizationRepository._();
 
   @override
-  int? id;
+  _i1.UuidValue? id;
 
   String name;
 
@@ -109,13 +111,13 @@ abstract class Organization
   DateTime? deletedAt;
 
   @override
-  _i1.Table<int?> get table => t;
+  _i1.Table<_i1.UuidValue?> get table => t;
 
   /// Returns a shallow copy of this [Organization]
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
   Organization copyWith({
-    int? id,
+    _i1.UuidValue? id,
     String? name,
     String? legalName,
     String? slug,
@@ -134,7 +136,7 @@ abstract class Organization
   @override
   Map<String, dynamic> toJson() {
     return {
-      if (id != null) 'id': id,
+      if (id != null) 'id': id?.toJson(),
       'name': name,
       if (legalName != null) 'legalName': legalName,
       'slug': slug,
@@ -155,7 +157,7 @@ abstract class Organization
   @override
   Map<String, dynamic> toJsonForProtocol() {
     return {
-      if (id != null) 'id': id,
+      if (id != null) 'id': id?.toJson(),
       'name': name,
       if (legalName != null) 'legalName': legalName,
       'slug': slug,
@@ -207,7 +209,7 @@ class _Undefined {}
 
 class _OrganizationImpl extends Organization {
   _OrganizationImpl({
-    int? id,
+    _i1.UuidValue? id,
     required String name,
     String? legalName,
     required String slug,
@@ -262,7 +264,7 @@ class _OrganizationImpl extends Organization {
     Object? deletedAt = _Undefined,
   }) {
     return Organization(
-      id: id is int? ? id : this.id,
+      id: id is _i1.UuidValue? ? id : this.id,
       name: name ?? this.name,
       legalName: legalName is String? ? legalName : this.legalName,
       slug: slug ?? this.slug,
@@ -281,7 +283,7 @@ class _OrganizationImpl extends Organization {
   }
 }
 
-class OrganizationTable extends _i1.Table<int?> {
+class OrganizationTable extends _i1.Table<_i1.UuidValue?> {
   OrganizationTable({super.tableRelation}) : super(tableName: 'organization') {
     name = _i1.ColumnString(
       'name',
@@ -396,7 +398,7 @@ class OrganizationInclude extends _i1.IncludeObject {
   Map<String, _i1.Include?> get includes => {};
 
   @override
-  _i1.Table<int?> get table => Organization.t;
+  _i1.Table<_i1.UuidValue?> get table => Organization.t;
 }
 
 class OrganizationIncludeList extends _i1.IncludeList {
@@ -416,7 +418,7 @@ class OrganizationIncludeList extends _i1.IncludeList {
   Map<String, _i1.Include?> get includes => include?.includes ?? {};
 
   @override
-  _i1.Table<int?> get table => Organization.t;
+  _i1.Table<_i1.UuidValue?> get table => Organization.t;
 }
 
 class OrganizationRepository {
@@ -504,7 +506,7 @@ class OrganizationRepository {
   /// Finds a single [Organization] by its [id] or null if no such row exists.
   Future<Organization?> findById(
     _i1.Session session,
-    int id, {
+    _i1.UuidValue id, {
     _i1.Transaction? transaction,
   }) async {
     return session.db.findById<Organization>(

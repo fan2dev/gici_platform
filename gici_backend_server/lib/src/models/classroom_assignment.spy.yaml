@@ -5,13 +5,14 @@ class: ClassroomAssignment
 table: classroom_assignment
 
 fields:
-  organizationId: int
-  classroomId: int
-  childId: int
+  id: UuidValue?, defaultPersist=random
+  organizationId: UuidValue
+  classroomId: UuidValue
+  childId: UuidValue
   assignedAt: DateTime
-  assignedByUserId: int?
+  assignedByUserId: UuidValue?
   withdrawnAt: DateTime?
-  withdrawnByUserId: int?
+  withdrawnByUserId: UuidValue?
   withdrawnReason: String?
   status: String
   createdAt: DateTime
@@ -27,4 +28,3 @@ indexes:
   ca_unique_active:
     fields: classroomId, childId
     unique: true
-

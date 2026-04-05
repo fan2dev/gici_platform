@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gici_backend_client/gici_backend_server_client.dart';
 import 'package:go_router/go_router.dart';
+import 'package:uuid/uuid_value.dart';
 
 import '../../../core/di/injection.dart';
 import '../data/chat_repository.dart';
@@ -28,9 +29,7 @@ class _ChatPageState extends State<ChatPage> {
     final authState = context.watch<AuthCubit>().state;
     final repo = sl<ChatRepository>();
 
-    if (!authState.isAuthenticated ||
-        authState.organizationId == null ||
-        authState.actorId == null) {
+    if (!authState.isAuthenticated || authState.organizationId == null) {
       return const Scaffold(body: Center(child: Text('Unauthorized')));
     }
 
@@ -45,15 +44,10 @@ class _ChatPageState extends State<ChatPage> {
       body: FutureBuilder<(List<ChatConversation>, Map<String, int>)>(
         future: () async {
           final conversations = await repo.listConversations(
-            organizationId: authState.organizationId!,
-            actorId: authState.actorId!,
             page: 0,
             pageSize: 30,
           );
-          final unread = await repo.unreadCounts(
-            organizationId: authState.organizationId!,
-            actorId: authState.actorId!,
-          );
+          final unread = await repo.unreadCounts();
           return (conversations, unread);
         }(),
         builder: (context, snapshot) {
@@ -108,9 +102,8 @@ class _ChatPageState extends State<ChatPage> {
               title: const Text('Create direct conversation'),
               content: TextField(
                 controller: _directUserController,
-                keyboardType: TextInputType.number,
                 decoration: const InputDecoration(
-                  labelText: 'Participant user id',
+                  labelText: 'Participant user id (UUID)',
                 ),
               ),
               actions: [
@@ -120,15 +113,10 @@ class _ChatPageState extends State<ChatPage> {
                 ),
                 FilledButton(
                   onPressed: () async {
-                    final participantId = int.tryParse(
-                      _directUserController.text,
-                    );
-                    if (participantId == null) {
-                      return;
-                    }
+                    final input = _directUserController.text.trim();
+                    if (input.isEmpty) return;
+                    final participantId = UuidValue.fromString(input);
                     final conversation = await repo.createDirectConversation(
-                      organizationId: authState.organizationId!,
-                      actorId: authState.actorId!,
                       otherParticipantUserId: participantId,
                     );
                     _directUserController.clear();

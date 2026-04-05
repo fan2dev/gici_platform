@@ -12,7 +12,7 @@
 import 'package:serverpod/serverpod.dart' as _i1;
 
 abstract class PedagogicalReport
-    implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
+    implements _i1.TableRow<_i1.UuidValue?>, _i1.ProtocolSerialization {
   PedagogicalReport._({
     this.id,
     required this.organizationId,
@@ -31,17 +31,17 @@ abstract class PedagogicalReport
   });
 
   factory PedagogicalReport({
-    int? id,
-    required int organizationId,
-    required int childId,
+    _i1.UuidValue? id,
+    required _i1.UuidValue organizationId,
+    required _i1.UuidValue childId,
     required DateTime reportDate,
     required String title,
     required String summary,
     required String body,
     required String status,
     required String visibility,
-    required int createdByUserId,
-    int? updatedByUserId,
+    required _i1.UuidValue createdByUserId,
+    _i1.UuidValue? updatedByUserId,
     required DateTime createdAt,
     required DateTime updatedAt,
     DateTime? deletedAt,
@@ -49,9 +49,13 @@ abstract class PedagogicalReport
 
   factory PedagogicalReport.fromJson(Map<String, dynamic> jsonSerialization) {
     return PedagogicalReport(
-      id: jsonSerialization['id'] as int?,
-      organizationId: jsonSerialization['organizationId'] as int,
-      childId: jsonSerialization['childId'] as int,
+      id: jsonSerialization['id'] == null
+          ? null
+          : _i1.UuidValueJsonExtension.fromJson(jsonSerialization['id']),
+      organizationId: _i1.UuidValueJsonExtension.fromJson(
+          jsonSerialization['organizationId']),
+      childId:
+          _i1.UuidValueJsonExtension.fromJson(jsonSerialization['childId']),
       reportDate:
           _i1.DateTimeJsonExtension.fromJson(jsonSerialization['reportDate']),
       title: jsonSerialization['title'] as String,
@@ -59,8 +63,12 @@ abstract class PedagogicalReport
       body: jsonSerialization['body'] as String,
       status: jsonSerialization['status'] as String,
       visibility: jsonSerialization['visibility'] as String,
-      createdByUserId: jsonSerialization['createdByUserId'] as int,
-      updatedByUserId: jsonSerialization['updatedByUserId'] as int?,
+      createdByUserId: _i1.UuidValueJsonExtension.fromJson(
+          jsonSerialization['createdByUserId']),
+      updatedByUserId: jsonSerialization['updatedByUserId'] == null
+          ? null
+          : _i1.UuidValueJsonExtension.fromJson(
+              jsonSerialization['updatedByUserId']),
       createdAt:
           _i1.DateTimeJsonExtension.fromJson(jsonSerialization['createdAt']),
       updatedAt:
@@ -76,11 +84,11 @@ abstract class PedagogicalReport
   static const db = PedagogicalReportRepository._();
 
   @override
-  int? id;
+  _i1.UuidValue? id;
 
-  int organizationId;
+  _i1.UuidValue organizationId;
 
-  int childId;
+  _i1.UuidValue childId;
 
   DateTime reportDate;
 
@@ -94,9 +102,9 @@ abstract class PedagogicalReport
 
   String visibility;
 
-  int createdByUserId;
+  _i1.UuidValue createdByUserId;
 
-  int? updatedByUserId;
+  _i1.UuidValue? updatedByUserId;
 
   DateTime createdAt;
 
@@ -105,23 +113,23 @@ abstract class PedagogicalReport
   DateTime? deletedAt;
 
   @override
-  _i1.Table<int?> get table => t;
+  _i1.Table<_i1.UuidValue?> get table => t;
 
   /// Returns a shallow copy of this [PedagogicalReport]
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
   PedagogicalReport copyWith({
-    int? id,
-    int? organizationId,
-    int? childId,
+    _i1.UuidValue? id,
+    _i1.UuidValue? organizationId,
+    _i1.UuidValue? childId,
     DateTime? reportDate,
     String? title,
     String? summary,
     String? body,
     String? status,
     String? visibility,
-    int? createdByUserId,
-    int? updatedByUserId,
+    _i1.UuidValue? createdByUserId,
+    _i1.UuidValue? updatedByUserId,
     DateTime? createdAt,
     DateTime? updatedAt,
     DateTime? deletedAt,
@@ -129,17 +137,17 @@ abstract class PedagogicalReport
   @override
   Map<String, dynamic> toJson() {
     return {
-      if (id != null) 'id': id,
-      'organizationId': organizationId,
-      'childId': childId,
+      if (id != null) 'id': id?.toJson(),
+      'organizationId': organizationId.toJson(),
+      'childId': childId.toJson(),
       'reportDate': reportDate.toJson(),
       'title': title,
       'summary': summary,
       'body': body,
       'status': status,
       'visibility': visibility,
-      'createdByUserId': createdByUserId,
-      if (updatedByUserId != null) 'updatedByUserId': updatedByUserId,
+      'createdByUserId': createdByUserId.toJson(),
+      if (updatedByUserId != null) 'updatedByUserId': updatedByUserId?.toJson(),
       'createdAt': createdAt.toJson(),
       'updatedAt': updatedAt.toJson(),
       if (deletedAt != null) 'deletedAt': deletedAt?.toJson(),
@@ -149,17 +157,17 @@ abstract class PedagogicalReport
   @override
   Map<String, dynamic> toJsonForProtocol() {
     return {
-      if (id != null) 'id': id,
-      'organizationId': organizationId,
-      'childId': childId,
+      if (id != null) 'id': id?.toJson(),
+      'organizationId': organizationId.toJson(),
+      'childId': childId.toJson(),
       'reportDate': reportDate.toJson(),
       'title': title,
       'summary': summary,
       'body': body,
       'status': status,
       'visibility': visibility,
-      'createdByUserId': createdByUserId,
-      if (updatedByUserId != null) 'updatedByUserId': updatedByUserId,
+      'createdByUserId': createdByUserId.toJson(),
+      if (updatedByUserId != null) 'updatedByUserId': updatedByUserId?.toJson(),
       'createdAt': createdAt.toJson(),
       'updatedAt': updatedAt.toJson(),
       if (deletedAt != null) 'deletedAt': deletedAt?.toJson(),
@@ -200,17 +208,17 @@ class _Undefined {}
 
 class _PedagogicalReportImpl extends PedagogicalReport {
   _PedagogicalReportImpl({
-    int? id,
-    required int organizationId,
-    required int childId,
+    _i1.UuidValue? id,
+    required _i1.UuidValue organizationId,
+    required _i1.UuidValue childId,
     required DateTime reportDate,
     required String title,
     required String summary,
     required String body,
     required String status,
     required String visibility,
-    required int createdByUserId,
-    int? updatedByUserId,
+    required _i1.UuidValue createdByUserId,
+    _i1.UuidValue? updatedByUserId,
     required DateTime createdAt,
     required DateTime updatedAt,
     DateTime? deletedAt,
@@ -237,22 +245,22 @@ class _PedagogicalReportImpl extends PedagogicalReport {
   @override
   PedagogicalReport copyWith({
     Object? id = _Undefined,
-    int? organizationId,
-    int? childId,
+    _i1.UuidValue? organizationId,
+    _i1.UuidValue? childId,
     DateTime? reportDate,
     String? title,
     String? summary,
     String? body,
     String? status,
     String? visibility,
-    int? createdByUserId,
+    _i1.UuidValue? createdByUserId,
     Object? updatedByUserId = _Undefined,
     DateTime? createdAt,
     DateTime? updatedAt,
     Object? deletedAt = _Undefined,
   }) {
     return PedagogicalReport(
-      id: id is int? ? id : this.id,
+      id: id is _i1.UuidValue? ? id : this.id,
       organizationId: organizationId ?? this.organizationId,
       childId: childId ?? this.childId,
       reportDate: reportDate ?? this.reportDate,
@@ -262,8 +270,9 @@ class _PedagogicalReportImpl extends PedagogicalReport {
       status: status ?? this.status,
       visibility: visibility ?? this.visibility,
       createdByUserId: createdByUserId ?? this.createdByUserId,
-      updatedByUserId:
-          updatedByUserId is int? ? updatedByUserId : this.updatedByUserId,
+      updatedByUserId: updatedByUserId is _i1.UuidValue?
+          ? updatedByUserId
+          : this.updatedByUserId,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
       deletedAt: deletedAt is DateTime? ? deletedAt : this.deletedAt,
@@ -271,14 +280,14 @@ class _PedagogicalReportImpl extends PedagogicalReport {
   }
 }
 
-class PedagogicalReportTable extends _i1.Table<int?> {
+class PedagogicalReportTable extends _i1.Table<_i1.UuidValue?> {
   PedagogicalReportTable({super.tableRelation})
       : super(tableName: 'pedagogical_report') {
-    organizationId = _i1.ColumnInt(
+    organizationId = _i1.ColumnUuid(
       'organizationId',
       this,
     );
-    childId = _i1.ColumnInt(
+    childId = _i1.ColumnUuid(
       'childId',
       this,
     );
@@ -306,11 +315,11 @@ class PedagogicalReportTable extends _i1.Table<int?> {
       'visibility',
       this,
     );
-    createdByUserId = _i1.ColumnInt(
+    createdByUserId = _i1.ColumnUuid(
       'createdByUserId',
       this,
     );
-    updatedByUserId = _i1.ColumnInt(
+    updatedByUserId = _i1.ColumnUuid(
       'updatedByUserId',
       this,
     );
@@ -328,9 +337,9 @@ class PedagogicalReportTable extends _i1.Table<int?> {
     );
   }
 
-  late final _i1.ColumnInt organizationId;
+  late final _i1.ColumnUuid organizationId;
 
-  late final _i1.ColumnInt childId;
+  late final _i1.ColumnUuid childId;
 
   late final _i1.ColumnDateTime reportDate;
 
@@ -344,9 +353,9 @@ class PedagogicalReportTable extends _i1.Table<int?> {
 
   late final _i1.ColumnString visibility;
 
-  late final _i1.ColumnInt createdByUserId;
+  late final _i1.ColumnUuid createdByUserId;
 
-  late final _i1.ColumnInt updatedByUserId;
+  late final _i1.ColumnUuid updatedByUserId;
 
   late final _i1.ColumnDateTime createdAt;
 
@@ -380,7 +389,7 @@ class PedagogicalReportInclude extends _i1.IncludeObject {
   Map<String, _i1.Include?> get includes => {};
 
   @override
-  _i1.Table<int?> get table => PedagogicalReport.t;
+  _i1.Table<_i1.UuidValue?> get table => PedagogicalReport.t;
 }
 
 class PedagogicalReportIncludeList extends _i1.IncludeList {
@@ -400,7 +409,7 @@ class PedagogicalReportIncludeList extends _i1.IncludeList {
   Map<String, _i1.Include?> get includes => include?.includes ?? {};
 
   @override
-  _i1.Table<int?> get table => PedagogicalReport.t;
+  _i1.Table<_i1.UuidValue?> get table => PedagogicalReport.t;
 }
 
 class PedagogicalReportRepository {
@@ -488,7 +497,7 @@ class PedagogicalReportRepository {
   /// Finds a single [PedagogicalReport] by its [id] or null if no such row exists.
   Future<PedagogicalReport?> findById(
     _i1.Session session,
-    int id, {
+    _i1.UuidValue id, {
     _i1.Transaction? transaction,
   }) async {
     return session.db.findById<PedagogicalReport>(

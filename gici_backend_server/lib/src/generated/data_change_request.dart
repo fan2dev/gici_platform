@@ -12,7 +12,7 @@
 import 'package:serverpod/serverpod.dart' as _i1;
 
 abstract class DataChangeRequest
-    implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
+    implements _i1.TableRow<_i1.UuidValue?>, _i1.ProtocolSerialization {
   DataChangeRequest._({
     this.id,
     required this.organizationId,
@@ -29,15 +29,15 @@ abstract class DataChangeRequest
   });
 
   factory DataChangeRequest({
-    int? id,
-    required int organizationId,
-    required int requesterUserId,
-    int? targetChildId,
+    _i1.UuidValue? id,
+    required _i1.UuidValue organizationId,
+    required _i1.UuidValue requesterUserId,
+    _i1.UuidValue? targetChildId,
     required String requestType,
     required String requestPayload,
     required String status,
     String? resolutionNote,
-    int? reviewedByUserId,
+    _i1.UuidValue? reviewedByUserId,
     DateTime? reviewedAt,
     required DateTime createdAt,
     required DateTime updatedAt,
@@ -45,15 +45,25 @@ abstract class DataChangeRequest
 
   factory DataChangeRequest.fromJson(Map<String, dynamic> jsonSerialization) {
     return DataChangeRequest(
-      id: jsonSerialization['id'] as int?,
-      organizationId: jsonSerialization['organizationId'] as int,
-      requesterUserId: jsonSerialization['requesterUserId'] as int,
-      targetChildId: jsonSerialization['targetChildId'] as int?,
+      id: jsonSerialization['id'] == null
+          ? null
+          : _i1.UuidValueJsonExtension.fromJson(jsonSerialization['id']),
+      organizationId: _i1.UuidValueJsonExtension.fromJson(
+          jsonSerialization['organizationId']),
+      requesterUserId: _i1.UuidValueJsonExtension.fromJson(
+          jsonSerialization['requesterUserId']),
+      targetChildId: jsonSerialization['targetChildId'] == null
+          ? null
+          : _i1.UuidValueJsonExtension.fromJson(
+              jsonSerialization['targetChildId']),
       requestType: jsonSerialization['requestType'] as String,
       requestPayload: jsonSerialization['requestPayload'] as String,
       status: jsonSerialization['status'] as String,
       resolutionNote: jsonSerialization['resolutionNote'] as String?,
-      reviewedByUserId: jsonSerialization['reviewedByUserId'] as int?,
+      reviewedByUserId: jsonSerialization['reviewedByUserId'] == null
+          ? null
+          : _i1.UuidValueJsonExtension.fromJson(
+              jsonSerialization['reviewedByUserId']),
       reviewedAt: jsonSerialization['reviewedAt'] == null
           ? null
           : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['reviewedAt']),
@@ -69,13 +79,13 @@ abstract class DataChangeRequest
   static const db = DataChangeRequestRepository._();
 
   @override
-  int? id;
+  _i1.UuidValue? id;
 
-  int organizationId;
+  _i1.UuidValue organizationId;
 
-  int requesterUserId;
+  _i1.UuidValue requesterUserId;
 
-  int? targetChildId;
+  _i1.UuidValue? targetChildId;
 
   String requestType;
 
@@ -85,7 +95,7 @@ abstract class DataChangeRequest
 
   String? resolutionNote;
 
-  int? reviewedByUserId;
+  _i1.UuidValue? reviewedByUserId;
 
   DateTime? reviewedAt;
 
@@ -94,21 +104,21 @@ abstract class DataChangeRequest
   DateTime updatedAt;
 
   @override
-  _i1.Table<int?> get table => t;
+  _i1.Table<_i1.UuidValue?> get table => t;
 
   /// Returns a shallow copy of this [DataChangeRequest]
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
   DataChangeRequest copyWith({
-    int? id,
-    int? organizationId,
-    int? requesterUserId,
-    int? targetChildId,
+    _i1.UuidValue? id,
+    _i1.UuidValue? organizationId,
+    _i1.UuidValue? requesterUserId,
+    _i1.UuidValue? targetChildId,
     String? requestType,
     String? requestPayload,
     String? status,
     String? resolutionNote,
-    int? reviewedByUserId,
+    _i1.UuidValue? reviewedByUserId,
     DateTime? reviewedAt,
     DateTime? createdAt,
     DateTime? updatedAt,
@@ -116,15 +126,16 @@ abstract class DataChangeRequest
   @override
   Map<String, dynamic> toJson() {
     return {
-      if (id != null) 'id': id,
-      'organizationId': organizationId,
-      'requesterUserId': requesterUserId,
-      if (targetChildId != null) 'targetChildId': targetChildId,
+      if (id != null) 'id': id?.toJson(),
+      'organizationId': organizationId.toJson(),
+      'requesterUserId': requesterUserId.toJson(),
+      if (targetChildId != null) 'targetChildId': targetChildId?.toJson(),
       'requestType': requestType,
       'requestPayload': requestPayload,
       'status': status,
       if (resolutionNote != null) 'resolutionNote': resolutionNote,
-      if (reviewedByUserId != null) 'reviewedByUserId': reviewedByUserId,
+      if (reviewedByUserId != null)
+        'reviewedByUserId': reviewedByUserId?.toJson(),
       if (reviewedAt != null) 'reviewedAt': reviewedAt?.toJson(),
       'createdAt': createdAt.toJson(),
       'updatedAt': updatedAt.toJson(),
@@ -134,15 +145,16 @@ abstract class DataChangeRequest
   @override
   Map<String, dynamic> toJsonForProtocol() {
     return {
-      if (id != null) 'id': id,
-      'organizationId': organizationId,
-      'requesterUserId': requesterUserId,
-      if (targetChildId != null) 'targetChildId': targetChildId,
+      if (id != null) 'id': id?.toJson(),
+      'organizationId': organizationId.toJson(),
+      'requesterUserId': requesterUserId.toJson(),
+      if (targetChildId != null) 'targetChildId': targetChildId?.toJson(),
       'requestType': requestType,
       'requestPayload': requestPayload,
       'status': status,
       if (resolutionNote != null) 'resolutionNote': resolutionNote,
-      if (reviewedByUserId != null) 'reviewedByUserId': reviewedByUserId,
+      if (reviewedByUserId != null)
+        'reviewedByUserId': reviewedByUserId?.toJson(),
       if (reviewedAt != null) 'reviewedAt': reviewedAt?.toJson(),
       'createdAt': createdAt.toJson(),
       'updatedAt': updatedAt.toJson(),
@@ -183,15 +195,15 @@ class _Undefined {}
 
 class _DataChangeRequestImpl extends DataChangeRequest {
   _DataChangeRequestImpl({
-    int? id,
-    required int organizationId,
-    required int requesterUserId,
-    int? targetChildId,
+    _i1.UuidValue? id,
+    required _i1.UuidValue organizationId,
+    required _i1.UuidValue requesterUserId,
+    _i1.UuidValue? targetChildId,
     required String requestType,
     required String requestPayload,
     required String status,
     String? resolutionNote,
-    int? reviewedByUserId,
+    _i1.UuidValue? reviewedByUserId,
     DateTime? reviewedAt,
     required DateTime createdAt,
     required DateTime updatedAt,
@@ -216,8 +228,8 @@ class _DataChangeRequestImpl extends DataChangeRequest {
   @override
   DataChangeRequest copyWith({
     Object? id = _Undefined,
-    int? organizationId,
-    int? requesterUserId,
+    _i1.UuidValue? organizationId,
+    _i1.UuidValue? requesterUserId,
     Object? targetChildId = _Undefined,
     String? requestType,
     String? requestPayload,
@@ -229,17 +241,19 @@ class _DataChangeRequestImpl extends DataChangeRequest {
     DateTime? updatedAt,
   }) {
     return DataChangeRequest(
-      id: id is int? ? id : this.id,
+      id: id is _i1.UuidValue? ? id : this.id,
       organizationId: organizationId ?? this.organizationId,
       requesterUserId: requesterUserId ?? this.requesterUserId,
-      targetChildId: targetChildId is int? ? targetChildId : this.targetChildId,
+      targetChildId:
+          targetChildId is _i1.UuidValue? ? targetChildId : this.targetChildId,
       requestType: requestType ?? this.requestType,
       requestPayload: requestPayload ?? this.requestPayload,
       status: status ?? this.status,
       resolutionNote:
           resolutionNote is String? ? resolutionNote : this.resolutionNote,
-      reviewedByUserId:
-          reviewedByUserId is int? ? reviewedByUserId : this.reviewedByUserId,
+      reviewedByUserId: reviewedByUserId is _i1.UuidValue?
+          ? reviewedByUserId
+          : this.reviewedByUserId,
       reviewedAt: reviewedAt is DateTime? ? reviewedAt : this.reviewedAt,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
@@ -247,18 +261,18 @@ class _DataChangeRequestImpl extends DataChangeRequest {
   }
 }
 
-class DataChangeRequestTable extends _i1.Table<int?> {
+class DataChangeRequestTable extends _i1.Table<_i1.UuidValue?> {
   DataChangeRequestTable({super.tableRelation})
       : super(tableName: 'data_change_request') {
-    organizationId = _i1.ColumnInt(
+    organizationId = _i1.ColumnUuid(
       'organizationId',
       this,
     );
-    requesterUserId = _i1.ColumnInt(
+    requesterUserId = _i1.ColumnUuid(
       'requesterUserId',
       this,
     );
-    targetChildId = _i1.ColumnInt(
+    targetChildId = _i1.ColumnUuid(
       'targetChildId',
       this,
     );
@@ -278,7 +292,7 @@ class DataChangeRequestTable extends _i1.Table<int?> {
       'resolutionNote',
       this,
     );
-    reviewedByUserId = _i1.ColumnInt(
+    reviewedByUserId = _i1.ColumnUuid(
       'reviewedByUserId',
       this,
     );
@@ -296,11 +310,11 @@ class DataChangeRequestTable extends _i1.Table<int?> {
     );
   }
 
-  late final _i1.ColumnInt organizationId;
+  late final _i1.ColumnUuid organizationId;
 
-  late final _i1.ColumnInt requesterUserId;
+  late final _i1.ColumnUuid requesterUserId;
 
-  late final _i1.ColumnInt targetChildId;
+  late final _i1.ColumnUuid targetChildId;
 
   late final _i1.ColumnString requestType;
 
@@ -310,7 +324,7 @@ class DataChangeRequestTable extends _i1.Table<int?> {
 
   late final _i1.ColumnString resolutionNote;
 
-  late final _i1.ColumnInt reviewedByUserId;
+  late final _i1.ColumnUuid reviewedByUserId;
 
   late final _i1.ColumnDateTime reviewedAt;
 
@@ -342,7 +356,7 @@ class DataChangeRequestInclude extends _i1.IncludeObject {
   Map<String, _i1.Include?> get includes => {};
 
   @override
-  _i1.Table<int?> get table => DataChangeRequest.t;
+  _i1.Table<_i1.UuidValue?> get table => DataChangeRequest.t;
 }
 
 class DataChangeRequestIncludeList extends _i1.IncludeList {
@@ -362,7 +376,7 @@ class DataChangeRequestIncludeList extends _i1.IncludeList {
   Map<String, _i1.Include?> get includes => include?.includes ?? {};
 
   @override
-  _i1.Table<int?> get table => DataChangeRequest.t;
+  _i1.Table<_i1.UuidValue?> get table => DataChangeRequest.t;
 }
 
 class DataChangeRequestRepository {
@@ -450,7 +464,7 @@ class DataChangeRequestRepository {
   /// Finds a single [DataChangeRequest] by its [id] or null if no such row exists.
   Future<DataChangeRequest?> findById(
     _i1.Session session,
-    int id, {
+    _i1.UuidValue id, {
     _i1.Transaction? transaction,
   }) async {
     return session.db.findById<DataChangeRequest>(

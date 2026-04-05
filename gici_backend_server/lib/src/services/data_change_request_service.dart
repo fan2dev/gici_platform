@@ -7,9 +7,9 @@ class DataChangeRequestService {
 
   Future<DataChangeRequest> create(
     Session session, {
-    required int organizationId,
-    required int requesterUserId,
-    int? targetChildId,
+    required UuidValue organizationId,
+    required UuidValue requesterUserId,
+    UuidValue? targetChildId,
     required String requestType,
     required String requestPayload,
   }) {
@@ -34,8 +34,8 @@ class DataChangeRequestService {
 
   Future<List<DataChangeRequest>> listOwn(
     Session session, {
-    required int organizationId,
-    required int requesterUserId,
+    required UuidValue organizationId,
+    required UuidValue requesterUserId,
     required int limit,
     required int offset,
   }) {
@@ -53,7 +53,7 @@ class DataChangeRequestService {
 
   Future<List<DataChangeRequest>> listForReview(
     Session session, {
-    required int organizationId,
+    required UuidValue organizationId,
     String? status,
     required int limit,
     required int offset,
@@ -76,7 +76,7 @@ class DataChangeRequestService {
 
   Future<DataChangeRequest?> getById(
     Session session, {
-    required int requestId,
+    required UuidValue requestId,
   }) {
     return DataChangeRequest.db.findById(session, requestId);
   }
@@ -84,7 +84,7 @@ class DataChangeRequestService {
   Future<DataChangeRequest> updateStatus(
     Session session, {
     required DataChangeRequest request,
-    required int reviewedByUserId,
+    required UuidValue reviewedByUserId,
     required String status,
     String? resolutionNote,
   }) {

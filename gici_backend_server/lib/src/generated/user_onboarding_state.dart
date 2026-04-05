@@ -12,7 +12,7 @@
 import 'package:serverpod/serverpod.dart' as _i1;
 
 abstract class UserOnboardingState
-    implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
+    implements _i1.TableRow<_i1.UuidValue?>, _i1.ProtocolSerialization {
   UserOnboardingState._({
     this.id,
     this.organizationId,
@@ -25,9 +25,9 @@ abstract class UserOnboardingState
   });
 
   factory UserOnboardingState({
-    int? id,
-    int? organizationId,
-    required int userId,
+    _i1.UuidValue? id,
+    _i1.UuidValue? organizationId,
+    required _i1.UuidValue userId,
     DateTime? introCompletedAt,
     DateTime? termsAcceptedAt,
     DateTime? completedAt,
@@ -37,9 +37,14 @@ abstract class UserOnboardingState
 
   factory UserOnboardingState.fromJson(Map<String, dynamic> jsonSerialization) {
     return UserOnboardingState(
-      id: jsonSerialization['id'] as int?,
-      organizationId: jsonSerialization['organizationId'] as int?,
-      userId: jsonSerialization['userId'] as int,
+      id: jsonSerialization['id'] == null
+          ? null
+          : _i1.UuidValueJsonExtension.fromJson(jsonSerialization['id']),
+      organizationId: jsonSerialization['organizationId'] == null
+          ? null
+          : _i1.UuidValueJsonExtension.fromJson(
+              jsonSerialization['organizationId']),
+      userId: _i1.UuidValueJsonExtension.fromJson(jsonSerialization['userId']),
       introCompletedAt: jsonSerialization['introCompletedAt'] == null
           ? null
           : _i1.DateTimeJsonExtension.fromJson(
@@ -64,11 +69,11 @@ abstract class UserOnboardingState
   static const db = UserOnboardingStateRepository._();
 
   @override
-  int? id;
+  _i1.UuidValue? id;
 
-  int? organizationId;
+  _i1.UuidValue? organizationId;
 
-  int userId;
+  _i1.UuidValue userId;
 
   DateTime? introCompletedAt;
 
@@ -81,15 +86,15 @@ abstract class UserOnboardingState
   DateTime updatedAt;
 
   @override
-  _i1.Table<int?> get table => t;
+  _i1.Table<_i1.UuidValue?> get table => t;
 
   /// Returns a shallow copy of this [UserOnboardingState]
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
   UserOnboardingState copyWith({
-    int? id,
-    int? organizationId,
-    int? userId,
+    _i1.UuidValue? id,
+    _i1.UuidValue? organizationId,
+    _i1.UuidValue? userId,
     DateTime? introCompletedAt,
     DateTime? termsAcceptedAt,
     DateTime? completedAt,
@@ -99,9 +104,9 @@ abstract class UserOnboardingState
   @override
   Map<String, dynamic> toJson() {
     return {
-      if (id != null) 'id': id,
-      if (organizationId != null) 'organizationId': organizationId,
-      'userId': userId,
+      if (id != null) 'id': id?.toJson(),
+      if (organizationId != null) 'organizationId': organizationId?.toJson(),
+      'userId': userId.toJson(),
       if (introCompletedAt != null)
         'introCompletedAt': introCompletedAt?.toJson(),
       if (termsAcceptedAt != null) 'termsAcceptedAt': termsAcceptedAt?.toJson(),
@@ -114,9 +119,9 @@ abstract class UserOnboardingState
   @override
   Map<String, dynamic> toJsonForProtocol() {
     return {
-      if (id != null) 'id': id,
-      if (organizationId != null) 'organizationId': organizationId,
-      'userId': userId,
+      if (id != null) 'id': id?.toJson(),
+      if (organizationId != null) 'organizationId': organizationId?.toJson(),
+      'userId': userId.toJson(),
       if (introCompletedAt != null)
         'introCompletedAt': introCompletedAt?.toJson(),
       if (termsAcceptedAt != null) 'termsAcceptedAt': termsAcceptedAt?.toJson(),
@@ -160,9 +165,9 @@ class _Undefined {}
 
 class _UserOnboardingStateImpl extends UserOnboardingState {
   _UserOnboardingStateImpl({
-    int? id,
-    int? organizationId,
-    required int userId,
+    _i1.UuidValue? id,
+    _i1.UuidValue? organizationId,
+    required _i1.UuidValue userId,
     DateTime? introCompletedAt,
     DateTime? termsAcceptedAt,
     DateTime? completedAt,
@@ -186,7 +191,7 @@ class _UserOnboardingStateImpl extends UserOnboardingState {
   UserOnboardingState copyWith({
     Object? id = _Undefined,
     Object? organizationId = _Undefined,
-    int? userId,
+    _i1.UuidValue? userId,
     Object? introCompletedAt = _Undefined,
     Object? termsAcceptedAt = _Undefined,
     Object? completedAt = _Undefined,
@@ -194,9 +199,10 @@ class _UserOnboardingStateImpl extends UserOnboardingState {
     DateTime? updatedAt,
   }) {
     return UserOnboardingState(
-      id: id is int? ? id : this.id,
-      organizationId:
-          organizationId is int? ? organizationId : this.organizationId,
+      id: id is _i1.UuidValue? ? id : this.id,
+      organizationId: organizationId is _i1.UuidValue?
+          ? organizationId
+          : this.organizationId,
       userId: userId ?? this.userId,
       introCompletedAt: introCompletedAt is DateTime?
           ? introCompletedAt
@@ -210,14 +216,14 @@ class _UserOnboardingStateImpl extends UserOnboardingState {
   }
 }
 
-class UserOnboardingStateTable extends _i1.Table<int?> {
+class UserOnboardingStateTable extends _i1.Table<_i1.UuidValue?> {
   UserOnboardingStateTable({super.tableRelation})
       : super(tableName: 'user_onboarding_state') {
-    organizationId = _i1.ColumnInt(
+    organizationId = _i1.ColumnUuid(
       'organizationId',
       this,
     );
-    userId = _i1.ColumnInt(
+    userId = _i1.ColumnUuid(
       'userId',
       this,
     );
@@ -243,9 +249,9 @@ class UserOnboardingStateTable extends _i1.Table<int?> {
     );
   }
 
-  late final _i1.ColumnInt organizationId;
+  late final _i1.ColumnUuid organizationId;
 
-  late final _i1.ColumnInt userId;
+  late final _i1.ColumnUuid userId;
 
   late final _i1.ColumnDateTime introCompletedAt;
 
@@ -277,7 +283,7 @@ class UserOnboardingStateInclude extends _i1.IncludeObject {
   Map<String, _i1.Include?> get includes => {};
 
   @override
-  _i1.Table<int?> get table => UserOnboardingState.t;
+  _i1.Table<_i1.UuidValue?> get table => UserOnboardingState.t;
 }
 
 class UserOnboardingStateIncludeList extends _i1.IncludeList {
@@ -297,7 +303,7 @@ class UserOnboardingStateIncludeList extends _i1.IncludeList {
   Map<String, _i1.Include?> get includes => include?.includes ?? {};
 
   @override
-  _i1.Table<int?> get table => UserOnboardingState.t;
+  _i1.Table<_i1.UuidValue?> get table => UserOnboardingState.t;
 }
 
 class UserOnboardingStateRepository {
@@ -385,7 +391,7 @@ class UserOnboardingStateRepository {
   /// Finds a single [UserOnboardingState] by its [id] or null if no such row exists.
   Future<UserOnboardingState?> findById(
     _i1.Session session,
-    int id, {
+    _i1.UuidValue id, {
     _i1.Transaction? transaction,
   }) async {
     return session.db.findById<UserOnboardingState>(

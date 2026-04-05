@@ -5,7 +5,9 @@ class: AppUser
 table: app_user
 
 fields:
-  organizationId: int?
+  id: UuidValue?, defaultPersist=random
+  serverpodUserId: int?
+  organizationId: UuidValue?
   email: String
   passwordHash: String
   firstName: String
@@ -29,3 +31,6 @@ indexes:
     fields: organizationId
   appuser_role_idx:
     fields: role
+  appuser_serverpod_idx:
+    fields: serverpodUserId
+    unique: true

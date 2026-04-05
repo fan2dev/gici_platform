@@ -1,4 +1,5 @@
 import 'package:gici_backend_client/gici_backend_server_client.dart';
+import 'package:uuid/uuid_value.dart';
 
 class HabitRepository {
   const HabitRepository(this._client);
@@ -6,15 +7,11 @@ class HabitRepository {
   final Client _client;
 
   Future<List<MealEntry>> listMealsByChild({
-    required String organizationId,
-    required String actorId,
-    required int childId,
+    required UuidValue childId,
     int page = 0,
     int pageSize = 50,
   }) {
     return _client.habit.listMealsByChild(
-      organizationId: organizationId,
-      actorId: actorId,
       childId: childId,
       page: page,
       pageSize: pageSize,
@@ -22,9 +19,7 @@ class HabitRepository {
   }
 
   Future<MealEntry> createMealEntry({
-    required String organizationId,
-    required String actorId,
-    required int childId,
+    required UuidValue childId,
     required String mealType,
     required String consumptionLevel,
     DateTime? recordedAt,
@@ -32,8 +27,6 @@ class HabitRepository {
     String? notes,
   }) {
     return _client.habit.createMealEntry(
-      organizationId: organizationId,
-      actorId: actorId,
       childId: childId,
       mealType: mealType,
       consumptionLevel: consumptionLevel,
@@ -44,9 +37,7 @@ class HabitRepository {
   }
 
   Future<MealEntry> updateMealEntry({
-    required String organizationId,
-    required String actorId,
-    required int mealEntryId,
+    required UuidValue mealEntryId,
     String? mealType,
     String? consumptionLevel,
     DateTime? recordedAt,
@@ -54,8 +45,6 @@ class HabitRepository {
     String? notes,
   }) {
     return _client.habit.updateMealEntry(
-      organizationId: organizationId,
-      actorId: actorId,
       mealEntryId: mealEntryId,
       mealType: mealType,
       consumptionLevel: consumptionLevel,
@@ -66,15 +55,11 @@ class HabitRepository {
   }
 
   Future<List<NapEntry>> listNapsByChild({
-    required String organizationId,
-    required String actorId,
-    required int childId,
+    required UuidValue childId,
     int page = 0,
     int pageSize = 50,
   }) {
     return _client.habit.listNapsByChild(
-      organizationId: organizationId,
-      actorId: actorId,
       childId: childId,
       page: page,
       pageSize: pageSize,
@@ -82,9 +67,7 @@ class HabitRepository {
   }
 
   Future<NapEntry> createNapEntry({
-    required String organizationId,
-    required String actorId,
-    required int childId,
+    required UuidValue childId,
     required DateTime startedAt,
     DateTime? endedAt,
     int? durationMinutes,
@@ -92,8 +75,6 @@ class HabitRepository {
     String? notes,
   }) {
     return _client.habit.createNapEntry(
-      organizationId: organizationId,
-      actorId: actorId,
       childId: childId,
       startedAt: startedAt,
       endedAt: endedAt,
@@ -104,9 +85,7 @@ class HabitRepository {
   }
 
   Future<NapEntry> updateNapEntry({
-    required String organizationId,
-    required String actorId,
-    required int napEntryId,
+    required UuidValue napEntryId,
     DateTime? startedAt,
     DateTime? endedAt,
     int? durationMinutes,
@@ -114,8 +93,6 @@ class HabitRepository {
     String? notes,
   }) {
     return _client.habit.updateNapEntry(
-      organizationId: organizationId,
-      actorId: actorId,
       napEntryId: napEntryId,
       startedAt: startedAt,
       endedAt: endedAt,
@@ -126,15 +103,11 @@ class HabitRepository {
   }
 
   Future<List<BowelMovementEntry>> listBowelMovementsByChild({
-    required String organizationId,
-    required String actorId,
-    required int childId,
+    required UuidValue childId,
     int page = 0,
     int pageSize = 50,
   }) {
     return _client.habit.listBowelMovementsByChild(
-      organizationId: organizationId,
-      actorId: actorId,
       childId: childId,
       page: page,
       pageSize: pageSize,
@@ -142,17 +115,13 @@ class HabitRepository {
   }
 
   Future<BowelMovementEntry> createBowelMovementEntry({
-    required String organizationId,
-    required String actorId,
-    required int childId,
+    required UuidValue childId,
     DateTime? eventAt,
     required String eventType,
     String? consistency,
     String? notes,
   }) {
     return _client.habit.createBowelMovementEntry(
-      organizationId: organizationId,
-      actorId: actorId,
       childId: childId,
       eventAt: eventAt,
       eventType: eventType,
@@ -162,17 +131,13 @@ class HabitRepository {
   }
 
   Future<BowelMovementEntry> updateBowelMovementEntry({
-    required String organizationId,
-    required String actorId,
-    required int entryId,
+    required UuidValue entryId,
     DateTime? eventAt,
     String? eventType,
     String? consistency,
     String? notes,
   }) {
     return _client.habit.updateBowelMovementEntry(
-      organizationId: organizationId,
-      actorId: actorId,
       entryId: entryId,
       eventAt: eventAt,
       eventType: eventType,
@@ -182,14 +147,10 @@ class HabitRepository {
   }
 
   Future<ChildDailyHabits> getChildDailyHabits({
-    required String organizationId,
-    required String actorId,
-    required int childId,
+    required UuidValue childId,
     required DateTime day,
   }) {
     return _client.habit.getChildDailyHabits(
-      organizationId: organizationId,
-      actorId: actorId,
       childId: childId,
       day: day,
     );

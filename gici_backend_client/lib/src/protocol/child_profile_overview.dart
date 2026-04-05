@@ -26,9 +26,9 @@ abstract class ChildProfileOverview implements _i1.SerializableModel {
 
   factory ChildProfileOverview({
     required _i2.Child child,
-    int? activeClassroomId,
+    _i1.UuidValue? activeClassroomId,
     String? activeClassroomName,
-    required List<int> guardianUserIds,
+    required List<_i1.UuidValue> guardianUserIds,
     required List<String> guardianDisplayNames,
     required int documentsCount,
     required int reportsCount,
@@ -40,10 +40,13 @@ abstract class ChildProfileOverview implements _i1.SerializableModel {
     return ChildProfileOverview(
       child: _i2.Child.fromJson(
           (jsonSerialization['child'] as Map<String, dynamic>)),
-      activeClassroomId: jsonSerialization['activeClassroomId'] as int?,
+      activeClassroomId: jsonSerialization['activeClassroomId'] == null
+          ? null
+          : _i1.UuidValueJsonExtension.fromJson(
+              jsonSerialization['activeClassroomId']),
       activeClassroomName: jsonSerialization['activeClassroomName'] as String?,
       guardianUserIds: (jsonSerialization['guardianUserIds'] as List)
-          .map((e) => e as int)
+          .map((e) => _i1.UuidValueJsonExtension.fromJson(e))
           .toList(),
       guardianDisplayNames: (jsonSerialization['guardianDisplayNames'] as List)
           .map((e) => e as String)
@@ -59,11 +62,11 @@ abstract class ChildProfileOverview implements _i1.SerializableModel {
 
   _i2.Child child;
 
-  int? activeClassroomId;
+  _i1.UuidValue? activeClassroomId;
 
   String? activeClassroomName;
 
-  List<int> guardianUserIds;
+  List<_i1.UuidValue> guardianUserIds;
 
   List<String> guardianDisplayNames;
 
@@ -78,9 +81,9 @@ abstract class ChildProfileOverview implements _i1.SerializableModel {
   @_i1.useResult
   ChildProfileOverview copyWith({
     _i2.Child? child,
-    int? activeClassroomId,
+    _i1.UuidValue? activeClassroomId,
     String? activeClassroomName,
-    List<int>? guardianUserIds,
+    List<_i1.UuidValue>? guardianUserIds,
     List<String>? guardianDisplayNames,
     int? documentsCount,
     int? reportsCount,
@@ -90,10 +93,11 @@ abstract class ChildProfileOverview implements _i1.SerializableModel {
   Map<String, dynamic> toJson() {
     return {
       'child': child.toJson(),
-      if (activeClassroomId != null) 'activeClassroomId': activeClassroomId,
+      if (activeClassroomId != null)
+        'activeClassroomId': activeClassroomId?.toJson(),
       if (activeClassroomName != null)
         'activeClassroomName': activeClassroomName,
-      'guardianUserIds': guardianUserIds.toJson(),
+      'guardianUserIds': guardianUserIds.toJson(valueToJson: (v) => v.toJson()),
       'guardianDisplayNames': guardianDisplayNames.toJson(),
       'documentsCount': documentsCount,
       'reportsCount': reportsCount,
@@ -112,9 +116,9 @@ class _Undefined {}
 class _ChildProfileOverviewImpl extends ChildProfileOverview {
   _ChildProfileOverviewImpl({
     required _i2.Child child,
-    int? activeClassroomId,
+    _i1.UuidValue? activeClassroomId,
     String? activeClassroomName,
-    required List<int> guardianUserIds,
+    required List<_i1.UuidValue> guardianUserIds,
     required List<String> guardianDisplayNames,
     required int documentsCount,
     required int reportsCount,
@@ -138,7 +142,7 @@ class _ChildProfileOverviewImpl extends ChildProfileOverview {
     _i2.Child? child,
     Object? activeClassroomId = _Undefined,
     Object? activeClassroomName = _Undefined,
-    List<int>? guardianUserIds,
+    List<_i1.UuidValue>? guardianUserIds,
     List<String>? guardianDisplayNames,
     int? documentsCount,
     int? reportsCount,
@@ -146,7 +150,7 @@ class _ChildProfileOverviewImpl extends ChildProfileOverview {
   }) {
     return ChildProfileOverview(
       child: child ?? this.child.copyWith(),
-      activeClassroomId: activeClassroomId is int?
+      activeClassroomId: activeClassroomId is _i1.UuidValue?
           ? activeClassroomId
           : this.activeClassroomId,
       activeClassroomName: activeClassroomName is String?

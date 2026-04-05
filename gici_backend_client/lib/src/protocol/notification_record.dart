@@ -30,17 +30,17 @@ abstract class NotificationRecord implements _i1.SerializableModel {
   });
 
   factory NotificationRecord({
-    int? id,
-    required int organizationId,
-    required int userId,
+    _i1.UuidValue? id,
+    required _i1.UuidValue organizationId,
+    required _i1.UuidValue userId,
     required String title,
     required String body,
     required String category,
     required String targetScope,
-    int? targetClassroomId,
-    int? targetChildId,
-    int? targetUserId,
-    required int createdByUserId,
+    _i1.UuidValue? targetClassroomId,
+    _i1.UuidValue? targetChildId,
+    _i1.UuidValue? targetUserId,
+    required _i1.UuidValue createdByUserId,
     required bool isRead,
     DateTime? readAt,
     required DateTime createdAt,
@@ -48,17 +48,30 @@ abstract class NotificationRecord implements _i1.SerializableModel {
 
   factory NotificationRecord.fromJson(Map<String, dynamic> jsonSerialization) {
     return NotificationRecord(
-      id: jsonSerialization['id'] as int?,
-      organizationId: jsonSerialization['organizationId'] as int,
-      userId: jsonSerialization['userId'] as int,
+      id: jsonSerialization['id'] == null
+          ? null
+          : _i1.UuidValueJsonExtension.fromJson(jsonSerialization['id']),
+      organizationId: _i1.UuidValueJsonExtension.fromJson(
+          jsonSerialization['organizationId']),
+      userId: _i1.UuidValueJsonExtension.fromJson(jsonSerialization['userId']),
       title: jsonSerialization['title'] as String,
       body: jsonSerialization['body'] as String,
       category: jsonSerialization['category'] as String,
       targetScope: jsonSerialization['targetScope'] as String,
-      targetClassroomId: jsonSerialization['targetClassroomId'] as int?,
-      targetChildId: jsonSerialization['targetChildId'] as int?,
-      targetUserId: jsonSerialization['targetUserId'] as int?,
-      createdByUserId: jsonSerialization['createdByUserId'] as int,
+      targetClassroomId: jsonSerialization['targetClassroomId'] == null
+          ? null
+          : _i1.UuidValueJsonExtension.fromJson(
+              jsonSerialization['targetClassroomId']),
+      targetChildId: jsonSerialization['targetChildId'] == null
+          ? null
+          : _i1.UuidValueJsonExtension.fromJson(
+              jsonSerialization['targetChildId']),
+      targetUserId: jsonSerialization['targetUserId'] == null
+          ? null
+          : _i1.UuidValueJsonExtension.fromJson(
+              jsonSerialization['targetUserId']),
+      createdByUserId: _i1.UuidValueJsonExtension.fromJson(
+          jsonSerialization['createdByUserId']),
       isRead: jsonSerialization['isRead'] as bool,
       readAt: jsonSerialization['readAt'] == null
           ? null
@@ -71,11 +84,11 @@ abstract class NotificationRecord implements _i1.SerializableModel {
   /// The database id, set if the object has been inserted into the
   /// database or if it has been fetched from the database. Otherwise,
   /// the id will be null.
-  int? id;
+  _i1.UuidValue? id;
 
-  int organizationId;
+  _i1.UuidValue organizationId;
 
-  int userId;
+  _i1.UuidValue userId;
 
   String title;
 
@@ -85,13 +98,13 @@ abstract class NotificationRecord implements _i1.SerializableModel {
 
   String targetScope;
 
-  int? targetClassroomId;
+  _i1.UuidValue? targetClassroomId;
 
-  int? targetChildId;
+  _i1.UuidValue? targetChildId;
 
-  int? targetUserId;
+  _i1.UuidValue? targetUserId;
 
-  int createdByUserId;
+  _i1.UuidValue createdByUserId;
 
   bool isRead;
 
@@ -103,17 +116,17 @@ abstract class NotificationRecord implements _i1.SerializableModel {
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
   NotificationRecord copyWith({
-    int? id,
-    int? organizationId,
-    int? userId,
+    _i1.UuidValue? id,
+    _i1.UuidValue? organizationId,
+    _i1.UuidValue? userId,
     String? title,
     String? body,
     String? category,
     String? targetScope,
-    int? targetClassroomId,
-    int? targetChildId,
-    int? targetUserId,
-    int? createdByUserId,
+    _i1.UuidValue? targetClassroomId,
+    _i1.UuidValue? targetChildId,
+    _i1.UuidValue? targetUserId,
+    _i1.UuidValue? createdByUserId,
     bool? isRead,
     DateTime? readAt,
     DateTime? createdAt,
@@ -121,17 +134,18 @@ abstract class NotificationRecord implements _i1.SerializableModel {
   @override
   Map<String, dynamic> toJson() {
     return {
-      if (id != null) 'id': id,
-      'organizationId': organizationId,
-      'userId': userId,
+      if (id != null) 'id': id?.toJson(),
+      'organizationId': organizationId.toJson(),
+      'userId': userId.toJson(),
       'title': title,
       'body': body,
       'category': category,
       'targetScope': targetScope,
-      if (targetClassroomId != null) 'targetClassroomId': targetClassroomId,
-      if (targetChildId != null) 'targetChildId': targetChildId,
-      if (targetUserId != null) 'targetUserId': targetUserId,
-      'createdByUserId': createdByUserId,
+      if (targetClassroomId != null)
+        'targetClassroomId': targetClassroomId?.toJson(),
+      if (targetChildId != null) 'targetChildId': targetChildId?.toJson(),
+      if (targetUserId != null) 'targetUserId': targetUserId?.toJson(),
+      'createdByUserId': createdByUserId.toJson(),
       'isRead': isRead,
       if (readAt != null) 'readAt': readAt?.toJson(),
       'createdAt': createdAt.toJson(),
@@ -148,17 +162,17 @@ class _Undefined {}
 
 class _NotificationRecordImpl extends NotificationRecord {
   _NotificationRecordImpl({
-    int? id,
-    required int organizationId,
-    required int userId,
+    _i1.UuidValue? id,
+    required _i1.UuidValue organizationId,
+    required _i1.UuidValue userId,
     required String title,
     required String body,
     required String category,
     required String targetScope,
-    int? targetClassroomId,
-    int? targetChildId,
-    int? targetUserId,
-    required int createdByUserId,
+    _i1.UuidValue? targetClassroomId,
+    _i1.UuidValue? targetChildId,
+    _i1.UuidValue? targetUserId,
+    required _i1.UuidValue createdByUserId,
     required bool isRead,
     DateTime? readAt,
     required DateTime createdAt,
@@ -185,8 +199,8 @@ class _NotificationRecordImpl extends NotificationRecord {
   @override
   NotificationRecord copyWith({
     Object? id = _Undefined,
-    int? organizationId,
-    int? userId,
+    _i1.UuidValue? organizationId,
+    _i1.UuidValue? userId,
     String? title,
     String? body,
     String? category,
@@ -194,24 +208,26 @@ class _NotificationRecordImpl extends NotificationRecord {
     Object? targetClassroomId = _Undefined,
     Object? targetChildId = _Undefined,
     Object? targetUserId = _Undefined,
-    int? createdByUserId,
+    _i1.UuidValue? createdByUserId,
     bool? isRead,
     Object? readAt = _Undefined,
     DateTime? createdAt,
   }) {
     return NotificationRecord(
-      id: id is int? ? id : this.id,
+      id: id is _i1.UuidValue? ? id : this.id,
       organizationId: organizationId ?? this.organizationId,
       userId: userId ?? this.userId,
       title: title ?? this.title,
       body: body ?? this.body,
       category: category ?? this.category,
       targetScope: targetScope ?? this.targetScope,
-      targetClassroomId: targetClassroomId is int?
+      targetClassroomId: targetClassroomId is _i1.UuidValue?
           ? targetClassroomId
           : this.targetClassroomId,
-      targetChildId: targetChildId is int? ? targetChildId : this.targetChildId,
-      targetUserId: targetUserId is int? ? targetUserId : this.targetUserId,
+      targetChildId:
+          targetChildId is _i1.UuidValue? ? targetChildId : this.targetChildId,
+      targetUserId:
+          targetUserId is _i1.UuidValue? ? targetUserId : this.targetUserId,
       createdByUserId: createdByUserId ?? this.createdByUserId,
       isRead: isRead ?? this.isRead,
       readAt: readAt is DateTime? ? readAt : this.readAt,

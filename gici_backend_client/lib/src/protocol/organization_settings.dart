@@ -33,8 +33,8 @@ abstract class OrganizationSettings implements _i1.SerializableModel {
   });
 
   factory OrganizationSettings({
-    int? id,
-    required int organizationId,
+    _i1.UuidValue? id,
+    required _i1.UuidValue organizationId,
     required String defaultLanguage,
     required String timezone,
     required String dateFormat,
@@ -55,8 +55,11 @@ abstract class OrganizationSettings implements _i1.SerializableModel {
   factory OrganizationSettings.fromJson(
       Map<String, dynamic> jsonSerialization) {
     return OrganizationSettings(
-      id: jsonSerialization['id'] as int?,
-      organizationId: jsonSerialization['organizationId'] as int,
+      id: jsonSerialization['id'] == null
+          ? null
+          : _i1.UuidValueJsonExtension.fromJson(jsonSerialization['id']),
+      organizationId: _i1.UuidValueJsonExtension.fromJson(
+          jsonSerialization['organizationId']),
       defaultLanguage: jsonSerialization['defaultLanguage'] as String,
       timezone: jsonSerialization['timezone'] as String,
       dateFormat: jsonSerialization['dateFormat'] as String,
@@ -84,9 +87,9 @@ abstract class OrganizationSettings implements _i1.SerializableModel {
   /// The database id, set if the object has been inserted into the
   /// database or if it has been fetched from the database. Otherwise,
   /// the id will be null.
-  int? id;
+  _i1.UuidValue? id;
 
-  int organizationId;
+  _i1.UuidValue organizationId;
 
   String defaultLanguage;
 
@@ -122,8 +125,8 @@ abstract class OrganizationSettings implements _i1.SerializableModel {
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
   OrganizationSettings copyWith({
-    int? id,
-    int? organizationId,
+    _i1.UuidValue? id,
+    _i1.UuidValue? organizationId,
     String? defaultLanguage,
     String? timezone,
     String? dateFormat,
@@ -143,8 +146,8 @@ abstract class OrganizationSettings implements _i1.SerializableModel {
   @override
   Map<String, dynamic> toJson() {
     return {
-      if (id != null) 'id': id,
-      'organizationId': organizationId,
+      if (id != null) 'id': id?.toJson(),
+      'organizationId': organizationId.toJson(),
       'defaultLanguage': defaultLanguage,
       'timezone': timezone,
       'dateFormat': dateFormat,
@@ -173,8 +176,8 @@ class _Undefined {}
 
 class _OrganizationSettingsImpl extends OrganizationSettings {
   _OrganizationSettingsImpl({
-    int? id,
-    required int organizationId,
+    _i1.UuidValue? id,
+    required _i1.UuidValue organizationId,
     required String defaultLanguage,
     required String timezone,
     required String dateFormat,
@@ -216,7 +219,7 @@ class _OrganizationSettingsImpl extends OrganizationSettings {
   @override
   OrganizationSettings copyWith({
     Object? id = _Undefined,
-    int? organizationId,
+    _i1.UuidValue? organizationId,
     String? defaultLanguage,
     String? timezone,
     String? dateFormat,
@@ -234,7 +237,7 @@ class _OrganizationSettingsImpl extends OrganizationSettings {
     DateTime? updatedAt,
   }) {
     return OrganizationSettings(
-      id: id is int? ? id : this.id,
+      id: id is _i1.UuidValue? ? id : this.id,
       organizationId: organizationId ?? this.organizationId,
       defaultLanguage: defaultLanguage ?? this.defaultLanguage,
       timezone: timezone ?? this.timezone,

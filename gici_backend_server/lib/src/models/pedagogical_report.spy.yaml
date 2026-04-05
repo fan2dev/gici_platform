@@ -1,18 +1,21 @@
+# Pedagogical progress report
+
 class: PedagogicalReport
 
 table: pedagogical_report
 
 fields:
-  organizationId: int
-  childId: int
+  id: UuidValue?, defaultPersist=random
+  organizationId: UuidValue
+  childId: UuidValue
   reportDate: DateTime
   title: String
   summary: String
   body: String
   status: String
   visibility: String
-  createdByUserId: int
-  updatedByUserId: int?
+  createdByUserId: UuidValue
+  updatedByUserId: UuidValue?
   createdAt: DateTime
   updatedAt: DateTime
   deletedAt: DateTime?

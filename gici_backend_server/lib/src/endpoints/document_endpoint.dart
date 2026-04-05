@@ -1,7 +1,7 @@
 import 'package:serverpod/serverpod.dart';
 
 import '../generated/protocol.dart';
-import '../helpers/request_scope.dart';
+import '../helpers/session_user_helper.dart';
 import '../services/access_control_service.dart';
 import '../services/activity_log_service.dart';
 import '../services/document_service.dart';
@@ -15,23 +15,17 @@ class DocumentEndpoint extends Endpoint {
 
   Future<List<OrganizationDocument>> listOrganizationDocuments(
     Session session, {
-    required String organizationId,
-    required String actorId,
     int page = 0,
     int pageSize = 30,
   }) async {
-    final orgId = parseOrganizationId(organizationId);
-    final actor = await _accessControl.requireActor(
-      session,
-      actorId: parseActorId(actorId),
-      organizationId: orgId,
-      allowedRoles: const [
-        'platform_super_admin',
-        'organization_admin',
-        'staff',
-        'guardian',
-      ],
-    );
+    final actor = await getAuthenticatedUser(session);
+    _accessControl.requireRole(actor, allowedRoles: [
+      'platform_super_admin',
+      'organization_admin',
+      'staff',
+      'guardian',
+    ]);
+    final orgId = actor.organizationId!;
 
     final safePage = page < 0 ? 0 : page;
     final safePageSize = pageSize.clamp(1, 100);
@@ -47,8 +41,6 @@ class DocumentEndpoint extends Endpoint {
 
   Future<OrganizationDocument> createOrganizationDocument(
     Session session, {
-    required String organizationId,
-    required String actorId,
     required String title,
     String? description,
     required String visibility,
@@ -57,13 +49,13 @@ class DocumentEndpoint extends Endpoint {
     required int sizeBytes,
     String? storagePath,
   }) async {
-    final orgId = parseOrganizationId(organizationId);
-    final actor = await _accessControl.requireActor(
-      session,
-      actorId: parseActorId(actorId),
-      organizationId: orgId,
-      allowedRoles: const ['platform_super_admin', 'organization_admin', 'staff'],
-    );
+    final actor = await getAuthenticatedUser(session);
+    _accessControl.requireRole(actor, allowedRoles: [
+      'platform_super_admin',
+      'organization_admin',
+      'staff',
+    ]);
+    final orgId = actor.organizationId!;
 
     final fileAsset = await _documentService.createFileAsset(
       session,
@@ -90,10 +82,10 @@ class DocumentEndpoint extends Endpoint {
     await _activityLogService.log(
       session,
       organizationId: orgId,
-      userId: actor.id,
+      userId: actor.id!,
       action: 'document.organization.create',
       entityType: 'organization_document',
-      entityId: doc.id,
+      entityId: doc.id.toString(),
       metadata: 'title=$title;visibility=$visibility',
     );
 
@@ -102,35 +94,25 @@ class DocumentEndpoint extends Endpoint {
 
   Future<List<ChildDocument>> listChildDocuments(
     Session session, {
-    required String organizationId,
-    required String actorId,
-    required int childId,
+    required UuidValue childId,
     int page = 0,
     int pageSize = 30,
   }) async {
-    final orgId = parseOrganizationId(organizationId);
-    final actor = await _accessControl.requireActor(
-      session,
-      actorId: parseActorId(actorId),
-      organizationId: orgId,
-      allowedRoles: const [
-        'platform_super_admin',
-        'organization_admin',
-        'staff',
-        'guardian',
-      ],
-    );
+    final actor = await getAuthenticatedUser(session);
+    _accessControl.requireRole(actor, allowedRoles: [
+      'platform_super_admin',
+      'organization_admin',
+      'staff',
+      'guardian',
+    ]);
+    final orgId = actor.organizationId!;
 
     if (actor.role == 'guardian') {
-      final canAccess = await _accessControl.isGuardianOfChild(
+      await _accessControl.requireGuardianChildAccess(
         session,
-        organizationId: orgId,
-        guardianUserId: actor.id!,
+        actor: actor,
         childId: childId,
       );
-      if (!canAccess) {
-        throw Exception('Guardian cannot access this child documents.');
-      }
     }
 
     final safePage = page < 0 ? 0 : page;
@@ -148,9 +130,7 @@ class DocumentEndpoint extends Endpoint {
 
   Future<ChildDocument> createChildDocument(
     Session session, {
-    required String organizationId,
-    required String actorId,
-    required int childId,
+    required UuidValue childId,
     required String title,
     String? description,
     required bool visibleToGuardians,
@@ -159,13 +139,13 @@ class DocumentEndpoint extends Endpoint {
     required int sizeBytes,
     String? storagePath,
   }) async {
-    final orgId = parseOrganizationId(organizationId);
-    final actor = await _accessControl.requireActor(
-      session,
-      actorId: parseActorId(actorId),
-      organizationId: orgId,
-      allowedRoles: const ['platform_super_admin', 'organization_admin', 'staff'],
-    );
+    final actor = await getAuthenticatedUser(session);
+    _accessControl.requireRole(actor, allowedRoles: [
+      'platform_super_admin',
+      'organization_admin',
+      'staff',
+    ]);
+    final orgId = actor.organizationId!;
 
     final child = await Child.db.findFirstRow(
       session,
@@ -204,10 +184,10 @@ class DocumentEndpoint extends Endpoint {
     await _activityLogService.log(
       session,
       organizationId: orgId,
-      userId: actor.id,
+      userId: actor.id!,
       action: 'document.child.create',
       entityType: 'child_document',
-      entityId: doc.id,
+      entityId: doc.id.toString(),
       metadata: 'childId=$childId;title=$title',
     );
 
@@ -216,22 +196,16 @@ class DocumentEndpoint extends Endpoint {
 
   Future<String> resolveFileDownloadUrl(
     Session session, {
-    required String organizationId,
-    required String actorId,
-    required int fileAssetId,
+    required UuidValue fileAssetId,
   }) async {
-    final orgId = parseOrganizationId(organizationId);
-    await _accessControl.requireActor(
-      session,
-      actorId: parseActorId(actorId),
-      organizationId: orgId,
-      allowedRoles: const [
-        'platform_super_admin',
-        'organization_admin',
-        'staff',
-        'guardian',
-      ],
-    );
+    final actor = await getAuthenticatedUser(session);
+    _accessControl.requireRole(actor, allowedRoles: [
+      'platform_super_admin',
+      'organization_admin',
+      'staff',
+      'guardian',
+    ]);
+    final orgId = actor.organizationId!;
 
     return _documentService.resolveFileUrl(
       session,

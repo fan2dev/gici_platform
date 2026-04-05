@@ -45,31 +45,32 @@ import 'time_entry.dart' as _i33;
 import 'user_onboarding_state.dart' as _i34;
 import 'package:gici_backend_server/src/generated/chat_conversation.dart'
     as _i35;
-import 'package:gici_backend_server/src/generated/chat_message.dart' as _i36;
-import 'package:gici_backend_server/src/generated/child.dart' as _i37;
+import 'package:uuid/uuid_value.dart' as _i36;
+import 'package:gici_backend_server/src/generated/chat_message.dart' as _i37;
+import 'package:gici_backend_server/src/generated/child.dart' as _i38;
 import 'package:gici_backend_server/src/generated/child_timeline_item.dart'
-    as _i38;
-import 'package:gici_backend_server/src/generated/classroom.dart' as _i39;
+    as _i39;
+import 'package:gici_backend_server/src/generated/classroom.dart' as _i40;
 import 'package:gici_backend_server/src/generated/classroom_assignment.dart'
-    as _i40;
-import 'package:gici_backend_server/src/generated/data_change_request.dart'
     as _i41;
-import 'package:gici_backend_server/src/generated/organization_document.dart'
+import 'package:gici_backend_server/src/generated/data_change_request.dart'
     as _i42;
-import 'package:gici_backend_server/src/generated/child_document.dart' as _i43;
-import 'package:gici_backend_server/src/generated/menu_entry.dart' as _i44;
-import 'package:gici_backend_server/src/generated/gallery.dart' as _i45;
-import 'package:gici_backend_server/src/generated/gallery_item.dart' as _i46;
-import 'package:gici_backend_server/src/generated/meal_entry.dart' as _i47;
-import 'package:gici_backend_server/src/generated/nap_entry.dart' as _i48;
+import 'package:gici_backend_server/src/generated/organization_document.dart'
+    as _i43;
+import 'package:gici_backend_server/src/generated/child_document.dart' as _i44;
+import 'package:gici_backend_server/src/generated/menu_entry.dart' as _i45;
+import 'package:gici_backend_server/src/generated/gallery.dart' as _i46;
+import 'package:gici_backend_server/src/generated/gallery_item.dart' as _i47;
+import 'package:gici_backend_server/src/generated/meal_entry.dart' as _i48;
+import 'package:gici_backend_server/src/generated/nap_entry.dart' as _i49;
 import 'package:gici_backend_server/src/generated/bowel_movement_entry.dart'
-    as _i49;
-import 'package:gici_backend_server/src/generated/notification_record.dart'
     as _i50;
-import 'package:gici_backend_server/src/generated/organization.dart' as _i51;
+import 'package:gici_backend_server/src/generated/notification_record.dart'
+    as _i51;
+import 'package:gici_backend_server/src/generated/organization.dart' as _i52;
 import 'package:gici_backend_server/src/generated/pedagogical_report.dart'
-    as _i52;
-import 'package:gici_backend_server/src/generated/time_entry.dart' as _i53;
+    as _i53;
+import 'package:gici_backend_server/src/generated/time_entry.dart' as _i54;
 export 'activity_log.dart';
 export 'app_user.dart';
 export 'auth_session.dart';
@@ -118,22 +119,22 @@ class Protocol extends _i1.SerializationManagerServer {
       columns: [
         _i2.ColumnDefinition(
           name: 'id',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int?',
-          columnDefault: 'nextval(\'activity_log_id_seq\'::regclass)',
+          dartType: 'UuidValue?',
+          columnDefault: 'gen_random_uuid()',
         ),
         _i2.ColumnDefinition(
           name: 'organizationId',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int',
+          dartType: 'UuidValue',
         ),
         _i2.ColumnDefinition(
           name: 'userId',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: true,
-          dartType: 'int?',
+          dartType: 'UuidValue?',
         ),
         _i2.ColumnDefinition(
           name: 'action',
@@ -149,9 +150,9 @@ class Protocol extends _i1.SerializationManagerServer {
         ),
         _i2.ColumnDefinition(
           name: 'entityId',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.text,
           isNullable: true,
-          dartType: 'int?',
+          dartType: 'String?',
         ),
         _i2.ColumnDefinition(
           name: 'oldValues',
@@ -285,16 +286,22 @@ class Protocol extends _i1.SerializationManagerServer {
       columns: [
         _i2.ColumnDefinition(
           name: 'id',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int?',
-          columnDefault: 'nextval(\'app_user_id_seq\'::regclass)',
+          dartType: 'UuidValue?',
+          columnDefault: 'gen_random_uuid()',
         ),
         _i2.ColumnDefinition(
-          name: 'organizationId',
+          name: 'serverpodUserId',
           columnType: _i2.ColumnType.bigint,
           isNullable: true,
           dartType: 'int?',
+        ),
+        _i2.ColumnDefinition(
+          name: 'organizationId',
+          columnType: _i2.ColumnType.uuid,
+          isNullable: true,
+          dartType: 'UuidValue?',
         ),
         _i2.ColumnDefinition(
           name: 'email',
@@ -435,6 +442,19 @@ class Protocol extends _i1.SerializationManagerServer {
           isUnique: false,
           isPrimary: false,
         ),
+        _i2.IndexDefinition(
+          indexName: 'appuser_serverpod_idx',
+          tableSpace: null,
+          elements: [
+            _i2.IndexElementDefinition(
+              type: _i2.IndexElementDefinitionType.column,
+              definition: 'serverpodUserId',
+            )
+          ],
+          type: 'btree',
+          isUnique: true,
+          isPrimary: false,
+        ),
       ],
       managed: true,
     ),
@@ -446,28 +466,28 @@ class Protocol extends _i1.SerializationManagerServer {
       columns: [
         _i2.ColumnDefinition(
           name: 'id',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int?',
-          columnDefault: 'nextval(\'bowel_movement_entry_id_seq\'::regclass)',
+          dartType: 'UuidValue?',
+          columnDefault: 'gen_random_uuid()',
         ),
         _i2.ColumnDefinition(
           name: 'organizationId',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int',
+          dartType: 'UuidValue',
         ),
         _i2.ColumnDefinition(
           name: 'childId',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int',
+          dartType: 'UuidValue',
         ),
         _i2.ColumnDefinition(
           name: 'recordedByUserId',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int',
+          dartType: 'UuidValue',
         ),
         _i2.ColumnDefinition(
           name: 'eventAt',
@@ -588,16 +608,16 @@ class Protocol extends _i1.SerializationManagerServer {
       columns: [
         _i2.ColumnDefinition(
           name: 'id',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int?',
-          columnDefault: 'nextval(\'chat_conversation_id_seq\'::regclass)',
+          dartType: 'UuidValue?',
+          columnDefault: 'gen_random_uuid()',
         ),
         _i2.ColumnDefinition(
           name: 'organizationId',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int',
+          dartType: 'UuidValue',
         ),
         _i2.ColumnDefinition(
           name: 'title',
@@ -613,21 +633,21 @@ class Protocol extends _i1.SerializationManagerServer {
         ),
         _i2.ColumnDefinition(
           name: 'relatedChildId',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: true,
-          dartType: 'int?',
+          dartType: 'UuidValue?',
         ),
         _i2.ColumnDefinition(
           name: 'relatedClassroomId',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: true,
-          dartType: 'int?',
+          dartType: 'UuidValue?',
         ),
         _i2.ColumnDefinition(
           name: 'createdByUserId',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int',
+          dartType: 'UuidValue',
         ),
         _i2.ColumnDefinition(
           name: 'isArchived',
@@ -745,28 +765,28 @@ class Protocol extends _i1.SerializationManagerServer {
       columns: [
         _i2.ColumnDefinition(
           name: 'id',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int?',
-          columnDefault: 'nextval(\'chat_message_id_seq\'::regclass)',
+          dartType: 'UuidValue?',
+          columnDefault: 'gen_random_uuid()',
         ),
         _i2.ColumnDefinition(
           name: 'organizationId',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int',
+          dartType: 'UuidValue',
         ),
         _i2.ColumnDefinition(
           name: 'conversationId',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int',
+          dartType: 'UuidValue',
         ),
         _i2.ColumnDefinition(
           name: 'senderUserId',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int',
+          dartType: 'UuidValue',
         ),
         _i2.ColumnDefinition(
           name: 'body',
@@ -883,28 +903,28 @@ class Protocol extends _i1.SerializationManagerServer {
       columns: [
         _i2.ColumnDefinition(
           name: 'id',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int?',
-          columnDefault: 'nextval(\'chat_participant_id_seq\'::regclass)',
+          dartType: 'UuidValue?',
+          columnDefault: 'gen_random_uuid()',
         ),
         _i2.ColumnDefinition(
           name: 'organizationId',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int',
+          dartType: 'UuidValue',
         ),
         _i2.ColumnDefinition(
           name: 'conversationId',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int',
+          dartType: 'UuidValue',
         ),
         _i2.ColumnDefinition(
           name: 'userId',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int',
+          dartType: 'UuidValue',
         ),
         _i2.ColumnDefinition(
           name: 'joinedAt',
@@ -914,9 +934,9 @@ class Protocol extends _i1.SerializationManagerServer {
         ),
         _i2.ColumnDefinition(
           name: 'lastReadMessageId',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: true,
-          dartType: 'int?',
+          dartType: 'UuidValue?',
         ),
         _i2.ColumnDefinition(
           name: 'lastReadAt',
@@ -1025,16 +1045,16 @@ class Protocol extends _i1.SerializationManagerServer {
       columns: [
         _i2.ColumnDefinition(
           name: 'id',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int?',
-          columnDefault: 'nextval(\'child_id_seq\'::regclass)',
+          dartType: 'UuidValue?',
+          columnDefault: 'gen_random_uuid()',
         ),
         _i2.ColumnDefinition(
           name: 'organizationId',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int',
+          dartType: 'UuidValue',
         ),
         _i2.ColumnDefinition(
           name: 'firstName',
@@ -1196,28 +1216,28 @@ class Protocol extends _i1.SerializationManagerServer {
       columns: [
         _i2.ColumnDefinition(
           name: 'id',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int?',
-          columnDefault: 'nextval(\'child_document_id_seq\'::regclass)',
+          dartType: 'UuidValue?',
+          columnDefault: 'gen_random_uuid()',
         ),
         _i2.ColumnDefinition(
           name: 'organizationId',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int',
+          dartType: 'UuidValue',
         ),
         _i2.ColumnDefinition(
           name: 'childId',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int',
+          dartType: 'UuidValue',
         ),
         _i2.ColumnDefinition(
           name: 'fileAssetId',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int',
+          dartType: 'UuidValue',
         ),
         _i2.ColumnDefinition(
           name: 'title',
@@ -1239,9 +1259,9 @@ class Protocol extends _i1.SerializationManagerServer {
         ),
         _i2.ColumnDefinition(
           name: 'createdByUserId',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int',
+          dartType: 'UuidValue',
         ),
         _i2.ColumnDefinition(
           name: 'createdAt',
@@ -1327,29 +1347,28 @@ class Protocol extends _i1.SerializationManagerServer {
       columns: [
         _i2.ColumnDefinition(
           name: 'id',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int?',
-          columnDefault:
-              'nextval(\'child_guardian_relation_id_seq\'::regclass)',
+          dartType: 'UuidValue?',
+          columnDefault: 'gen_random_uuid()',
         ),
         _i2.ColumnDefinition(
           name: 'organizationId',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int',
+          dartType: 'UuidValue',
         ),
         _i2.ColumnDefinition(
           name: 'childId',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int',
+          dartType: 'UuidValue',
         ),
         _i2.ColumnDefinition(
           name: 'guardianUserId',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int',
+          dartType: 'UuidValue',
         ),
         _i2.ColumnDefinition(
           name: 'relation',
@@ -1482,16 +1501,16 @@ class Protocol extends _i1.SerializationManagerServer {
       columns: [
         _i2.ColumnDefinition(
           name: 'id',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int?',
-          columnDefault: 'nextval(\'classroom_id_seq\'::regclass)',
+          dartType: 'UuidValue?',
+          columnDefault: 'gen_random_uuid()',
         ),
         _i2.ColumnDefinition(
           name: 'organizationId',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int',
+          dartType: 'UuidValue',
         ),
         _i2.ColumnDefinition(
           name: 'name',
@@ -1612,28 +1631,28 @@ class Protocol extends _i1.SerializationManagerServer {
       columns: [
         _i2.ColumnDefinition(
           name: 'id',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int?',
-          columnDefault: 'nextval(\'classroom_assignment_id_seq\'::regclass)',
+          dartType: 'UuidValue?',
+          columnDefault: 'gen_random_uuid()',
         ),
         _i2.ColumnDefinition(
           name: 'organizationId',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int',
+          dartType: 'UuidValue',
         ),
         _i2.ColumnDefinition(
           name: 'classroomId',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int',
+          dartType: 'UuidValue',
         ),
         _i2.ColumnDefinition(
           name: 'childId',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int',
+          dartType: 'UuidValue',
         ),
         _i2.ColumnDefinition(
           name: 'assignedAt',
@@ -1643,9 +1662,9 @@ class Protocol extends _i1.SerializationManagerServer {
         ),
         _i2.ColumnDefinition(
           name: 'assignedByUserId',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: true,
-          dartType: 'int?',
+          dartType: 'UuidValue?',
         ),
         _i2.ColumnDefinition(
           name: 'withdrawnAt',
@@ -1655,9 +1674,9 @@ class Protocol extends _i1.SerializationManagerServer {
         ),
         _i2.ColumnDefinition(
           name: 'withdrawnByUserId',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: true,
-          dartType: 'int?',
+          dartType: 'UuidValue?',
         ),
         _i2.ColumnDefinition(
           name: 'withdrawnReason',
@@ -1766,28 +1785,28 @@ class Protocol extends _i1.SerializationManagerServer {
       columns: [
         _i2.ColumnDefinition(
           name: 'id',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int?',
-          columnDefault: 'nextval(\'data_change_request_id_seq\'::regclass)',
+          dartType: 'UuidValue?',
+          columnDefault: 'gen_random_uuid()',
         ),
         _i2.ColumnDefinition(
           name: 'organizationId',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int',
+          dartType: 'UuidValue',
         ),
         _i2.ColumnDefinition(
           name: 'requesterUserId',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int',
+          dartType: 'UuidValue',
         ),
         _i2.ColumnDefinition(
           name: 'targetChildId',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: true,
-          dartType: 'int?',
+          dartType: 'UuidValue?',
         ),
         _i2.ColumnDefinition(
           name: 'requestType',
@@ -1815,9 +1834,9 @@ class Protocol extends _i1.SerializationManagerServer {
         ),
         _i2.ColumnDefinition(
           name: 'reviewedByUserId',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: true,
-          dartType: 'int?',
+          dartType: 'UuidValue?',
         ),
         _i2.ColumnDefinition(
           name: 'reviewedAt',
@@ -1929,22 +1948,22 @@ class Protocol extends _i1.SerializationManagerServer {
       columns: [
         _i2.ColumnDefinition(
           name: 'id',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int?',
-          columnDefault: 'nextval(\'file_asset_id_seq\'::regclass)',
+          dartType: 'UuidValue?',
+          columnDefault: 'gen_random_uuid()',
         ),
         _i2.ColumnDefinition(
           name: 'organizationId',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int',
+          dartType: 'UuidValue',
         ),
         _i2.ColumnDefinition(
           name: 'uploadedByUserId',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int',
+          dartType: 'UuidValue',
         ),
         _i2.ColumnDefinition(
           name: 'fileName',
@@ -2102,16 +2121,16 @@ class Protocol extends _i1.SerializationManagerServer {
       columns: [
         _i2.ColumnDefinition(
           name: 'id',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int?',
-          columnDefault: 'nextval(\'gallery_id_seq\'::regclass)',
+          dartType: 'UuidValue?',
+          columnDefault: 'gen_random_uuid()',
         ),
         _i2.ColumnDefinition(
           name: 'organizationId',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int',
+          dartType: 'UuidValue',
         ),
         _i2.ColumnDefinition(
           name: 'title',
@@ -2133,21 +2152,21 @@ class Protocol extends _i1.SerializationManagerServer {
         ),
         _i2.ColumnDefinition(
           name: 'audienceClassroomId',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: true,
-          dartType: 'int?',
+          dartType: 'UuidValue?',
         ),
         _i2.ColumnDefinition(
           name: 'audienceChildId',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: true,
-          dartType: 'int?',
+          dartType: 'UuidValue?',
         ),
         _i2.ColumnDefinition(
           name: 'createdByUserId',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int',
+          dartType: 'UuidValue',
         ),
         _i2.ColumnDefinition(
           name: 'isPublished',
@@ -2226,28 +2245,28 @@ class Protocol extends _i1.SerializationManagerServer {
       columns: [
         _i2.ColumnDefinition(
           name: 'id',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int?',
-          columnDefault: 'nextval(\'gallery_item_id_seq\'::regclass)',
+          dartType: 'UuidValue?',
+          columnDefault: 'gen_random_uuid()',
         ),
         _i2.ColumnDefinition(
           name: 'organizationId',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int',
+          dartType: 'UuidValue',
         ),
         _i2.ColumnDefinition(
           name: 'galleryId',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int',
+          dartType: 'UuidValue',
         ),
         _i2.ColumnDefinition(
           name: 'fileAssetId',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int',
+          dartType: 'UuidValue',
         ),
         _i2.ColumnDefinition(
           name: 'caption',
@@ -2263,9 +2282,9 @@ class Protocol extends _i1.SerializationManagerServer {
         ),
         _i2.ColumnDefinition(
           name: 'createdByUserId',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int',
+          dartType: 'UuidValue',
         ),
         _i2.ColumnDefinition(
           name: 'createdAt',
@@ -2355,28 +2374,28 @@ class Protocol extends _i1.SerializationManagerServer {
       columns: [
         _i2.ColumnDefinition(
           name: 'id',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int?',
-          columnDefault: 'nextval(\'meal_entry_id_seq\'::regclass)',
+          dartType: 'UuidValue?',
+          columnDefault: 'gen_random_uuid()',
         ),
         _i2.ColumnDefinition(
           name: 'organizationId',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int',
+          dartType: 'UuidValue',
         ),
         _i2.ColumnDefinition(
           name: 'childId',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int',
+          dartType: 'UuidValue',
         ),
         _i2.ColumnDefinition(
           name: 'recordedByUserId',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int',
+          dartType: 'UuidValue',
         ),
         _i2.ColumnDefinition(
           name: 'mealType',
@@ -2509,16 +2528,16 @@ class Protocol extends _i1.SerializationManagerServer {
       columns: [
         _i2.ColumnDefinition(
           name: 'id',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int?',
-          columnDefault: 'nextval(\'menu_entry_id_seq\'::regclass)',
+          dartType: 'UuidValue?',
+          columnDefault: 'gen_random_uuid()',
         ),
         _i2.ColumnDefinition(
           name: 'organizationId',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int',
+          dartType: 'UuidValue',
         ),
         _i2.ColumnDefinition(
           name: 'menuDate',
@@ -2546,15 +2565,15 @@ class Protocol extends _i1.SerializationManagerServer {
         ),
         _i2.ColumnDefinition(
           name: 'classroomId',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: true,
-          dartType: 'int?',
+          dartType: 'UuidValue?',
         ),
         _i2.ColumnDefinition(
           name: 'createdByUserId',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int',
+          dartType: 'UuidValue',
         ),
         _i2.ColumnDefinition(
           name: 'createdAt',
@@ -2644,28 +2663,28 @@ class Protocol extends _i1.SerializationManagerServer {
       columns: [
         _i2.ColumnDefinition(
           name: 'id',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int?',
-          columnDefault: 'nextval(\'nap_entry_id_seq\'::regclass)',
+          dartType: 'UuidValue?',
+          columnDefault: 'gen_random_uuid()',
         ),
         _i2.ColumnDefinition(
           name: 'organizationId',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int',
+          dartType: 'UuidValue',
         ),
         _i2.ColumnDefinition(
           name: 'childId',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int',
+          dartType: 'UuidValue',
         ),
         _i2.ColumnDefinition(
           name: 'recordedByUserId',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int',
+          dartType: 'UuidValue',
         ),
         _i2.ColumnDefinition(
           name: 'startedAt',
@@ -2792,22 +2811,22 @@ class Protocol extends _i1.SerializationManagerServer {
       columns: [
         _i2.ColumnDefinition(
           name: 'id',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int?',
-          columnDefault: 'nextval(\'notification_record_id_seq\'::regclass)',
+          dartType: 'UuidValue?',
+          columnDefault: 'gen_random_uuid()',
         ),
         _i2.ColumnDefinition(
           name: 'organizationId',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int',
+          dartType: 'UuidValue',
         ),
         _i2.ColumnDefinition(
           name: 'userId',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int',
+          dartType: 'UuidValue',
         ),
         _i2.ColumnDefinition(
           name: 'title',
@@ -2835,27 +2854,27 @@ class Protocol extends _i1.SerializationManagerServer {
         ),
         _i2.ColumnDefinition(
           name: 'targetClassroomId',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: true,
-          dartType: 'int?',
+          dartType: 'UuidValue?',
         ),
         _i2.ColumnDefinition(
           name: 'targetChildId',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: true,
-          dartType: 'int?',
+          dartType: 'UuidValue?',
         ),
         _i2.ColumnDefinition(
           name: 'targetUserId',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: true,
-          dartType: 'int?',
+          dartType: 'UuidValue?',
         ),
         _i2.ColumnDefinition(
           name: 'createdByUserId',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int',
+          dartType: 'UuidValue',
         ),
         _i2.ColumnDefinition(
           name: 'isRead',
@@ -2954,10 +2973,10 @@ class Protocol extends _i1.SerializationManagerServer {
       columns: [
         _i2.ColumnDefinition(
           name: 'id',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int?',
-          columnDefault: 'nextval(\'organization_id_seq\'::regclass)',
+          dartType: 'UuidValue?',
+          columnDefault: 'gen_random_uuid()',
         ),
         _i2.ColumnDefinition(
           name: 'name',
@@ -3096,16 +3115,16 @@ class Protocol extends _i1.SerializationManagerServer {
       columns: [
         _i2.ColumnDefinition(
           name: 'id',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int?',
-          columnDefault: 'nextval(\'organization_branding_id_seq\'::regclass)',
+          dartType: 'UuidValue?',
+          columnDefault: 'gen_random_uuid()',
         ),
         _i2.ColumnDefinition(
           name: 'organizationId',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int',
+          dartType: 'UuidValue',
         ),
         _i2.ColumnDefinition(
           name: 'primaryColor',
@@ -3195,22 +3214,22 @@ class Protocol extends _i1.SerializationManagerServer {
       columns: [
         _i2.ColumnDefinition(
           name: 'id',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int?',
-          columnDefault: 'nextval(\'organization_document_id_seq\'::regclass)',
+          dartType: 'UuidValue?',
+          columnDefault: 'gen_random_uuid()',
         ),
         _i2.ColumnDefinition(
           name: 'organizationId',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int',
+          dartType: 'UuidValue',
         ),
         _i2.ColumnDefinition(
           name: 'fileAssetId',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int',
+          dartType: 'UuidValue',
         ),
         _i2.ColumnDefinition(
           name: 'title',
@@ -3232,9 +3251,9 @@ class Protocol extends _i1.SerializationManagerServer {
         ),
         _i2.ColumnDefinition(
           name: 'createdByUserId',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int',
+          dartType: 'UuidValue',
         ),
         _i2.ColumnDefinition(
           name: 'createdAt',
@@ -3320,16 +3339,16 @@ class Protocol extends _i1.SerializationManagerServer {
       columns: [
         _i2.ColumnDefinition(
           name: 'id',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int?',
-          columnDefault: 'nextval(\'organization_settings_id_seq\'::regclass)',
+          dartType: 'UuidValue?',
+          columnDefault: 'gen_random_uuid()',
         ),
         _i2.ColumnDefinition(
           name: 'organizationId',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int',
+          dartType: 'UuidValue',
         ),
         _i2.ColumnDefinition(
           name: 'defaultLanguage',
@@ -3461,22 +3480,22 @@ class Protocol extends _i1.SerializationManagerServer {
       columns: [
         _i2.ColumnDefinition(
           name: 'id',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int?',
-          columnDefault: 'nextval(\'pedagogical_report_id_seq\'::regclass)',
+          dartType: 'UuidValue?',
+          columnDefault: 'gen_random_uuid()',
         ),
         _i2.ColumnDefinition(
           name: 'organizationId',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int',
+          dartType: 'UuidValue',
         ),
         _i2.ColumnDefinition(
           name: 'childId',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int',
+          dartType: 'UuidValue',
         ),
         _i2.ColumnDefinition(
           name: 'reportDate',
@@ -3516,15 +3535,15 @@ class Protocol extends _i1.SerializationManagerServer {
         ),
         _i2.ColumnDefinition(
           name: 'createdByUserId',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int',
+          dartType: 'UuidValue',
         ),
         _i2.ColumnDefinition(
           name: 'updatedByUserId',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: true,
-          dartType: 'int?',
+          dartType: 'UuidValue?',
         ),
         _i2.ColumnDefinition(
           name: 'createdAt',
@@ -3623,22 +3642,22 @@ class Protocol extends _i1.SerializationManagerServer {
       columns: [
         _i2.ColumnDefinition(
           name: 'id',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int?',
-          columnDefault: 'nextval(\'push_device_token_id_seq\'::regclass)',
+          dartType: 'UuidValue?',
+          columnDefault: 'gen_random_uuid()',
         ),
         _i2.ColumnDefinition(
           name: 'organizationId',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int',
+          dartType: 'UuidValue',
         ),
         _i2.ColumnDefinition(
           name: 'userId',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int',
+          dartType: 'UuidValue',
         ),
         _i2.ColumnDefinition(
           name: 'token',
@@ -3777,22 +3796,22 @@ class Protocol extends _i1.SerializationManagerServer {
       columns: [
         _i2.ColumnDefinition(
           name: 'id',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int?',
-          columnDefault: 'nextval(\'time_entry_id_seq\'::regclass)',
+          dartType: 'UuidValue?',
+          columnDefault: 'gen_random_uuid()',
         ),
         _i2.ColumnDefinition(
           name: 'organizationId',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int',
+          dartType: 'UuidValue',
         ),
         _i2.ColumnDefinition(
           name: 'userId',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int',
+          dartType: 'UuidValue',
         ),
         _i2.ColumnDefinition(
           name: 'entryType',
@@ -3808,9 +3827,9 @@ class Protocol extends _i1.SerializationManagerServer {
         ),
         _i2.ColumnDefinition(
           name: 'parentEntryId',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: true,
-          dartType: 'int?',
+          dartType: 'UuidValue?',
         ),
         _i2.ColumnDefinition(
           name: 'correctionReason',
@@ -3844,9 +3863,9 @@ class Protocol extends _i1.SerializationManagerServer {
         ),
         _i2.ColumnDefinition(
           name: 'createdByUserId',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int',
+          dartType: 'UuidValue',
         ),
         _i2.ColumnDefinition(
           name: 'createdAt',
@@ -3950,22 +3969,22 @@ class Protocol extends _i1.SerializationManagerServer {
       columns: [
         _i2.ColumnDefinition(
           name: 'id',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int?',
-          columnDefault: 'nextval(\'user_onboarding_state_id_seq\'::regclass)',
+          dartType: 'UuidValue?',
+          columnDefault: 'gen_random_uuid()',
         ),
         _i2.ColumnDefinition(
           name: 'organizationId',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: true,
-          dartType: 'int?',
+          dartType: 'UuidValue?',
         ),
         _i2.ColumnDefinition(
           name: 'userId',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.uuid,
           isNullable: false,
-          dartType: 'int',
+          dartType: 'UuidValue',
         ),
         _i2.ColumnDefinition(
           name: 'introCompletedAt',
@@ -4259,8 +4278,9 @@ class Protocol extends _i1.SerializationManagerServer {
           .map((e) => deserialize<_i7.BowelMovementEntry>(e))
           .toList() as T;
     }
-    if (t == List<int>) {
-      return (data as List).map((e) => deserialize<int>(e)).toList() as T;
+    if (t == List<_i1.UuidValue>) {
+      return (data as List).map((e) => deserialize<_i1.UuidValue>(e)).toList()
+          as T;
     }
     if (t == List<String>) {
       return (data as List).map((e) => deserialize<String>(e)).toList() as T;
@@ -4270,94 +4290,95 @@ class Protocol extends _i1.SerializationManagerServer {
           .map((e) => deserialize<_i35.ChatConversation>(e))
           .toList() as T;
     }
-    if (t == List<int>) {
-      return (data as List).map((e) => deserialize<int>(e)).toList() as T;
+    if (t == List<_i36.UuidValue>) {
+      return (data as List).map((e) => deserialize<_i36.UuidValue>(e)).toList()
+          as T;
     }
-    if (t == List<_i36.ChatMessage>) {
+    if (t == List<_i37.ChatMessage>) {
       return (data as List)
-          .map((e) => deserialize<_i36.ChatMessage>(e))
+          .map((e) => deserialize<_i37.ChatMessage>(e))
           .toList() as T;
     }
     if (t == Map<String, int>) {
       return (data as Map).map(
           (k, v) => MapEntry(deserialize<String>(k), deserialize<int>(v))) as T;
     }
-    if (t == List<_i37.Child>) {
-      return (data as List).map((e) => deserialize<_i37.Child>(e)).toList()
+    if (t == List<_i38.Child>) {
+      return (data as List).map((e) => deserialize<_i38.Child>(e)).toList()
           as T;
     }
-    if (t == List<_i38.ChildTimelineItem>) {
+    if (t == List<_i39.ChildTimelineItem>) {
       return (data as List)
-          .map((e) => deserialize<_i38.ChildTimelineItem>(e))
+          .map((e) => deserialize<_i39.ChildTimelineItem>(e))
           .toList() as T;
     }
-    if (t == List<_i39.Classroom>) {
-      return (data as List).map((e) => deserialize<_i39.Classroom>(e)).toList()
+    if (t == List<_i40.Classroom>) {
+      return (data as List).map((e) => deserialize<_i40.Classroom>(e)).toList()
           as T;
     }
-    if (t == List<_i40.ClassroomAssignment>) {
+    if (t == List<_i41.ClassroomAssignment>) {
       return (data as List)
-          .map((e) => deserialize<_i40.ClassroomAssignment>(e))
+          .map((e) => deserialize<_i41.ClassroomAssignment>(e))
           .toList() as T;
     }
-    if (t == List<_i41.DataChangeRequest>) {
+    if (t == List<_i42.DataChangeRequest>) {
       return (data as List)
-          .map((e) => deserialize<_i41.DataChangeRequest>(e))
+          .map((e) => deserialize<_i42.DataChangeRequest>(e))
           .toList() as T;
     }
-    if (t == List<_i42.OrganizationDocument>) {
+    if (t == List<_i43.OrganizationDocument>) {
       return (data as List)
-          .map((e) => deserialize<_i42.OrganizationDocument>(e))
+          .map((e) => deserialize<_i43.OrganizationDocument>(e))
           .toList() as T;
     }
-    if (t == List<_i43.ChildDocument>) {
+    if (t == List<_i44.ChildDocument>) {
       return (data as List)
-          .map((e) => deserialize<_i43.ChildDocument>(e))
+          .map((e) => deserialize<_i44.ChildDocument>(e))
           .toList() as T;
     }
-    if (t == List<_i44.MenuEntry>) {
-      return (data as List).map((e) => deserialize<_i44.MenuEntry>(e)).toList()
+    if (t == List<_i45.MenuEntry>) {
+      return (data as List).map((e) => deserialize<_i45.MenuEntry>(e)).toList()
           as T;
     }
-    if (t == List<_i45.Gallery>) {
-      return (data as List).map((e) => deserialize<_i45.Gallery>(e)).toList()
+    if (t == List<_i46.Gallery>) {
+      return (data as List).map((e) => deserialize<_i46.Gallery>(e)).toList()
           as T;
     }
-    if (t == List<_i46.GalleryItem>) {
+    if (t == List<_i47.GalleryItem>) {
       return (data as List)
-          .map((e) => deserialize<_i46.GalleryItem>(e))
+          .map((e) => deserialize<_i47.GalleryItem>(e))
           .toList() as T;
     }
-    if (t == List<_i47.MealEntry>) {
-      return (data as List).map((e) => deserialize<_i47.MealEntry>(e)).toList()
+    if (t == List<_i48.MealEntry>) {
+      return (data as List).map((e) => deserialize<_i48.MealEntry>(e)).toList()
           as T;
     }
-    if (t == List<_i48.NapEntry>) {
-      return (data as List).map((e) => deserialize<_i48.NapEntry>(e)).toList()
+    if (t == List<_i49.NapEntry>) {
+      return (data as List).map((e) => deserialize<_i49.NapEntry>(e)).toList()
           as T;
     }
-    if (t == List<_i49.BowelMovementEntry>) {
+    if (t == List<_i50.BowelMovementEntry>) {
       return (data as List)
-          .map((e) => deserialize<_i49.BowelMovementEntry>(e))
+          .map((e) => deserialize<_i50.BowelMovementEntry>(e))
           .toList() as T;
     }
-    if (t == List<_i50.NotificationRecord>) {
+    if (t == List<_i51.NotificationRecord>) {
       return (data as List)
-          .map((e) => deserialize<_i50.NotificationRecord>(e))
+          .map((e) => deserialize<_i51.NotificationRecord>(e))
           .toList() as T;
     }
-    if (t == List<_i51.Organization>) {
+    if (t == List<_i52.Organization>) {
       return (data as List)
-          .map((e) => deserialize<_i51.Organization>(e))
+          .map((e) => deserialize<_i52.Organization>(e))
           .toList() as T;
     }
-    if (t == List<_i52.PedagogicalReport>) {
+    if (t == List<_i53.PedagogicalReport>) {
       return (data as List)
-          .map((e) => deserialize<_i52.PedagogicalReport>(e))
+          .map((e) => deserialize<_i53.PedagogicalReport>(e))
           .toList() as T;
     }
-    if (t == List<_i53.TimeEntry>) {
-      return (data as List).map((e) => deserialize<_i53.TimeEntry>(e)).toList()
+    if (t == List<_i54.TimeEntry>) {
+      return (data as List).map((e) => deserialize<_i54.TimeEntry>(e)).toList()
           as T;
     }
     try {

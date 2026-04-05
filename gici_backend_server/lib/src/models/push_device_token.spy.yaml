@@ -5,8 +5,9 @@ class: PushDeviceToken
 table: push_device_token
 
 fields:
-  organizationId: int
-  userId: int
+  id: UuidValue?, defaultPersist=random
+  organizationId: UuidValue
+  userId: UuidValue
   token: String
   platform: String
   deviceId: String?
@@ -27,4 +28,3 @@ indexes:
     unique: true
   push_user_platform_idx:
     fields: userId, platform
-

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gici_backend_client/gici_backend_server_client.dart';
 import 'package:go_router/go_router.dart';
+import 'package:uuid/uuid_value.dart';
 
 import '../../../core/di/injection.dart';
 import '../../auth/cubit/auth_cubit.dart';
@@ -10,7 +11,7 @@ import '../data/child_repository.dart';
 class ChildDetailPage extends StatefulWidget {
   const ChildDetailPage({super.key, required this.childId});
 
-  final int childId;
+  final UuidValue childId;
 
   @override
   State<ChildDetailPage> createState() => _ChildDetailPageState();
@@ -30,9 +31,7 @@ class _ChildDetailPageState extends State<ChildDetailPage> {
     final auth = context.watch<AuthCubit>().state;
     final repo = sl<ChildRepository>();
 
-    if (!auth.isAuthenticated ||
-        auth.organizationId == null ||
-        auth.actorId == null) {
+    if (!auth.isAuthenticated || auth.organizationId == null) {
       return const Scaffold(body: Center(child: Text('Unauthorized')));
     }
 
@@ -46,8 +45,6 @@ class _ChildDetailPageState extends State<ChildDetailPage> {
       ),
       body: FutureBuilder<ChildProfileOverview>(
         future: repo.getChildProfileOverview(
-          organizationId: auth.organizationId!,
-          actorId: auth.actorId!,
           childId: widget.childId,
         ),
         builder: (context, snapshot) {
@@ -64,10 +61,7 @@ class _ChildDetailPageState extends State<ChildDetailPage> {
           final child = overview.child;
           _medicalController.text = child.medicalNotes ?? '';
 
-          final canManage =
-              auth.role == AppRole.organizationAdmin ||
-              auth.role == AppRole.staff ||
-              auth.role == AppRole.platformSuperAdmin;
+          final canManage = auth.isStaffOrAbove;
 
           return Padding(
             padding: const EdgeInsets.all(16),
@@ -129,8 +123,6 @@ class _ChildDetailPageState extends State<ChildDetailPage> {
                   FilledButton(
                     onPressed: () async {
                       await repo.updateChild(
-                        organizationId: auth.organizationId!,
-                        actorId: auth.actorId!,
                         childId: child.id!,
                         medicalNotes: _medicalController.text.trim().isEmpty
                             ? null

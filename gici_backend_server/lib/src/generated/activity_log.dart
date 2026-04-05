@@ -12,7 +12,7 @@
 import 'package:serverpod/serverpod.dart' as _i1;
 
 abstract class ActivityLog
-    implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
+    implements _i1.TableRow<_i1.UuidValue?>, _i1.ProtocolSerialization {
   ActivityLog._({
     this.id,
     required this.organizationId,
@@ -29,12 +29,12 @@ abstract class ActivityLog
   });
 
   factory ActivityLog({
-    int? id,
-    required int organizationId,
-    int? userId,
+    _i1.UuidValue? id,
+    required _i1.UuidValue organizationId,
+    _i1.UuidValue? userId,
     required String action,
     String? entityType,
-    int? entityId,
+    String? entityId,
     String? oldValues,
     String? newValues,
     String? ipAddress,
@@ -45,12 +45,17 @@ abstract class ActivityLog
 
   factory ActivityLog.fromJson(Map<String, dynamic> jsonSerialization) {
     return ActivityLog(
-      id: jsonSerialization['id'] as int?,
-      organizationId: jsonSerialization['organizationId'] as int,
-      userId: jsonSerialization['userId'] as int?,
+      id: jsonSerialization['id'] == null
+          ? null
+          : _i1.UuidValueJsonExtension.fromJson(jsonSerialization['id']),
+      organizationId: _i1.UuidValueJsonExtension.fromJson(
+          jsonSerialization['organizationId']),
+      userId: jsonSerialization['userId'] == null
+          ? null
+          : _i1.UuidValueJsonExtension.fromJson(jsonSerialization['userId']),
       action: jsonSerialization['action'] as String,
       entityType: jsonSerialization['entityType'] as String?,
-      entityId: jsonSerialization['entityId'] as int?,
+      entityId: jsonSerialization['entityId'] as String?,
       oldValues: jsonSerialization['oldValues'] as String?,
       newValues: jsonSerialization['newValues'] as String?,
       ipAddress: jsonSerialization['ipAddress'] as String?,
@@ -66,17 +71,17 @@ abstract class ActivityLog
   static const db = ActivityLogRepository._();
 
   @override
-  int? id;
+  _i1.UuidValue? id;
 
-  int organizationId;
+  _i1.UuidValue organizationId;
 
-  int? userId;
+  _i1.UuidValue? userId;
 
   String action;
 
   String? entityType;
 
-  int? entityId;
+  String? entityId;
 
   String? oldValues;
 
@@ -91,18 +96,18 @@ abstract class ActivityLog
   DateTime createdAt;
 
   @override
-  _i1.Table<int?> get table => t;
+  _i1.Table<_i1.UuidValue?> get table => t;
 
   /// Returns a shallow copy of this [ActivityLog]
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
   ActivityLog copyWith({
-    int? id,
-    int? organizationId,
-    int? userId,
+    _i1.UuidValue? id,
+    _i1.UuidValue? organizationId,
+    _i1.UuidValue? userId,
     String? action,
     String? entityType,
-    int? entityId,
+    String? entityId,
     String? oldValues,
     String? newValues,
     String? ipAddress,
@@ -113,9 +118,9 @@ abstract class ActivityLog
   @override
   Map<String, dynamic> toJson() {
     return {
-      if (id != null) 'id': id,
-      'organizationId': organizationId,
-      if (userId != null) 'userId': userId,
+      if (id != null) 'id': id?.toJson(),
+      'organizationId': organizationId.toJson(),
+      if (userId != null) 'userId': userId?.toJson(),
       'action': action,
       if (entityType != null) 'entityType': entityType,
       if (entityId != null) 'entityId': entityId,
@@ -131,9 +136,9 @@ abstract class ActivityLog
   @override
   Map<String, dynamic> toJsonForProtocol() {
     return {
-      if (id != null) 'id': id,
-      'organizationId': organizationId,
-      if (userId != null) 'userId': userId,
+      if (id != null) 'id': id?.toJson(),
+      'organizationId': organizationId.toJson(),
+      if (userId != null) 'userId': userId?.toJson(),
       'action': action,
       if (entityType != null) 'entityType': entityType,
       if (entityId != null) 'entityId': entityId,
@@ -180,12 +185,12 @@ class _Undefined {}
 
 class _ActivityLogImpl extends ActivityLog {
   _ActivityLogImpl({
-    int? id,
-    required int organizationId,
-    int? userId,
+    _i1.UuidValue? id,
+    required _i1.UuidValue organizationId,
+    _i1.UuidValue? userId,
     required String action,
     String? entityType,
-    int? entityId,
+    String? entityId,
     String? oldValues,
     String? newValues,
     String? ipAddress,
@@ -213,7 +218,7 @@ class _ActivityLogImpl extends ActivityLog {
   @override
   ActivityLog copyWith({
     Object? id = _Undefined,
-    int? organizationId,
+    _i1.UuidValue? organizationId,
     Object? userId = _Undefined,
     String? action,
     Object? entityType = _Undefined,
@@ -226,12 +231,12 @@ class _ActivityLogImpl extends ActivityLog {
     DateTime? createdAt,
   }) {
     return ActivityLog(
-      id: id is int? ? id : this.id,
+      id: id is _i1.UuidValue? ? id : this.id,
       organizationId: organizationId ?? this.organizationId,
-      userId: userId is int? ? userId : this.userId,
+      userId: userId is _i1.UuidValue? ? userId : this.userId,
       action: action ?? this.action,
       entityType: entityType is String? ? entityType : this.entityType,
-      entityId: entityId is int? ? entityId : this.entityId,
+      entityId: entityId is String? ? entityId : this.entityId,
       oldValues: oldValues is String? ? oldValues : this.oldValues,
       newValues: newValues is String? ? newValues : this.newValues,
       ipAddress: ipAddress is String? ? ipAddress : this.ipAddress,
@@ -242,13 +247,13 @@ class _ActivityLogImpl extends ActivityLog {
   }
 }
 
-class ActivityLogTable extends _i1.Table<int?> {
+class ActivityLogTable extends _i1.Table<_i1.UuidValue?> {
   ActivityLogTable({super.tableRelation}) : super(tableName: 'activity_log') {
-    organizationId = _i1.ColumnInt(
+    organizationId = _i1.ColumnUuid(
       'organizationId',
       this,
     );
-    userId = _i1.ColumnInt(
+    userId = _i1.ColumnUuid(
       'userId',
       this,
     );
@@ -260,7 +265,7 @@ class ActivityLogTable extends _i1.Table<int?> {
       'entityType',
       this,
     );
-    entityId = _i1.ColumnInt(
+    entityId = _i1.ColumnString(
       'entityId',
       this,
     );
@@ -290,15 +295,15 @@ class ActivityLogTable extends _i1.Table<int?> {
     );
   }
 
-  late final _i1.ColumnInt organizationId;
+  late final _i1.ColumnUuid organizationId;
 
-  late final _i1.ColumnInt userId;
+  late final _i1.ColumnUuid userId;
 
   late final _i1.ColumnString action;
 
   late final _i1.ColumnString entityType;
 
-  late final _i1.ColumnInt entityId;
+  late final _i1.ColumnString entityId;
 
   late final _i1.ColumnString oldValues;
 
@@ -336,7 +341,7 @@ class ActivityLogInclude extends _i1.IncludeObject {
   Map<String, _i1.Include?> get includes => {};
 
   @override
-  _i1.Table<int?> get table => ActivityLog.t;
+  _i1.Table<_i1.UuidValue?> get table => ActivityLog.t;
 }
 
 class ActivityLogIncludeList extends _i1.IncludeList {
@@ -356,7 +361,7 @@ class ActivityLogIncludeList extends _i1.IncludeList {
   Map<String, _i1.Include?> get includes => include?.includes ?? {};
 
   @override
-  _i1.Table<int?> get table => ActivityLog.t;
+  _i1.Table<_i1.UuidValue?> get table => ActivityLog.t;
 }
 
 class ActivityLogRepository {
@@ -444,7 +449,7 @@ class ActivityLogRepository {
   /// Finds a single [ActivityLog] by its [id] or null if no such row exists.
   Future<ActivityLog?> findById(
     _i1.Session session,
-    int id, {
+    _i1.UuidValue id, {
     _i1.Transaction? transaction,
   }) async {
     return session.db.findById<ActivityLog>(

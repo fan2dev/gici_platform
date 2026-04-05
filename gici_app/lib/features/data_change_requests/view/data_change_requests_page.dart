@@ -27,24 +27,16 @@ class _DataChangeRequestsPageState extends State<DataChangeRequestsPage> {
     super.dispose();
   }
 
-  bool _canReview(AppRole? role) {
-    return role == AppRole.organizationAdmin ||
-        role == AppRole.platformSuperAdmin ||
-        role == AppRole.staff;
-  }
-
   @override
   Widget build(BuildContext context) {
     final auth = context.watch<AuthCubit>().state;
     final repo = sl<DataChangeRequestRepository>();
 
-    if (!auth.isAuthenticated ||
-        auth.organizationId == null ||
-        auth.actorId == null) {
+    if (!auth.isAuthenticated || auth.organizationId == null) {
       return const Scaffold(body: Center(child: Text('Unauthorized')));
     }
 
-    final canReview = _canReview(auth.role);
+    final canReview = auth.isStaffOrAbove;
 
     return Scaffold(
       appBar: AppBar(
@@ -57,14 +49,10 @@ class _DataChangeRequestsPageState extends State<DataChangeRequestsPage> {
       body: FutureBuilder<List<DataChangeRequest>>(
         future: canReview
             ? repo.listRequestsForReview(
-                organizationId: auth.organizationId!,
-                actorId: auth.actorId!,
                 page: 0,
                 pageSize: 100,
               )
             : repo.myRequests(
-                organizationId: auth.organizationId!,
-                actorId: auth.actorId!,
                 page: 0,
                 pageSize: 100,
               ),
@@ -110,8 +98,6 @@ class _DataChangeRequestsPageState extends State<DataChangeRequestsPage> {
                               final type = _requestTypeController.text.trim();
                               if (payload.isEmpty || type.isEmpty) return;
                               await repo.createRequest(
-                                organizationId: auth.organizationId!,
-                                actorId: auth.actorId!,
                                 requestType: type,
                                 requestPayload: payload,
                               );
@@ -143,8 +129,6 @@ class _DataChangeRequestsPageState extends State<DataChangeRequestsPage> {
                                   icon: const Icon(Icons.check),
                                   onPressed: () async {
                                     await repo.updateRequestStatus(
-                                      organizationId: auth.organizationId!,
-                                      actorId: auth.actorId!,
                                       requestId: request.id!,
                                       status: 'approved',
                                       resolutionNote: 'Approved by staff',
@@ -157,8 +141,6 @@ class _DataChangeRequestsPageState extends State<DataChangeRequestsPage> {
                                   icon: const Icon(Icons.close),
                                   onPressed: () async {
                                     await repo.updateRequestStatus(
-                                      organizationId: auth.organizationId!,
-                                      actorId: auth.actorId!,
                                       requestId: request.id!,
                                       status: 'rejected',
                                       resolutionNote: 'Rejected by staff',

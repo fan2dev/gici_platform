@@ -1,4 +1,5 @@
 import 'package:gici_backend_client/gici_backend_server_client.dart';
+import 'package:uuid/uuid_value.dart';
 
 class PedagogicalReportRepository {
   const PedagogicalReportRepository(this._client);
@@ -6,15 +7,11 @@ class PedagogicalReportRepository {
   final Client _client;
 
   Future<List<PedagogicalReport>> listReportsByChild({
-    required String organizationId,
-    required String actorId,
-    required int childId,
+    required UuidValue childId,
     int page = 0,
     int pageSize = 30,
   }) {
     return _client.pedagogicalReport.listReportsByChild(
-      organizationId: organizationId,
-      actorId: actorId,
       childId: childId,
       page: page,
       pageSize: pageSize,
@@ -22,21 +19,15 @@ class PedagogicalReportRepository {
   }
 
   Future<PedagogicalReport> getReport({
-    required String organizationId,
-    required String actorId,
-    required int reportId,
+    required UuidValue reportId,
   }) {
     return _client.pedagogicalReport.getReport(
-      organizationId: organizationId,
-      actorId: actorId,
       reportId: reportId,
     );
   }
 
   Future<PedagogicalReport> createReport({
-    required String organizationId,
-    required String actorId,
-    required int childId,
+    required UuidValue childId,
     required DateTime reportDate,
     required String title,
     required String summary,
@@ -45,8 +36,6 @@ class PedagogicalReportRepository {
     String visibility = 'guardian',
   }) {
     return _client.pedagogicalReport.createReport(
-      organizationId: organizationId,
-      actorId: actorId,
       childId: childId,
       reportDate: reportDate,
       title: title,
@@ -58,9 +47,7 @@ class PedagogicalReportRepository {
   }
 
   Future<PedagogicalReport> updateReport({
-    required String organizationId,
-    required String actorId,
-    required int reportId,
+    required UuidValue reportId,
     DateTime? reportDate,
     String? title,
     String? summary,
@@ -69,8 +56,6 @@ class PedagogicalReportRepository {
     String? visibility,
   }) {
     return _client.pedagogicalReport.updateReport(
-      organizationId: organizationId,
-      actorId: actorId,
       reportId: reportId,
       reportDate: reportDate,
       title: title,

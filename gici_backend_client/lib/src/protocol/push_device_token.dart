@@ -28,9 +28,9 @@ abstract class PushDeviceToken implements _i1.SerializableModel {
   });
 
   factory PushDeviceToken({
-    int? id,
-    required int organizationId,
-    required int userId,
+    _i1.UuidValue? id,
+    required _i1.UuidValue organizationId,
+    required _i1.UuidValue userId,
     required String token,
     required String platform,
     String? deviceId,
@@ -44,9 +44,12 @@ abstract class PushDeviceToken implements _i1.SerializableModel {
 
   factory PushDeviceToken.fromJson(Map<String, dynamic> jsonSerialization) {
     return PushDeviceToken(
-      id: jsonSerialization['id'] as int?,
-      organizationId: jsonSerialization['organizationId'] as int,
-      userId: jsonSerialization['userId'] as int,
+      id: jsonSerialization['id'] == null
+          ? null
+          : _i1.UuidValueJsonExtension.fromJson(jsonSerialization['id']),
+      organizationId: _i1.UuidValueJsonExtension.fromJson(
+          jsonSerialization['organizationId']),
+      userId: _i1.UuidValueJsonExtension.fromJson(jsonSerialization['userId']),
       token: jsonSerialization['token'] as String,
       platform: jsonSerialization['platform'] as String,
       deviceId: jsonSerialization['deviceId'] as String?,
@@ -65,11 +68,11 @@ abstract class PushDeviceToken implements _i1.SerializableModel {
   /// The database id, set if the object has been inserted into the
   /// database or if it has been fetched from the database. Otherwise,
   /// the id will be null.
-  int? id;
+  _i1.UuidValue? id;
 
-  int organizationId;
+  _i1.UuidValue organizationId;
 
-  int userId;
+  _i1.UuidValue userId;
 
   String token;
 
@@ -93,9 +96,9 @@ abstract class PushDeviceToken implements _i1.SerializableModel {
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
   PushDeviceToken copyWith({
-    int? id,
-    int? organizationId,
-    int? userId,
+    _i1.UuidValue? id,
+    _i1.UuidValue? organizationId,
+    _i1.UuidValue? userId,
     String? token,
     String? platform,
     String? deviceId,
@@ -109,9 +112,9 @@ abstract class PushDeviceToken implements _i1.SerializableModel {
   @override
   Map<String, dynamic> toJson() {
     return {
-      if (id != null) 'id': id,
-      'organizationId': organizationId,
-      'userId': userId,
+      if (id != null) 'id': id?.toJson(),
+      'organizationId': organizationId.toJson(),
+      'userId': userId.toJson(),
       'token': token,
       'platform': platform,
       if (deviceId != null) 'deviceId': deviceId,
@@ -134,9 +137,9 @@ class _Undefined {}
 
 class _PushDeviceTokenImpl extends PushDeviceToken {
   _PushDeviceTokenImpl({
-    int? id,
-    required int organizationId,
-    required int userId,
+    _i1.UuidValue? id,
+    required _i1.UuidValue organizationId,
+    required _i1.UuidValue userId,
     required String token,
     required String platform,
     String? deviceId,
@@ -167,8 +170,8 @@ class _PushDeviceTokenImpl extends PushDeviceToken {
   @override
   PushDeviceToken copyWith({
     Object? id = _Undefined,
-    int? organizationId,
-    int? userId,
+    _i1.UuidValue? organizationId,
+    _i1.UuidValue? userId,
     String? token,
     String? platform,
     Object? deviceId = _Undefined,
@@ -180,7 +183,7 @@ class _PushDeviceTokenImpl extends PushDeviceToken {
     DateTime? updatedAt,
   }) {
     return PushDeviceToken(
-      id: id is int? ? id : this.id,
+      id: id is _i1.UuidValue? ? id : this.id,
       organizationId: organizationId ?? this.organizationId,
       userId: userId ?? this.userId,
       token: token ?? this.token,

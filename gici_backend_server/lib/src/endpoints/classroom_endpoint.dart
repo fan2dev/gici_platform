@@ -1,7 +1,7 @@
 import 'package:serverpod/serverpod.dart';
 
 import '../generated/protocol.dart';
-import '../helpers/request_scope.dart';
+import '../helpers/session_user_helper.dart';
 import '../services/access_control_service.dart';
 import '../services/activity_log_service.dart';
 import '../services/classroom_service.dart';
@@ -15,23 +15,17 @@ class ClassroomEndpoint extends Endpoint {
 
   Future<List<Classroom>> listClassrooms(
     Session session, {
-    required String organizationId,
-    required String actorId,
     int page = 0,
     int pageSize = 20,
   }) async {
-    final orgId = parseOrganizationId(organizationId);
-    await _accessControl.requireActor(
-      session,
-      actorId: parseActorId(actorId),
-      organizationId: orgId,
-      allowedRoles: const [
-        'platform_super_admin',
-        'organization_admin',
-        'staff',
-        'guardian',
-      ],
-    );
+    final actor = await getAuthenticatedUser(session);
+    _accessControl.requireRole(actor, allowedRoles: [
+      'platform_super_admin',
+      'organization_admin',
+      'staff',
+      'guardian',
+    ]);
+    final orgId = actor.organizationId!;
 
     final safePage = page < 0 ? 0 : page;
     final safePageSize = pageSize.clamp(1, 100);
@@ -46,8 +40,6 @@ class ClassroomEndpoint extends Endpoint {
 
   Future<Classroom> createClassroom(
     Session session, {
-    required String organizationId,
-    required String actorId,
     required String name,
     String? description,
     int? ageGroupMin,
@@ -55,13 +47,13 @@ class ClassroomEndpoint extends Endpoint {
     required int capacity,
     String? color,
   }) async {
-    final orgId = parseOrganizationId(organizationId);
-    final actor = await _accessControl.requireActor(
-      session,
-      actorId: parseActorId(actorId),
-      organizationId: orgId,
-      allowedRoles: const ['platform_super_admin', 'organization_admin', 'staff'],
-    );
+    final actor = await getAuthenticatedUser(session);
+    _accessControl.requireRole(actor, allowedRoles: [
+      'platform_super_admin',
+      'organization_admin',
+      'staff',
+    ]);
+    final orgId = actor.organizationId!;
 
     final classroom = await _classroomService.create(
       session,
@@ -77,10 +69,10 @@ class ClassroomEndpoint extends Endpoint {
     await _activityLogService.log(
       session,
       organizationId: orgId,
-      userId: actor.id,
+      userId: actor.id!,
       action: 'classroom.create',
       entityType: 'classroom',
-      entityId: classroom.id,
+      entityId: classroom.id?.toString(),
       metadata: 'name=$name',
     );
 
@@ -89,9 +81,7 @@ class ClassroomEndpoint extends Endpoint {
 
   Future<Classroom> updateClassroom(
     Session session, {
-    required String organizationId,
-    required String actorId,
-    required int classroomId,
+    required UuidValue classroomId,
     String? name,
     String? description,
     int? ageGroupMin,
@@ -100,13 +90,13 @@ class ClassroomEndpoint extends Endpoint {
     String? color,
     String? status,
   }) async {
-    final orgId = parseOrganizationId(organizationId);
-    final actor = await _accessControl.requireActor(
-      session,
-      actorId: parseActorId(actorId),
-      organizationId: orgId,
-      allowedRoles: const ['platform_super_admin', 'organization_admin', 'staff'],
-    );
+    final actor = await getAuthenticatedUser(session);
+    _accessControl.requireRole(actor, allowedRoles: [
+      'platform_super_admin',
+      'organization_admin',
+      'staff',
+    ]);
+    final orgId = actor.organizationId!;
 
     final classroom = await _classroomService.getById(
       session,
@@ -132,10 +122,10 @@ class ClassroomEndpoint extends Endpoint {
     await _activityLogService.log(
       session,
       organizationId: orgId,
-      userId: actor.id,
+      userId: actor.id!,
       action: 'classroom.update',
       entityType: 'classroom',
-      entityId: updated.id,
+      entityId: updated.id?.toString(),
       metadata: 'classroomId=$classroomId',
     );
 
@@ -144,18 +134,16 @@ class ClassroomEndpoint extends Endpoint {
 
   Future<ClassroomAssignment> assignChildToClassroom(
     Session session, {
-    required String organizationId,
-    required String actorId,
-    required int classroomId,
-    required int childId,
+    required UuidValue classroomId,
+    required UuidValue childId,
   }) async {
-    final orgId = parseOrganizationId(organizationId);
-    final actor = await _accessControl.requireActor(
-      session,
-      actorId: parseActorId(actorId),
-      organizationId: orgId,
-      allowedRoles: const ['platform_super_admin', 'organization_admin', 'staff'],
-    );
+    final actor = await getAuthenticatedUser(session);
+    _accessControl.requireRole(actor, allowedRoles: [
+      'platform_super_admin',
+      'organization_admin',
+      'staff',
+    ]);
+    final orgId = actor.organizationId!;
 
     final classroom = await _classroomService.getById(
       session,
@@ -188,10 +176,10 @@ class ClassroomEndpoint extends Endpoint {
     await _activityLogService.log(
       session,
       organizationId: orgId,
-      userId: actor.id,
+      userId: actor.id!,
       action: 'classroom.assign_child',
       entityType: 'classroom_assignment',
-      entityId: assignment.id,
+      entityId: assignment.id?.toString(),
       metadata: 'classroomId=$classroomId;childId=$childId',
     );
 
@@ -200,21 +188,19 @@ class ClassroomEndpoint extends Endpoint {
 
   Future<List<ClassroomAssignment>> listAssignments(
     Session session, {
-    required String organizationId,
-    required String actorId,
-    int? classroomId,
-    int? childId,
+    UuidValue? classroomId,
+    UuidValue? childId,
     bool onlyActive = true,
     int page = 0,
     int pageSize = 50,
   }) async {
-    final orgId = parseOrganizationId(organizationId);
-    await _accessControl.requireActor(
-      session,
-      actorId: parseActorId(actorId),
-      organizationId: orgId,
-      allowedRoles: const ['platform_super_admin', 'organization_admin', 'staff'],
-    );
+    final actor = await getAuthenticatedUser(session);
+    _accessControl.requireRole(actor, allowedRoles: [
+      'platform_super_admin',
+      'organization_admin',
+      'staff',
+    ]);
+    final orgId = actor.organizationId!;
 
     final safePage = page < 0 ? 0 : page;
     final safePageSize = pageSize.clamp(1, 200);

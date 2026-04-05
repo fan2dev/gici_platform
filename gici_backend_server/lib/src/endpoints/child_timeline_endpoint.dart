@@ -1,6 +1,6 @@
 import 'package:serverpod/serverpod.dart';
 
-import '../helpers/request_scope.dart';
+import '../helpers/session_user_helper.dart';
 import '../services/access_control_service.dart';
 import '../services/child_timeline_service.dart';
 import '../generated/protocol.dart';
@@ -13,35 +13,25 @@ class ChildTimelineEndpoint extends Endpoint {
 
   Future<List<ChildTimelineItem>> getChildTimeline(
     Session session, {
-    required String organizationId,
-    required String actorId,
-    required int childId,
+    required UuidValue childId,
     int page = 0,
     int pageSize = 40,
   }) async {
-    final orgId = parseOrganizationId(organizationId);
-    final actor = await _accessControl.requireActor(
-      session,
-      actorId: parseActorId(actorId),
-      organizationId: orgId,
-      allowedRoles: const [
-        'platform_super_admin',
-        'organization_admin',
-        'staff',
-        'guardian',
-      ],
-    );
+    final actor = await getAuthenticatedUser(session);
+    _accessControl.requireRole(actor, allowedRoles: [
+      'platform_super_admin',
+      'organization_admin',
+      'staff',
+      'guardian',
+    ]);
+    final orgId = actor.organizationId!;
 
     if (actor.role == 'guardian') {
-      final canAccess = await _accessControl.isGuardianOfChild(
+      await _accessControl.requireGuardianChildAccess(
         session,
-        organizationId: orgId,
-        guardianUserId: actor.id!,
+        actor: actor,
         childId: childId,
       );
-      if (!canAccess) {
-        throw Exception('Guardian cannot access this child timeline.');
-      }
     }
 
     final safePage = page < 0 ? 0 : page;

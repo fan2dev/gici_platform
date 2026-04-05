@@ -5,11 +5,12 @@ class: ActivityLog
 table: activity_log
 
 fields:
-  organizationId: int
-  userId: int?
+  id: UuidValue?, defaultPersist=random
+  organizationId: UuidValue
+  userId: UuidValue?
   action: String
   entityType: String?
-  entityId: int?
+  entityId: String?
   oldValues: String?
   newValues: String?
   ipAddress: String?

@@ -5,7 +5,7 @@ import '../generated/protocol.dart';
 class OrganizationService {
   const OrganizationService();
 
-  Future<Organization?> getById(Session session, int organizationId) {
+  Future<Organization?> getById(Session session, UuidValue organizationId) {
     return Organization.db.findFirstRow(
       session,
       where: (t) => t.id.equals(organizationId) & t.deletedAt.equals(null),

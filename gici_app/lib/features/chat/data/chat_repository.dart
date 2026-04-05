@@ -1,4 +1,5 @@
 import 'package:gici_backend_client/gici_backend_server_client.dart';
+import 'package:uuid/uuid_value.dart';
 
 class ChatRepository {
   const ChatRepository(this._client);
@@ -6,29 +7,21 @@ class ChatRepository {
   final Client _client;
 
   Future<List<ChatConversation>> listConversations({
-    required String organizationId,
-    required String actorId,
     int page = 0,
     int pageSize = 20,
   }) {
     return _client.chat.listConversations(
-      organizationId: organizationId,
-      actorId: actorId,
       page: page,
       pageSize: pageSize,
     );
   }
 
   Future<List<ChatMessage>> listMessages({
-    required String organizationId,
-    required String actorId,
-    required String conversationId,
+    required UuidValue conversationId,
     int page = 0,
     int pageSize = 30,
   }) {
     return _client.chat.listMessages(
-      organizationId: organizationId,
-      actorId: actorId,
       conversationId: conversationId,
       page: page,
       pageSize: pageSize,
@@ -36,25 +29,17 @@ class ChatRepository {
   }
 
   Future<ChatConversation> getConversation({
-    required String organizationId,
-    required String actorId,
-    required int conversationId,
+    required UuidValue conversationId,
   }) {
     return _client.chat.getConversation(
-      organizationId: organizationId,
-      actorId: actorId,
       conversationId: conversationId,
     );
   }
 
   Future<ChatConversation> createDirectConversation({
-    required String organizationId,
-    required String actorId,
-    required int otherParticipantUserId,
+    required UuidValue otherParticipantUserId,
   }) {
     return _client.chat.createConversation(
-      organizationId: organizationId,
-      actorId: actorId,
       conversationType: 'direct',
       title: null,
       relatedChildId: null,
@@ -64,40 +49,26 @@ class ChatRepository {
   }
 
   Future<ChatMessage> sendMessage({
-    required String organizationId,
-    required String actorId,
-    required int conversationId,
+    required UuidValue conversationId,
     required String content,
   }) {
     return _client.chat.sendMessage(
-      organizationId: organizationId,
-      actorId: actorId,
-      conversationId: conversationId.toString(),
+      conversationId: conversationId,
       content: content,
     );
   }
 
   Future<void> markConversationRead({
-    required String organizationId,
-    required String actorId,
-    required int conversationId,
-    int? lastReadMessageId,
+    required UuidValue conversationId,
+    UuidValue? lastReadMessageId,
   }) {
     return _client.chat.markConversationRead(
-      organizationId: organizationId,
-      actorId: actorId,
       conversationId: conversationId,
       lastReadMessageId: lastReadMessageId,
     );
   }
 
-  Future<Map<String, int>> unreadCounts({
-    required String organizationId,
-    required String actorId,
-  }) {
-    return _client.chat.unreadCounts(
-      organizationId: organizationId,
-      actorId: actorId,
-    );
+  Future<Map<String, int>> unreadCounts() {
+    return _client.chat.unreadCounts();
   }
 }

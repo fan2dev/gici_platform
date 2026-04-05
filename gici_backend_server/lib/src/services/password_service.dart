@@ -1,15 +1,13 @@
-import 'dart:convert';
-
-import 'package:crypto/crypto.dart';
+import 'package:bcrypt/bcrypt.dart';
 
 class PasswordService {
   const PasswordService();
 
-  String hash(String input) {
-    return sha256.convert(utf8.encode(input)).toString();
+  String hash(String password) {
+    return BCrypt.hashpw(password, BCrypt.gensalt());
   }
 
   bool verify({required String input, required String hashValue}) {
-    return hash(input) == hashValue;
+    return BCrypt.checkpw(input, hashValue);
   }
 }

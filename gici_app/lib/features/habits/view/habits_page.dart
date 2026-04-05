@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gici_backend_client/gici_backend_server_client.dart';
 import 'package:go_router/go_router.dart';
+import 'package:uuid/uuid_value.dart';
 
 import '../../../core/di/injection.dart';
 import '../../auth/cubit/auth_cubit.dart';
@@ -16,13 +17,7 @@ class HabitsPage extends StatefulWidget {
 }
 
 class _HabitsPageState extends State<HabitsPage> {
-  int? _selectedChildId;
-
-  bool _canManage(AppRole? role) {
-    return role == AppRole.organizationAdmin ||
-        role == AppRole.platformSuperAdmin ||
-        role == AppRole.staff;
-  }
+  UuidValue? _selectedChildId;
 
   @override
   Widget build(BuildContext context) {
@@ -30,13 +25,11 @@ class _HabitsPageState extends State<HabitsPage> {
     final childRepo = sl<ChildRepository>();
     final habitRepo = sl<HabitRepository>();
 
-    if (!auth.isAuthenticated ||
-        auth.organizationId == null ||
-        auth.actorId == null) {
+    if (!auth.isAuthenticated || auth.organizationId == null) {
       return const Scaffold(body: Center(child: Text('Unauthorized')));
     }
 
-    final canManage = _canManage(auth.role);
+    final canManage = auth.isStaffOrAbove;
 
     return Scaffold(
       appBar: AppBar(
@@ -48,8 +41,6 @@ class _HabitsPageState extends State<HabitsPage> {
       ),
       body: FutureBuilder<List<Child>>(
         future: childRepo.listChildren(
-          organizationId: auth.organizationId!,
-          actorId: auth.actorId!,
           page: 0,
           pageSize: 100,
         ),
@@ -78,12 +69,12 @@ class _HabitsPageState extends State<HabitsPage> {
             children: [
               Padding(
                 padding: const EdgeInsets.all(12),
-                child: DropdownButtonFormField<int>(
-                  initialValue: selected.id,
+                child: DropdownButtonFormField<UuidValue>(
+                  value: selected.id,
                   decoration: const InputDecoration(labelText: 'Child'),
                   items: children
                       .map(
-                        (c) => DropdownMenuItem<int>(
+                        (c) => DropdownMenuItem<UuidValue>(
                           value: c.id,
                           child: Text('${c.firstName} ${c.lastName}'),
                         ),
@@ -98,8 +89,6 @@ class _HabitsPageState extends State<HabitsPage> {
               Expanded(
                 child: FutureBuilder<ChildDailyHabits>(
                   future: habitRepo.getChildDailyHabits(
-                    organizationId: auth.organizationId!,
-                    actorId: auth.actorId!,
                     childId: selected.id!,
                     day: DateTime.now().toUtc(),
                   ),
@@ -126,8 +115,6 @@ class _HabitsPageState extends State<HabitsPage> {
                               FilledButton(
                                 onPressed: () async {
                                   await habitRepo.createMealEntry(
-                                    organizationId: auth.organizationId!,
-                                    actorId: auth.actorId!,
                                     childId: selected.id!,
                                     mealType: 'lunch',
                                     consumptionLevel: 'most',
@@ -141,8 +128,6 @@ class _HabitsPageState extends State<HabitsPage> {
                                 onPressed: () async {
                                   final now = DateTime.now().toUtc();
                                   await habitRepo.createNapEntry(
-                                    organizationId: auth.organizationId!,
-                                    actorId: auth.actorId!,
                                     childId: selected.id!,
                                     startedAt: now.subtract(
                                       const Duration(minutes: 45),
@@ -158,8 +143,6 @@ class _HabitsPageState extends State<HabitsPage> {
                               FilledButton(
                                 onPressed: () async {
                                   await habitRepo.createBowelMovementEntry(
-                                    organizationId: auth.organizationId!,
-                                    actorId: auth.actorId!,
                                     childId: selected.id!,
                                     eventType: 'diaper_change',
                                     consistency: 'normal',

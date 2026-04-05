@@ -9,22 +9,22 @@
       "columns": [
         {
           "name": "id",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "columnDefault": "nextval('activity_log_id_seq'::regclass)",
-          "dartType": "int?"
+          "columnDefault": "gen_random_uuid()",
+          "dartType": "UuidValue?"
         },
         {
           "name": "organizationId",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "dartType": "int"
+          "dartType": "UuidValue"
         },
         {
           "name": "userId",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": true,
-          "dartType": "int?"
+          "dartType": "UuidValue?"
         },
         {
           "name": "action",
@@ -40,9 +40,9 @@
         },
         {
           "name": "entityId",
-          "columnType": 6,
+          "columnType": 0,
           "isNullable": true,
-          "dartType": "int?"
+          "dartType": "String?"
         },
         {
           "name": "oldValues",
@@ -170,16 +170,22 @@
       "columns": [
         {
           "name": "id",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "columnDefault": "nextval('app_user_id_seq'::regclass)",
+          "columnDefault": "gen_random_uuid()",
+          "dartType": "UuidValue?"
+        },
+        {
+          "name": "serverpodUserId",
+          "columnType": 6,
+          "isNullable": true,
           "dartType": "int?"
         },
         {
           "name": "organizationId",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": true,
-          "dartType": "int?"
+          "dartType": "UuidValue?"
         },
         {
           "name": "email",
@@ -315,6 +321,18 @@
           "type": "btree",
           "isUnique": false,
           "isPrimary": false
+        },
+        {
+          "indexName": "appuser_serverpod_idx",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "serverpodUserId"
+            }
+          ],
+          "type": "btree",
+          "isUnique": true,
+          "isPrimary": false
         }
       ],
       "managed": true
@@ -327,28 +345,28 @@
       "columns": [
         {
           "name": "id",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "columnDefault": "nextval('bowel_movement_entry_id_seq'::regclass)",
-          "dartType": "int?"
+          "columnDefault": "gen_random_uuid()",
+          "dartType": "UuidValue?"
         },
         {
           "name": "organizationId",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "dartType": "int"
+          "dartType": "UuidValue"
         },
         {
           "name": "childId",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "dartType": "int"
+          "dartType": "UuidValue"
         },
         {
           "name": "recordedByUserId",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "dartType": "int"
+          "dartType": "UuidValue"
         },
         {
           "name": "eventAt",
@@ -464,16 +482,16 @@
       "columns": [
         {
           "name": "id",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "columnDefault": "nextval('chat_conversation_id_seq'::regclass)",
-          "dartType": "int?"
+          "columnDefault": "gen_random_uuid()",
+          "dartType": "UuidValue?"
         },
         {
           "name": "organizationId",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "dartType": "int"
+          "dartType": "UuidValue"
         },
         {
           "name": "title",
@@ -489,21 +507,21 @@
         },
         {
           "name": "relatedChildId",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": true,
-          "dartType": "int?"
+          "dartType": "UuidValue?"
         },
         {
           "name": "relatedClassroomId",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": true,
-          "dartType": "int?"
+          "dartType": "UuidValue?"
         },
         {
           "name": "createdByUserId",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "dartType": "int"
+          "dartType": "UuidValue"
         },
         {
           "name": "isArchived",
@@ -615,28 +633,28 @@
       "columns": [
         {
           "name": "id",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "columnDefault": "nextval('chat_message_id_seq'::regclass)",
-          "dartType": "int?"
+          "columnDefault": "gen_random_uuid()",
+          "dartType": "UuidValue?"
         },
         {
           "name": "organizationId",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "dartType": "int"
+          "dartType": "UuidValue"
         },
         {
           "name": "conversationId",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "dartType": "int"
+          "dartType": "UuidValue"
         },
         {
           "name": "senderUserId",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "dartType": "int"
+          "dartType": "UuidValue"
         },
         {
           "name": "body",
@@ -748,28 +766,28 @@
       "columns": [
         {
           "name": "id",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "columnDefault": "nextval('chat_participant_id_seq'::regclass)",
-          "dartType": "int?"
+          "columnDefault": "gen_random_uuid()",
+          "dartType": "UuidValue?"
         },
         {
           "name": "organizationId",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "dartType": "int"
+          "dartType": "UuidValue"
         },
         {
           "name": "conversationId",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "dartType": "int"
+          "dartType": "UuidValue"
         },
         {
           "name": "userId",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "dartType": "int"
+          "dartType": "UuidValue"
         },
         {
           "name": "joinedAt",
@@ -779,9 +797,9 @@
         },
         {
           "name": "lastReadMessageId",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": true,
-          "dartType": "int?"
+          "dartType": "UuidValue?"
         },
         {
           "name": "lastReadAt",
@@ -885,16 +903,16 @@
       "columns": [
         {
           "name": "id",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "columnDefault": "nextval('child_id_seq'::regclass)",
-          "dartType": "int?"
+          "columnDefault": "gen_random_uuid()",
+          "dartType": "UuidValue?"
         },
         {
           "name": "organizationId",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "dartType": "int"
+          "dartType": "UuidValue"
         },
         {
           "name": "firstName",
@@ -1052,28 +1070,28 @@
       "columns": [
         {
           "name": "id",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "columnDefault": "nextval('child_document_id_seq'::regclass)",
-          "dartType": "int?"
+          "columnDefault": "gen_random_uuid()",
+          "dartType": "UuidValue?"
         },
         {
           "name": "organizationId",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "dartType": "int"
+          "dartType": "UuidValue"
         },
         {
           "name": "childId",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "dartType": "int"
+          "dartType": "UuidValue"
         },
         {
           "name": "fileAssetId",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "dartType": "int"
+          "dartType": "UuidValue"
         },
         {
           "name": "title",
@@ -1095,9 +1113,9 @@
         },
         {
           "name": "createdByUserId",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "dartType": "int"
+          "dartType": "UuidValue"
         },
         {
           "name": "createdAt",
@@ -1179,28 +1197,28 @@
       "columns": [
         {
           "name": "id",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "columnDefault": "nextval('child_guardian_relation_id_seq'::regclass)",
-          "dartType": "int?"
+          "columnDefault": "gen_random_uuid()",
+          "dartType": "UuidValue?"
         },
         {
           "name": "organizationId",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "dartType": "int"
+          "dartType": "UuidValue"
         },
         {
           "name": "childId",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "dartType": "int"
+          "dartType": "UuidValue"
         },
         {
           "name": "guardianUserId",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "dartType": "int"
+          "dartType": "UuidValue"
         },
         {
           "name": "relation",
@@ -1328,16 +1346,16 @@
       "columns": [
         {
           "name": "id",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "columnDefault": "nextval('classroom_id_seq'::regclass)",
-          "dartType": "int?"
+          "columnDefault": "gen_random_uuid()",
+          "dartType": "UuidValue?"
         },
         {
           "name": "organizationId",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "dartType": "int"
+          "dartType": "UuidValue"
         },
         {
           "name": "name",
@@ -1455,28 +1473,28 @@
       "columns": [
         {
           "name": "id",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "columnDefault": "nextval('classroom_assignment_id_seq'::regclass)",
-          "dartType": "int?"
+          "columnDefault": "gen_random_uuid()",
+          "dartType": "UuidValue?"
         },
         {
           "name": "organizationId",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "dartType": "int"
+          "dartType": "UuidValue"
         },
         {
           "name": "classroomId",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "dartType": "int"
+          "dartType": "UuidValue"
         },
         {
           "name": "childId",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "dartType": "int"
+          "dartType": "UuidValue"
         },
         {
           "name": "assignedAt",
@@ -1486,9 +1504,9 @@
         },
         {
           "name": "assignedByUserId",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": true,
-          "dartType": "int?"
+          "dartType": "UuidValue?"
         },
         {
           "name": "withdrawnAt",
@@ -1498,9 +1516,9 @@
         },
         {
           "name": "withdrawnByUserId",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": true,
-          "dartType": "int?"
+          "dartType": "UuidValue?"
         },
         {
           "name": "withdrawnReason",
@@ -1604,28 +1622,28 @@
       "columns": [
         {
           "name": "id",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "columnDefault": "nextval('data_change_request_id_seq'::regclass)",
-          "dartType": "int?"
+          "columnDefault": "gen_random_uuid()",
+          "dartType": "UuidValue?"
         },
         {
           "name": "organizationId",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "dartType": "int"
+          "dartType": "UuidValue"
         },
         {
           "name": "requesterUserId",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "dartType": "int"
+          "dartType": "UuidValue"
         },
         {
           "name": "targetChildId",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": true,
-          "dartType": "int?"
+          "dartType": "UuidValue?"
         },
         {
           "name": "requestType",
@@ -1653,9 +1671,9 @@
         },
         {
           "name": "reviewedByUserId",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": true,
-          "dartType": "int?"
+          "dartType": "UuidValue?"
         },
         {
           "name": "reviewedAt",
@@ -1761,22 +1779,22 @@
       "columns": [
         {
           "name": "id",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "columnDefault": "nextval('file_asset_id_seq'::regclass)",
-          "dartType": "int?"
+          "columnDefault": "gen_random_uuid()",
+          "dartType": "UuidValue?"
         },
         {
           "name": "organizationId",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "dartType": "int"
+          "dartType": "UuidValue"
         },
         {
           "name": "uploadedByUserId",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "dartType": "int"
+          "dartType": "UuidValue"
         },
         {
           "name": "fileName",
@@ -1930,16 +1948,16 @@
       "columns": [
         {
           "name": "id",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "columnDefault": "nextval('gallery_id_seq'::regclass)",
-          "dartType": "int?"
+          "columnDefault": "gen_random_uuid()",
+          "dartType": "UuidValue?"
         },
         {
           "name": "organizationId",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "dartType": "int"
+          "dartType": "UuidValue"
         },
         {
           "name": "title",
@@ -1961,21 +1979,21 @@
         },
         {
           "name": "audienceClassroomId",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": true,
-          "dartType": "int?"
+          "dartType": "UuidValue?"
         },
         {
           "name": "audienceChildId",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": true,
-          "dartType": "int?"
+          "dartType": "UuidValue?"
         },
         {
           "name": "createdByUserId",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "dartType": "int"
+          "dartType": "UuidValue"
         },
         {
           "name": "isPublished",
@@ -2051,28 +2069,28 @@
       "columns": [
         {
           "name": "id",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "columnDefault": "nextval('gallery_item_id_seq'::regclass)",
-          "dartType": "int?"
+          "columnDefault": "gen_random_uuid()",
+          "dartType": "UuidValue?"
         },
         {
           "name": "organizationId",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "dartType": "int"
+          "dartType": "UuidValue"
         },
         {
           "name": "galleryId",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "dartType": "int"
+          "dartType": "UuidValue"
         },
         {
           "name": "fileAssetId",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "dartType": "int"
+          "dartType": "UuidValue"
         },
         {
           "name": "caption",
@@ -2088,9 +2106,9 @@
         },
         {
           "name": "createdByUserId",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "dartType": "int"
+          "dartType": "UuidValue"
         },
         {
           "name": "createdAt",
@@ -2176,28 +2194,28 @@
       "columns": [
         {
           "name": "id",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "columnDefault": "nextval('meal_entry_id_seq'::regclass)",
-          "dartType": "int?"
+          "columnDefault": "gen_random_uuid()",
+          "dartType": "UuidValue?"
         },
         {
           "name": "organizationId",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "dartType": "int"
+          "dartType": "UuidValue"
         },
         {
           "name": "childId",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "dartType": "int"
+          "dartType": "UuidValue"
         },
         {
           "name": "recordedByUserId",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "dartType": "int"
+          "dartType": "UuidValue"
         },
         {
           "name": "mealType",
@@ -2325,16 +2343,16 @@
       "columns": [
         {
           "name": "id",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "columnDefault": "nextval('menu_entry_id_seq'::regclass)",
-          "dartType": "int?"
+          "columnDefault": "gen_random_uuid()",
+          "dartType": "UuidValue?"
         },
         {
           "name": "organizationId",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "dartType": "int"
+          "dartType": "UuidValue"
         },
         {
           "name": "menuDate",
@@ -2362,15 +2380,15 @@
         },
         {
           "name": "classroomId",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": true,
-          "dartType": "int?"
+          "dartType": "UuidValue?"
         },
         {
           "name": "createdByUserId",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "dartType": "int"
+          "dartType": "UuidValue"
         },
         {
           "name": "createdAt",
@@ -2456,28 +2474,28 @@
       "columns": [
         {
           "name": "id",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "columnDefault": "nextval('nap_entry_id_seq'::regclass)",
-          "dartType": "int?"
+          "columnDefault": "gen_random_uuid()",
+          "dartType": "UuidValue?"
         },
         {
           "name": "organizationId",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "dartType": "int"
+          "dartType": "UuidValue"
         },
         {
           "name": "childId",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "dartType": "int"
+          "dartType": "UuidValue"
         },
         {
           "name": "recordedByUserId",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "dartType": "int"
+          "dartType": "UuidValue"
         },
         {
           "name": "startedAt",
@@ -2599,22 +2617,22 @@
       "columns": [
         {
           "name": "id",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "columnDefault": "nextval('notification_record_id_seq'::regclass)",
-          "dartType": "int?"
+          "columnDefault": "gen_random_uuid()",
+          "dartType": "UuidValue?"
         },
         {
           "name": "organizationId",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "dartType": "int"
+          "dartType": "UuidValue"
         },
         {
           "name": "userId",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "dartType": "int"
+          "dartType": "UuidValue"
         },
         {
           "name": "title",
@@ -2642,27 +2660,27 @@
         },
         {
           "name": "targetClassroomId",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": true,
-          "dartType": "int?"
+          "dartType": "UuidValue?"
         },
         {
           "name": "targetChildId",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": true,
-          "dartType": "int?"
+          "dartType": "UuidValue?"
         },
         {
           "name": "targetUserId",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": true,
-          "dartType": "int?"
+          "dartType": "UuidValue?"
         },
         {
           "name": "createdByUserId",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "dartType": "int"
+          "dartType": "UuidValue"
         },
         {
           "name": "isRead",
@@ -2756,10 +2774,10 @@
       "columns": [
         {
           "name": "id",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "columnDefault": "nextval('organization_id_seq'::regclass)",
-          "dartType": "int?"
+          "columnDefault": "gen_random_uuid()",
+          "dartType": "UuidValue?"
         },
         {
           "name": "name",
@@ -2895,16 +2913,16 @@
       "columns": [
         {
           "name": "id",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "columnDefault": "nextval('organization_branding_id_seq'::regclass)",
-          "dartType": "int?"
+          "columnDefault": "gen_random_uuid()",
+          "dartType": "UuidValue?"
         },
         {
           "name": "organizationId",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "dartType": "int"
+          "dartType": "UuidValue"
         },
         {
           "name": "primaryColor",
@@ -2992,22 +3010,22 @@
       "columns": [
         {
           "name": "id",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "columnDefault": "nextval('organization_document_id_seq'::regclass)",
-          "dartType": "int?"
+          "columnDefault": "gen_random_uuid()",
+          "dartType": "UuidValue?"
         },
         {
           "name": "organizationId",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "dartType": "int"
+          "dartType": "UuidValue"
         },
         {
           "name": "fileAssetId",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "dartType": "int"
+          "dartType": "UuidValue"
         },
         {
           "name": "title",
@@ -3029,9 +3047,9 @@
         },
         {
           "name": "createdByUserId",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "dartType": "int"
+          "dartType": "UuidValue"
         },
         {
           "name": "createdAt",
@@ -3113,16 +3131,16 @@
       "columns": [
         {
           "name": "id",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "columnDefault": "nextval('organization_settings_id_seq'::regclass)",
-          "dartType": "int?"
+          "columnDefault": "gen_random_uuid()",
+          "dartType": "UuidValue?"
         },
         {
           "name": "organizationId",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "dartType": "int"
+          "dartType": "UuidValue"
         },
         {
           "name": "defaultLanguage",
@@ -3252,22 +3270,22 @@
       "columns": [
         {
           "name": "id",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "columnDefault": "nextval('pedagogical_report_id_seq'::regclass)",
-          "dartType": "int?"
+          "columnDefault": "gen_random_uuid()",
+          "dartType": "UuidValue?"
         },
         {
           "name": "organizationId",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "dartType": "int"
+          "dartType": "UuidValue"
         },
         {
           "name": "childId",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "dartType": "int"
+          "dartType": "UuidValue"
         },
         {
           "name": "reportDate",
@@ -3307,15 +3325,15 @@
         },
         {
           "name": "createdByUserId",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "dartType": "int"
+          "dartType": "UuidValue"
         },
         {
           "name": "updatedByUserId",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": true,
-          "dartType": "int?"
+          "dartType": "UuidValue?"
         },
         {
           "name": "createdAt",
@@ -3409,22 +3427,22 @@
       "columns": [
         {
           "name": "id",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "columnDefault": "nextval('push_device_token_id_seq'::regclass)",
-          "dartType": "int?"
+          "columnDefault": "gen_random_uuid()",
+          "dartType": "UuidValue?"
         },
         {
           "name": "organizationId",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "dartType": "int"
+          "dartType": "UuidValue"
         },
         {
           "name": "userId",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "dartType": "int"
+          "dartType": "UuidValue"
         },
         {
           "name": "token",
@@ -3558,22 +3576,22 @@
       "columns": [
         {
           "name": "id",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "columnDefault": "nextval('time_entry_id_seq'::regclass)",
-          "dartType": "int?"
+          "columnDefault": "gen_random_uuid()",
+          "dartType": "UuidValue?"
         },
         {
           "name": "organizationId",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "dartType": "int"
+          "dartType": "UuidValue"
         },
         {
           "name": "userId",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "dartType": "int"
+          "dartType": "UuidValue"
         },
         {
           "name": "entryType",
@@ -3589,9 +3607,9 @@
         },
         {
           "name": "parentEntryId",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": true,
-          "dartType": "int?"
+          "dartType": "UuidValue?"
         },
         {
           "name": "correctionReason",
@@ -3625,9 +3643,9 @@
         },
         {
           "name": "createdByUserId",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "dartType": "int"
+          "dartType": "UuidValue"
         },
         {
           "name": "createdAt",
@@ -3725,22 +3743,22 @@
       "columns": [
         {
           "name": "id",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "columnDefault": "nextval('user_onboarding_state_id_seq'::regclass)",
-          "dartType": "int?"
+          "columnDefault": "gen_random_uuid()",
+          "dartType": "UuidValue?"
         },
         {
           "name": "organizationId",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": true,
-          "dartType": "int?"
+          "dartType": "UuidValue?"
         },
         {
           "name": "userId",
-          "columnType": 6,
+          "columnType": 7,
           "isNullable": false,
-          "dartType": "int"
+          "dartType": "UuidValue"
         },
         {
           "name": "introCompletedAt",
@@ -3813,9 +3831,1702 @@
         }
       ],
       "managed": true
+    },
+    {
+      "name": "serverpod_cloud_storage",
+      "dartName": "CloudStorageEntry",
+      "module": "serverpod",
+      "schema": "public",
+      "columns": [
+        {
+          "name": "id",
+          "columnType": 6,
+          "isNullable": false,
+          "columnDefault": "nextval('serverpod_cloud_storage_id_seq'::regclass)",
+          "dartType": "int?"
+        },
+        {
+          "name": "storageId",
+          "columnType": 0,
+          "isNullable": false,
+          "dartType": "String"
+        },
+        {
+          "name": "path",
+          "columnType": 0,
+          "isNullable": false,
+          "dartType": "String"
+        },
+        {
+          "name": "addedTime",
+          "columnType": 4,
+          "isNullable": false,
+          "dartType": "DateTime"
+        },
+        {
+          "name": "expiration",
+          "columnType": 4,
+          "isNullable": true,
+          "dartType": "DateTime?"
+        },
+        {
+          "name": "byteData",
+          "columnType": 5,
+          "isNullable": false,
+          "dartType": "dart:typed_data:ByteData"
+        },
+        {
+          "name": "verified",
+          "columnType": 1,
+          "isNullable": false,
+          "dartType": "bool"
+        }
+      ],
+      "foreignKeys": [],
+      "indexes": [
+        {
+          "indexName": "serverpod_cloud_storage_pkey",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "id"
+            }
+          ],
+          "type": "btree",
+          "isUnique": true,
+          "isPrimary": true
+        },
+        {
+          "indexName": "serverpod_cloud_storage_path_idx",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "storageId"
+            },
+            {
+              "type": 0,
+              "definition": "path"
+            }
+          ],
+          "type": "btree",
+          "isUnique": true,
+          "isPrimary": false
+        },
+        {
+          "indexName": "serverpod_cloud_storage_expiration",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "expiration"
+            }
+          ],
+          "type": "btree",
+          "isUnique": false,
+          "isPrimary": false
+        }
+      ],
+      "managed": true
+    },
+    {
+      "name": "serverpod_cloud_storage_direct_upload",
+      "dartName": "CloudStorageDirectUploadEntry",
+      "module": "serverpod",
+      "schema": "public",
+      "columns": [
+        {
+          "name": "id",
+          "columnType": 6,
+          "isNullable": false,
+          "columnDefault": "nextval('serverpod_cloud_storage_direct_upload_id_seq'::regclass)",
+          "dartType": "int?"
+        },
+        {
+          "name": "storageId",
+          "columnType": 0,
+          "isNullable": false,
+          "dartType": "String"
+        },
+        {
+          "name": "path",
+          "columnType": 0,
+          "isNullable": false,
+          "dartType": "String"
+        },
+        {
+          "name": "expiration",
+          "columnType": 4,
+          "isNullable": false,
+          "dartType": "DateTime"
+        },
+        {
+          "name": "authKey",
+          "columnType": 0,
+          "isNullable": false,
+          "dartType": "String"
+        }
+      ],
+      "foreignKeys": [],
+      "indexes": [
+        {
+          "indexName": "serverpod_cloud_storage_direct_upload_pkey",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "id"
+            }
+          ],
+          "type": "btree",
+          "isUnique": true,
+          "isPrimary": true
+        },
+        {
+          "indexName": "serverpod_cloud_storage_direct_upload_storage_path",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "storageId"
+            },
+            {
+              "type": 0,
+              "definition": "path"
+            }
+          ],
+          "type": "btree",
+          "isUnique": true,
+          "isPrimary": false
+        }
+      ],
+      "managed": true
+    },
+    {
+      "name": "serverpod_future_call",
+      "dartName": "FutureCallEntry",
+      "module": "serverpod",
+      "schema": "public",
+      "columns": [
+        {
+          "name": "id",
+          "columnType": 6,
+          "isNullable": false,
+          "columnDefault": "nextval('serverpod_future_call_id_seq'::regclass)",
+          "dartType": "int?"
+        },
+        {
+          "name": "name",
+          "columnType": 0,
+          "isNullable": false,
+          "dartType": "String"
+        },
+        {
+          "name": "time",
+          "columnType": 4,
+          "isNullable": false,
+          "dartType": "DateTime"
+        },
+        {
+          "name": "serializedObject",
+          "columnType": 0,
+          "isNullable": true,
+          "dartType": "String?"
+        },
+        {
+          "name": "serverId",
+          "columnType": 0,
+          "isNullable": false,
+          "dartType": "String"
+        },
+        {
+          "name": "identifier",
+          "columnType": 0,
+          "isNullable": true,
+          "dartType": "String?"
+        }
+      ],
+      "foreignKeys": [],
+      "indexes": [
+        {
+          "indexName": "serverpod_future_call_pkey",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "id"
+            }
+          ],
+          "type": "btree",
+          "isUnique": true,
+          "isPrimary": true
+        },
+        {
+          "indexName": "serverpod_future_call_time_idx",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "time"
+            }
+          ],
+          "type": "btree",
+          "isUnique": false,
+          "isPrimary": false
+        },
+        {
+          "indexName": "serverpod_future_call_serverId_idx",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "serverId"
+            }
+          ],
+          "type": "btree",
+          "isUnique": false,
+          "isPrimary": false
+        },
+        {
+          "indexName": "serverpod_future_call_identifier_idx",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "identifier"
+            }
+          ],
+          "type": "btree",
+          "isUnique": false,
+          "isPrimary": false
+        }
+      ],
+      "managed": true
+    },
+    {
+      "name": "serverpod_health_connection_info",
+      "dartName": "ServerHealthConnectionInfo",
+      "module": "serverpod",
+      "schema": "public",
+      "columns": [
+        {
+          "name": "id",
+          "columnType": 6,
+          "isNullable": false,
+          "columnDefault": "nextval('serverpod_health_connection_info_id_seq'::regclass)",
+          "dartType": "int?"
+        },
+        {
+          "name": "serverId",
+          "columnType": 0,
+          "isNullable": false,
+          "dartType": "String"
+        },
+        {
+          "name": "timestamp",
+          "columnType": 4,
+          "isNullable": false,
+          "dartType": "DateTime"
+        },
+        {
+          "name": "active",
+          "columnType": 6,
+          "isNullable": false,
+          "dartType": "int"
+        },
+        {
+          "name": "closing",
+          "columnType": 6,
+          "isNullable": false,
+          "dartType": "int"
+        },
+        {
+          "name": "idle",
+          "columnType": 6,
+          "isNullable": false,
+          "dartType": "int"
+        },
+        {
+          "name": "granularity",
+          "columnType": 6,
+          "isNullable": false,
+          "dartType": "int"
+        }
+      ],
+      "foreignKeys": [],
+      "indexes": [
+        {
+          "indexName": "serverpod_health_connection_info_pkey",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "id"
+            }
+          ],
+          "type": "btree",
+          "isUnique": true,
+          "isPrimary": true
+        },
+        {
+          "indexName": "serverpod_health_connection_info_timestamp_idx",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "timestamp"
+            },
+            {
+              "type": 0,
+              "definition": "serverId"
+            },
+            {
+              "type": 0,
+              "definition": "granularity"
+            }
+          ],
+          "type": "btree",
+          "isUnique": true,
+          "isPrimary": false
+        }
+      ],
+      "managed": true
+    },
+    {
+      "name": "serverpod_health_metric",
+      "dartName": "ServerHealthMetric",
+      "module": "serverpod",
+      "schema": "public",
+      "columns": [
+        {
+          "name": "id",
+          "columnType": 6,
+          "isNullable": false,
+          "columnDefault": "nextval('serverpod_health_metric_id_seq'::regclass)",
+          "dartType": "int?"
+        },
+        {
+          "name": "name",
+          "columnType": 0,
+          "isNullable": false,
+          "dartType": "String"
+        },
+        {
+          "name": "serverId",
+          "columnType": 0,
+          "isNullable": false,
+          "dartType": "String"
+        },
+        {
+          "name": "timestamp",
+          "columnType": 4,
+          "isNullable": false,
+          "dartType": "DateTime"
+        },
+        {
+          "name": "isHealthy",
+          "columnType": 1,
+          "isNullable": false,
+          "dartType": "bool"
+        },
+        {
+          "name": "value",
+          "columnType": 3,
+          "isNullable": false,
+          "dartType": "double"
+        },
+        {
+          "name": "granularity",
+          "columnType": 6,
+          "isNullable": false,
+          "dartType": "int"
+        }
+      ],
+      "foreignKeys": [],
+      "indexes": [
+        {
+          "indexName": "serverpod_health_metric_pkey",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "id"
+            }
+          ],
+          "type": "btree",
+          "isUnique": true,
+          "isPrimary": true
+        },
+        {
+          "indexName": "serverpod_health_metric_timestamp_idx",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "timestamp"
+            },
+            {
+              "type": 0,
+              "definition": "serverId"
+            },
+            {
+              "type": 0,
+              "definition": "name"
+            },
+            {
+              "type": 0,
+              "definition": "granularity"
+            }
+          ],
+          "type": "btree",
+          "isUnique": true,
+          "isPrimary": false
+        }
+      ],
+      "managed": true
+    },
+    {
+      "name": "serverpod_log",
+      "dartName": "LogEntry",
+      "module": "serverpod",
+      "schema": "public",
+      "columns": [
+        {
+          "name": "id",
+          "columnType": 6,
+          "isNullable": false,
+          "columnDefault": "nextval('serverpod_log_id_seq'::regclass)",
+          "dartType": "int?"
+        },
+        {
+          "name": "sessionLogId",
+          "columnType": 6,
+          "isNullable": false,
+          "dartType": "int"
+        },
+        {
+          "name": "messageId",
+          "columnType": 6,
+          "isNullable": true,
+          "dartType": "int?"
+        },
+        {
+          "name": "reference",
+          "columnType": 0,
+          "isNullable": true,
+          "dartType": "String?"
+        },
+        {
+          "name": "serverId",
+          "columnType": 0,
+          "isNullable": false,
+          "dartType": "String"
+        },
+        {
+          "name": "time",
+          "columnType": 4,
+          "isNullable": false,
+          "dartType": "DateTime"
+        },
+        {
+          "name": "logLevel",
+          "columnType": 6,
+          "isNullable": false,
+          "dartType": "protocol:LogLevel"
+        },
+        {
+          "name": "message",
+          "columnType": 0,
+          "isNullable": false,
+          "dartType": "String"
+        },
+        {
+          "name": "error",
+          "columnType": 0,
+          "isNullable": true,
+          "dartType": "String?"
+        },
+        {
+          "name": "stackTrace",
+          "columnType": 0,
+          "isNullable": true,
+          "dartType": "String?"
+        },
+        {
+          "name": "order",
+          "columnType": 6,
+          "isNullable": false,
+          "dartType": "int"
+        }
+      ],
+      "foreignKeys": [
+        {
+          "constraintName": "serverpod_log_fk_0",
+          "columns": [
+            "sessionLogId"
+          ],
+          "referenceTable": "serverpod_session_log",
+          "referenceTableSchema": "public",
+          "referenceColumns": [
+            "id"
+          ],
+          "onUpdate": 3,
+          "onDelete": 4
+        }
+      ],
+      "indexes": [
+        {
+          "indexName": "serverpod_log_pkey",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "id"
+            }
+          ],
+          "type": "btree",
+          "isUnique": true,
+          "isPrimary": true
+        },
+        {
+          "indexName": "serverpod_log_sessionLogId_idx",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "sessionLogId"
+            }
+          ],
+          "type": "btree",
+          "isUnique": false,
+          "isPrimary": false
+        }
+      ],
+      "managed": true
+    },
+    {
+      "name": "serverpod_message_log",
+      "dartName": "MessageLogEntry",
+      "module": "serverpod",
+      "schema": "public",
+      "columns": [
+        {
+          "name": "id",
+          "columnType": 6,
+          "isNullable": false,
+          "columnDefault": "nextval('serverpod_message_log_id_seq'::regclass)",
+          "dartType": "int?"
+        },
+        {
+          "name": "sessionLogId",
+          "columnType": 6,
+          "isNullable": false,
+          "dartType": "int"
+        },
+        {
+          "name": "serverId",
+          "columnType": 0,
+          "isNullable": false,
+          "dartType": "String"
+        },
+        {
+          "name": "messageId",
+          "columnType": 6,
+          "isNullable": false,
+          "dartType": "int"
+        },
+        {
+          "name": "endpoint",
+          "columnType": 0,
+          "isNullable": false,
+          "dartType": "String"
+        },
+        {
+          "name": "messageName",
+          "columnType": 0,
+          "isNullable": false,
+          "dartType": "String"
+        },
+        {
+          "name": "duration",
+          "columnType": 3,
+          "isNullable": false,
+          "dartType": "double"
+        },
+        {
+          "name": "error",
+          "columnType": 0,
+          "isNullable": true,
+          "dartType": "String?"
+        },
+        {
+          "name": "stackTrace",
+          "columnType": 0,
+          "isNullable": true,
+          "dartType": "String?"
+        },
+        {
+          "name": "slow",
+          "columnType": 1,
+          "isNullable": false,
+          "dartType": "bool"
+        },
+        {
+          "name": "order",
+          "columnType": 6,
+          "isNullable": false,
+          "dartType": "int"
+        }
+      ],
+      "foreignKeys": [
+        {
+          "constraintName": "serverpod_message_log_fk_0",
+          "columns": [
+            "sessionLogId"
+          ],
+          "referenceTable": "serverpod_session_log",
+          "referenceTableSchema": "public",
+          "referenceColumns": [
+            "id"
+          ],
+          "onUpdate": 3,
+          "onDelete": 4
+        }
+      ],
+      "indexes": [
+        {
+          "indexName": "serverpod_message_log_pkey",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "id"
+            }
+          ],
+          "type": "btree",
+          "isUnique": true,
+          "isPrimary": true
+        }
+      ],
+      "managed": true
+    },
+    {
+      "name": "serverpod_method",
+      "dartName": "MethodInfo",
+      "module": "serverpod",
+      "schema": "public",
+      "columns": [
+        {
+          "name": "id",
+          "columnType": 6,
+          "isNullable": false,
+          "columnDefault": "nextval('serverpod_method_id_seq'::regclass)",
+          "dartType": "int?"
+        },
+        {
+          "name": "endpoint",
+          "columnType": 0,
+          "isNullable": false,
+          "dartType": "String"
+        },
+        {
+          "name": "method",
+          "columnType": 0,
+          "isNullable": false,
+          "dartType": "String"
+        }
+      ],
+      "foreignKeys": [],
+      "indexes": [
+        {
+          "indexName": "serverpod_method_pkey",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "id"
+            }
+          ],
+          "type": "btree",
+          "isUnique": true,
+          "isPrimary": true
+        },
+        {
+          "indexName": "serverpod_method_endpoint_method_idx",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "endpoint"
+            },
+            {
+              "type": 0,
+              "definition": "method"
+            }
+          ],
+          "type": "btree",
+          "isUnique": true,
+          "isPrimary": false
+        }
+      ],
+      "managed": true
+    },
+    {
+      "name": "serverpod_migrations",
+      "dartName": "DatabaseMigrationVersion",
+      "module": "serverpod",
+      "schema": "public",
+      "columns": [
+        {
+          "name": "id",
+          "columnType": 6,
+          "isNullable": false,
+          "columnDefault": "nextval('serverpod_migrations_id_seq'::regclass)",
+          "dartType": "int?"
+        },
+        {
+          "name": "module",
+          "columnType": 0,
+          "isNullable": false,
+          "dartType": "String"
+        },
+        {
+          "name": "version",
+          "columnType": 0,
+          "isNullable": false,
+          "dartType": "String"
+        },
+        {
+          "name": "timestamp",
+          "columnType": 4,
+          "isNullable": true,
+          "dartType": "DateTime?"
+        }
+      ],
+      "foreignKeys": [],
+      "indexes": [
+        {
+          "indexName": "serverpod_migrations_pkey",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "id"
+            }
+          ],
+          "type": "btree",
+          "isUnique": true,
+          "isPrimary": true
+        },
+        {
+          "indexName": "serverpod_migrations_ids",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "module"
+            }
+          ],
+          "type": "btree",
+          "isUnique": true,
+          "isPrimary": false
+        }
+      ],
+      "managed": true
+    },
+    {
+      "name": "serverpod_query_log",
+      "dartName": "QueryLogEntry",
+      "module": "serverpod",
+      "schema": "public",
+      "columns": [
+        {
+          "name": "id",
+          "columnType": 6,
+          "isNullable": false,
+          "columnDefault": "nextval('serverpod_query_log_id_seq'::regclass)",
+          "dartType": "int?"
+        },
+        {
+          "name": "serverId",
+          "columnType": 0,
+          "isNullable": false,
+          "dartType": "String"
+        },
+        {
+          "name": "sessionLogId",
+          "columnType": 6,
+          "isNullable": false,
+          "dartType": "int"
+        },
+        {
+          "name": "messageId",
+          "columnType": 6,
+          "isNullable": true,
+          "dartType": "int?"
+        },
+        {
+          "name": "query",
+          "columnType": 0,
+          "isNullable": false,
+          "dartType": "String"
+        },
+        {
+          "name": "duration",
+          "columnType": 3,
+          "isNullable": false,
+          "dartType": "double"
+        },
+        {
+          "name": "numRows",
+          "columnType": 6,
+          "isNullable": true,
+          "dartType": "int?"
+        },
+        {
+          "name": "error",
+          "columnType": 0,
+          "isNullable": true,
+          "dartType": "String?"
+        },
+        {
+          "name": "stackTrace",
+          "columnType": 0,
+          "isNullable": true,
+          "dartType": "String?"
+        },
+        {
+          "name": "slow",
+          "columnType": 1,
+          "isNullable": false,
+          "dartType": "bool"
+        },
+        {
+          "name": "order",
+          "columnType": 6,
+          "isNullable": false,
+          "dartType": "int"
+        }
+      ],
+      "foreignKeys": [
+        {
+          "constraintName": "serverpod_query_log_fk_0",
+          "columns": [
+            "sessionLogId"
+          ],
+          "referenceTable": "serverpod_session_log",
+          "referenceTableSchema": "public",
+          "referenceColumns": [
+            "id"
+          ],
+          "onUpdate": 3,
+          "onDelete": 4
+        }
+      ],
+      "indexes": [
+        {
+          "indexName": "serverpod_query_log_pkey",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "id"
+            }
+          ],
+          "type": "btree",
+          "isUnique": true,
+          "isPrimary": true
+        },
+        {
+          "indexName": "serverpod_query_log_sessionLogId_idx",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "sessionLogId"
+            }
+          ],
+          "type": "btree",
+          "isUnique": false,
+          "isPrimary": false
+        }
+      ],
+      "managed": true
+    },
+    {
+      "name": "serverpod_readwrite_test",
+      "dartName": "ReadWriteTestEntry",
+      "module": "serverpod",
+      "schema": "public",
+      "columns": [
+        {
+          "name": "id",
+          "columnType": 6,
+          "isNullable": false,
+          "columnDefault": "nextval('serverpod_readwrite_test_id_seq'::regclass)",
+          "dartType": "int?"
+        },
+        {
+          "name": "number",
+          "columnType": 6,
+          "isNullable": false,
+          "dartType": "int"
+        }
+      ],
+      "foreignKeys": [],
+      "indexes": [
+        {
+          "indexName": "serverpod_readwrite_test_pkey",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "id"
+            }
+          ],
+          "type": "btree",
+          "isUnique": true,
+          "isPrimary": true
+        }
+      ],
+      "managed": true
+    },
+    {
+      "name": "serverpod_runtime_settings",
+      "dartName": "RuntimeSettings",
+      "module": "serverpod",
+      "schema": "public",
+      "columns": [
+        {
+          "name": "id",
+          "columnType": 6,
+          "isNullable": false,
+          "columnDefault": "nextval('serverpod_runtime_settings_id_seq'::regclass)",
+          "dartType": "int?"
+        },
+        {
+          "name": "logSettings",
+          "columnType": 8,
+          "isNullable": false,
+          "dartType": "protocol:LogSettings"
+        },
+        {
+          "name": "logSettingsOverrides",
+          "columnType": 8,
+          "isNullable": false,
+          "dartType": "List<protocol:LogSettingsOverride>"
+        },
+        {
+          "name": "logServiceCalls",
+          "columnType": 1,
+          "isNullable": false,
+          "dartType": "bool"
+        },
+        {
+          "name": "logMalformedCalls",
+          "columnType": 1,
+          "isNullable": false,
+          "dartType": "bool"
+        }
+      ],
+      "foreignKeys": [],
+      "indexes": [
+        {
+          "indexName": "serverpod_runtime_settings_pkey",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "id"
+            }
+          ],
+          "type": "btree",
+          "isUnique": true,
+          "isPrimary": true
+        }
+      ],
+      "managed": true
+    },
+    {
+      "name": "serverpod_session_log",
+      "dartName": "SessionLogEntry",
+      "module": "serverpod",
+      "schema": "public",
+      "columns": [
+        {
+          "name": "id",
+          "columnType": 6,
+          "isNullable": false,
+          "columnDefault": "nextval('serverpod_session_log_id_seq'::regclass)",
+          "dartType": "int?"
+        },
+        {
+          "name": "serverId",
+          "columnType": 0,
+          "isNullable": false,
+          "dartType": "String"
+        },
+        {
+          "name": "time",
+          "columnType": 4,
+          "isNullable": false,
+          "dartType": "DateTime"
+        },
+        {
+          "name": "module",
+          "columnType": 0,
+          "isNullable": true,
+          "dartType": "String?"
+        },
+        {
+          "name": "endpoint",
+          "columnType": 0,
+          "isNullable": true,
+          "dartType": "String?"
+        },
+        {
+          "name": "method",
+          "columnType": 0,
+          "isNullable": true,
+          "dartType": "String?"
+        },
+        {
+          "name": "duration",
+          "columnType": 3,
+          "isNullable": true,
+          "dartType": "double?"
+        },
+        {
+          "name": "numQueries",
+          "columnType": 6,
+          "isNullable": true,
+          "dartType": "int?"
+        },
+        {
+          "name": "slow",
+          "columnType": 1,
+          "isNullable": true,
+          "dartType": "bool?"
+        },
+        {
+          "name": "error",
+          "columnType": 0,
+          "isNullable": true,
+          "dartType": "String?"
+        },
+        {
+          "name": "stackTrace",
+          "columnType": 0,
+          "isNullable": true,
+          "dartType": "String?"
+        },
+        {
+          "name": "authenticatedUserId",
+          "columnType": 6,
+          "isNullable": true,
+          "dartType": "int?"
+        },
+        {
+          "name": "isOpen",
+          "columnType": 1,
+          "isNullable": true,
+          "dartType": "bool?"
+        },
+        {
+          "name": "touched",
+          "columnType": 4,
+          "isNullable": false,
+          "dartType": "DateTime"
+        }
+      ],
+      "foreignKeys": [],
+      "indexes": [
+        {
+          "indexName": "serverpod_session_log_pkey",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "id"
+            }
+          ],
+          "type": "btree",
+          "isUnique": true,
+          "isPrimary": true
+        },
+        {
+          "indexName": "serverpod_session_log_serverid_idx",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "serverId"
+            }
+          ],
+          "type": "btree",
+          "isUnique": false,
+          "isPrimary": false
+        },
+        {
+          "indexName": "serverpod_session_log_touched_idx",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "touched"
+            }
+          ],
+          "type": "btree",
+          "isUnique": false,
+          "isPrimary": false
+        },
+        {
+          "indexName": "serverpod_session_log_isopen_idx",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "isOpen"
+            }
+          ],
+          "type": "btree",
+          "isUnique": false,
+          "isPrimary": false
+        }
+      ],
+      "managed": true
+    },
+    {
+      "name": "serverpod_auth_key",
+      "dartName": "AuthKey",
+      "module": "serverpod_auth",
+      "schema": "public",
+      "columns": [
+        {
+          "name": "id",
+          "columnType": 6,
+          "isNullable": false,
+          "columnDefault": "nextval('serverpod_auth_key_id_seq'::regclass)",
+          "dartType": "int?"
+        },
+        {
+          "name": "userId",
+          "columnType": 6,
+          "isNullable": false,
+          "dartType": "int"
+        },
+        {
+          "name": "hash",
+          "columnType": 0,
+          "isNullable": false,
+          "dartType": "String"
+        },
+        {
+          "name": "scopeNames",
+          "columnType": 8,
+          "isNullable": false,
+          "dartType": "List<String>"
+        },
+        {
+          "name": "method",
+          "columnType": 0,
+          "isNullable": false,
+          "dartType": "String"
+        }
+      ],
+      "foreignKeys": [],
+      "indexes": [
+        {
+          "indexName": "serverpod_auth_key_pkey",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "id"
+            }
+          ],
+          "type": "btree",
+          "isUnique": true,
+          "isPrimary": true
+        },
+        {
+          "indexName": "serverpod_auth_key_userId_idx",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "userId"
+            }
+          ],
+          "type": "btree",
+          "isUnique": false,
+          "isPrimary": false
+        }
+      ],
+      "managed": true
+    },
+    {
+      "name": "serverpod_email_auth",
+      "dartName": "EmailAuth",
+      "module": "serverpod_auth",
+      "schema": "public",
+      "columns": [
+        {
+          "name": "id",
+          "columnType": 6,
+          "isNullable": false,
+          "columnDefault": "nextval('serverpod_email_auth_id_seq'::regclass)",
+          "dartType": "int?"
+        },
+        {
+          "name": "userId",
+          "columnType": 6,
+          "isNullable": false,
+          "dartType": "int"
+        },
+        {
+          "name": "email",
+          "columnType": 0,
+          "isNullable": false,
+          "dartType": "String"
+        },
+        {
+          "name": "hash",
+          "columnType": 0,
+          "isNullable": false,
+          "dartType": "String"
+        }
+      ],
+      "foreignKeys": [],
+      "indexes": [
+        {
+          "indexName": "serverpod_email_auth_pkey",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "id"
+            }
+          ],
+          "type": "btree",
+          "isUnique": true,
+          "isPrimary": true
+        },
+        {
+          "indexName": "serverpod_email_auth_email",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "email"
+            }
+          ],
+          "type": "btree",
+          "isUnique": true,
+          "isPrimary": false
+        }
+      ],
+      "managed": true
+    },
+    {
+      "name": "serverpod_email_create_request",
+      "dartName": "EmailCreateAccountRequest",
+      "module": "serverpod_auth",
+      "schema": "public",
+      "columns": [
+        {
+          "name": "id",
+          "columnType": 6,
+          "isNullable": false,
+          "columnDefault": "nextval('serverpod_email_create_request_id_seq'::regclass)",
+          "dartType": "int?"
+        },
+        {
+          "name": "userName",
+          "columnType": 0,
+          "isNullable": false,
+          "dartType": "String"
+        },
+        {
+          "name": "email",
+          "columnType": 0,
+          "isNullable": false,
+          "dartType": "String"
+        },
+        {
+          "name": "hash",
+          "columnType": 0,
+          "isNullable": false,
+          "dartType": "String"
+        },
+        {
+          "name": "verificationCode",
+          "columnType": 0,
+          "isNullable": false,
+          "dartType": "String"
+        }
+      ],
+      "foreignKeys": [],
+      "indexes": [
+        {
+          "indexName": "serverpod_email_create_request_pkey",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "id"
+            }
+          ],
+          "type": "btree",
+          "isUnique": true,
+          "isPrimary": true
+        },
+        {
+          "indexName": "serverpod_email_auth_create_account_request_idx",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "email"
+            }
+          ],
+          "type": "btree",
+          "isUnique": true,
+          "isPrimary": false
+        }
+      ],
+      "managed": true
+    },
+    {
+      "name": "serverpod_email_failed_sign_in",
+      "dartName": "EmailFailedSignIn",
+      "module": "serverpod_auth",
+      "schema": "public",
+      "columns": [
+        {
+          "name": "id",
+          "columnType": 6,
+          "isNullable": false,
+          "columnDefault": "nextval('serverpod_email_failed_sign_in_id_seq'::regclass)",
+          "dartType": "int?"
+        },
+        {
+          "name": "email",
+          "columnType": 0,
+          "isNullable": false,
+          "dartType": "String"
+        },
+        {
+          "name": "time",
+          "columnType": 4,
+          "isNullable": false,
+          "dartType": "DateTime"
+        },
+        {
+          "name": "ipAddress",
+          "columnType": 0,
+          "isNullable": false,
+          "dartType": "String"
+        }
+      ],
+      "foreignKeys": [],
+      "indexes": [
+        {
+          "indexName": "serverpod_email_failed_sign_in_pkey",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "id"
+            }
+          ],
+          "type": "btree",
+          "isUnique": true,
+          "isPrimary": true
+        },
+        {
+          "indexName": "serverpod_email_failed_sign_in_email_idx",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "email"
+            }
+          ],
+          "type": "btree",
+          "isUnique": false,
+          "isPrimary": false
+        },
+        {
+          "indexName": "serverpod_email_failed_sign_in_time_idx",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "time"
+            }
+          ],
+          "type": "btree",
+          "isUnique": false,
+          "isPrimary": false
+        }
+      ],
+      "managed": true
+    },
+    {
+      "name": "serverpod_email_reset",
+      "dartName": "EmailReset",
+      "module": "serverpod_auth",
+      "schema": "public",
+      "columns": [
+        {
+          "name": "id",
+          "columnType": 6,
+          "isNullable": false,
+          "columnDefault": "nextval('serverpod_email_reset_id_seq'::regclass)",
+          "dartType": "int?"
+        },
+        {
+          "name": "userId",
+          "columnType": 6,
+          "isNullable": false,
+          "dartType": "int"
+        },
+        {
+          "name": "verificationCode",
+          "columnType": 0,
+          "isNullable": false,
+          "dartType": "String"
+        },
+        {
+          "name": "expiration",
+          "columnType": 4,
+          "isNullable": false,
+          "dartType": "DateTime"
+        }
+      ],
+      "foreignKeys": [],
+      "indexes": [
+        {
+          "indexName": "serverpod_email_reset_pkey",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "id"
+            }
+          ],
+          "type": "btree",
+          "isUnique": true,
+          "isPrimary": true
+        },
+        {
+          "indexName": "serverpod_email_reset_verification_idx",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "verificationCode"
+            }
+          ],
+          "type": "btree",
+          "isUnique": true,
+          "isPrimary": false
+        }
+      ],
+      "managed": true
+    },
+    {
+      "name": "serverpod_google_refresh_token",
+      "dartName": "GoogleRefreshToken",
+      "module": "serverpod_auth",
+      "schema": "public",
+      "columns": [
+        {
+          "name": "id",
+          "columnType": 6,
+          "isNullable": false,
+          "columnDefault": "nextval('serverpod_google_refresh_token_id_seq'::regclass)",
+          "dartType": "int?"
+        },
+        {
+          "name": "userId",
+          "columnType": 6,
+          "isNullable": false,
+          "dartType": "int"
+        },
+        {
+          "name": "refreshToken",
+          "columnType": 0,
+          "isNullable": false,
+          "dartType": "String"
+        }
+      ],
+      "foreignKeys": [],
+      "indexes": [
+        {
+          "indexName": "serverpod_google_refresh_token_pkey",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "id"
+            }
+          ],
+          "type": "btree",
+          "isUnique": true,
+          "isPrimary": true
+        },
+        {
+          "indexName": "serverpod_google_refresh_token_userId_idx",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "userId"
+            }
+          ],
+          "type": "btree",
+          "isUnique": true,
+          "isPrimary": false
+        }
+      ],
+      "managed": true
+    },
+    {
+      "name": "serverpod_user_image",
+      "dartName": "UserImage",
+      "module": "serverpod_auth",
+      "schema": "public",
+      "columns": [
+        {
+          "name": "id",
+          "columnType": 6,
+          "isNullable": false,
+          "columnDefault": "nextval('serverpod_user_image_id_seq'::regclass)",
+          "dartType": "int?"
+        },
+        {
+          "name": "userId",
+          "columnType": 6,
+          "isNullable": false,
+          "dartType": "int"
+        },
+        {
+          "name": "version",
+          "columnType": 6,
+          "isNullable": false,
+          "dartType": "int"
+        },
+        {
+          "name": "url",
+          "columnType": 0,
+          "isNullable": false,
+          "dartType": "String"
+        }
+      ],
+      "foreignKeys": [],
+      "indexes": [
+        {
+          "indexName": "serverpod_user_image_pkey",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "id"
+            }
+          ],
+          "type": "btree",
+          "isUnique": true,
+          "isPrimary": true
+        },
+        {
+          "indexName": "serverpod_user_image_user_id",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "userId"
+            },
+            {
+              "type": 0,
+              "definition": "version"
+            }
+          ],
+          "type": "btree",
+          "isUnique": false,
+          "isPrimary": false
+        }
+      ],
+      "managed": true
+    },
+    {
+      "name": "serverpod_user_info",
+      "dartName": "UserInfo",
+      "module": "serverpod_auth",
+      "schema": "public",
+      "columns": [
+        {
+          "name": "id",
+          "columnType": 6,
+          "isNullable": false,
+          "columnDefault": "nextval('serverpod_user_info_id_seq'::regclass)",
+          "dartType": "int?"
+        },
+        {
+          "name": "userIdentifier",
+          "columnType": 0,
+          "isNullable": false,
+          "dartType": "String"
+        },
+        {
+          "name": "userName",
+          "columnType": 0,
+          "isNullable": true,
+          "dartType": "String?"
+        },
+        {
+          "name": "fullName",
+          "columnType": 0,
+          "isNullable": true,
+          "dartType": "String?"
+        },
+        {
+          "name": "email",
+          "columnType": 0,
+          "isNullable": true,
+          "dartType": "String?"
+        },
+        {
+          "name": "created",
+          "columnType": 4,
+          "isNullable": false,
+          "dartType": "DateTime"
+        },
+        {
+          "name": "imageUrl",
+          "columnType": 0,
+          "isNullable": true,
+          "dartType": "String?"
+        },
+        {
+          "name": "scopeNames",
+          "columnType": 8,
+          "isNullable": false,
+          "dartType": "List<String>"
+        },
+        {
+          "name": "blocked",
+          "columnType": 1,
+          "isNullable": false,
+          "dartType": "bool"
+        }
+      ],
+      "foreignKeys": [],
+      "indexes": [
+        {
+          "indexName": "serverpod_user_info_pkey",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "id"
+            }
+          ],
+          "type": "btree",
+          "isUnique": true,
+          "isPrimary": true
+        },
+        {
+          "indexName": "serverpod_user_info_user_identifier",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "userIdentifier"
+            }
+          ],
+          "type": "btree",
+          "isUnique": true,
+          "isPrimary": false
+        },
+        {
+          "indexName": "serverpod_user_info_email",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "email"
+            }
+          ],
+          "type": "btree",
+          "isUnique": false,
+          "isPrimary": false
+        }
+      ],
+      "managed": true
     }
   ],
   "installedModules": [
+    {
+      "module": "gici_backend",
+      "version": "20260405221151408"
+    },
     {
       "module": "serverpod",
       "version": "20240516151843329"

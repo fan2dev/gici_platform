@@ -5,7 +5,8 @@ class: OrganizationSettings
 table: organization_settings
 
 fields:
-  organizationId: int
+  id: UuidValue?, defaultPersist=random
+  organizationId: UuidValue
   defaultLanguage: String
   timezone: String
   dateFormat: String

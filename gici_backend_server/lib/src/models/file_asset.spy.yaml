@@ -5,8 +5,9 @@ class: FileAsset
 table: file_asset
 
 fields:
-  organizationId: int
-  uploadedByUserId: int
+  id: UuidValue?, defaultPersist=random
+  organizationId: UuidValue
+  uploadedByUserId: UuidValue
   fileName: String
   originalName: String
   mimeType: String
@@ -30,4 +31,3 @@ indexes:
     fields: fileType
   file_uploader_idx:
     fields: uploadedByUserId
-

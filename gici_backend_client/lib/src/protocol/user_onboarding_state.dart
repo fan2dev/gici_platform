@@ -24,9 +24,9 @@ abstract class UserOnboardingState implements _i1.SerializableModel {
   });
 
   factory UserOnboardingState({
-    int? id,
-    int? organizationId,
-    required int userId,
+    _i1.UuidValue? id,
+    _i1.UuidValue? organizationId,
+    required _i1.UuidValue userId,
     DateTime? introCompletedAt,
     DateTime? termsAcceptedAt,
     DateTime? completedAt,
@@ -36,9 +36,14 @@ abstract class UserOnboardingState implements _i1.SerializableModel {
 
   factory UserOnboardingState.fromJson(Map<String, dynamic> jsonSerialization) {
     return UserOnboardingState(
-      id: jsonSerialization['id'] as int?,
-      organizationId: jsonSerialization['organizationId'] as int?,
-      userId: jsonSerialization['userId'] as int,
+      id: jsonSerialization['id'] == null
+          ? null
+          : _i1.UuidValueJsonExtension.fromJson(jsonSerialization['id']),
+      organizationId: jsonSerialization['organizationId'] == null
+          ? null
+          : _i1.UuidValueJsonExtension.fromJson(
+              jsonSerialization['organizationId']),
+      userId: _i1.UuidValueJsonExtension.fromJson(jsonSerialization['userId']),
       introCompletedAt: jsonSerialization['introCompletedAt'] == null
           ? null
           : _i1.DateTimeJsonExtension.fromJson(
@@ -61,11 +66,11 @@ abstract class UserOnboardingState implements _i1.SerializableModel {
   /// The database id, set if the object has been inserted into the
   /// database or if it has been fetched from the database. Otherwise,
   /// the id will be null.
-  int? id;
+  _i1.UuidValue? id;
 
-  int? organizationId;
+  _i1.UuidValue? organizationId;
 
-  int userId;
+  _i1.UuidValue userId;
 
   DateTime? introCompletedAt;
 
@@ -81,9 +86,9 @@ abstract class UserOnboardingState implements _i1.SerializableModel {
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
   UserOnboardingState copyWith({
-    int? id,
-    int? organizationId,
-    int? userId,
+    _i1.UuidValue? id,
+    _i1.UuidValue? organizationId,
+    _i1.UuidValue? userId,
     DateTime? introCompletedAt,
     DateTime? termsAcceptedAt,
     DateTime? completedAt,
@@ -93,9 +98,9 @@ abstract class UserOnboardingState implements _i1.SerializableModel {
   @override
   Map<String, dynamic> toJson() {
     return {
-      if (id != null) 'id': id,
-      if (organizationId != null) 'organizationId': organizationId,
-      'userId': userId,
+      if (id != null) 'id': id?.toJson(),
+      if (organizationId != null) 'organizationId': organizationId?.toJson(),
+      'userId': userId.toJson(),
       if (introCompletedAt != null)
         'introCompletedAt': introCompletedAt?.toJson(),
       if (termsAcceptedAt != null) 'termsAcceptedAt': termsAcceptedAt?.toJson(),
@@ -115,9 +120,9 @@ class _Undefined {}
 
 class _UserOnboardingStateImpl extends UserOnboardingState {
   _UserOnboardingStateImpl({
-    int? id,
-    int? organizationId,
-    required int userId,
+    _i1.UuidValue? id,
+    _i1.UuidValue? organizationId,
+    required _i1.UuidValue userId,
     DateTime? introCompletedAt,
     DateTime? termsAcceptedAt,
     DateTime? completedAt,
@@ -141,7 +146,7 @@ class _UserOnboardingStateImpl extends UserOnboardingState {
   UserOnboardingState copyWith({
     Object? id = _Undefined,
     Object? organizationId = _Undefined,
-    int? userId,
+    _i1.UuidValue? userId,
     Object? introCompletedAt = _Undefined,
     Object? termsAcceptedAt = _Undefined,
     Object? completedAt = _Undefined,
@@ -149,9 +154,10 @@ class _UserOnboardingStateImpl extends UserOnboardingState {
     DateTime? updatedAt,
   }) {
     return UserOnboardingState(
-      id: id is int? ? id : this.id,
-      organizationId:
-          organizationId is int? ? organizationId : this.organizationId,
+      id: id is _i1.UuidValue? ? id : this.id,
+      organizationId: organizationId is _i1.UuidValue?
+          ? organizationId
+          : this.organizationId,
       userId: userId ?? this.userId,
       introCompletedAt: introCompletedAt is DateTime?
           ? introCompletedAt

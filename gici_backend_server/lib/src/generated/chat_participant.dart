@@ -12,7 +12,7 @@
 import 'package:serverpod/serverpod.dart' as _i1;
 
 abstract class ChatParticipant
-    implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
+    implements _i1.TableRow<_i1.UuidValue?>, _i1.ProtocolSerialization {
   ChatParticipant._({
     this.id,
     required this.organizationId,
@@ -27,12 +27,12 @@ abstract class ChatParticipant
   });
 
   factory ChatParticipant({
-    int? id,
-    required int organizationId,
-    required int conversationId,
-    required int userId,
+    _i1.UuidValue? id,
+    required _i1.UuidValue organizationId,
+    required _i1.UuidValue conversationId,
+    required _i1.UuidValue userId,
     required DateTime joinedAt,
-    int? lastReadMessageId,
+    _i1.UuidValue? lastReadMessageId,
     DateTime? lastReadAt,
     required bool isActive,
     required DateTime createdAt,
@@ -41,13 +41,20 @@ abstract class ChatParticipant
 
   factory ChatParticipant.fromJson(Map<String, dynamic> jsonSerialization) {
     return ChatParticipant(
-      id: jsonSerialization['id'] as int?,
-      organizationId: jsonSerialization['organizationId'] as int,
-      conversationId: jsonSerialization['conversationId'] as int,
-      userId: jsonSerialization['userId'] as int,
+      id: jsonSerialization['id'] == null
+          ? null
+          : _i1.UuidValueJsonExtension.fromJson(jsonSerialization['id']),
+      organizationId: _i1.UuidValueJsonExtension.fromJson(
+          jsonSerialization['organizationId']),
+      conversationId: _i1.UuidValueJsonExtension.fromJson(
+          jsonSerialization['conversationId']),
+      userId: _i1.UuidValueJsonExtension.fromJson(jsonSerialization['userId']),
       joinedAt:
           _i1.DateTimeJsonExtension.fromJson(jsonSerialization['joinedAt']),
-      lastReadMessageId: jsonSerialization['lastReadMessageId'] as int?,
+      lastReadMessageId: jsonSerialization['lastReadMessageId'] == null
+          ? null
+          : _i1.UuidValueJsonExtension.fromJson(
+              jsonSerialization['lastReadMessageId']),
       lastReadAt: jsonSerialization['lastReadAt'] == null
           ? null
           : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['lastReadAt']),
@@ -64,17 +71,17 @@ abstract class ChatParticipant
   static const db = ChatParticipantRepository._();
 
   @override
-  int? id;
+  _i1.UuidValue? id;
 
-  int organizationId;
+  _i1.UuidValue organizationId;
 
-  int conversationId;
+  _i1.UuidValue conversationId;
 
-  int userId;
+  _i1.UuidValue userId;
 
   DateTime joinedAt;
 
-  int? lastReadMessageId;
+  _i1.UuidValue? lastReadMessageId;
 
   DateTime? lastReadAt;
 
@@ -85,18 +92,18 @@ abstract class ChatParticipant
   DateTime updatedAt;
 
   @override
-  _i1.Table<int?> get table => t;
+  _i1.Table<_i1.UuidValue?> get table => t;
 
   /// Returns a shallow copy of this [ChatParticipant]
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
   ChatParticipant copyWith({
-    int? id,
-    int? organizationId,
-    int? conversationId,
-    int? userId,
+    _i1.UuidValue? id,
+    _i1.UuidValue? organizationId,
+    _i1.UuidValue? conversationId,
+    _i1.UuidValue? userId,
     DateTime? joinedAt,
-    int? lastReadMessageId,
+    _i1.UuidValue? lastReadMessageId,
     DateTime? lastReadAt,
     bool? isActive,
     DateTime? createdAt,
@@ -105,12 +112,13 @@ abstract class ChatParticipant
   @override
   Map<String, dynamic> toJson() {
     return {
-      if (id != null) 'id': id,
-      'organizationId': organizationId,
-      'conversationId': conversationId,
-      'userId': userId,
+      if (id != null) 'id': id?.toJson(),
+      'organizationId': organizationId.toJson(),
+      'conversationId': conversationId.toJson(),
+      'userId': userId.toJson(),
       'joinedAt': joinedAt.toJson(),
-      if (lastReadMessageId != null) 'lastReadMessageId': lastReadMessageId,
+      if (lastReadMessageId != null)
+        'lastReadMessageId': lastReadMessageId?.toJson(),
       if (lastReadAt != null) 'lastReadAt': lastReadAt?.toJson(),
       'isActive': isActive,
       'createdAt': createdAt.toJson(),
@@ -121,12 +129,13 @@ abstract class ChatParticipant
   @override
   Map<String, dynamic> toJsonForProtocol() {
     return {
-      if (id != null) 'id': id,
-      'organizationId': organizationId,
-      'conversationId': conversationId,
-      'userId': userId,
+      if (id != null) 'id': id?.toJson(),
+      'organizationId': organizationId.toJson(),
+      'conversationId': conversationId.toJson(),
+      'userId': userId.toJson(),
       'joinedAt': joinedAt.toJson(),
-      if (lastReadMessageId != null) 'lastReadMessageId': lastReadMessageId,
+      if (lastReadMessageId != null)
+        'lastReadMessageId': lastReadMessageId?.toJson(),
       if (lastReadAt != null) 'lastReadAt': lastReadAt?.toJson(),
       'isActive': isActive,
       'createdAt': createdAt.toJson(),
@@ -168,12 +177,12 @@ class _Undefined {}
 
 class _ChatParticipantImpl extends ChatParticipant {
   _ChatParticipantImpl({
-    int? id,
-    required int organizationId,
-    required int conversationId,
-    required int userId,
+    _i1.UuidValue? id,
+    required _i1.UuidValue organizationId,
+    required _i1.UuidValue conversationId,
+    required _i1.UuidValue userId,
     required DateTime joinedAt,
-    int? lastReadMessageId,
+    _i1.UuidValue? lastReadMessageId,
     DateTime? lastReadAt,
     required bool isActive,
     required DateTime createdAt,
@@ -197,9 +206,9 @@ class _ChatParticipantImpl extends ChatParticipant {
   @override
   ChatParticipant copyWith({
     Object? id = _Undefined,
-    int? organizationId,
-    int? conversationId,
-    int? userId,
+    _i1.UuidValue? organizationId,
+    _i1.UuidValue? conversationId,
+    _i1.UuidValue? userId,
     DateTime? joinedAt,
     Object? lastReadMessageId = _Undefined,
     Object? lastReadAt = _Undefined,
@@ -208,12 +217,12 @@ class _ChatParticipantImpl extends ChatParticipant {
     DateTime? updatedAt,
   }) {
     return ChatParticipant(
-      id: id is int? ? id : this.id,
+      id: id is _i1.UuidValue? ? id : this.id,
       organizationId: organizationId ?? this.organizationId,
       conversationId: conversationId ?? this.conversationId,
       userId: userId ?? this.userId,
       joinedAt: joinedAt ?? this.joinedAt,
-      lastReadMessageId: lastReadMessageId is int?
+      lastReadMessageId: lastReadMessageId is _i1.UuidValue?
           ? lastReadMessageId
           : this.lastReadMessageId,
       lastReadAt: lastReadAt is DateTime? ? lastReadAt : this.lastReadAt,
@@ -224,18 +233,18 @@ class _ChatParticipantImpl extends ChatParticipant {
   }
 }
 
-class ChatParticipantTable extends _i1.Table<int?> {
+class ChatParticipantTable extends _i1.Table<_i1.UuidValue?> {
   ChatParticipantTable({super.tableRelation})
       : super(tableName: 'chat_participant') {
-    organizationId = _i1.ColumnInt(
+    organizationId = _i1.ColumnUuid(
       'organizationId',
       this,
     );
-    conversationId = _i1.ColumnInt(
+    conversationId = _i1.ColumnUuid(
       'conversationId',
       this,
     );
-    userId = _i1.ColumnInt(
+    userId = _i1.ColumnUuid(
       'userId',
       this,
     );
@@ -243,7 +252,7 @@ class ChatParticipantTable extends _i1.Table<int?> {
       'joinedAt',
       this,
     );
-    lastReadMessageId = _i1.ColumnInt(
+    lastReadMessageId = _i1.ColumnUuid(
       'lastReadMessageId',
       this,
     );
@@ -265,15 +274,15 @@ class ChatParticipantTable extends _i1.Table<int?> {
     );
   }
 
-  late final _i1.ColumnInt organizationId;
+  late final _i1.ColumnUuid organizationId;
 
-  late final _i1.ColumnInt conversationId;
+  late final _i1.ColumnUuid conversationId;
 
-  late final _i1.ColumnInt userId;
+  late final _i1.ColumnUuid userId;
 
   late final _i1.ColumnDateTime joinedAt;
 
-  late final _i1.ColumnInt lastReadMessageId;
+  late final _i1.ColumnUuid lastReadMessageId;
 
   late final _i1.ColumnDateTime lastReadAt;
 
@@ -305,7 +314,7 @@ class ChatParticipantInclude extends _i1.IncludeObject {
   Map<String, _i1.Include?> get includes => {};
 
   @override
-  _i1.Table<int?> get table => ChatParticipant.t;
+  _i1.Table<_i1.UuidValue?> get table => ChatParticipant.t;
 }
 
 class ChatParticipantIncludeList extends _i1.IncludeList {
@@ -325,7 +334,7 @@ class ChatParticipantIncludeList extends _i1.IncludeList {
   Map<String, _i1.Include?> get includes => include?.includes ?? {};
 
   @override
-  _i1.Table<int?> get table => ChatParticipant.t;
+  _i1.Table<_i1.UuidValue?> get table => ChatParticipant.t;
 }
 
 class ChatParticipantRepository {
@@ -413,7 +422,7 @@ class ChatParticipantRepository {
   /// Finds a single [ChatParticipant] by its [id] or null if no such row exists.
   Future<ChatParticipant?> findById(
     _i1.Session session,
-    int id, {
+    _i1.UuidValue id, {
     _i1.Transaction? transaction,
   }) async {
     return session.db.findById<ChatParticipant>(

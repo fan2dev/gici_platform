@@ -12,7 +12,7 @@
 import 'package:serverpod/serverpod.dart' as _i1;
 
 abstract class TimeEntry
-    implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
+    implements _i1.TableRow<_i1.UuidValue?>, _i1.ProtocolSerialization {
   TimeEntry._({
     this.id,
     required this.organizationId,
@@ -30,36 +30,43 @@ abstract class TimeEntry
   });
 
   factory TimeEntry({
-    int? id,
-    required int organizationId,
-    required int userId,
+    _i1.UuidValue? id,
+    required _i1.UuidValue organizationId,
+    required _i1.UuidValue userId,
     required String entryType,
     required DateTime recordedAt,
-    int? parentEntryId,
+    _i1.UuidValue? parentEntryId,
     String? correctionReason,
     String? locationData,
     String? deviceInfo,
     String? notes,
     required bool isManualEntry,
-    required int createdByUserId,
+    required _i1.UuidValue createdByUserId,
     required DateTime createdAt,
   }) = _TimeEntryImpl;
 
   factory TimeEntry.fromJson(Map<String, dynamic> jsonSerialization) {
     return TimeEntry(
-      id: jsonSerialization['id'] as int?,
-      organizationId: jsonSerialization['organizationId'] as int,
-      userId: jsonSerialization['userId'] as int,
+      id: jsonSerialization['id'] == null
+          ? null
+          : _i1.UuidValueJsonExtension.fromJson(jsonSerialization['id']),
+      organizationId: _i1.UuidValueJsonExtension.fromJson(
+          jsonSerialization['organizationId']),
+      userId: _i1.UuidValueJsonExtension.fromJson(jsonSerialization['userId']),
       entryType: jsonSerialization['entryType'] as String,
       recordedAt:
           _i1.DateTimeJsonExtension.fromJson(jsonSerialization['recordedAt']),
-      parentEntryId: jsonSerialization['parentEntryId'] as int?,
+      parentEntryId: jsonSerialization['parentEntryId'] == null
+          ? null
+          : _i1.UuidValueJsonExtension.fromJson(
+              jsonSerialization['parentEntryId']),
       correctionReason: jsonSerialization['correctionReason'] as String?,
       locationData: jsonSerialization['locationData'] as String?,
       deviceInfo: jsonSerialization['deviceInfo'] as String?,
       notes: jsonSerialization['notes'] as String?,
       isManualEntry: jsonSerialization['isManualEntry'] as bool,
-      createdByUserId: jsonSerialization['createdByUserId'] as int,
+      createdByUserId: _i1.UuidValueJsonExtension.fromJson(
+          jsonSerialization['createdByUserId']),
       createdAt:
           _i1.DateTimeJsonExtension.fromJson(jsonSerialization['createdAt']),
     );
@@ -70,17 +77,17 @@ abstract class TimeEntry
   static const db = TimeEntryRepository._();
 
   @override
-  int? id;
+  _i1.UuidValue? id;
 
-  int organizationId;
+  _i1.UuidValue organizationId;
 
-  int userId;
+  _i1.UuidValue userId;
 
   String entryType;
 
   DateTime recordedAt;
 
-  int? parentEntryId;
+  _i1.UuidValue? parentEntryId;
 
   String? correctionReason;
 
@@ -92,46 +99,46 @@ abstract class TimeEntry
 
   bool isManualEntry;
 
-  int createdByUserId;
+  _i1.UuidValue createdByUserId;
 
   DateTime createdAt;
 
   @override
-  _i1.Table<int?> get table => t;
+  _i1.Table<_i1.UuidValue?> get table => t;
 
   /// Returns a shallow copy of this [TimeEntry]
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
   TimeEntry copyWith({
-    int? id,
-    int? organizationId,
-    int? userId,
+    _i1.UuidValue? id,
+    _i1.UuidValue? organizationId,
+    _i1.UuidValue? userId,
     String? entryType,
     DateTime? recordedAt,
-    int? parentEntryId,
+    _i1.UuidValue? parentEntryId,
     String? correctionReason,
     String? locationData,
     String? deviceInfo,
     String? notes,
     bool? isManualEntry,
-    int? createdByUserId,
+    _i1.UuidValue? createdByUserId,
     DateTime? createdAt,
   });
   @override
   Map<String, dynamic> toJson() {
     return {
-      if (id != null) 'id': id,
-      'organizationId': organizationId,
-      'userId': userId,
+      if (id != null) 'id': id?.toJson(),
+      'organizationId': organizationId.toJson(),
+      'userId': userId.toJson(),
       'entryType': entryType,
       'recordedAt': recordedAt.toJson(),
-      if (parentEntryId != null) 'parentEntryId': parentEntryId,
+      if (parentEntryId != null) 'parentEntryId': parentEntryId?.toJson(),
       if (correctionReason != null) 'correctionReason': correctionReason,
       if (locationData != null) 'locationData': locationData,
       if (deviceInfo != null) 'deviceInfo': deviceInfo,
       if (notes != null) 'notes': notes,
       'isManualEntry': isManualEntry,
-      'createdByUserId': createdByUserId,
+      'createdByUserId': createdByUserId.toJson(),
       'createdAt': createdAt.toJson(),
     };
   }
@@ -139,18 +146,18 @@ abstract class TimeEntry
   @override
   Map<String, dynamic> toJsonForProtocol() {
     return {
-      if (id != null) 'id': id,
-      'organizationId': organizationId,
-      'userId': userId,
+      if (id != null) 'id': id?.toJson(),
+      'organizationId': organizationId.toJson(),
+      'userId': userId.toJson(),
       'entryType': entryType,
       'recordedAt': recordedAt.toJson(),
-      if (parentEntryId != null) 'parentEntryId': parentEntryId,
+      if (parentEntryId != null) 'parentEntryId': parentEntryId?.toJson(),
       if (correctionReason != null) 'correctionReason': correctionReason,
       if (locationData != null) 'locationData': locationData,
       if (deviceInfo != null) 'deviceInfo': deviceInfo,
       if (notes != null) 'notes': notes,
       'isManualEntry': isManualEntry,
-      'createdByUserId': createdByUserId,
+      'createdByUserId': createdByUserId.toJson(),
       'createdAt': createdAt.toJson(),
     };
   }
@@ -189,18 +196,18 @@ class _Undefined {}
 
 class _TimeEntryImpl extends TimeEntry {
   _TimeEntryImpl({
-    int? id,
-    required int organizationId,
-    required int userId,
+    _i1.UuidValue? id,
+    required _i1.UuidValue organizationId,
+    required _i1.UuidValue userId,
     required String entryType,
     required DateTime recordedAt,
-    int? parentEntryId,
+    _i1.UuidValue? parentEntryId,
     String? correctionReason,
     String? locationData,
     String? deviceInfo,
     String? notes,
     required bool isManualEntry,
-    required int createdByUserId,
+    required _i1.UuidValue createdByUserId,
     required DateTime createdAt,
   }) : super._(
           id: id,
@@ -224,8 +231,8 @@ class _TimeEntryImpl extends TimeEntry {
   @override
   TimeEntry copyWith({
     Object? id = _Undefined,
-    int? organizationId,
-    int? userId,
+    _i1.UuidValue? organizationId,
+    _i1.UuidValue? userId,
     String? entryType,
     DateTime? recordedAt,
     Object? parentEntryId = _Undefined,
@@ -234,16 +241,17 @@ class _TimeEntryImpl extends TimeEntry {
     Object? deviceInfo = _Undefined,
     Object? notes = _Undefined,
     bool? isManualEntry,
-    int? createdByUserId,
+    _i1.UuidValue? createdByUserId,
     DateTime? createdAt,
   }) {
     return TimeEntry(
-      id: id is int? ? id : this.id,
+      id: id is _i1.UuidValue? ? id : this.id,
       organizationId: organizationId ?? this.organizationId,
       userId: userId ?? this.userId,
       entryType: entryType ?? this.entryType,
       recordedAt: recordedAt ?? this.recordedAt,
-      parentEntryId: parentEntryId is int? ? parentEntryId : this.parentEntryId,
+      parentEntryId:
+          parentEntryId is _i1.UuidValue? ? parentEntryId : this.parentEntryId,
       correctionReason: correctionReason is String?
           ? correctionReason
           : this.correctionReason,
@@ -257,13 +265,13 @@ class _TimeEntryImpl extends TimeEntry {
   }
 }
 
-class TimeEntryTable extends _i1.Table<int?> {
+class TimeEntryTable extends _i1.Table<_i1.UuidValue?> {
   TimeEntryTable({super.tableRelation}) : super(tableName: 'time_entry') {
-    organizationId = _i1.ColumnInt(
+    organizationId = _i1.ColumnUuid(
       'organizationId',
       this,
     );
-    userId = _i1.ColumnInt(
+    userId = _i1.ColumnUuid(
       'userId',
       this,
     );
@@ -275,7 +283,7 @@ class TimeEntryTable extends _i1.Table<int?> {
       'recordedAt',
       this,
     );
-    parentEntryId = _i1.ColumnInt(
+    parentEntryId = _i1.ColumnUuid(
       'parentEntryId',
       this,
     );
@@ -299,7 +307,7 @@ class TimeEntryTable extends _i1.Table<int?> {
       'isManualEntry',
       this,
     );
-    createdByUserId = _i1.ColumnInt(
+    createdByUserId = _i1.ColumnUuid(
       'createdByUserId',
       this,
     );
@@ -309,15 +317,15 @@ class TimeEntryTable extends _i1.Table<int?> {
     );
   }
 
-  late final _i1.ColumnInt organizationId;
+  late final _i1.ColumnUuid organizationId;
 
-  late final _i1.ColumnInt userId;
+  late final _i1.ColumnUuid userId;
 
   late final _i1.ColumnString entryType;
 
   late final _i1.ColumnDateTime recordedAt;
 
-  late final _i1.ColumnInt parentEntryId;
+  late final _i1.ColumnUuid parentEntryId;
 
   late final _i1.ColumnString correctionReason;
 
@@ -329,7 +337,7 @@ class TimeEntryTable extends _i1.Table<int?> {
 
   late final _i1.ColumnBool isManualEntry;
 
-  late final _i1.ColumnInt createdByUserId;
+  late final _i1.ColumnUuid createdByUserId;
 
   late final _i1.ColumnDateTime createdAt;
 
@@ -358,7 +366,7 @@ class TimeEntryInclude extends _i1.IncludeObject {
   Map<String, _i1.Include?> get includes => {};
 
   @override
-  _i1.Table<int?> get table => TimeEntry.t;
+  _i1.Table<_i1.UuidValue?> get table => TimeEntry.t;
 }
 
 class TimeEntryIncludeList extends _i1.IncludeList {
@@ -378,7 +386,7 @@ class TimeEntryIncludeList extends _i1.IncludeList {
   Map<String, _i1.Include?> get includes => include?.includes ?? {};
 
   @override
-  _i1.Table<int?> get table => TimeEntry.t;
+  _i1.Table<_i1.UuidValue?> get table => TimeEntry.t;
 }
 
 class TimeEntryRepository {
@@ -466,7 +474,7 @@ class TimeEntryRepository {
   /// Finds a single [TimeEntry] by its [id] or null if no such row exists.
   Future<TimeEntry?> findById(
     _i1.Session session,
-    int id, {
+    _i1.UuidValue id, {
     _i1.Transaction? transaction,
   }) async {
     return session.db.findById<TimeEntry>(

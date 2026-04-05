@@ -1,18 +1,21 @@
+# Notification record
+
 class: NotificationRecord
 
 table: notification_record
 
 fields:
-  organizationId: int
-  userId: int
+  id: UuidValue?, defaultPersist=random
+  organizationId: UuidValue
+  userId: UuidValue
   title: String
   body: String
   category: String
   targetScope: String
-  targetClassroomId: int?
-  targetChildId: int?
-  targetUserId: int?
-  createdByUserId: int
+  targetClassroomId: UuidValue?
+  targetChildId: UuidValue?
+  targetUserId: UuidValue?
+  createdByUserId: UuidValue
   isRead: bool
   readAt: DateTime?
   createdAt: DateTime

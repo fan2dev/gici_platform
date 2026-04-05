@@ -7,7 +7,7 @@ class ClassroomService {
 
   Future<List<Classroom>> listByOrganization(
     Session session, {
-    required int organizationId,
+    required UuidValue organizationId,
     required int limit,
     required int offset,
   }) {
@@ -24,7 +24,7 @@ class ClassroomService {
 
   Future<Classroom> create(
     Session session, {
-    required int organizationId,
+    required UuidValue organizationId,
     required String name,
     String? description,
     int? ageGroupMin,
@@ -54,8 +54,8 @@ class ClassroomService {
 
   Future<Classroom?> getById(
     Session session, {
-    required int organizationId,
-    required int classroomId,
+    required UuidValue organizationId,
+    required UuidValue classroomId,
   }) {
     return Classroom.db.findFirstRow(
       session,
@@ -92,10 +92,10 @@ class ClassroomService {
 
   Future<ClassroomAssignment> assignChild(
     Session session, {
-    required int organizationId,
-    required int classroomId,
-    required int childId,
-    required int assignedByUserId,
+    required UuidValue organizationId,
+    required UuidValue classroomId,
+    required UuidValue childId,
+    required UuidValue assignedByUserId,
   }) async {
     final now = DateTime.now().toUtc();
 
@@ -142,9 +142,9 @@ class ClassroomService {
 
   Future<List<ClassroomAssignment>> listAssignments(
     Session session, {
-    required int organizationId,
-    int? classroomId,
-    int? childId,
+    required UuidValue organizationId,
+    UuidValue? classroomId,
+    UuidValue? childId,
     bool onlyActive = true,
     required int limit,
     required int offset,

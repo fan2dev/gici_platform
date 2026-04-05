@@ -12,7 +12,7 @@
 import 'package:serverpod/serverpod.dart' as _i1;
 
 abstract class MenuEntry
-    implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
+    implements _i1.TableRow<_i1.UuidValue?>, _i1.ProtocolSerialization {
   MenuEntry._({
     this.id,
     required this.organizationId,
@@ -28,14 +28,14 @@ abstract class MenuEntry
   });
 
   factory MenuEntry({
-    int? id,
-    required int organizationId,
+    _i1.UuidValue? id,
+    required _i1.UuidValue organizationId,
     required DateTime menuDate,
     required String mealType,
     required String title,
     String? description,
-    int? classroomId,
-    required int createdByUserId,
+    _i1.UuidValue? classroomId,
+    required _i1.UuidValue createdByUserId,
     required DateTime createdAt,
     required DateTime updatedAt,
     DateTime? deletedAt,
@@ -43,15 +43,22 @@ abstract class MenuEntry
 
   factory MenuEntry.fromJson(Map<String, dynamic> jsonSerialization) {
     return MenuEntry(
-      id: jsonSerialization['id'] as int?,
-      organizationId: jsonSerialization['organizationId'] as int,
+      id: jsonSerialization['id'] == null
+          ? null
+          : _i1.UuidValueJsonExtension.fromJson(jsonSerialization['id']),
+      organizationId: _i1.UuidValueJsonExtension.fromJson(
+          jsonSerialization['organizationId']),
       menuDate:
           _i1.DateTimeJsonExtension.fromJson(jsonSerialization['menuDate']),
       mealType: jsonSerialization['mealType'] as String,
       title: jsonSerialization['title'] as String,
       description: jsonSerialization['description'] as String?,
-      classroomId: jsonSerialization['classroomId'] as int?,
-      createdByUserId: jsonSerialization['createdByUserId'] as int,
+      classroomId: jsonSerialization['classroomId'] == null
+          ? null
+          : _i1.UuidValueJsonExtension.fromJson(
+              jsonSerialization['classroomId']),
+      createdByUserId: _i1.UuidValueJsonExtension.fromJson(
+          jsonSerialization['createdByUserId']),
       createdAt:
           _i1.DateTimeJsonExtension.fromJson(jsonSerialization['createdAt']),
       updatedAt:
@@ -67,9 +74,9 @@ abstract class MenuEntry
   static const db = MenuEntryRepository._();
 
   @override
-  int? id;
+  _i1.UuidValue? id;
 
-  int organizationId;
+  _i1.UuidValue organizationId;
 
   DateTime menuDate;
 
@@ -79,9 +86,9 @@ abstract class MenuEntry
 
   String? description;
 
-  int? classroomId;
+  _i1.UuidValue? classroomId;
 
-  int createdByUserId;
+  _i1.UuidValue createdByUserId;
 
   DateTime createdAt;
 
@@ -90,20 +97,20 @@ abstract class MenuEntry
   DateTime? deletedAt;
 
   @override
-  _i1.Table<int?> get table => t;
+  _i1.Table<_i1.UuidValue?> get table => t;
 
   /// Returns a shallow copy of this [MenuEntry]
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
   MenuEntry copyWith({
-    int? id,
-    int? organizationId,
+    _i1.UuidValue? id,
+    _i1.UuidValue? organizationId,
     DateTime? menuDate,
     String? mealType,
     String? title,
     String? description,
-    int? classroomId,
-    int? createdByUserId,
+    _i1.UuidValue? classroomId,
+    _i1.UuidValue? createdByUserId,
     DateTime? createdAt,
     DateTime? updatedAt,
     DateTime? deletedAt,
@@ -111,14 +118,14 @@ abstract class MenuEntry
   @override
   Map<String, dynamic> toJson() {
     return {
-      if (id != null) 'id': id,
-      'organizationId': organizationId,
+      if (id != null) 'id': id?.toJson(),
+      'organizationId': organizationId.toJson(),
       'menuDate': menuDate.toJson(),
       'mealType': mealType,
       'title': title,
       if (description != null) 'description': description,
-      if (classroomId != null) 'classroomId': classroomId,
-      'createdByUserId': createdByUserId,
+      if (classroomId != null) 'classroomId': classroomId?.toJson(),
+      'createdByUserId': createdByUserId.toJson(),
       'createdAt': createdAt.toJson(),
       'updatedAt': updatedAt.toJson(),
       if (deletedAt != null) 'deletedAt': deletedAt?.toJson(),
@@ -128,14 +135,14 @@ abstract class MenuEntry
   @override
   Map<String, dynamic> toJsonForProtocol() {
     return {
-      if (id != null) 'id': id,
-      'organizationId': organizationId,
+      if (id != null) 'id': id?.toJson(),
+      'organizationId': organizationId.toJson(),
       'menuDate': menuDate.toJson(),
       'mealType': mealType,
       'title': title,
       if (description != null) 'description': description,
-      if (classroomId != null) 'classroomId': classroomId,
-      'createdByUserId': createdByUserId,
+      if (classroomId != null) 'classroomId': classroomId?.toJson(),
+      'createdByUserId': createdByUserId.toJson(),
       'createdAt': createdAt.toJson(),
       'updatedAt': updatedAt.toJson(),
       if (deletedAt != null) 'deletedAt': deletedAt?.toJson(),
@@ -176,14 +183,14 @@ class _Undefined {}
 
 class _MenuEntryImpl extends MenuEntry {
   _MenuEntryImpl({
-    int? id,
-    required int organizationId,
+    _i1.UuidValue? id,
+    required _i1.UuidValue organizationId,
     required DateTime menuDate,
     required String mealType,
     required String title,
     String? description,
-    int? classroomId,
-    required int createdByUserId,
+    _i1.UuidValue? classroomId,
+    required _i1.UuidValue createdByUserId,
     required DateTime createdAt,
     required DateTime updatedAt,
     DateTime? deletedAt,
@@ -207,25 +214,26 @@ class _MenuEntryImpl extends MenuEntry {
   @override
   MenuEntry copyWith({
     Object? id = _Undefined,
-    int? organizationId,
+    _i1.UuidValue? organizationId,
     DateTime? menuDate,
     String? mealType,
     String? title,
     Object? description = _Undefined,
     Object? classroomId = _Undefined,
-    int? createdByUserId,
+    _i1.UuidValue? createdByUserId,
     DateTime? createdAt,
     DateTime? updatedAt,
     Object? deletedAt = _Undefined,
   }) {
     return MenuEntry(
-      id: id is int? ? id : this.id,
+      id: id is _i1.UuidValue? ? id : this.id,
       organizationId: organizationId ?? this.organizationId,
       menuDate: menuDate ?? this.menuDate,
       mealType: mealType ?? this.mealType,
       title: title ?? this.title,
       description: description is String? ? description : this.description,
-      classroomId: classroomId is int? ? classroomId : this.classroomId,
+      classroomId:
+          classroomId is _i1.UuidValue? ? classroomId : this.classroomId,
       createdByUserId: createdByUserId ?? this.createdByUserId,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
@@ -234,9 +242,9 @@ class _MenuEntryImpl extends MenuEntry {
   }
 }
 
-class MenuEntryTable extends _i1.Table<int?> {
+class MenuEntryTable extends _i1.Table<_i1.UuidValue?> {
   MenuEntryTable({super.tableRelation}) : super(tableName: 'menu_entry') {
-    organizationId = _i1.ColumnInt(
+    organizationId = _i1.ColumnUuid(
       'organizationId',
       this,
     );
@@ -256,11 +264,11 @@ class MenuEntryTable extends _i1.Table<int?> {
       'description',
       this,
     );
-    classroomId = _i1.ColumnInt(
+    classroomId = _i1.ColumnUuid(
       'classroomId',
       this,
     );
-    createdByUserId = _i1.ColumnInt(
+    createdByUserId = _i1.ColumnUuid(
       'createdByUserId',
       this,
     );
@@ -278,7 +286,7 @@ class MenuEntryTable extends _i1.Table<int?> {
     );
   }
 
-  late final _i1.ColumnInt organizationId;
+  late final _i1.ColumnUuid organizationId;
 
   late final _i1.ColumnDateTime menuDate;
 
@@ -288,9 +296,9 @@ class MenuEntryTable extends _i1.Table<int?> {
 
   late final _i1.ColumnString description;
 
-  late final _i1.ColumnInt classroomId;
+  late final _i1.ColumnUuid classroomId;
 
-  late final _i1.ColumnInt createdByUserId;
+  late final _i1.ColumnUuid createdByUserId;
 
   late final _i1.ColumnDateTime createdAt;
 
@@ -321,7 +329,7 @@ class MenuEntryInclude extends _i1.IncludeObject {
   Map<String, _i1.Include?> get includes => {};
 
   @override
-  _i1.Table<int?> get table => MenuEntry.t;
+  _i1.Table<_i1.UuidValue?> get table => MenuEntry.t;
 }
 
 class MenuEntryIncludeList extends _i1.IncludeList {
@@ -341,7 +349,7 @@ class MenuEntryIncludeList extends _i1.IncludeList {
   Map<String, _i1.Include?> get includes => include?.includes ?? {};
 
   @override
-  _i1.Table<int?> get table => MenuEntry.t;
+  _i1.Table<_i1.UuidValue?> get table => MenuEntry.t;
 }
 
 class MenuEntryRepository {
@@ -429,7 +437,7 @@ class MenuEntryRepository {
   /// Finds a single [MenuEntry] by its [id] or null if no such row exists.
   Future<MenuEntry?> findById(
     _i1.Session session,
-    int id, {
+    _i1.UuidValue id, {
     _i1.Transaction? transaction,
   }) async {
     return session.db.findById<MenuEntry>(

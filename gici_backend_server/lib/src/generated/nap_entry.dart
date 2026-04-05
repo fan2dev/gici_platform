@@ -12,7 +12,7 @@
 import 'package:serverpod/serverpod.dart' as _i1;
 
 abstract class NapEntry
-    implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
+    implements _i1.TableRow<_i1.UuidValue?>, _i1.ProtocolSerialization {
   NapEntry._({
     this.id,
     required this.organizationId,
@@ -28,10 +28,10 @@ abstract class NapEntry
   });
 
   factory NapEntry({
-    int? id,
-    required int organizationId,
-    required int childId,
-    required int recordedByUserId,
+    _i1.UuidValue? id,
+    required _i1.UuidValue organizationId,
+    required _i1.UuidValue childId,
+    required _i1.UuidValue recordedByUserId,
     required DateTime startedAt,
     DateTime? endedAt,
     int? durationMinutes,
@@ -43,10 +43,15 @@ abstract class NapEntry
 
   factory NapEntry.fromJson(Map<String, dynamic> jsonSerialization) {
     return NapEntry(
-      id: jsonSerialization['id'] as int?,
-      organizationId: jsonSerialization['organizationId'] as int,
-      childId: jsonSerialization['childId'] as int,
-      recordedByUserId: jsonSerialization['recordedByUserId'] as int,
+      id: jsonSerialization['id'] == null
+          ? null
+          : _i1.UuidValueJsonExtension.fromJson(jsonSerialization['id']),
+      organizationId: _i1.UuidValueJsonExtension.fromJson(
+          jsonSerialization['organizationId']),
+      childId:
+          _i1.UuidValueJsonExtension.fromJson(jsonSerialization['childId']),
+      recordedByUserId: _i1.UuidValueJsonExtension.fromJson(
+          jsonSerialization['recordedByUserId']),
       startedAt:
           _i1.DateTimeJsonExtension.fromJson(jsonSerialization['startedAt']),
       endedAt: jsonSerialization['endedAt'] == null
@@ -67,13 +72,13 @@ abstract class NapEntry
   static const db = NapEntryRepository._();
 
   @override
-  int? id;
+  _i1.UuidValue? id;
 
-  int organizationId;
+  _i1.UuidValue organizationId;
 
-  int childId;
+  _i1.UuidValue childId;
 
-  int recordedByUserId;
+  _i1.UuidValue recordedByUserId;
 
   DateTime startedAt;
 
@@ -90,16 +95,16 @@ abstract class NapEntry
   DateTime updatedAt;
 
   @override
-  _i1.Table<int?> get table => t;
+  _i1.Table<_i1.UuidValue?> get table => t;
 
   /// Returns a shallow copy of this [NapEntry]
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
   NapEntry copyWith({
-    int? id,
-    int? organizationId,
-    int? childId,
-    int? recordedByUserId,
+    _i1.UuidValue? id,
+    _i1.UuidValue? organizationId,
+    _i1.UuidValue? childId,
+    _i1.UuidValue? recordedByUserId,
     DateTime? startedAt,
     DateTime? endedAt,
     int? durationMinutes,
@@ -111,10 +116,10 @@ abstract class NapEntry
   @override
   Map<String, dynamic> toJson() {
     return {
-      if (id != null) 'id': id,
-      'organizationId': organizationId,
-      'childId': childId,
-      'recordedByUserId': recordedByUserId,
+      if (id != null) 'id': id?.toJson(),
+      'organizationId': organizationId.toJson(),
+      'childId': childId.toJson(),
+      'recordedByUserId': recordedByUserId.toJson(),
       'startedAt': startedAt.toJson(),
       if (endedAt != null) 'endedAt': endedAt?.toJson(),
       if (durationMinutes != null) 'durationMinutes': durationMinutes,
@@ -128,10 +133,10 @@ abstract class NapEntry
   @override
   Map<String, dynamic> toJsonForProtocol() {
     return {
-      if (id != null) 'id': id,
-      'organizationId': organizationId,
-      'childId': childId,
-      'recordedByUserId': recordedByUserId,
+      if (id != null) 'id': id?.toJson(),
+      'organizationId': organizationId.toJson(),
+      'childId': childId.toJson(),
+      'recordedByUserId': recordedByUserId.toJson(),
       'startedAt': startedAt.toJson(),
       if (endedAt != null) 'endedAt': endedAt?.toJson(),
       if (durationMinutes != null) 'durationMinutes': durationMinutes,
@@ -176,10 +181,10 @@ class _Undefined {}
 
 class _NapEntryImpl extends NapEntry {
   _NapEntryImpl({
-    int? id,
-    required int organizationId,
-    required int childId,
-    required int recordedByUserId,
+    _i1.UuidValue? id,
+    required _i1.UuidValue organizationId,
+    required _i1.UuidValue childId,
+    required _i1.UuidValue recordedByUserId,
     required DateTime startedAt,
     DateTime? endedAt,
     int? durationMinutes,
@@ -207,9 +212,9 @@ class _NapEntryImpl extends NapEntry {
   @override
   NapEntry copyWith({
     Object? id = _Undefined,
-    int? organizationId,
-    int? childId,
-    int? recordedByUserId,
+    _i1.UuidValue? organizationId,
+    _i1.UuidValue? childId,
+    _i1.UuidValue? recordedByUserId,
     DateTime? startedAt,
     Object? endedAt = _Undefined,
     Object? durationMinutes = _Undefined,
@@ -219,7 +224,7 @@ class _NapEntryImpl extends NapEntry {
     DateTime? updatedAt,
   }) {
     return NapEntry(
-      id: id is int? ? id : this.id,
+      id: id is _i1.UuidValue? ? id : this.id,
       organizationId: organizationId ?? this.organizationId,
       childId: childId ?? this.childId,
       recordedByUserId: recordedByUserId ?? this.recordedByUserId,
@@ -235,17 +240,17 @@ class _NapEntryImpl extends NapEntry {
   }
 }
 
-class NapEntryTable extends _i1.Table<int?> {
+class NapEntryTable extends _i1.Table<_i1.UuidValue?> {
   NapEntryTable({super.tableRelation}) : super(tableName: 'nap_entry') {
-    organizationId = _i1.ColumnInt(
+    organizationId = _i1.ColumnUuid(
       'organizationId',
       this,
     );
-    childId = _i1.ColumnInt(
+    childId = _i1.ColumnUuid(
       'childId',
       this,
     );
-    recordedByUserId = _i1.ColumnInt(
+    recordedByUserId = _i1.ColumnUuid(
       'recordedByUserId',
       this,
     );
@@ -279,11 +284,11 @@ class NapEntryTable extends _i1.Table<int?> {
     );
   }
 
-  late final _i1.ColumnInt organizationId;
+  late final _i1.ColumnUuid organizationId;
 
-  late final _i1.ColumnInt childId;
+  late final _i1.ColumnUuid childId;
 
-  late final _i1.ColumnInt recordedByUserId;
+  late final _i1.ColumnUuid recordedByUserId;
 
   late final _i1.ColumnDateTime startedAt;
 
@@ -322,7 +327,7 @@ class NapEntryInclude extends _i1.IncludeObject {
   Map<String, _i1.Include?> get includes => {};
 
   @override
-  _i1.Table<int?> get table => NapEntry.t;
+  _i1.Table<_i1.UuidValue?> get table => NapEntry.t;
 }
 
 class NapEntryIncludeList extends _i1.IncludeList {
@@ -342,7 +347,7 @@ class NapEntryIncludeList extends _i1.IncludeList {
   Map<String, _i1.Include?> get includes => include?.includes ?? {};
 
   @override
-  _i1.Table<int?> get table => NapEntry.t;
+  _i1.Table<_i1.UuidValue?> get table => NapEntry.t;
 }
 
 class NapEntryRepository {
@@ -430,7 +435,7 @@ class NapEntryRepository {
   /// Finds a single [NapEntry] by its [id] or null if no such row exists.
   Future<NapEntry?> findById(
     _i1.Session session,
-    int id, {
+    _i1.UuidValue id, {
     _i1.Transaction? transaction,
   }) async {
     return session.db.findById<NapEntry>(

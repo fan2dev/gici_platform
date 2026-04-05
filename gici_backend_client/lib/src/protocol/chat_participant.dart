@@ -26,12 +26,12 @@ abstract class ChatParticipant implements _i1.SerializableModel {
   });
 
   factory ChatParticipant({
-    int? id,
-    required int organizationId,
-    required int conversationId,
-    required int userId,
+    _i1.UuidValue? id,
+    required _i1.UuidValue organizationId,
+    required _i1.UuidValue conversationId,
+    required _i1.UuidValue userId,
     required DateTime joinedAt,
-    int? lastReadMessageId,
+    _i1.UuidValue? lastReadMessageId,
     DateTime? lastReadAt,
     required bool isActive,
     required DateTime createdAt,
@@ -40,13 +40,20 @@ abstract class ChatParticipant implements _i1.SerializableModel {
 
   factory ChatParticipant.fromJson(Map<String, dynamic> jsonSerialization) {
     return ChatParticipant(
-      id: jsonSerialization['id'] as int?,
-      organizationId: jsonSerialization['organizationId'] as int,
-      conversationId: jsonSerialization['conversationId'] as int,
-      userId: jsonSerialization['userId'] as int,
+      id: jsonSerialization['id'] == null
+          ? null
+          : _i1.UuidValueJsonExtension.fromJson(jsonSerialization['id']),
+      organizationId: _i1.UuidValueJsonExtension.fromJson(
+          jsonSerialization['organizationId']),
+      conversationId: _i1.UuidValueJsonExtension.fromJson(
+          jsonSerialization['conversationId']),
+      userId: _i1.UuidValueJsonExtension.fromJson(jsonSerialization['userId']),
       joinedAt:
           _i1.DateTimeJsonExtension.fromJson(jsonSerialization['joinedAt']),
-      lastReadMessageId: jsonSerialization['lastReadMessageId'] as int?,
+      lastReadMessageId: jsonSerialization['lastReadMessageId'] == null
+          ? null
+          : _i1.UuidValueJsonExtension.fromJson(
+              jsonSerialization['lastReadMessageId']),
       lastReadAt: jsonSerialization['lastReadAt'] == null
           ? null
           : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['lastReadAt']),
@@ -61,17 +68,17 @@ abstract class ChatParticipant implements _i1.SerializableModel {
   /// The database id, set if the object has been inserted into the
   /// database or if it has been fetched from the database. Otherwise,
   /// the id will be null.
-  int? id;
+  _i1.UuidValue? id;
 
-  int organizationId;
+  _i1.UuidValue organizationId;
 
-  int conversationId;
+  _i1.UuidValue conversationId;
 
-  int userId;
+  _i1.UuidValue userId;
 
   DateTime joinedAt;
 
-  int? lastReadMessageId;
+  _i1.UuidValue? lastReadMessageId;
 
   DateTime? lastReadAt;
 
@@ -85,12 +92,12 @@ abstract class ChatParticipant implements _i1.SerializableModel {
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
   ChatParticipant copyWith({
-    int? id,
-    int? organizationId,
-    int? conversationId,
-    int? userId,
+    _i1.UuidValue? id,
+    _i1.UuidValue? organizationId,
+    _i1.UuidValue? conversationId,
+    _i1.UuidValue? userId,
     DateTime? joinedAt,
-    int? lastReadMessageId,
+    _i1.UuidValue? lastReadMessageId,
     DateTime? lastReadAt,
     bool? isActive,
     DateTime? createdAt,
@@ -99,12 +106,13 @@ abstract class ChatParticipant implements _i1.SerializableModel {
   @override
   Map<String, dynamic> toJson() {
     return {
-      if (id != null) 'id': id,
-      'organizationId': organizationId,
-      'conversationId': conversationId,
-      'userId': userId,
+      if (id != null) 'id': id?.toJson(),
+      'organizationId': organizationId.toJson(),
+      'conversationId': conversationId.toJson(),
+      'userId': userId.toJson(),
       'joinedAt': joinedAt.toJson(),
-      if (lastReadMessageId != null) 'lastReadMessageId': lastReadMessageId,
+      if (lastReadMessageId != null)
+        'lastReadMessageId': lastReadMessageId?.toJson(),
       if (lastReadAt != null) 'lastReadAt': lastReadAt?.toJson(),
       'isActive': isActive,
       'createdAt': createdAt.toJson(),
@@ -122,12 +130,12 @@ class _Undefined {}
 
 class _ChatParticipantImpl extends ChatParticipant {
   _ChatParticipantImpl({
-    int? id,
-    required int organizationId,
-    required int conversationId,
-    required int userId,
+    _i1.UuidValue? id,
+    required _i1.UuidValue organizationId,
+    required _i1.UuidValue conversationId,
+    required _i1.UuidValue userId,
     required DateTime joinedAt,
-    int? lastReadMessageId,
+    _i1.UuidValue? lastReadMessageId,
     DateTime? lastReadAt,
     required bool isActive,
     required DateTime createdAt,
@@ -151,9 +159,9 @@ class _ChatParticipantImpl extends ChatParticipant {
   @override
   ChatParticipant copyWith({
     Object? id = _Undefined,
-    int? organizationId,
-    int? conversationId,
-    int? userId,
+    _i1.UuidValue? organizationId,
+    _i1.UuidValue? conversationId,
+    _i1.UuidValue? userId,
     DateTime? joinedAt,
     Object? lastReadMessageId = _Undefined,
     Object? lastReadAt = _Undefined,
@@ -162,12 +170,12 @@ class _ChatParticipantImpl extends ChatParticipant {
     DateTime? updatedAt,
   }) {
     return ChatParticipant(
-      id: id is int? ? id : this.id,
+      id: id is _i1.UuidValue? ? id : this.id,
       organizationId: organizationId ?? this.organizationId,
       conversationId: conversationId ?? this.conversationId,
       userId: userId ?? this.userId,
       joinedAt: joinedAt ?? this.joinedAt,
-      lastReadMessageId: lastReadMessageId is int?
+      lastReadMessageId: lastReadMessageId is _i1.UuidValue?
           ? lastReadMessageId
           : this.lastReadMessageId,
       lastReadAt: lastReadAt is DateTime? ? lastReadAt : this.lastReadAt,

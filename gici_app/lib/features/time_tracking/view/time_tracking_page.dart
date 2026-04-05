@@ -13,7 +13,6 @@ class TimeTrackingPage extends StatelessWidget {
   Future<void> _openCorrectionDialog(
     BuildContext context,
     TimeTrackingRepository repo,
-    AuthState auth,
     TimeEntry target,
   ) async {
     final reasonController = TextEditingController();
@@ -36,15 +35,11 @@ class TimeTrackingPage extends StatelessWidget {
           FilledButton(
             onPressed: () async {
               final reason = reasonController.text.trim();
-              if (reason.isEmpty ||
-                  auth.organizationId == null ||
-                  auth.actorId == null) {
+              if (reason.isEmpty) {
                 return;
               }
 
               await repo.correctEntry(
-                organizationId: auth.organizationId!,
-                actorId: auth.actorId!,
                 targetEntryId: target.id!,
                 correctedEntryType: target.entryType == 'check_in'
                     ? 'check_out'
@@ -75,13 +70,9 @@ class TimeTrackingPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final authState = context.watch<AuthCubit>().state;
     final repo = sl<TimeTrackingRepository>();
-    final canViewOrganization =
-        authState.role == AppRole.organizationAdmin ||
-        authState.role == AppRole.platformSuperAdmin;
+    final canViewOrganization = authState.isAdmin;
 
-    if (!authState.isAuthenticated ||
-        authState.organizationId == null ||
-        authState.actorId == null) {
+    if (!authState.isAuthenticated || authState.organizationId == null) {
       return const Scaffold(body: Center(child: Text('Unauthorized')));
     }
 
@@ -95,8 +86,6 @@ class TimeTrackingPage extends StatelessWidget {
       ),
       body: FutureBuilder<List<TimeEntry>>(
         future: repo.myEntries(
-          organizationId: authState.organizationId!,
-          actorId: authState.actorId!,
           page: 0,
           pageSize: 20,
         ),
@@ -118,8 +107,6 @@ class TimeTrackingPage extends StatelessWidget {
                     FilledButton(
                       onPressed: () async {
                         await repo.checkIn(
-                          organizationId: authState.organizationId!,
-                          actorId: authState.actorId!,
                           notes: 'Mobile check-in',
                         );
                         if (context.mounted) {
@@ -135,8 +122,6 @@ class TimeTrackingPage extends StatelessWidget {
                     OutlinedButton(
                       onPressed: () async {
                         await repo.checkOut(
-                          organizationId: authState.organizationId!,
-                          actorId: authState.actorId!,
                           notes: 'Mobile check-out',
                         );
                         if (context.mounted) {
@@ -176,8 +161,6 @@ class TimeTrackingPage extends StatelessWidget {
                         const SizedBox(height: 8),
                         FutureBuilder<List<TimeEntry>>(
                           future: repo.listEntries(
-                            organizationId: authState.organizationId!,
-                            actorId: authState.actorId!,
                             page: 0,
                             pageSize: 50,
                           ),
@@ -211,7 +194,6 @@ class TimeTrackingPage extends StatelessWidget {
                                     onPressed: () => _openCorrectionDialog(
                                       context,
                                       repo,
-                                      authState,
                                       entry,
                                     ),
                                     child: const Text('Correct'),

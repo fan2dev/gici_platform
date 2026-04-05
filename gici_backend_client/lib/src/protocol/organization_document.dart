@@ -26,13 +26,13 @@ abstract class OrganizationDocument implements _i1.SerializableModel {
   });
 
   factory OrganizationDocument({
-    int? id,
-    required int organizationId,
-    required int fileAssetId,
+    _i1.UuidValue? id,
+    required _i1.UuidValue organizationId,
+    required _i1.UuidValue fileAssetId,
     required String title,
     String? description,
     required String visibility,
-    required int createdByUserId,
+    required _i1.UuidValue createdByUserId,
     required DateTime createdAt,
     required DateTime updatedAt,
     DateTime? deletedAt,
@@ -41,13 +41,18 @@ abstract class OrganizationDocument implements _i1.SerializableModel {
   factory OrganizationDocument.fromJson(
       Map<String, dynamic> jsonSerialization) {
     return OrganizationDocument(
-      id: jsonSerialization['id'] as int?,
-      organizationId: jsonSerialization['organizationId'] as int,
-      fileAssetId: jsonSerialization['fileAssetId'] as int,
+      id: jsonSerialization['id'] == null
+          ? null
+          : _i1.UuidValueJsonExtension.fromJson(jsonSerialization['id']),
+      organizationId: _i1.UuidValueJsonExtension.fromJson(
+          jsonSerialization['organizationId']),
+      fileAssetId:
+          _i1.UuidValueJsonExtension.fromJson(jsonSerialization['fileAssetId']),
       title: jsonSerialization['title'] as String,
       description: jsonSerialization['description'] as String?,
       visibility: jsonSerialization['visibility'] as String,
-      createdByUserId: jsonSerialization['createdByUserId'] as int,
+      createdByUserId: _i1.UuidValueJsonExtension.fromJson(
+          jsonSerialization['createdByUserId']),
       createdAt:
           _i1.DateTimeJsonExtension.fromJson(jsonSerialization['createdAt']),
       updatedAt:
@@ -61,11 +66,11 @@ abstract class OrganizationDocument implements _i1.SerializableModel {
   /// The database id, set if the object has been inserted into the
   /// database or if it has been fetched from the database. Otherwise,
   /// the id will be null.
-  int? id;
+  _i1.UuidValue? id;
 
-  int organizationId;
+  _i1.UuidValue organizationId;
 
-  int fileAssetId;
+  _i1.UuidValue fileAssetId;
 
   String title;
 
@@ -73,7 +78,7 @@ abstract class OrganizationDocument implements _i1.SerializableModel {
 
   String visibility;
 
-  int createdByUserId;
+  _i1.UuidValue createdByUserId;
 
   DateTime createdAt;
 
@@ -85,13 +90,13 @@ abstract class OrganizationDocument implements _i1.SerializableModel {
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
   OrganizationDocument copyWith({
-    int? id,
-    int? organizationId,
-    int? fileAssetId,
+    _i1.UuidValue? id,
+    _i1.UuidValue? organizationId,
+    _i1.UuidValue? fileAssetId,
     String? title,
     String? description,
     String? visibility,
-    int? createdByUserId,
+    _i1.UuidValue? createdByUserId,
     DateTime? createdAt,
     DateTime? updatedAt,
     DateTime? deletedAt,
@@ -99,13 +104,13 @@ abstract class OrganizationDocument implements _i1.SerializableModel {
   @override
   Map<String, dynamic> toJson() {
     return {
-      if (id != null) 'id': id,
-      'organizationId': organizationId,
-      'fileAssetId': fileAssetId,
+      if (id != null) 'id': id?.toJson(),
+      'organizationId': organizationId.toJson(),
+      'fileAssetId': fileAssetId.toJson(),
       'title': title,
       if (description != null) 'description': description,
       'visibility': visibility,
-      'createdByUserId': createdByUserId,
+      'createdByUserId': createdByUserId.toJson(),
       'createdAt': createdAt.toJson(),
       'updatedAt': updatedAt.toJson(),
       if (deletedAt != null) 'deletedAt': deletedAt?.toJson(),
@@ -122,13 +127,13 @@ class _Undefined {}
 
 class _OrganizationDocumentImpl extends OrganizationDocument {
   _OrganizationDocumentImpl({
-    int? id,
-    required int organizationId,
-    required int fileAssetId,
+    _i1.UuidValue? id,
+    required _i1.UuidValue organizationId,
+    required _i1.UuidValue fileAssetId,
     required String title,
     String? description,
     required String visibility,
-    required int createdByUserId,
+    required _i1.UuidValue createdByUserId,
     required DateTime createdAt,
     required DateTime updatedAt,
     DateTime? deletedAt,
@@ -151,18 +156,18 @@ class _OrganizationDocumentImpl extends OrganizationDocument {
   @override
   OrganizationDocument copyWith({
     Object? id = _Undefined,
-    int? organizationId,
-    int? fileAssetId,
+    _i1.UuidValue? organizationId,
+    _i1.UuidValue? fileAssetId,
     String? title,
     Object? description = _Undefined,
     String? visibility,
-    int? createdByUserId,
+    _i1.UuidValue? createdByUserId,
     DateTime? createdAt,
     DateTime? updatedAt,
     Object? deletedAt = _Undefined,
   }) {
     return OrganizationDocument(
-      id: id is int? ? id : this.id,
+      id: id is _i1.UuidValue? ? id : this.id,
       organizationId: organizationId ?? this.organizationId,
       fileAssetId: fileAssetId ?? this.fileAssetId,
       title: title ?? this.title,

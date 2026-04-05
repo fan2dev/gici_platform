@@ -5,9 +5,10 @@ class: ChildGuardianRelation
 table: child_guardian_relation
 
 fields:
-  organizationId: int
-  childId: int
-  guardianUserId: int
+  id: UuidValue?, defaultPersist=random
+  organizationId: UuidValue
+  childId: UuidValue
+  guardianUserId: UuidValue
   relation: String
   isPrimary: bool
   canPickup: bool
@@ -27,4 +28,3 @@ indexes:
   cgr_unique_relation:
     fields: childId, guardianUserId
     unique: true
-

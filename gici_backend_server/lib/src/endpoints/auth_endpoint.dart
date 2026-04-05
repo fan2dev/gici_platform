@@ -4,32 +4,49 @@ import '../generated/protocol.dart';
 import '../services/auth_service.dart';
 
 class AuthEndpoint extends Endpoint {
-  AuthEndpoint();
-
   final _authService = const AuthService();
 
+  /// Sign in with email and password.
+  /// Returns [AuthSession] with user info and creates a session token
+  /// that the client will automatically include in subsequent requests.
   Future<AuthSession> signInWithEmailPassword(
     Session session, {
     required String email,
     required String password,
   }) async {
-    final authSession = await _authService.signInWithEmailPassword(
+    return await _authService.signInWithEmailPassword(
       session,
       email: email,
       password: password,
     );
-
-    if (authSession == null) {
-      throw Exception('Invalid credentials.');
-    }
-
-    return authSession;
   }
 
-  Future<AuthSession?> me(
+  /// Get current authenticated user's session info.
+  /// Uses the session token to identify the user — no parameters needed.
+  Future<AuthSession?> me(Session session) {
+    return _authService.me(session);
+  }
+
+  /// Request a password reset code sent to the user's email.
+  Future<bool> requestPasswordReset(
     Session session, {
-    required int appUserId,
+    required String email,
   }) {
-    return _authService.me(session, appUserId: appUserId);
+    return _authService.requestPasswordReset(session, email: email);
+  }
+
+  /// Reset password using a verification code.
+  Future<bool> resetPassword(
+    Session session, {
+    required String email,
+    required String code,
+    required String newPassword,
+  }) {
+    return _authService.resetPassword(
+      session,
+      email: email,
+      code: code,
+      newPassword: newPassword,
+    );
   }
 }

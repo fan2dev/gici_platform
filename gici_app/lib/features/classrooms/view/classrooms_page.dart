@@ -32,16 +32,11 @@ class _ClassroomsPageState extends State<ClassroomsPage> {
     final classroomRepo = sl<ClassroomRepository>();
     final childRepo = sl<ChildRepository>();
 
-    if (!auth.isAuthenticated ||
-        auth.organizationId == null ||
-        auth.actorId == null) {
+    if (!auth.isAuthenticated || auth.organizationId == null) {
       return const Scaffold(body: Center(child: Text('Unauthorized')));
     }
 
-    final canManage =
-        auth.role == AppRole.organizationAdmin ||
-        auth.role == AppRole.staff ||
-        auth.role == AppRole.platformSuperAdmin;
+    final canManage = auth.isStaffOrAbove;
 
     return Scaffold(
       appBar: AppBar(
@@ -53,8 +48,6 @@ class _ClassroomsPageState extends State<ClassroomsPage> {
       ),
       body: FutureBuilder<List<Classroom>>(
         future: classroomRepo.listClassrooms(
-          organizationId: auth.organizationId!,
-          actorId: auth.actorId!,
           page: 0,
           pageSize: 100,
         ),
@@ -70,8 +63,6 @@ class _ClassroomsPageState extends State<ClassroomsPage> {
 
           return FutureBuilder<List<Child>>(
             future: childRepo.listChildren(
-              organizationId: auth.organizationId!,
-              actorId: auth.actorId!,
               page: 0,
               pageSize: 200,
             ),
@@ -110,8 +101,6 @@ class _ClassroomsPageState extends State<ClassroomsPage> {
                               final capacity =
                                   int.tryParse(_capacityController.text) ?? 20;
                               await classroomRepo.createClassroom(
-                                organizationId: auth.organizationId!,
-                                actorId: auth.actorId!,
                                 name: _nameController.text.trim(),
                                 capacity: capacity,
                               );
@@ -158,9 +147,6 @@ class _ClassroomsPageState extends State<ClassroomsPage> {
                                         onPressed: () async {
                                           await classroomRepo
                                               .assignChildToClassroom(
-                                                organizationId:
-                                                    auth.organizationId!,
-                                                actorId: auth.actorId!,
                                                 classroomId: classroom.id!,
                                                 childId: child.id!,
                                               );

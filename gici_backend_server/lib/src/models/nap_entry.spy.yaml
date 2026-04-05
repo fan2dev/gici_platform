@@ -5,9 +5,10 @@ class: NapEntry
 table: nap_entry
 
 fields:
-  organizationId: int
-  childId: int
-  recordedByUserId: int
+  id: UuidValue?, defaultPersist=random
+  organizationId: UuidValue
+  childId: UuidValue
+  recordedByUserId: UuidValue
   startedAt: DateTime
   endedAt: DateTime?
   durationMinutes: int?
@@ -25,4 +26,3 @@ indexes:
     fields: startedAt
   nap_child_date_idx:
     fields: childId, startedAt
-

@@ -23,22 +23,16 @@ class _GalleriesPageState extends State<GalleriesPage> {
     super.dispose();
   }
 
-  bool _canManage(AppRole? role) {
-    return role == AppRole.organizationAdmin ||
-        role == AppRole.platformSuperAdmin ||
-        role == AppRole.staff;
-  }
-
   @override
   Widget build(BuildContext context) {
     final auth = context.watch<AuthCubit>().state;
     final repo = sl<GalleryRepository>();
 
-    if (!auth.isAuthenticated ||
-        auth.organizationId == null ||
-        auth.actorId == null) {
+    if (!auth.isAuthenticated || auth.organizationId == null) {
       return const Scaffold(body: Center(child: Text('Unauthorized')));
     }
+
+    final canManage = auth.isStaffOrAbove;
 
     return Scaffold(
       appBar: AppBar(
@@ -50,8 +44,6 @@ class _GalleriesPageState extends State<GalleriesPage> {
       ),
       body: FutureBuilder<List<Gallery>>(
         future: repo.listGalleries(
-          organizationId: auth.organizationId!,
-          actorId: auth.actorId!,
           page: 0,
           pageSize: 100,
         ),
@@ -67,7 +59,7 @@ class _GalleriesPageState extends State<GalleriesPage> {
           return ListView(
             padding: const EdgeInsets.all(16),
             children: [
-              if (_canManage(auth.role))
+              if (canManage)
                 Row(
                   children: [
                     Expanded(
@@ -84,8 +76,6 @@ class _GalleriesPageState extends State<GalleriesPage> {
                         final title = _titleController.text.trim();
                         if (title.isEmpty) return;
                         await repo.createGallery(
-                          organizationId: auth.organizationId!,
-                          actorId: auth.actorId!,
                           title: title,
                           description: 'Created from app UI',
                         );
@@ -96,7 +86,7 @@ class _GalleriesPageState extends State<GalleriesPage> {
                     ),
                   ],
                 ),
-              if (_canManage(auth.role)) const SizedBox(height: 12),
+              if (canManage) const SizedBox(height: 12),
               if (galleries.isEmpty)
                 const Text('No galleries yet.')
               else
@@ -109,8 +99,6 @@ class _GalleriesPageState extends State<GalleriesPage> {
                     children: [
                       FutureBuilder<List<GalleryItem>>(
                         future: repo.listGalleryItems(
-                          organizationId: auth.organizationId!,
-                          actorId: auth.actorId!,
                           galleryId: gallery.id!,
                           page: 0,
                           pageSize: 50,

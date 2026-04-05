@@ -12,7 +12,7 @@
 import 'package:serverpod/serverpod.dart' as _i1;
 
 abstract class MealEntry
-    implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
+    implements _i1.TableRow<_i1.UuidValue?>, _i1.ProtocolSerialization {
   MealEntry._({
     this.id,
     required this.organizationId,
@@ -29,10 +29,10 @@ abstract class MealEntry
   });
 
   factory MealEntry({
-    int? id,
-    required int organizationId,
-    required int childId,
-    required int recordedByUserId,
+    _i1.UuidValue? id,
+    required _i1.UuidValue organizationId,
+    required _i1.UuidValue childId,
+    required _i1.UuidValue recordedByUserId,
     required String mealType,
     required String consumptionLevel,
     required DateTime recordedAt,
@@ -45,10 +45,15 @@ abstract class MealEntry
 
   factory MealEntry.fromJson(Map<String, dynamic> jsonSerialization) {
     return MealEntry(
-      id: jsonSerialization['id'] as int?,
-      organizationId: jsonSerialization['organizationId'] as int,
-      childId: jsonSerialization['childId'] as int,
-      recordedByUserId: jsonSerialization['recordedByUserId'] as int,
+      id: jsonSerialization['id'] == null
+          ? null
+          : _i1.UuidValueJsonExtension.fromJson(jsonSerialization['id']),
+      organizationId: _i1.UuidValueJsonExtension.fromJson(
+          jsonSerialization['organizationId']),
+      childId:
+          _i1.UuidValueJsonExtension.fromJson(jsonSerialization['childId']),
+      recordedByUserId: _i1.UuidValueJsonExtension.fromJson(
+          jsonSerialization['recordedByUserId']),
       mealType: jsonSerialization['mealType'] as String,
       consumptionLevel: jsonSerialization['consumptionLevel'] as String,
       recordedAt:
@@ -68,13 +73,13 @@ abstract class MealEntry
   static const db = MealEntryRepository._();
 
   @override
-  int? id;
+  _i1.UuidValue? id;
 
-  int organizationId;
+  _i1.UuidValue organizationId;
 
-  int childId;
+  _i1.UuidValue childId;
 
-  int recordedByUserId;
+  _i1.UuidValue recordedByUserId;
 
   String mealType;
 
@@ -93,16 +98,16 @@ abstract class MealEntry
   DateTime updatedAt;
 
   @override
-  _i1.Table<int?> get table => t;
+  _i1.Table<_i1.UuidValue?> get table => t;
 
   /// Returns a shallow copy of this [MealEntry]
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
   MealEntry copyWith({
-    int? id,
-    int? organizationId,
-    int? childId,
-    int? recordedByUserId,
+    _i1.UuidValue? id,
+    _i1.UuidValue? organizationId,
+    _i1.UuidValue? childId,
+    _i1.UuidValue? recordedByUserId,
     String? mealType,
     String? consumptionLevel,
     DateTime? recordedAt,
@@ -115,10 +120,10 @@ abstract class MealEntry
   @override
   Map<String, dynamic> toJson() {
     return {
-      if (id != null) 'id': id,
-      'organizationId': organizationId,
-      'childId': childId,
-      'recordedByUserId': recordedByUserId,
+      if (id != null) 'id': id?.toJson(),
+      'organizationId': organizationId.toJson(),
+      'childId': childId.toJson(),
+      'recordedByUserId': recordedByUserId.toJson(),
       'mealType': mealType,
       'consumptionLevel': consumptionLevel,
       'recordedAt': recordedAt.toJson(),
@@ -133,10 +138,10 @@ abstract class MealEntry
   @override
   Map<String, dynamic> toJsonForProtocol() {
     return {
-      if (id != null) 'id': id,
-      'organizationId': organizationId,
-      'childId': childId,
-      'recordedByUserId': recordedByUserId,
+      if (id != null) 'id': id?.toJson(),
+      'organizationId': organizationId.toJson(),
+      'childId': childId.toJson(),
+      'recordedByUserId': recordedByUserId.toJson(),
       'mealType': mealType,
       'consumptionLevel': consumptionLevel,
       'recordedAt': recordedAt.toJson(),
@@ -182,10 +187,10 @@ class _Undefined {}
 
 class _MealEntryImpl extends MealEntry {
   _MealEntryImpl({
-    int? id,
-    required int organizationId,
-    required int childId,
-    required int recordedByUserId,
+    _i1.UuidValue? id,
+    required _i1.UuidValue organizationId,
+    required _i1.UuidValue childId,
+    required _i1.UuidValue recordedByUserId,
     required String mealType,
     required String consumptionLevel,
     required DateTime recordedAt,
@@ -215,9 +220,9 @@ class _MealEntryImpl extends MealEntry {
   @override
   MealEntry copyWith({
     Object? id = _Undefined,
-    int? organizationId,
-    int? childId,
-    int? recordedByUserId,
+    _i1.UuidValue? organizationId,
+    _i1.UuidValue? childId,
+    _i1.UuidValue? recordedByUserId,
     String? mealType,
     String? consumptionLevel,
     DateTime? recordedAt,
@@ -228,7 +233,7 @@ class _MealEntryImpl extends MealEntry {
     DateTime? updatedAt,
   }) {
     return MealEntry(
-      id: id is int? ? id : this.id,
+      id: id is _i1.UuidValue? ? id : this.id,
       organizationId: organizationId ?? this.organizationId,
       childId: childId ?? this.childId,
       recordedByUserId: recordedByUserId ?? this.recordedByUserId,
@@ -244,17 +249,17 @@ class _MealEntryImpl extends MealEntry {
   }
 }
 
-class MealEntryTable extends _i1.Table<int?> {
+class MealEntryTable extends _i1.Table<_i1.UuidValue?> {
   MealEntryTable({super.tableRelation}) : super(tableName: 'meal_entry') {
-    organizationId = _i1.ColumnInt(
+    organizationId = _i1.ColumnUuid(
       'organizationId',
       this,
     );
-    childId = _i1.ColumnInt(
+    childId = _i1.ColumnUuid(
       'childId',
       this,
     );
-    recordedByUserId = _i1.ColumnInt(
+    recordedByUserId = _i1.ColumnUuid(
       'recordedByUserId',
       this,
     );
@@ -292,11 +297,11 @@ class MealEntryTable extends _i1.Table<int?> {
     );
   }
 
-  late final _i1.ColumnInt organizationId;
+  late final _i1.ColumnUuid organizationId;
 
-  late final _i1.ColumnInt childId;
+  late final _i1.ColumnUuid childId;
 
-  late final _i1.ColumnInt recordedByUserId;
+  late final _i1.ColumnUuid recordedByUserId;
 
   late final _i1.ColumnString mealType;
 
@@ -338,7 +343,7 @@ class MealEntryInclude extends _i1.IncludeObject {
   Map<String, _i1.Include?> get includes => {};
 
   @override
-  _i1.Table<int?> get table => MealEntry.t;
+  _i1.Table<_i1.UuidValue?> get table => MealEntry.t;
 }
 
 class MealEntryIncludeList extends _i1.IncludeList {
@@ -358,7 +363,7 @@ class MealEntryIncludeList extends _i1.IncludeList {
   Map<String, _i1.Include?> get includes => include?.includes ?? {};
 
   @override
-  _i1.Table<int?> get table => MealEntry.t;
+  _i1.Table<_i1.UuidValue?> get table => MealEntry.t;
 }
 
 class MealEntryRepository {
@@ -446,7 +451,7 @@ class MealEntryRepository {
   /// Finds a single [MealEntry] by its [id] or null if no such row exists.
   Future<MealEntry?> findById(
     _i1.Session session,
-    int id, {
+    _i1.UuidValue id, {
     _i1.Transaction? transaction,
   }) async {
     return session.db.findById<MealEntry>(

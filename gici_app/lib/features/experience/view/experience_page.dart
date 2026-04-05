@@ -15,22 +15,16 @@ class ExperiencePage extends StatefulWidget {
 }
 
 class _ExperiencePageState extends State<ExperiencePage> {
-  bool _canManageMenu(AppRole? role) {
-    return role == AppRole.organizationAdmin ||
-        role == AppRole.platformSuperAdmin ||
-        role == AppRole.staff;
-  }
-
   @override
   Widget build(BuildContext context) {
     final auth = context.watch<AuthCubit>().state;
     final repo = sl<ExperienceRepository>();
 
-    if (!auth.isAuthenticated ||
-        auth.organizationId == null ||
-        auth.actorId == null) {
+    if (!auth.isAuthenticated || auth.organizationId == null) {
       return const Scaffold(body: Center(child: Text('Unauthorized')));
     }
+
+    final canManageMenu = auth.isStaffOrAbove;
 
     return Scaffold(
       appBar: AppBar(
@@ -42,17 +36,9 @@ class _ExperiencePageState extends State<ExperiencePage> {
       ),
       body: FutureBuilder<(Organization, UserOnboardingState?, List<MenuEntry>)>(
         future: () async {
-          final center = await repo.getCenterInfo(
-            organizationId: auth.organizationId!,
-            actorId: auth.actorId!,
-          );
-          final onboarding = await repo.getOnboardingState(
-            organizationId: auth.organizationId!,
-            actorId: auth.actorId!,
-          );
+          final center = await repo.getCenterInfo();
+          final onboarding = await repo.getOnboardingState();
           final menu = await repo.listMenuEntries(
-            organizationId: auth.organizationId!,
-            actorId: auth.actorId!,
             page: 0,
             pageSize: 30,
           );
@@ -108,8 +94,6 @@ class _ExperiencePageState extends State<ExperiencePage> {
                       ? FilledButton(
                           onPressed: () async {
                             await repo.completeOnboarding(
-                              organizationId: auth.organizationId!,
-                              actorId: auth.actorId!,
                               acceptTerms: true,
                             );
                             if (mounted) setState(() {});
@@ -137,12 +121,10 @@ class _ExperiencePageState extends State<ExperiencePage> {
           );
         },
       ),
-      floatingActionButton: _canManageMenu(auth.role)
+      floatingActionButton: canManageMenu
           ? FloatingActionButton.extended(
               onPressed: () async {
                 await repo.createMenuEntry(
-                  organizationId: auth.organizationId!,
-                  actorId: auth.actorId!,
                   menuDate: DateTime.now().toUtc(),
                   mealType: 'lunch',
                   title: 'Daily menu',

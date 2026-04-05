@@ -1,10 +1,13 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:uuid/uuid_value.dart';
 
+import '../../app/shell/app_shell.dart';
 import '../../features/auth/cubit/auth_cubit.dart';
 import '../../features/auth/view/login_page.dart';
+import '../../features/auth/view/forgot_password_page.dart';
 import '../../features/chat/view/chat_page.dart';
 import '../../features/chat/view/chat_conversation_page.dart';
 import '../../features/children/view/child_detail_page.dart';
@@ -29,18 +32,8 @@ GoRouter buildAppRouter(AuthCubit authCubit) {
     refreshListenable: GoRouterRefreshStream(authCubit.stream),
     redirect: (context, state) {
       final authState = authCubit.state;
-      final isLogin = state.uri.path == '/login';
-      final isTimeTracking = state.uri.path.startsWith('/time-tracking');
-      final isClassrooms = state.uri.path.startsWith('/classrooms');
-      final isChildren = state.uri.path.startsWith('/children');
-      final isHabits = state.uri.path.startsWith('/habits');
-      final isTimeline = state.uri.path.startsWith('/timeline');
-      final isReports = state.uri.path.startsWith('/reports');
-      final isRequests = state.uri.path.startsWith('/requests');
-      final isDocuments = state.uri.path.startsWith('/documents');
-      final isGalleries = state.uri.path.startsWith('/galleries');
-      final isNotifications = state.uri.path.startsWith('/notifications');
-      final isExperience = state.uri.path.startsWith('/experience');
+      final path = state.uri.path;
+      final isLogin = path == '/login' || path == '/forgot-password';
 
       if (!authState.isAuthenticated && !isLogin) {
         return '/login';
@@ -49,133 +42,135 @@ GoRouter buildAppRouter(AuthCubit authCubit) {
         return '/dashboard';
       }
 
-      if (authState.isAuthenticated &&
-          authState.role == AppRole.guardian &&
-          (isTimeTracking || isClassrooms)) {
-        return '/dashboard';
-      }
-
-      if (authState.isAuthenticated &&
-          authState.role == null &&
-          (isTimeTracking ||
-              isClassrooms ||
-              isChildren ||
-              isHabits ||
-              isTimeline ||
-              isReports ||
-              isRequests ||
-              isDocuments ||
-              isGalleries ||
-              isNotifications ||
-              isExperience)) {
-        return '/dashboard';
+      // Guardian restrictions
+      if (authState.isAuthenticated && authState.isGuardian) {
+        if (path.startsWith('/time-tracking') ||
+            path.startsWith('/classrooms') ||
+            path.startsWith('/staff')) {
+          return '/dashboard';
+        }
       }
 
       return null;
     },
     routes: [
-      GoRoute(path: '/login', builder: (context, state) => const LoginPage()),
-      GoRoute(
-        path: '/dashboard',
-        builder: (context, state) =>
-            DashboardPage(isWebEntry: kIsWeb, role: authCubit.state.role),
-      ),
-      GoRoute(
-        path: '/time-tracking',
-        builder: (context, state) => const TimeTrackingPage(),
-      ),
-      GoRoute(path: '/chat', builder: (context, state) => const ChatPage()),
-      GoRoute(
-        path: '/chat/:conversationId',
-        builder: (context, state) {
-          final conversationId = int.tryParse(
-            state.pathParameters['conversationId'] ?? '',
-          );
-          if (conversationId == null) {
-            return const ChatPage();
-          }
-          return ChatConversationPage(conversationId: conversationId);
-        },
-      ),
-      GoRoute(
-        path: '/children',
-        builder: (context, state) => const ChildrenPage(),
-      ),
-      GoRoute(
-        path: '/children/:childId',
-        builder: (context, state) {
-          final childId = int.tryParse(state.pathParameters['childId'] ?? '');
-          if (childId == null) {
-            return const LoginPage();
-          }
-          return ChildDetailPage(childId: childId);
-        },
-      ),
-      GoRoute(
-        path: '/classrooms',
-        builder: (context, state) => const ClassroomsPage(),
-      ),
-      GoRoute(path: '/habits', builder: (context, state) => const HabitsPage()),
-      GoRoute(
-        path: '/timeline/:childId',
-        builder: (context, state) {
-          final childId = int.tryParse(state.pathParameters['childId'] ?? '');
-          if (childId == null) {
-            return const ChildrenPage();
-          }
-          return ChildTimelinePage(childId: childId);
-        },
-      ),
-      GoRoute(
-        path: '/reports/:childId',
-        builder: (context, state) {
-          final childId = int.tryParse(state.pathParameters['childId'] ?? '');
-          if (childId == null) {
-            return const ChildrenPage();
-          }
-          return PedagogicalReportsPage(childId: childId);
-        },
-      ),
-      GoRoute(
-        path: '/reports/:childId/:reportId',
-        builder: (context, state) {
-          final childId = int.tryParse(state.pathParameters['childId'] ?? '');
-          final reportId = int.tryParse(state.pathParameters['reportId'] ?? '');
-          if (childId == null || reportId == null) {
-            return const ChildrenPage();
-          }
-          return PedagogicalReportDetailPage(
-            childId: childId,
-            reportId: reportId,
-          );
-        },
-      ),
-      GoRoute(
-        path: '/requests',
-        builder: (context, state) => const DataChangeRequestsPage(),
-      ),
-      GoRoute(
-        path: '/documents',
-        builder: (context, state) => const DocumentsPage(),
-      ),
-      GoRoute(
-        path: '/galleries',
-        builder: (context, state) => const GalleriesPage(),
-      ),
-      GoRoute(
-        path: '/notifications',
-        builder: (context, state) => const NotificationsPage(),
-      ),
-      GoRoute(
-        path: '/experience',
-        builder: (context, state) => const ExperiencePage(),
-      ),
-      GoRoute(
-        path: '/settings',
-        builder: (context, state) => const SettingsPage(),
+      // Auth routes (outside shell)
+      GoRoute(path: '/login', builder: (_, __) => const LoginPage()),
+      GoRoute(path: '/forgot-password', builder: (_, __) => const ForgotPasswordPage()),
+
+      // App routes (inside shell)
+      ShellRoute(
+        builder: (context, state, child) => AppShell(child: child),
+        routes: [
+          GoRoute(
+            path: '/dashboard',
+            builder: (_, __) => const DashboardPage(),
+          ),
+          GoRoute(
+            path: '/children',
+            builder: (_, __) => const ChildrenPage(),
+          ),
+          GoRoute(
+            path: '/children/:childId',
+            builder: (_, state) {
+              final childId = _parseUuid(state.pathParameters['childId']);
+              return childId != null
+                  ? ChildDetailPage(childId: childId)
+                  : const ChildrenPage();
+            },
+          ),
+          GoRoute(
+            path: '/classrooms',
+            builder: (_, __) => const ClassroomsPage(),
+          ),
+          GoRoute(
+            path: '/habits',
+            builder: (_, __) => const HabitsPage(),
+          ),
+          GoRoute(
+            path: '/chat',
+            builder: (_, __) => const ChatPage(),
+          ),
+          GoRoute(
+            path: '/chat/:conversationId',
+            builder: (_, state) {
+              final id = _parseUuid(state.pathParameters['conversationId']);
+              return id != null
+                  ? ChatConversationPage(conversationId: id)
+                  : const ChatPage();
+            },
+          ),
+          GoRoute(
+            path: '/time-tracking',
+            builder: (_, __) => const TimeTrackingPage(),
+          ),
+          GoRoute(
+            path: '/notifications',
+            builder: (_, __) => const NotificationsPage(),
+          ),
+          GoRoute(
+            path: '/documents',
+            builder: (_, __) => const DocumentsPage(),
+          ),
+          GoRoute(
+            path: '/galleries',
+            builder: (_, __) => const GalleriesPage(),
+          ),
+          GoRoute(
+            path: '/timeline/:childId',
+            builder: (_, state) {
+              final childId = _parseUuid(state.pathParameters['childId']);
+              return childId != null
+                  ? ChildTimelinePage(childId: childId)
+                  : const ChildrenPage();
+            },
+          ),
+          GoRoute(
+            path: '/reports/:childId',
+            builder: (_, state) {
+              final childId = _parseUuid(state.pathParameters['childId']);
+              return childId != null
+                  ? PedagogicalReportsPage(childId: childId)
+                  : const ChildrenPage();
+            },
+          ),
+          GoRoute(
+            path: '/reports/:childId/:reportId',
+            builder: (_, state) {
+              final childId = _parseUuid(state.pathParameters['childId']);
+              final reportId = _parseUuid(state.pathParameters['reportId']);
+              if (childId == null || reportId == null) return const ChildrenPage();
+              return PedagogicalReportDetailPage(
+                childId: childId,
+                reportId: reportId,
+              );
+            },
+          ),
+          GoRoute(
+            path: '/requests',
+            builder: (_, __) => const DataChangeRequestsPage(),
+          ),
+          GoRoute(
+            path: '/experience',
+            builder: (_, __) => const ExperiencePage(),
+          ),
+          GoRoute(
+            path: '/settings',
+            builder: (_, __) => const SettingsPage(),
+          ),
+        ],
       ),
     ],
   );
+}
+
+UuidValue? _parseUuid(String? value) {
+  if (value == null || value.isEmpty) return null;
+  try {
+    return UuidValue.fromString(value);
+  } catch (_) {
+    return null;
+  }
 }
 
 class GoRouterRefreshStream extends ChangeNotifier {

@@ -27,14 +27,14 @@ abstract class MenuEntry implements _i1.SerializableModel {
   });
 
   factory MenuEntry({
-    int? id,
-    required int organizationId,
+    _i1.UuidValue? id,
+    required _i1.UuidValue organizationId,
     required DateTime menuDate,
     required String mealType,
     required String title,
     String? description,
-    int? classroomId,
-    required int createdByUserId,
+    _i1.UuidValue? classroomId,
+    required _i1.UuidValue createdByUserId,
     required DateTime createdAt,
     required DateTime updatedAt,
     DateTime? deletedAt,
@@ -42,15 +42,22 @@ abstract class MenuEntry implements _i1.SerializableModel {
 
   factory MenuEntry.fromJson(Map<String, dynamic> jsonSerialization) {
     return MenuEntry(
-      id: jsonSerialization['id'] as int?,
-      organizationId: jsonSerialization['organizationId'] as int,
+      id: jsonSerialization['id'] == null
+          ? null
+          : _i1.UuidValueJsonExtension.fromJson(jsonSerialization['id']),
+      organizationId: _i1.UuidValueJsonExtension.fromJson(
+          jsonSerialization['organizationId']),
       menuDate:
           _i1.DateTimeJsonExtension.fromJson(jsonSerialization['menuDate']),
       mealType: jsonSerialization['mealType'] as String,
       title: jsonSerialization['title'] as String,
       description: jsonSerialization['description'] as String?,
-      classroomId: jsonSerialization['classroomId'] as int?,
-      createdByUserId: jsonSerialization['createdByUserId'] as int,
+      classroomId: jsonSerialization['classroomId'] == null
+          ? null
+          : _i1.UuidValueJsonExtension.fromJson(
+              jsonSerialization['classroomId']),
+      createdByUserId: _i1.UuidValueJsonExtension.fromJson(
+          jsonSerialization['createdByUserId']),
       createdAt:
           _i1.DateTimeJsonExtension.fromJson(jsonSerialization['createdAt']),
       updatedAt:
@@ -64,9 +71,9 @@ abstract class MenuEntry implements _i1.SerializableModel {
   /// The database id, set if the object has been inserted into the
   /// database or if it has been fetched from the database. Otherwise,
   /// the id will be null.
-  int? id;
+  _i1.UuidValue? id;
 
-  int organizationId;
+  _i1.UuidValue organizationId;
 
   DateTime menuDate;
 
@@ -76,9 +83,9 @@ abstract class MenuEntry implements _i1.SerializableModel {
 
   String? description;
 
-  int? classroomId;
+  _i1.UuidValue? classroomId;
 
-  int createdByUserId;
+  _i1.UuidValue createdByUserId;
 
   DateTime createdAt;
 
@@ -90,14 +97,14 @@ abstract class MenuEntry implements _i1.SerializableModel {
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
   MenuEntry copyWith({
-    int? id,
-    int? organizationId,
+    _i1.UuidValue? id,
+    _i1.UuidValue? organizationId,
     DateTime? menuDate,
     String? mealType,
     String? title,
     String? description,
-    int? classroomId,
-    int? createdByUserId,
+    _i1.UuidValue? classroomId,
+    _i1.UuidValue? createdByUserId,
     DateTime? createdAt,
     DateTime? updatedAt,
     DateTime? deletedAt,
@@ -105,14 +112,14 @@ abstract class MenuEntry implements _i1.SerializableModel {
   @override
   Map<String, dynamic> toJson() {
     return {
-      if (id != null) 'id': id,
-      'organizationId': organizationId,
+      if (id != null) 'id': id?.toJson(),
+      'organizationId': organizationId.toJson(),
       'menuDate': menuDate.toJson(),
       'mealType': mealType,
       'title': title,
       if (description != null) 'description': description,
-      if (classroomId != null) 'classroomId': classroomId,
-      'createdByUserId': createdByUserId,
+      if (classroomId != null) 'classroomId': classroomId?.toJson(),
+      'createdByUserId': createdByUserId.toJson(),
       'createdAt': createdAt.toJson(),
       'updatedAt': updatedAt.toJson(),
       if (deletedAt != null) 'deletedAt': deletedAt?.toJson(),
@@ -129,14 +136,14 @@ class _Undefined {}
 
 class _MenuEntryImpl extends MenuEntry {
   _MenuEntryImpl({
-    int? id,
-    required int organizationId,
+    _i1.UuidValue? id,
+    required _i1.UuidValue organizationId,
     required DateTime menuDate,
     required String mealType,
     required String title,
     String? description,
-    int? classroomId,
-    required int createdByUserId,
+    _i1.UuidValue? classroomId,
+    required _i1.UuidValue createdByUserId,
     required DateTime createdAt,
     required DateTime updatedAt,
     DateTime? deletedAt,
@@ -160,25 +167,26 @@ class _MenuEntryImpl extends MenuEntry {
   @override
   MenuEntry copyWith({
     Object? id = _Undefined,
-    int? organizationId,
+    _i1.UuidValue? organizationId,
     DateTime? menuDate,
     String? mealType,
     String? title,
     Object? description = _Undefined,
     Object? classroomId = _Undefined,
-    int? createdByUserId,
+    _i1.UuidValue? createdByUserId,
     DateTime? createdAt,
     DateTime? updatedAt,
     Object? deletedAt = _Undefined,
   }) {
     return MenuEntry(
-      id: id is int? ? id : this.id,
+      id: id is _i1.UuidValue? ? id : this.id,
       organizationId: organizationId ?? this.organizationId,
       menuDate: menuDate ?? this.menuDate,
       mealType: mealType ?? this.mealType,
       title: title ?? this.title,
       description: description is String? ? description : this.description,
-      classroomId: classroomId is int? ? classroomId : this.classroomId,
+      classroomId:
+          classroomId is _i1.UuidValue? ? classroomId : this.classroomId,
       createdByUserId: createdByUserId ?? this.createdByUserId,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,

@@ -2,7 +2,6 @@ import 'package:get_it/get_it.dart';
 import 'package:gici_backend_client/gici_backend_server_client.dart';
 
 import '../../features/auth/data/auth_repository.dart';
-import '../../features/auth/data/auth_session_storage.dart';
 import '../../features/chat/data/chat_repository.dart';
 import '../../features/children/data/child_repository.dart';
 import '../../features/child_timeline/data/child_timeline_repository.dart';
@@ -20,10 +19,6 @@ import '../network/backend_client.dart';
 final sl = GetIt.instance;
 
 Future<void> configureDependencies() async {
-  if (!sl.isRegistered<DateTime Function()>()) {
-    sl.registerLazySingleton<DateTime Function()>(() => DateTime.now);
-  }
-
   if (!sl.isRegistered<Client>()) {
     sl.registerLazySingleton<Client>(() => BackendClientProvider.instance);
   }
@@ -31,12 +26,6 @@ Future<void> configureDependencies() async {
   if (!sl.isRegistered<AuthRepository>()) {
     sl.registerLazySingleton<AuthRepository>(
       () => AuthRepository(sl<Client>()),
-    );
-  }
-
-  if (!sl.isRegistered<AuthSessionStorage>()) {
-    sl.registerLazySingleton<AuthSessionStorage>(
-      () => const AuthSessionStorage(),
     );
   }
 

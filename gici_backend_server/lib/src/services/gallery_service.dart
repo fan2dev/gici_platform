@@ -7,13 +7,13 @@ class GalleryService {
 
   Future<Gallery> createGallery(
     Session session, {
-    required int organizationId,
-    required int createdByUserId,
+    required UuidValue organizationId,
+    required UuidValue createdByUserId,
     required String title,
     String? description,
     required String audienceType,
-    int? audienceClassroomId,
-    int? audienceChildId,
+    UuidValue? audienceClassroomId,
+    UuidValue? audienceChildId,
   }) {
     final now = DateTime.now().toUtc();
     return Gallery.db.insertRow(
@@ -40,8 +40,8 @@ class GalleryService {
     String? title,
     String? description,
     String? audienceType,
-    int? audienceClassroomId,
-    int? audienceChildId,
+    UuidValue? audienceClassroomId,
+    UuidValue? audienceChildId,
     bool? isPublished,
   }) {
     return Gallery.db.updateRow(
@@ -60,8 +60,8 @@ class GalleryService {
 
   Future<List<Gallery>> listGalleries(
     Session session, {
-    required int organizationId,
-    required int actorUserId,
+    required UuidValue organizationId,
+    required UuidValue actorUserId,
     required String actorRole,
     required int limit,
     required int offset,
@@ -122,10 +122,10 @@ class GalleryService {
 
   Future<GalleryItem> addGalleryItem(
     Session session, {
-    required int organizationId,
-    required int galleryId,
-    required int fileAssetId,
-    required int createdByUserId,
+    required UuidValue organizationId,
+    required UuidValue galleryId,
+    required UuidValue fileAssetId,
+    required UuidValue createdByUserId,
     String? caption,
     int? sortOrder,
   }) async {
@@ -164,8 +164,8 @@ class GalleryService {
 
   Future<List<GalleryItem>> listGalleryItems(
     Session session, {
-    required int organizationId,
-    required int galleryId,
+    required UuidValue organizationId,
+    required UuidValue galleryId,
     required int limit,
     required int offset,
   }) {

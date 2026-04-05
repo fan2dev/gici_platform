@@ -12,7 +12,7 @@
 import 'package:serverpod/serverpod.dart' as _i1;
 
 abstract class Gallery
-    implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
+    implements _i1.TableRow<_i1.UuidValue?>, _i1.ProtocolSerialization {
   Gallery._({
     this.id,
     required this.organizationId,
@@ -29,14 +29,14 @@ abstract class Gallery
   });
 
   factory Gallery({
-    int? id,
-    required int organizationId,
+    _i1.UuidValue? id,
+    required _i1.UuidValue organizationId,
     required String title,
     String? description,
     required String audienceType,
-    int? audienceClassroomId,
-    int? audienceChildId,
-    required int createdByUserId,
+    _i1.UuidValue? audienceClassroomId,
+    _i1.UuidValue? audienceChildId,
+    required _i1.UuidValue createdByUserId,
     required bool isPublished,
     required DateTime createdAt,
     required DateTime updatedAt,
@@ -45,14 +45,24 @@ abstract class Gallery
 
   factory Gallery.fromJson(Map<String, dynamic> jsonSerialization) {
     return Gallery(
-      id: jsonSerialization['id'] as int?,
-      organizationId: jsonSerialization['organizationId'] as int,
+      id: jsonSerialization['id'] == null
+          ? null
+          : _i1.UuidValueJsonExtension.fromJson(jsonSerialization['id']),
+      organizationId: _i1.UuidValueJsonExtension.fromJson(
+          jsonSerialization['organizationId']),
       title: jsonSerialization['title'] as String,
       description: jsonSerialization['description'] as String?,
       audienceType: jsonSerialization['audienceType'] as String,
-      audienceClassroomId: jsonSerialization['audienceClassroomId'] as int?,
-      audienceChildId: jsonSerialization['audienceChildId'] as int?,
-      createdByUserId: jsonSerialization['createdByUserId'] as int,
+      audienceClassroomId: jsonSerialization['audienceClassroomId'] == null
+          ? null
+          : _i1.UuidValueJsonExtension.fromJson(
+              jsonSerialization['audienceClassroomId']),
+      audienceChildId: jsonSerialization['audienceChildId'] == null
+          ? null
+          : _i1.UuidValueJsonExtension.fromJson(
+              jsonSerialization['audienceChildId']),
+      createdByUserId: _i1.UuidValueJsonExtension.fromJson(
+          jsonSerialization['createdByUserId']),
       isPublished: jsonSerialization['isPublished'] as bool,
       createdAt:
           _i1.DateTimeJsonExtension.fromJson(jsonSerialization['createdAt']),
@@ -69,9 +79,9 @@ abstract class Gallery
   static const db = GalleryRepository._();
 
   @override
-  int? id;
+  _i1.UuidValue? id;
 
-  int organizationId;
+  _i1.UuidValue organizationId;
 
   String title;
 
@@ -79,11 +89,11 @@ abstract class Gallery
 
   String audienceType;
 
-  int? audienceClassroomId;
+  _i1.UuidValue? audienceClassroomId;
 
-  int? audienceChildId;
+  _i1.UuidValue? audienceChildId;
 
-  int createdByUserId;
+  _i1.UuidValue createdByUserId;
 
   bool isPublished;
 
@@ -94,20 +104,20 @@ abstract class Gallery
   DateTime? deletedAt;
 
   @override
-  _i1.Table<int?> get table => t;
+  _i1.Table<_i1.UuidValue?> get table => t;
 
   /// Returns a shallow copy of this [Gallery]
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
   Gallery copyWith({
-    int? id,
-    int? organizationId,
+    _i1.UuidValue? id,
+    _i1.UuidValue? organizationId,
     String? title,
     String? description,
     String? audienceType,
-    int? audienceClassroomId,
-    int? audienceChildId,
-    int? createdByUserId,
+    _i1.UuidValue? audienceClassroomId,
+    _i1.UuidValue? audienceChildId,
+    _i1.UuidValue? createdByUserId,
     bool? isPublished,
     DateTime? createdAt,
     DateTime? updatedAt,
@@ -116,15 +126,15 @@ abstract class Gallery
   @override
   Map<String, dynamic> toJson() {
     return {
-      if (id != null) 'id': id,
-      'organizationId': organizationId,
+      if (id != null) 'id': id?.toJson(),
+      'organizationId': organizationId.toJson(),
       'title': title,
       if (description != null) 'description': description,
       'audienceType': audienceType,
       if (audienceClassroomId != null)
-        'audienceClassroomId': audienceClassroomId,
-      if (audienceChildId != null) 'audienceChildId': audienceChildId,
-      'createdByUserId': createdByUserId,
+        'audienceClassroomId': audienceClassroomId?.toJson(),
+      if (audienceChildId != null) 'audienceChildId': audienceChildId?.toJson(),
+      'createdByUserId': createdByUserId.toJson(),
       'isPublished': isPublished,
       'createdAt': createdAt.toJson(),
       'updatedAt': updatedAt.toJson(),
@@ -135,15 +145,15 @@ abstract class Gallery
   @override
   Map<String, dynamic> toJsonForProtocol() {
     return {
-      if (id != null) 'id': id,
-      'organizationId': organizationId,
+      if (id != null) 'id': id?.toJson(),
+      'organizationId': organizationId.toJson(),
       'title': title,
       if (description != null) 'description': description,
       'audienceType': audienceType,
       if (audienceClassroomId != null)
-        'audienceClassroomId': audienceClassroomId,
-      if (audienceChildId != null) 'audienceChildId': audienceChildId,
-      'createdByUserId': createdByUserId,
+        'audienceClassroomId': audienceClassroomId?.toJson(),
+      if (audienceChildId != null) 'audienceChildId': audienceChildId?.toJson(),
+      'createdByUserId': createdByUserId.toJson(),
       'isPublished': isPublished,
       'createdAt': createdAt.toJson(),
       'updatedAt': updatedAt.toJson(),
@@ -185,14 +195,14 @@ class _Undefined {}
 
 class _GalleryImpl extends Gallery {
   _GalleryImpl({
-    int? id,
-    required int organizationId,
+    _i1.UuidValue? id,
+    required _i1.UuidValue organizationId,
     required String title,
     String? description,
     required String audienceType,
-    int? audienceClassroomId,
-    int? audienceChildId,
-    required int createdByUserId,
+    _i1.UuidValue? audienceClassroomId,
+    _i1.UuidValue? audienceChildId,
+    required _i1.UuidValue createdByUserId,
     required bool isPublished,
     required DateTime createdAt,
     required DateTime updatedAt,
@@ -218,29 +228,30 @@ class _GalleryImpl extends Gallery {
   @override
   Gallery copyWith({
     Object? id = _Undefined,
-    int? organizationId,
+    _i1.UuidValue? organizationId,
     String? title,
     Object? description = _Undefined,
     String? audienceType,
     Object? audienceClassroomId = _Undefined,
     Object? audienceChildId = _Undefined,
-    int? createdByUserId,
+    _i1.UuidValue? createdByUserId,
     bool? isPublished,
     DateTime? createdAt,
     DateTime? updatedAt,
     Object? deletedAt = _Undefined,
   }) {
     return Gallery(
-      id: id is int? ? id : this.id,
+      id: id is _i1.UuidValue? ? id : this.id,
       organizationId: organizationId ?? this.organizationId,
       title: title ?? this.title,
       description: description is String? ? description : this.description,
       audienceType: audienceType ?? this.audienceType,
-      audienceClassroomId: audienceClassroomId is int?
+      audienceClassroomId: audienceClassroomId is _i1.UuidValue?
           ? audienceClassroomId
           : this.audienceClassroomId,
-      audienceChildId:
-          audienceChildId is int? ? audienceChildId : this.audienceChildId,
+      audienceChildId: audienceChildId is _i1.UuidValue?
+          ? audienceChildId
+          : this.audienceChildId,
       createdByUserId: createdByUserId ?? this.createdByUserId,
       isPublished: isPublished ?? this.isPublished,
       createdAt: createdAt ?? this.createdAt,
@@ -250,9 +261,9 @@ class _GalleryImpl extends Gallery {
   }
 }
 
-class GalleryTable extends _i1.Table<int?> {
+class GalleryTable extends _i1.Table<_i1.UuidValue?> {
   GalleryTable({super.tableRelation}) : super(tableName: 'gallery') {
-    organizationId = _i1.ColumnInt(
+    organizationId = _i1.ColumnUuid(
       'organizationId',
       this,
     );
@@ -268,15 +279,15 @@ class GalleryTable extends _i1.Table<int?> {
       'audienceType',
       this,
     );
-    audienceClassroomId = _i1.ColumnInt(
+    audienceClassroomId = _i1.ColumnUuid(
       'audienceClassroomId',
       this,
     );
-    audienceChildId = _i1.ColumnInt(
+    audienceChildId = _i1.ColumnUuid(
       'audienceChildId',
       this,
     );
-    createdByUserId = _i1.ColumnInt(
+    createdByUserId = _i1.ColumnUuid(
       'createdByUserId',
       this,
     );
@@ -298,7 +309,7 @@ class GalleryTable extends _i1.Table<int?> {
     );
   }
 
-  late final _i1.ColumnInt organizationId;
+  late final _i1.ColumnUuid organizationId;
 
   late final _i1.ColumnString title;
 
@@ -306,11 +317,11 @@ class GalleryTable extends _i1.Table<int?> {
 
   late final _i1.ColumnString audienceType;
 
-  late final _i1.ColumnInt audienceClassroomId;
+  late final _i1.ColumnUuid audienceClassroomId;
 
-  late final _i1.ColumnInt audienceChildId;
+  late final _i1.ColumnUuid audienceChildId;
 
-  late final _i1.ColumnInt createdByUserId;
+  late final _i1.ColumnUuid createdByUserId;
 
   late final _i1.ColumnBool isPublished;
 
@@ -344,7 +355,7 @@ class GalleryInclude extends _i1.IncludeObject {
   Map<String, _i1.Include?> get includes => {};
 
   @override
-  _i1.Table<int?> get table => Gallery.t;
+  _i1.Table<_i1.UuidValue?> get table => Gallery.t;
 }
 
 class GalleryIncludeList extends _i1.IncludeList {
@@ -364,7 +375,7 @@ class GalleryIncludeList extends _i1.IncludeList {
   Map<String, _i1.Include?> get includes => include?.includes ?? {};
 
   @override
-  _i1.Table<int?> get table => Gallery.t;
+  _i1.Table<_i1.UuidValue?> get table => Gallery.t;
 }
 
 class GalleryRepository {
@@ -452,7 +463,7 @@ class GalleryRepository {
   /// Finds a single [Gallery] by its [id] or null if no such row exists.
   Future<Gallery?> findById(
     _i1.Session session,
-    int id, {
+    _i1.UuidValue id, {
     _i1.Transaction? transaction,
   }) async {
     return session.db.findById<Gallery>(

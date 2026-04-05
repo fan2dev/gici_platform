@@ -14,6 +14,7 @@ import 'package:serverpod_client/serverpod_client.dart' as _i1;
 abstract class AppUser implements _i1.SerializableModel {
   AppUser._({
     this.id,
+    this.serverpodUserId,
     this.organizationId,
     required this.email,
     required this.passwordHash,
@@ -32,8 +33,9 @@ abstract class AppUser implements _i1.SerializableModel {
   });
 
   factory AppUser({
-    int? id,
-    int? organizationId,
+    _i1.UuidValue? id,
+    int? serverpodUserId,
+    _i1.UuidValue? organizationId,
     required String email,
     required String passwordHash,
     required String firstName,
@@ -52,8 +54,14 @@ abstract class AppUser implements _i1.SerializableModel {
 
   factory AppUser.fromJson(Map<String, dynamic> jsonSerialization) {
     return AppUser(
-      id: jsonSerialization['id'] as int?,
-      organizationId: jsonSerialization['organizationId'] as int?,
+      id: jsonSerialization['id'] == null
+          ? null
+          : _i1.UuidValueJsonExtension.fromJson(jsonSerialization['id']),
+      serverpodUserId: jsonSerialization['serverpodUserId'] as int?,
+      organizationId: jsonSerialization['organizationId'] == null
+          ? null
+          : _i1.UuidValueJsonExtension.fromJson(
+              jsonSerialization['organizationId']),
       email: jsonSerialization['email'] as String,
       passwordHash: jsonSerialization['passwordHash'] as String,
       firstName: jsonSerialization['firstName'] as String,
@@ -81,9 +89,11 @@ abstract class AppUser implements _i1.SerializableModel {
   /// The database id, set if the object has been inserted into the
   /// database or if it has been fetched from the database. Otherwise,
   /// the id will be null.
-  int? id;
+  _i1.UuidValue? id;
 
-  int? organizationId;
+  int? serverpodUserId;
+
+  _i1.UuidValue? organizationId;
 
   String email;
 
@@ -117,8 +127,9 @@ abstract class AppUser implements _i1.SerializableModel {
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
   AppUser copyWith({
-    int? id,
-    int? organizationId,
+    _i1.UuidValue? id,
+    int? serverpodUserId,
+    _i1.UuidValue? organizationId,
     String? email,
     String? passwordHash,
     String? firstName,
@@ -137,8 +148,9 @@ abstract class AppUser implements _i1.SerializableModel {
   @override
   Map<String, dynamic> toJson() {
     return {
-      if (id != null) 'id': id,
-      if (organizationId != null) 'organizationId': organizationId,
+      if (id != null) 'id': id?.toJson(),
+      if (serverpodUserId != null) 'serverpodUserId': serverpodUserId,
+      if (organizationId != null) 'organizationId': organizationId?.toJson(),
       'email': email,
       'passwordHash': passwordHash,
       'firstName': firstName,
@@ -166,8 +178,9 @@ class _Undefined {}
 
 class _AppUserImpl extends AppUser {
   _AppUserImpl({
-    int? id,
-    int? organizationId,
+    _i1.UuidValue? id,
+    int? serverpodUserId,
+    _i1.UuidValue? organizationId,
     required String email,
     required String passwordHash,
     required String firstName,
@@ -184,6 +197,7 @@ class _AppUserImpl extends AppUser {
     DateTime? deletedAt,
   }) : super._(
           id: id,
+          serverpodUserId: serverpodUserId,
           organizationId: organizationId,
           email: email,
           passwordHash: passwordHash,
@@ -207,6 +221,7 @@ class _AppUserImpl extends AppUser {
   @override
   AppUser copyWith({
     Object? id = _Undefined,
+    Object? serverpodUserId = _Undefined,
     Object? organizationId = _Undefined,
     String? email,
     String? passwordHash,
@@ -224,9 +239,12 @@ class _AppUserImpl extends AppUser {
     Object? deletedAt = _Undefined,
   }) {
     return AppUser(
-      id: id is int? ? id : this.id,
-      organizationId:
-          organizationId is int? ? organizationId : this.organizationId,
+      id: id is _i1.UuidValue? ? id : this.id,
+      serverpodUserId:
+          serverpodUserId is int? ? serverpodUserId : this.serverpodUserId,
+      organizationId: organizationId is _i1.UuidValue?
+          ? organizationId
+          : this.organizationId,
       email: email ?? this.email,
       passwordHash: passwordHash ?? this.passwordHash,
       firstName: firstName ?? this.firstName,

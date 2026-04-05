@@ -28,12 +28,12 @@ abstract class ActivityLog implements _i1.SerializableModel {
   });
 
   factory ActivityLog({
-    int? id,
-    required int organizationId,
-    int? userId,
+    _i1.UuidValue? id,
+    required _i1.UuidValue organizationId,
+    _i1.UuidValue? userId,
     required String action,
     String? entityType,
-    int? entityId,
+    String? entityId,
     String? oldValues,
     String? newValues,
     String? ipAddress,
@@ -44,12 +44,17 @@ abstract class ActivityLog implements _i1.SerializableModel {
 
   factory ActivityLog.fromJson(Map<String, dynamic> jsonSerialization) {
     return ActivityLog(
-      id: jsonSerialization['id'] as int?,
-      organizationId: jsonSerialization['organizationId'] as int,
-      userId: jsonSerialization['userId'] as int?,
+      id: jsonSerialization['id'] == null
+          ? null
+          : _i1.UuidValueJsonExtension.fromJson(jsonSerialization['id']),
+      organizationId: _i1.UuidValueJsonExtension.fromJson(
+          jsonSerialization['organizationId']),
+      userId: jsonSerialization['userId'] == null
+          ? null
+          : _i1.UuidValueJsonExtension.fromJson(jsonSerialization['userId']),
       action: jsonSerialization['action'] as String,
       entityType: jsonSerialization['entityType'] as String?,
-      entityId: jsonSerialization['entityId'] as int?,
+      entityId: jsonSerialization['entityId'] as String?,
       oldValues: jsonSerialization['oldValues'] as String?,
       newValues: jsonSerialization['newValues'] as String?,
       ipAddress: jsonSerialization['ipAddress'] as String?,
@@ -63,17 +68,17 @@ abstract class ActivityLog implements _i1.SerializableModel {
   /// The database id, set if the object has been inserted into the
   /// database or if it has been fetched from the database. Otherwise,
   /// the id will be null.
-  int? id;
+  _i1.UuidValue? id;
 
-  int organizationId;
+  _i1.UuidValue organizationId;
 
-  int? userId;
+  _i1.UuidValue? userId;
 
   String action;
 
   String? entityType;
 
-  int? entityId;
+  String? entityId;
 
   String? oldValues;
 
@@ -91,12 +96,12 @@ abstract class ActivityLog implements _i1.SerializableModel {
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
   ActivityLog copyWith({
-    int? id,
-    int? organizationId,
-    int? userId,
+    _i1.UuidValue? id,
+    _i1.UuidValue? organizationId,
+    _i1.UuidValue? userId,
     String? action,
     String? entityType,
-    int? entityId,
+    String? entityId,
     String? oldValues,
     String? newValues,
     String? ipAddress,
@@ -107,9 +112,9 @@ abstract class ActivityLog implements _i1.SerializableModel {
   @override
   Map<String, dynamic> toJson() {
     return {
-      if (id != null) 'id': id,
-      'organizationId': organizationId,
-      if (userId != null) 'userId': userId,
+      if (id != null) 'id': id?.toJson(),
+      'organizationId': organizationId.toJson(),
+      if (userId != null) 'userId': userId?.toJson(),
       'action': action,
       if (entityType != null) 'entityType': entityType,
       if (entityId != null) 'entityId': entityId,
@@ -132,12 +137,12 @@ class _Undefined {}
 
 class _ActivityLogImpl extends ActivityLog {
   _ActivityLogImpl({
-    int? id,
-    required int organizationId,
-    int? userId,
+    _i1.UuidValue? id,
+    required _i1.UuidValue organizationId,
+    _i1.UuidValue? userId,
     required String action,
     String? entityType,
-    int? entityId,
+    String? entityId,
     String? oldValues,
     String? newValues,
     String? ipAddress,
@@ -165,7 +170,7 @@ class _ActivityLogImpl extends ActivityLog {
   @override
   ActivityLog copyWith({
     Object? id = _Undefined,
-    int? organizationId,
+    _i1.UuidValue? organizationId,
     Object? userId = _Undefined,
     String? action,
     Object? entityType = _Undefined,
@@ -178,12 +183,12 @@ class _ActivityLogImpl extends ActivityLog {
     DateTime? createdAt,
   }) {
     return ActivityLog(
-      id: id is int? ? id : this.id,
+      id: id is _i1.UuidValue? ? id : this.id,
       organizationId: organizationId ?? this.organizationId,
-      userId: userId is int? ? userId : this.userId,
+      userId: userId is _i1.UuidValue? ? userId : this.userId,
       action: action ?? this.action,
       entityType: entityType is String? ? entityType : this.entityType,
-      entityId: entityId is int? ? entityId : this.entityId,
+      entityId: entityId is String? ? entityId : this.entityId,
       oldValues: oldValues is String? ? oldValues : this.oldValues,
       newValues: newValues is String? ? newValues : this.newValues,
       ipAddress: ipAddress is String? ? ipAddress : this.ipAddress,

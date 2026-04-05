@@ -30,17 +30,17 @@ abstract class PedagogicalReport implements _i1.SerializableModel {
   });
 
   factory PedagogicalReport({
-    int? id,
-    required int organizationId,
-    required int childId,
+    _i1.UuidValue? id,
+    required _i1.UuidValue organizationId,
+    required _i1.UuidValue childId,
     required DateTime reportDate,
     required String title,
     required String summary,
     required String body,
     required String status,
     required String visibility,
-    required int createdByUserId,
-    int? updatedByUserId,
+    required _i1.UuidValue createdByUserId,
+    _i1.UuidValue? updatedByUserId,
     required DateTime createdAt,
     required DateTime updatedAt,
     DateTime? deletedAt,
@@ -48,9 +48,13 @@ abstract class PedagogicalReport implements _i1.SerializableModel {
 
   factory PedagogicalReport.fromJson(Map<String, dynamic> jsonSerialization) {
     return PedagogicalReport(
-      id: jsonSerialization['id'] as int?,
-      organizationId: jsonSerialization['organizationId'] as int,
-      childId: jsonSerialization['childId'] as int,
+      id: jsonSerialization['id'] == null
+          ? null
+          : _i1.UuidValueJsonExtension.fromJson(jsonSerialization['id']),
+      organizationId: _i1.UuidValueJsonExtension.fromJson(
+          jsonSerialization['organizationId']),
+      childId:
+          _i1.UuidValueJsonExtension.fromJson(jsonSerialization['childId']),
       reportDate:
           _i1.DateTimeJsonExtension.fromJson(jsonSerialization['reportDate']),
       title: jsonSerialization['title'] as String,
@@ -58,8 +62,12 @@ abstract class PedagogicalReport implements _i1.SerializableModel {
       body: jsonSerialization['body'] as String,
       status: jsonSerialization['status'] as String,
       visibility: jsonSerialization['visibility'] as String,
-      createdByUserId: jsonSerialization['createdByUserId'] as int,
-      updatedByUserId: jsonSerialization['updatedByUserId'] as int?,
+      createdByUserId: _i1.UuidValueJsonExtension.fromJson(
+          jsonSerialization['createdByUserId']),
+      updatedByUserId: jsonSerialization['updatedByUserId'] == null
+          ? null
+          : _i1.UuidValueJsonExtension.fromJson(
+              jsonSerialization['updatedByUserId']),
       createdAt:
           _i1.DateTimeJsonExtension.fromJson(jsonSerialization['createdAt']),
       updatedAt:
@@ -73,11 +81,11 @@ abstract class PedagogicalReport implements _i1.SerializableModel {
   /// The database id, set if the object has been inserted into the
   /// database or if it has been fetched from the database. Otherwise,
   /// the id will be null.
-  int? id;
+  _i1.UuidValue? id;
 
-  int organizationId;
+  _i1.UuidValue organizationId;
 
-  int childId;
+  _i1.UuidValue childId;
 
   DateTime reportDate;
 
@@ -91,9 +99,9 @@ abstract class PedagogicalReport implements _i1.SerializableModel {
 
   String visibility;
 
-  int createdByUserId;
+  _i1.UuidValue createdByUserId;
 
-  int? updatedByUserId;
+  _i1.UuidValue? updatedByUserId;
 
   DateTime createdAt;
 
@@ -105,17 +113,17 @@ abstract class PedagogicalReport implements _i1.SerializableModel {
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
   PedagogicalReport copyWith({
-    int? id,
-    int? organizationId,
-    int? childId,
+    _i1.UuidValue? id,
+    _i1.UuidValue? organizationId,
+    _i1.UuidValue? childId,
     DateTime? reportDate,
     String? title,
     String? summary,
     String? body,
     String? status,
     String? visibility,
-    int? createdByUserId,
-    int? updatedByUserId,
+    _i1.UuidValue? createdByUserId,
+    _i1.UuidValue? updatedByUserId,
     DateTime? createdAt,
     DateTime? updatedAt,
     DateTime? deletedAt,
@@ -123,17 +131,17 @@ abstract class PedagogicalReport implements _i1.SerializableModel {
   @override
   Map<String, dynamic> toJson() {
     return {
-      if (id != null) 'id': id,
-      'organizationId': organizationId,
-      'childId': childId,
+      if (id != null) 'id': id?.toJson(),
+      'organizationId': organizationId.toJson(),
+      'childId': childId.toJson(),
       'reportDate': reportDate.toJson(),
       'title': title,
       'summary': summary,
       'body': body,
       'status': status,
       'visibility': visibility,
-      'createdByUserId': createdByUserId,
-      if (updatedByUserId != null) 'updatedByUserId': updatedByUserId,
+      'createdByUserId': createdByUserId.toJson(),
+      if (updatedByUserId != null) 'updatedByUserId': updatedByUserId?.toJson(),
       'createdAt': createdAt.toJson(),
       'updatedAt': updatedAt.toJson(),
       if (deletedAt != null) 'deletedAt': deletedAt?.toJson(),
@@ -150,17 +158,17 @@ class _Undefined {}
 
 class _PedagogicalReportImpl extends PedagogicalReport {
   _PedagogicalReportImpl({
-    int? id,
-    required int organizationId,
-    required int childId,
+    _i1.UuidValue? id,
+    required _i1.UuidValue organizationId,
+    required _i1.UuidValue childId,
     required DateTime reportDate,
     required String title,
     required String summary,
     required String body,
     required String status,
     required String visibility,
-    required int createdByUserId,
-    int? updatedByUserId,
+    required _i1.UuidValue createdByUserId,
+    _i1.UuidValue? updatedByUserId,
     required DateTime createdAt,
     required DateTime updatedAt,
     DateTime? deletedAt,
@@ -187,22 +195,22 @@ class _PedagogicalReportImpl extends PedagogicalReport {
   @override
   PedagogicalReport copyWith({
     Object? id = _Undefined,
-    int? organizationId,
-    int? childId,
+    _i1.UuidValue? organizationId,
+    _i1.UuidValue? childId,
     DateTime? reportDate,
     String? title,
     String? summary,
     String? body,
     String? status,
     String? visibility,
-    int? createdByUserId,
+    _i1.UuidValue? createdByUserId,
     Object? updatedByUserId = _Undefined,
     DateTime? createdAt,
     DateTime? updatedAt,
     Object? deletedAt = _Undefined,
   }) {
     return PedagogicalReport(
-      id: id is int? ? id : this.id,
+      id: id is _i1.UuidValue? ? id : this.id,
       organizationId: organizationId ?? this.organizationId,
       childId: childId ?? this.childId,
       reportDate: reportDate ?? this.reportDate,
@@ -212,8 +220,9 @@ class _PedagogicalReportImpl extends PedagogicalReport {
       status: status ?? this.status,
       visibility: visibility ?? this.visibility,
       createdByUserId: createdByUserId ?? this.createdByUserId,
-      updatedByUserId:
-          updatedByUserId is int? ? updatedByUserId : this.updatedByUserId,
+      updatedByUserId: updatedByUserId is _i1.UuidValue?
+          ? updatedByUserId
+          : this.updatedByUserId,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
       deletedAt: deletedAt is DateTime? ? deletedAt : this.deletedAt,

@@ -12,7 +12,7 @@
 import 'package:serverpod/serverpod.dart' as _i1;
 
 abstract class FileAsset
-    implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
+    implements _i1.TableRow<_i1.UuidValue?>, _i1.ProtocolSerialization {
   FileAsset._({
     this.id,
     required this.organizationId,
@@ -35,9 +35,9 @@ abstract class FileAsset
   });
 
   factory FileAsset({
-    int? id,
-    required int organizationId,
-    required int uploadedByUserId,
+    _i1.UuidValue? id,
+    required _i1.UuidValue organizationId,
+    required _i1.UuidValue uploadedByUserId,
     required String fileName,
     required String originalName,
     required String mimeType,
@@ -57,9 +57,13 @@ abstract class FileAsset
 
   factory FileAsset.fromJson(Map<String, dynamic> jsonSerialization) {
     return FileAsset(
-      id: jsonSerialization['id'] as int?,
-      organizationId: jsonSerialization['organizationId'] as int,
-      uploadedByUserId: jsonSerialization['uploadedByUserId'] as int,
+      id: jsonSerialization['id'] == null
+          ? null
+          : _i1.UuidValueJsonExtension.fromJson(jsonSerialization['id']),
+      organizationId: _i1.UuidValueJsonExtension.fromJson(
+          jsonSerialization['organizationId']),
+      uploadedByUserId: _i1.UuidValueJsonExtension.fromJson(
+          jsonSerialization['uploadedByUserId']),
       fileName: jsonSerialization['fileName'] as String,
       originalName: jsonSerialization['originalName'] as String,
       mimeType: jsonSerialization['mimeType'] as String,
@@ -89,11 +93,11 @@ abstract class FileAsset
   static const db = FileAssetRepository._();
 
   @override
-  int? id;
+  _i1.UuidValue? id;
 
-  int organizationId;
+  _i1.UuidValue organizationId;
 
-  int uploadedByUserId;
+  _i1.UuidValue uploadedByUserId;
 
   String fileName;
 
@@ -126,15 +130,15 @@ abstract class FileAsset
   DateTime? deletedAt;
 
   @override
-  _i1.Table<int?> get table => t;
+  _i1.Table<_i1.UuidValue?> get table => t;
 
   /// Returns a shallow copy of this [FileAsset]
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
   FileAsset copyWith({
-    int? id,
-    int? organizationId,
-    int? uploadedByUserId,
+    _i1.UuidValue? id,
+    _i1.UuidValue? organizationId,
+    _i1.UuidValue? uploadedByUserId,
     String? fileName,
     String? originalName,
     String? mimeType,
@@ -154,9 +158,9 @@ abstract class FileAsset
   @override
   Map<String, dynamic> toJson() {
     return {
-      if (id != null) 'id': id,
-      'organizationId': organizationId,
-      'uploadedByUserId': uploadedByUserId,
+      if (id != null) 'id': id?.toJson(),
+      'organizationId': organizationId.toJson(),
+      'uploadedByUserId': uploadedByUserId.toJson(),
       'fileName': fileName,
       'originalName': originalName,
       'mimeType': mimeType,
@@ -178,9 +182,9 @@ abstract class FileAsset
   @override
   Map<String, dynamic> toJsonForProtocol() {
     return {
-      if (id != null) 'id': id,
-      'organizationId': organizationId,
-      'uploadedByUserId': uploadedByUserId,
+      if (id != null) 'id': id?.toJson(),
+      'organizationId': organizationId.toJson(),
+      'uploadedByUserId': uploadedByUserId.toJson(),
       'fileName': fileName,
       'originalName': originalName,
       'mimeType': mimeType,
@@ -233,9 +237,9 @@ class _Undefined {}
 
 class _FileAssetImpl extends FileAsset {
   _FileAssetImpl({
-    int? id,
-    required int organizationId,
-    required int uploadedByUserId,
+    _i1.UuidValue? id,
+    required _i1.UuidValue organizationId,
+    required _i1.UuidValue uploadedByUserId,
     required String fileName,
     required String originalName,
     required String mimeType,
@@ -278,8 +282,8 @@ class _FileAssetImpl extends FileAsset {
   @override
   FileAsset copyWith({
     Object? id = _Undefined,
-    int? organizationId,
-    int? uploadedByUserId,
+    _i1.UuidValue? organizationId,
+    _i1.UuidValue? uploadedByUserId,
     String? fileName,
     String? originalName,
     String? mimeType,
@@ -297,7 +301,7 @@ class _FileAssetImpl extends FileAsset {
     Object? deletedAt = _Undefined,
   }) {
     return FileAsset(
-      id: id is int? ? id : this.id,
+      id: id is _i1.UuidValue? ? id : this.id,
       organizationId: organizationId ?? this.organizationId,
       uploadedByUserId: uploadedByUserId ?? this.uploadedByUserId,
       fileName: fileName ?? this.fileName,
@@ -319,13 +323,13 @@ class _FileAssetImpl extends FileAsset {
   }
 }
 
-class FileAssetTable extends _i1.Table<int?> {
+class FileAssetTable extends _i1.Table<_i1.UuidValue?> {
   FileAssetTable({super.tableRelation}) : super(tableName: 'file_asset') {
-    organizationId = _i1.ColumnInt(
+    organizationId = _i1.ColumnUuid(
       'organizationId',
       this,
     );
-    uploadedByUserId = _i1.ColumnInt(
+    uploadedByUserId = _i1.ColumnUuid(
       'uploadedByUserId',
       this,
     );
@@ -391,9 +395,9 @@ class FileAssetTable extends _i1.Table<int?> {
     );
   }
 
-  late final _i1.ColumnInt organizationId;
+  late final _i1.ColumnUuid organizationId;
 
-  late final _i1.ColumnInt uploadedByUserId;
+  late final _i1.ColumnUuid uploadedByUserId;
 
   late final _i1.ColumnString fileName;
 
@@ -455,7 +459,7 @@ class FileAssetInclude extends _i1.IncludeObject {
   Map<String, _i1.Include?> get includes => {};
 
   @override
-  _i1.Table<int?> get table => FileAsset.t;
+  _i1.Table<_i1.UuidValue?> get table => FileAsset.t;
 }
 
 class FileAssetIncludeList extends _i1.IncludeList {
@@ -475,7 +479,7 @@ class FileAssetIncludeList extends _i1.IncludeList {
   Map<String, _i1.Include?> get includes => include?.includes ?? {};
 
   @override
-  _i1.Table<int?> get table => FileAsset.t;
+  _i1.Table<_i1.UuidValue?> get table => FileAsset.t;
 }
 
 class FileAssetRepository {
@@ -563,7 +567,7 @@ class FileAssetRepository {
   /// Finds a single [FileAsset] by its [id] or null if no such row exists.
   Future<FileAsset?> findById(
     _i1.Session session,
-    int id, {
+    _i1.UuidValue id, {
     _i1.Transaction? transaction,
   }) async {
     return session.db.findById<FileAsset>(

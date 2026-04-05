@@ -5,9 +5,10 @@ class: MealEntry
 table: meal_entry
 
 fields:
-  organizationId: int
-  childId: int
-  recordedByUserId: int
+  id: UuidValue?, defaultPersist=random
+  organizationId: UuidValue
+  childId: UuidValue
+  recordedByUserId: UuidValue
   mealType: String
   consumptionLevel: String
   recordedAt: DateTime
@@ -26,5 +27,3 @@ indexes:
     fields: recordedAt
   meal_child_date_idx:
     fields: childId, recordedAt
-
-

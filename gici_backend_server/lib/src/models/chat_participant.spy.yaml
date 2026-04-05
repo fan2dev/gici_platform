@@ -5,11 +5,12 @@ class: ChatParticipant
 table: chat_participant
 
 fields:
-  organizationId: int
-  conversationId: int
-  userId: int
+  id: UuidValue?, defaultPersist=random
+  organizationId: UuidValue
+  conversationId: UuidValue
+  userId: UuidValue
   joinedAt: DateTime
-  lastReadMessageId: int?
+  lastReadMessageId: UuidValue?
   lastReadAt: DateTime?
   isActive: bool
   createdAt: DateTime

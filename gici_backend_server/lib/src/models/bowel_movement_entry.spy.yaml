@@ -1,11 +1,14 @@
+# Bowel movement entry for habit tracking
+
 class: BowelMovementEntry
 
 table: bowel_movement_entry
 
 fields:
-  organizationId: int
-  childId: int
-  recordedByUserId: int
+  id: UuidValue?, defaultPersist=random
+  organizationId: UuidValue
+  childId: UuidValue
+  recordedByUserId: UuidValue
   eventAt: DateTime
   eventType: String
   consistency: String?

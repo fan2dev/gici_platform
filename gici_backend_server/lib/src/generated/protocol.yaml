@@ -1,6 +1,8 @@
 auth:
   - signInWithEmailPassword:
   - me:
+  - requestPasswordReset:
+  - resetPassword:
 bootstrap:
   - seedDemoData:
 chat:

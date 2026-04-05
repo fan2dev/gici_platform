@@ -1,15 +1,20 @@
+import 'package:bcrypt/bcrypt.dart';
 import 'package:serverpod/serverpod.dart';
+import 'package:serverpod_auth_server/serverpod_auth_server.dart' as auth;
+import 'package:uuid/uuid.dart';
 
 import '../generated/protocol.dart';
-import 'password_service.dart';
 
 class BootstrapSeedService {
   const BootstrapSeedService();
 
-  static const _passwordService = PasswordService();
+  static String _hashPassword(String password) {
+    return BCrypt.hashpw(password, BCrypt.gensalt());
+  }
 
   Future<void> seedElBorreguet(Session session) async {
     final now = DateTime.now().toUtc();
+    final uuid = Uuid();
 
     var organization = await Organization.db.findFirstRow(
       session,
@@ -143,7 +148,7 @@ class BootstrapSeedService {
           AppUser(
             organizationId: organizationId,
             email: 'admin@elborreguet.demo',
-            passwordHash: _passwordService.hash('Admin123!'),
+            passwordHash: _hashPassword('Admin123!'),
             firstName: 'Laura',
             lastName: 'Ribas',
             phone: '+34-600-700-001',
@@ -160,7 +165,7 @@ class BootstrapSeedService {
           AppUser(
             organizationId: organizationId,
             email: 'staff@elborreguet.demo',
-            passwordHash: _passwordService.hash('Staff123!'),
+            passwordHash: _hashPassword('Staff123!'),
             firstName: 'Marc',
             lastName: 'Serra',
             phone: '+34-600-700-002',
@@ -177,7 +182,7 @@ class BootstrapSeedService {
           AppUser(
             organizationId: organizationId,
             email: 'guardian@elborreguet.demo',
-            passwordHash: _passwordService.hash('Guardian123!'),
+            passwordHash: _hashPassword('Guardian123!'),
             firstName: 'Ana',
             lastName: 'Martinez',
             phone: '+34-600-700-003',
@@ -199,6 +204,23 @@ class BootstrapSeedService {
       );
       final staffUser = users.firstWhere((u) => u.role == 'staff');
       final guardianUser = users.firstWhere((u) => u.role == 'guardian');
+
+      // Create corresponding Serverpod Auth UserInfo records and link them
+      for (final appUser in [adminUser, staffUser, guardianUser]) {
+        final userInfo = auth.UserInfo(
+          userIdentifier: appUser.email,
+          email: appUser.email,
+          userName: '${appUser.firstName} ${appUser.lastName}',
+          created: now,
+          scopeNames: [],
+          blocked: false,
+        );
+        final created = await auth.Users.createUser(session, userInfo, 'email');
+        if (created != null) {
+          final updated = appUser.copyWith(serverpodUserId: created.id!);
+          await AppUser.db.updateRow(session, updated);
+        }
+      }
 
       final leoChild = await Child.db.findFirstRow(
         session,

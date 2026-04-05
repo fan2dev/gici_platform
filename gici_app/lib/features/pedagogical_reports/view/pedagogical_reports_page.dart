@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gici_backend_client/gici_backend_server_client.dart';
 import 'package:go_router/go_router.dart';
+import 'package:uuid/uuid_value.dart';
 
 import '../../../core/di/injection.dart';
 import '../../auth/cubit/auth_cubit.dart';
@@ -10,31 +11,23 @@ import '../data/pedagogical_report_repository.dart';
 class PedagogicalReportsPage extends StatefulWidget {
   const PedagogicalReportsPage({super.key, required this.childId});
 
-  final int childId;
+  final UuidValue childId;
 
   @override
   State<PedagogicalReportsPage> createState() => _PedagogicalReportsPageState();
 }
 
 class _PedagogicalReportsPageState extends State<PedagogicalReportsPage> {
-  bool _canManage(AppRole? role) {
-    return role == AppRole.organizationAdmin ||
-        role == AppRole.platformSuperAdmin ||
-        role == AppRole.staff;
-  }
-
   @override
   Widget build(BuildContext context) {
     final auth = context.watch<AuthCubit>().state;
     final repo = sl<PedagogicalReportRepository>();
 
-    if (!auth.isAuthenticated ||
-        auth.organizationId == null ||
-        auth.actorId == null) {
+    if (!auth.isAuthenticated || auth.organizationId == null) {
       return const Scaffold(body: Center(child: Text('Unauthorized')));
     }
 
-    final canManage = _canManage(auth.role);
+    final canManage = auth.isStaffOrAbove;
 
     return Scaffold(
       appBar: AppBar(
@@ -46,8 +39,6 @@ class _PedagogicalReportsPageState extends State<PedagogicalReportsPage> {
       ),
       body: FutureBuilder<List<PedagogicalReport>>(
         future: repo.listReportsByChild(
-          organizationId: auth.organizationId!,
-          actorId: auth.actorId!,
           childId: widget.childId,
           page: 0,
           pageSize: 100,
@@ -85,8 +76,6 @@ class _PedagogicalReportsPageState extends State<PedagogicalReportsPage> {
           ? FloatingActionButton.extended(
               onPressed: () async {
                 await repo.createReport(
-                  organizationId: auth.organizationId!,
-                  actorId: auth.actorId!,
                   childId: widget.childId,
                   reportDate: DateTime.now().toUtc(),
                   title: 'Daily progress',

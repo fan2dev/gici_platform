@@ -12,7 +12,7 @@
 import 'package:serverpod/serverpod.dart' as _i1;
 
 abstract class ChildDocument
-    implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
+    implements _i1.TableRow<_i1.UuidValue?>, _i1.ProtocolSerialization {
   ChildDocument._({
     this.id,
     required this.organizationId,
@@ -28,14 +28,14 @@ abstract class ChildDocument
   });
 
   factory ChildDocument({
-    int? id,
-    required int organizationId,
-    required int childId,
-    required int fileAssetId,
+    _i1.UuidValue? id,
+    required _i1.UuidValue organizationId,
+    required _i1.UuidValue childId,
+    required _i1.UuidValue fileAssetId,
     required String title,
     String? description,
     required bool visibleToGuardians,
-    required int createdByUserId,
+    required _i1.UuidValue createdByUserId,
     required DateTime createdAt,
     required DateTime updatedAt,
     DateTime? deletedAt,
@@ -43,14 +43,20 @@ abstract class ChildDocument
 
   factory ChildDocument.fromJson(Map<String, dynamic> jsonSerialization) {
     return ChildDocument(
-      id: jsonSerialization['id'] as int?,
-      organizationId: jsonSerialization['organizationId'] as int,
-      childId: jsonSerialization['childId'] as int,
-      fileAssetId: jsonSerialization['fileAssetId'] as int,
+      id: jsonSerialization['id'] == null
+          ? null
+          : _i1.UuidValueJsonExtension.fromJson(jsonSerialization['id']),
+      organizationId: _i1.UuidValueJsonExtension.fromJson(
+          jsonSerialization['organizationId']),
+      childId:
+          _i1.UuidValueJsonExtension.fromJson(jsonSerialization['childId']),
+      fileAssetId:
+          _i1.UuidValueJsonExtension.fromJson(jsonSerialization['fileAssetId']),
       title: jsonSerialization['title'] as String,
       description: jsonSerialization['description'] as String?,
       visibleToGuardians: jsonSerialization['visibleToGuardians'] as bool,
-      createdByUserId: jsonSerialization['createdByUserId'] as int,
+      createdByUserId: _i1.UuidValueJsonExtension.fromJson(
+          jsonSerialization['createdByUserId']),
       createdAt:
           _i1.DateTimeJsonExtension.fromJson(jsonSerialization['createdAt']),
       updatedAt:
@@ -66,13 +72,13 @@ abstract class ChildDocument
   static const db = ChildDocumentRepository._();
 
   @override
-  int? id;
+  _i1.UuidValue? id;
 
-  int organizationId;
+  _i1.UuidValue organizationId;
 
-  int childId;
+  _i1.UuidValue childId;
 
-  int fileAssetId;
+  _i1.UuidValue fileAssetId;
 
   String title;
 
@@ -80,7 +86,7 @@ abstract class ChildDocument
 
   bool visibleToGuardians;
 
-  int createdByUserId;
+  _i1.UuidValue createdByUserId;
 
   DateTime createdAt;
 
@@ -89,20 +95,20 @@ abstract class ChildDocument
   DateTime? deletedAt;
 
   @override
-  _i1.Table<int?> get table => t;
+  _i1.Table<_i1.UuidValue?> get table => t;
 
   /// Returns a shallow copy of this [ChildDocument]
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
   ChildDocument copyWith({
-    int? id,
-    int? organizationId,
-    int? childId,
-    int? fileAssetId,
+    _i1.UuidValue? id,
+    _i1.UuidValue? organizationId,
+    _i1.UuidValue? childId,
+    _i1.UuidValue? fileAssetId,
     String? title,
     String? description,
     bool? visibleToGuardians,
-    int? createdByUserId,
+    _i1.UuidValue? createdByUserId,
     DateTime? createdAt,
     DateTime? updatedAt,
     DateTime? deletedAt,
@@ -110,14 +116,14 @@ abstract class ChildDocument
   @override
   Map<String, dynamic> toJson() {
     return {
-      if (id != null) 'id': id,
-      'organizationId': organizationId,
-      'childId': childId,
-      'fileAssetId': fileAssetId,
+      if (id != null) 'id': id?.toJson(),
+      'organizationId': organizationId.toJson(),
+      'childId': childId.toJson(),
+      'fileAssetId': fileAssetId.toJson(),
       'title': title,
       if (description != null) 'description': description,
       'visibleToGuardians': visibleToGuardians,
-      'createdByUserId': createdByUserId,
+      'createdByUserId': createdByUserId.toJson(),
       'createdAt': createdAt.toJson(),
       'updatedAt': updatedAt.toJson(),
       if (deletedAt != null) 'deletedAt': deletedAt?.toJson(),
@@ -127,14 +133,14 @@ abstract class ChildDocument
   @override
   Map<String, dynamic> toJsonForProtocol() {
     return {
-      if (id != null) 'id': id,
-      'organizationId': organizationId,
-      'childId': childId,
-      'fileAssetId': fileAssetId,
+      if (id != null) 'id': id?.toJson(),
+      'organizationId': organizationId.toJson(),
+      'childId': childId.toJson(),
+      'fileAssetId': fileAssetId.toJson(),
       'title': title,
       if (description != null) 'description': description,
       'visibleToGuardians': visibleToGuardians,
-      'createdByUserId': createdByUserId,
+      'createdByUserId': createdByUserId.toJson(),
       'createdAt': createdAt.toJson(),
       'updatedAt': updatedAt.toJson(),
       if (deletedAt != null) 'deletedAt': deletedAt?.toJson(),
@@ -175,14 +181,14 @@ class _Undefined {}
 
 class _ChildDocumentImpl extends ChildDocument {
   _ChildDocumentImpl({
-    int? id,
-    required int organizationId,
-    required int childId,
-    required int fileAssetId,
+    _i1.UuidValue? id,
+    required _i1.UuidValue organizationId,
+    required _i1.UuidValue childId,
+    required _i1.UuidValue fileAssetId,
     required String title,
     String? description,
     required bool visibleToGuardians,
-    required int createdByUserId,
+    required _i1.UuidValue createdByUserId,
     required DateTime createdAt,
     required DateTime updatedAt,
     DateTime? deletedAt,
@@ -206,19 +212,19 @@ class _ChildDocumentImpl extends ChildDocument {
   @override
   ChildDocument copyWith({
     Object? id = _Undefined,
-    int? organizationId,
-    int? childId,
-    int? fileAssetId,
+    _i1.UuidValue? organizationId,
+    _i1.UuidValue? childId,
+    _i1.UuidValue? fileAssetId,
     String? title,
     Object? description = _Undefined,
     bool? visibleToGuardians,
-    int? createdByUserId,
+    _i1.UuidValue? createdByUserId,
     DateTime? createdAt,
     DateTime? updatedAt,
     Object? deletedAt = _Undefined,
   }) {
     return ChildDocument(
-      id: id is int? ? id : this.id,
+      id: id is _i1.UuidValue? ? id : this.id,
       organizationId: organizationId ?? this.organizationId,
       childId: childId ?? this.childId,
       fileAssetId: fileAssetId ?? this.fileAssetId,
@@ -233,18 +239,18 @@ class _ChildDocumentImpl extends ChildDocument {
   }
 }
 
-class ChildDocumentTable extends _i1.Table<int?> {
+class ChildDocumentTable extends _i1.Table<_i1.UuidValue?> {
   ChildDocumentTable({super.tableRelation})
       : super(tableName: 'child_document') {
-    organizationId = _i1.ColumnInt(
+    organizationId = _i1.ColumnUuid(
       'organizationId',
       this,
     );
-    childId = _i1.ColumnInt(
+    childId = _i1.ColumnUuid(
       'childId',
       this,
     );
-    fileAssetId = _i1.ColumnInt(
+    fileAssetId = _i1.ColumnUuid(
       'fileAssetId',
       this,
     );
@@ -260,7 +266,7 @@ class ChildDocumentTable extends _i1.Table<int?> {
       'visibleToGuardians',
       this,
     );
-    createdByUserId = _i1.ColumnInt(
+    createdByUserId = _i1.ColumnUuid(
       'createdByUserId',
       this,
     );
@@ -278,11 +284,11 @@ class ChildDocumentTable extends _i1.Table<int?> {
     );
   }
 
-  late final _i1.ColumnInt organizationId;
+  late final _i1.ColumnUuid organizationId;
 
-  late final _i1.ColumnInt childId;
+  late final _i1.ColumnUuid childId;
 
-  late final _i1.ColumnInt fileAssetId;
+  late final _i1.ColumnUuid fileAssetId;
 
   late final _i1.ColumnString title;
 
@@ -290,7 +296,7 @@ class ChildDocumentTable extends _i1.Table<int?> {
 
   late final _i1.ColumnBool visibleToGuardians;
 
-  late final _i1.ColumnInt createdByUserId;
+  late final _i1.ColumnUuid createdByUserId;
 
   late final _i1.ColumnDateTime createdAt;
 
@@ -321,7 +327,7 @@ class ChildDocumentInclude extends _i1.IncludeObject {
   Map<String, _i1.Include?> get includes => {};
 
   @override
-  _i1.Table<int?> get table => ChildDocument.t;
+  _i1.Table<_i1.UuidValue?> get table => ChildDocument.t;
 }
 
 class ChildDocumentIncludeList extends _i1.IncludeList {
@@ -341,7 +347,7 @@ class ChildDocumentIncludeList extends _i1.IncludeList {
   Map<String, _i1.Include?> get includes => include?.includes ?? {};
 
   @override
-  _i1.Table<int?> get table => ChildDocument.t;
+  _i1.Table<_i1.UuidValue?> get table => ChildDocument.t;
 }
 
 class ChildDocumentRepository {
@@ -429,7 +435,7 @@ class ChildDocumentRepository {
   /// Finds a single [ChildDocument] by its [id] or null if no such row exists.
   Future<ChildDocument?> findById(
     _i1.Session session,
-    int id, {
+    _i1.UuidValue id, {
     _i1.Transaction? transaction,
   }) async {
     return session.db.findById<ChildDocument>(

@@ -5,7 +5,8 @@ class: Classroom
 table: classroom
 
 fields:
-  organizationId: int
+  id: UuidValue?, defaultPersist=random
+  organizationId: UuidValue
   name: String
   description: String?
   ageGroupMin: int?
@@ -23,4 +24,3 @@ indexes:
     fields: organizationId
   classroom_status_idx:
     fields: status
-

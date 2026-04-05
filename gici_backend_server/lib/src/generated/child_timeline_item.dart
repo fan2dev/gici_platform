@@ -24,28 +24,29 @@ abstract class ChildTimelineItem
   });
 
   factory ChildTimelineItem({
-    required int childId,
+    required _i1.UuidValue childId,
     required DateTime eventAt,
     required String eventType,
     required String title,
     String? description,
     String? referenceType,
-    int? referenceId,
+    String? referenceId,
   }) = _ChildTimelineItemImpl;
 
   factory ChildTimelineItem.fromJson(Map<String, dynamic> jsonSerialization) {
     return ChildTimelineItem(
-      childId: jsonSerialization['childId'] as int,
+      childId:
+          _i1.UuidValueJsonExtension.fromJson(jsonSerialization['childId']),
       eventAt: _i1.DateTimeJsonExtension.fromJson(jsonSerialization['eventAt']),
       eventType: jsonSerialization['eventType'] as String,
       title: jsonSerialization['title'] as String,
       description: jsonSerialization['description'] as String?,
       referenceType: jsonSerialization['referenceType'] as String?,
-      referenceId: jsonSerialization['referenceId'] as int?,
+      referenceId: jsonSerialization['referenceId'] as String?,
     );
   }
 
-  int childId;
+  _i1.UuidValue childId;
 
   DateTime eventAt;
 
@@ -57,24 +58,24 @@ abstract class ChildTimelineItem
 
   String? referenceType;
 
-  int? referenceId;
+  String? referenceId;
 
   /// Returns a shallow copy of this [ChildTimelineItem]
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
   ChildTimelineItem copyWith({
-    int? childId,
+    _i1.UuidValue? childId,
     DateTime? eventAt,
     String? eventType,
     String? title,
     String? description,
     String? referenceType,
-    int? referenceId,
+    String? referenceId,
   });
   @override
   Map<String, dynamic> toJson() {
     return {
-      'childId': childId,
+      'childId': childId.toJson(),
       'eventAt': eventAt.toJson(),
       'eventType': eventType,
       'title': title,
@@ -87,7 +88,7 @@ abstract class ChildTimelineItem
   @override
   Map<String, dynamic> toJsonForProtocol() {
     return {
-      'childId': childId,
+      'childId': childId.toJson(),
       'eventAt': eventAt.toJson(),
       'eventType': eventType,
       'title': title,
@@ -107,13 +108,13 @@ class _Undefined {}
 
 class _ChildTimelineItemImpl extends ChildTimelineItem {
   _ChildTimelineItemImpl({
-    required int childId,
+    required _i1.UuidValue childId,
     required DateTime eventAt,
     required String eventType,
     required String title,
     String? description,
     String? referenceType,
-    int? referenceId,
+    String? referenceId,
   }) : super._(
           childId: childId,
           eventAt: eventAt,
@@ -129,7 +130,7 @@ class _ChildTimelineItemImpl extends ChildTimelineItem {
   @_i1.useResult
   @override
   ChildTimelineItem copyWith({
-    int? childId,
+    _i1.UuidValue? childId,
     DateTime? eventAt,
     String? eventType,
     String? title,
@@ -145,7 +146,7 @@ class _ChildTimelineItemImpl extends ChildTimelineItem {
       description: description is String? ? description : this.description,
       referenceType:
           referenceType is String? ? referenceType : this.referenceType,
-      referenceId: referenceId is int? ? referenceId : this.referenceId,
+      referenceId: referenceId is String? ? referenceId : this.referenceId,
     );
   }
 }

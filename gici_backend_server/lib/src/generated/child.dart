@@ -11,7 +11,8 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod/serverpod.dart' as _i1;
 
-abstract class Child implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
+abstract class Child
+    implements _i1.TableRow<_i1.UuidValue?>, _i1.ProtocolSerialization {
   Child._({
     this.id,
     required this.organizationId,
@@ -33,8 +34,8 @@ abstract class Child implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
   });
 
   factory Child({
-    int? id,
-    required int organizationId,
+    _i1.UuidValue? id,
+    required _i1.UuidValue organizationId,
     required String firstName,
     required String lastName,
     required DateTime dateOfBirth,
@@ -54,8 +55,11 @@ abstract class Child implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
 
   factory Child.fromJson(Map<String, dynamic> jsonSerialization) {
     return Child(
-      id: jsonSerialization['id'] as int?,
-      organizationId: jsonSerialization['organizationId'] as int,
+      id: jsonSerialization['id'] == null
+          ? null
+          : _i1.UuidValueJsonExtension.fromJson(jsonSerialization['id']),
+      organizationId: _i1.UuidValueJsonExtension.fromJson(
+          jsonSerialization['organizationId']),
       firstName: jsonSerialization['firstName'] as String,
       lastName: jsonSerialization['lastName'] as String,
       dateOfBirth:
@@ -89,9 +93,9 @@ abstract class Child implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
   static const db = ChildRepository._();
 
   @override
-  int? id;
+  _i1.UuidValue? id;
 
-  int organizationId;
+  _i1.UuidValue organizationId;
 
   String firstName;
 
@@ -124,14 +128,14 @@ abstract class Child implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
   DateTime? deletedAt;
 
   @override
-  _i1.Table<int?> get table => t;
+  _i1.Table<_i1.UuidValue?> get table => t;
 
   /// Returns a shallow copy of this [Child]
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
   Child copyWith({
-    int? id,
-    int? organizationId,
+    _i1.UuidValue? id,
+    _i1.UuidValue? organizationId,
     String? firstName,
     String? lastName,
     DateTime? dateOfBirth,
@@ -151,8 +155,8 @@ abstract class Child implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
   @override
   Map<String, dynamic> toJson() {
     return {
-      if (id != null) 'id': id,
-      'organizationId': organizationId,
+      if (id != null) 'id': id?.toJson(),
+      'organizationId': organizationId.toJson(),
       'firstName': firstName,
       'lastName': lastName,
       'dateOfBirth': dateOfBirth.toJson(),
@@ -176,8 +180,8 @@ abstract class Child implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
   @override
   Map<String, dynamic> toJsonForProtocol() {
     return {
-      if (id != null) 'id': id,
-      'organizationId': organizationId,
+      if (id != null) 'id': id?.toJson(),
+      'organizationId': organizationId.toJson(),
       'firstName': firstName,
       'lastName': lastName,
       'dateOfBirth': dateOfBirth.toJson(),
@@ -232,8 +236,8 @@ class _Undefined {}
 
 class _ChildImpl extends Child {
   _ChildImpl({
-    int? id,
-    required int organizationId,
+    _i1.UuidValue? id,
+    required _i1.UuidValue organizationId,
     required String firstName,
     required String lastName,
     required DateTime dateOfBirth,
@@ -275,7 +279,7 @@ class _ChildImpl extends Child {
   @override
   Child copyWith({
     Object? id = _Undefined,
-    int? organizationId,
+    _i1.UuidValue? organizationId,
     String? firstName,
     String? lastName,
     DateTime? dateOfBirth,
@@ -293,7 +297,7 @@ class _ChildImpl extends Child {
     Object? deletedAt = _Undefined,
   }) {
     return Child(
-      id: id is int? ? id : this.id,
+      id: id is _i1.UuidValue? ? id : this.id,
       organizationId: organizationId ?? this.organizationId,
       firstName: firstName ?? this.firstName,
       lastName: lastName ?? this.lastName,
@@ -319,9 +323,9 @@ class _ChildImpl extends Child {
   }
 }
 
-class ChildTable extends _i1.Table<int?> {
+class ChildTable extends _i1.Table<_i1.UuidValue?> {
   ChildTable({super.tableRelation}) : super(tableName: 'child') {
-    organizationId = _i1.ColumnInt(
+    organizationId = _i1.ColumnUuid(
       'organizationId',
       this,
     );
@@ -387,7 +391,7 @@ class ChildTable extends _i1.Table<int?> {
     );
   }
 
-  late final _i1.ColumnInt organizationId;
+  late final _i1.ColumnUuid organizationId;
 
   late final _i1.ColumnString firstName;
 
@@ -448,7 +452,7 @@ class ChildInclude extends _i1.IncludeObject {
   Map<String, _i1.Include?> get includes => {};
 
   @override
-  _i1.Table<int?> get table => Child.t;
+  _i1.Table<_i1.UuidValue?> get table => Child.t;
 }
 
 class ChildIncludeList extends _i1.IncludeList {
@@ -468,7 +472,7 @@ class ChildIncludeList extends _i1.IncludeList {
   Map<String, _i1.Include?> get includes => include?.includes ?? {};
 
   @override
-  _i1.Table<int?> get table => Child.t;
+  _i1.Table<_i1.UuidValue?> get table => Child.t;
 }
 
 class ChildRepository {
@@ -556,7 +560,7 @@ class ChildRepository {
   /// Finds a single [Child] by its [id] or null if no such row exists.
   Future<Child?> findById(
     _i1.Session session,
-    int id, {
+    _i1.UuidValue id, {
     _i1.Transaction? transaction,
   }) async {
     return session.db.findById<Child>(

@@ -23,22 +23,16 @@ class _DocumentsPageState extends State<DocumentsPage> {
     super.dispose();
   }
 
-  bool _canManage(AppRole? role) {
-    return role == AppRole.organizationAdmin ||
-        role == AppRole.platformSuperAdmin ||
-        role == AppRole.staff;
-  }
-
   @override
   Widget build(BuildContext context) {
     final auth = context.watch<AuthCubit>().state;
     final repo = sl<DocumentRepository>();
 
-    if (!auth.isAuthenticated ||
-        auth.organizationId == null ||
-        auth.actorId == null) {
+    if (!auth.isAuthenticated || auth.organizationId == null) {
       return const Scaffold(body: Center(child: Text('Unauthorized')));
     }
+
+    final canManage = auth.isStaffOrAbove;
 
     return Scaffold(
       appBar: AppBar(
@@ -50,8 +44,6 @@ class _DocumentsPageState extends State<DocumentsPage> {
       ),
       body: FutureBuilder<List<OrganizationDocument>>(
         future: repo.listOrganizationDocuments(
-          organizationId: auth.organizationId!,
-          actorId: auth.actorId!,
           page: 0,
           pageSize: 100,
         ),
@@ -67,7 +59,7 @@ class _DocumentsPageState extends State<DocumentsPage> {
           return ListView(
             padding: const EdgeInsets.all(16),
             children: [
-              if (_canManage(auth.role))
+              if (canManage)
                 Row(
                   children: [
                     Expanded(
@@ -84,8 +76,6 @@ class _DocumentsPageState extends State<DocumentsPage> {
                         final title = _titleController.text.trim();
                         if (title.isEmpty) return;
                         await repo.createOrganizationDocument(
-                          organizationId: auth.organizationId!,
-                          actorId: auth.actorId!,
                           title: title,
                           description: 'Created from app UI',
                           visibility: 'all',
@@ -100,7 +90,7 @@ class _DocumentsPageState extends State<DocumentsPage> {
                     ),
                   ],
                 ),
-              if (_canManage(auth.role)) const SizedBox(height: 12),
+              if (canManage) const SizedBox(height: 12),
               if (docs.isEmpty)
                 const Text('No organization documents yet.')
               else
@@ -115,8 +105,6 @@ class _DocumentsPageState extends State<DocumentsPage> {
                       onPressed: () async {
                         final messenger = ScaffoldMessenger.of(context);
                         final url = await repo.resolveFileDownloadUrl(
-                          organizationId: auth.organizationId!,
-                          actorId: auth.actorId!,
                           fileAssetId: doc.fileAssetId,
                         );
                         if (!mounted) return;

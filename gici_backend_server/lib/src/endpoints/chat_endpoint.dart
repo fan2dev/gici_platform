@@ -1,7 +1,7 @@
 import 'package:serverpod/serverpod.dart';
 
 import '../generated/protocol.dart';
-import '../helpers/request_scope.dart';
+import '../helpers/session_user_helper.dart';
 import '../services/access_control_service.dart';
 import '../services/activity_log_service.dart';
 
@@ -13,23 +13,17 @@ class ChatEndpoint extends Endpoint {
 
   Future<List<ChatConversation>> listConversations(
     Session session, {
-    required String organizationId,
-    required String actorId,
     int page = 0,
     int pageSize = 20,
   }) async {
-    final orgId = parseOrganizationId(organizationId);
-    final actor = await _accessControl.requireActor(
-      session,
-      actorId: parseActorId(actorId),
-      organizationId: orgId,
-      allowedRoles: const [
-        'platform_super_admin',
-        'organization_admin',
-        'staff',
-        'guardian',
-      ],
-    );
+    final actor = await getAuthenticatedUser(session);
+    _accessControl.requireRole(actor, allowedRoles: [
+      'platform_super_admin',
+      'organization_admin',
+      'staff',
+      'guardian',
+    ]);
+    final orgId = actor.organizationId!;
 
     final safePage = page < 0 ? 0 : page;
     final safePageSize = pageSize.clamp(1, 100);
@@ -81,22 +75,16 @@ class ChatEndpoint extends Endpoint {
 
   Future<ChatConversation> getConversation(
     Session session, {
-    required String organizationId,
-    required String actorId,
-    required int conversationId,
+    required UuidValue conversationId,
   }) async {
-    final orgId = parseOrganizationId(organizationId);
-    final actor = await _accessControl.requireActor(
-      session,
-      actorId: parseActorId(actorId),
-      organizationId: orgId,
-      allowedRoles: const [
-        'platform_super_admin',
-        'organization_admin',
-        'staff',
-        'guardian',
-      ],
-    );
+    final actor = await getAuthenticatedUser(session);
+    _accessControl.requireRole(actor, allowedRoles: [
+      'platform_super_admin',
+      'organization_admin',
+      'staff',
+      'guardian',
+    ]);
+    final orgId = actor.organizationId!;
 
     await _ensureParticipant(
       session,
@@ -118,25 +106,19 @@ class ChatEndpoint extends Endpoint {
 
   Future<ChatConversation> createConversation(
     Session session, {
-    required String organizationId,
-    required String actorId,
     required String conversationType,
     String? title,
-    int? relatedChildId,
-    int? relatedClassroomId,
-    required List<int> participantUserIds,
+    UuidValue? relatedChildId,
+    UuidValue? relatedClassroomId,
+    required List<UuidValue> participantUserIds,
   }) async {
-    final orgId = parseOrganizationId(organizationId);
-    final actor = await _accessControl.requireActor(
-      session,
-      actorId: parseActorId(actorId),
-      organizationId: orgId,
-      allowedRoles: const [
-        'platform_super_admin',
-        'organization_admin',
-        'staff'
-      ],
-    );
+    final actor = await getAuthenticatedUser(session);
+    _accessControl.requireRole(actor, allowedRoles: [
+      'platform_super_admin',
+      'organization_admin',
+      'staff',
+    ]);
+    final orgId = actor.organizationId!;
 
     if (participantUserIds.isEmpty) {
       throw Exception('Conversation requires at least one participant.');
@@ -144,19 +126,7 @@ class ChatEndpoint extends Endpoint {
 
     final uniqueParticipants = {...participantUserIds, actor.id!}.toList();
 
-    for (final participantId in uniqueParticipants) {
-      await _accessControl.requireActor(
-        session,
-        actorId: participantId,
-        organizationId: orgId,
-        allowedRoles: const [
-          'platform_super_admin',
-          'organization_admin',
-          'staff',
-          'guardian',
-        ],
-      );
-    }
+    final now = DateTime.now().toUtc();
 
     if (conversationType == 'direct' && uniqueParticipants.length == 2) {
       final existing = await _findDirectConversation(
@@ -169,7 +139,6 @@ class ChatEndpoint extends Endpoint {
       }
     }
 
-    final now = DateTime.now().toUtc();
     final conversation = await ChatConversation.db.insertRow(
       session,
       ChatConversation(
@@ -208,10 +177,10 @@ class ChatEndpoint extends Endpoint {
     await _activityLogService.log(
       session,
       organizationId: orgId,
-      userId: actor.id,
+      userId: actor.id!,
       action: 'chat.conversation.create',
       entityType: 'chat_conversation',
-      entityId: conversation.id,
+      entityId: conversation.id.toString(),
       metadata:
           'type=$conversationType;participants=${uniqueParticipants.join(',')}',
     );
@@ -221,36 +190,22 @@ class ChatEndpoint extends Endpoint {
 
   Future<ChatMessage> sendMessage(
     Session session, {
-    required String organizationId,
-    required String actorId,
-    required String conversationId,
+    required UuidValue conversationId,
     required String content,
   }) async {
-    final orgId = parseOrganizationId(organizationId);
-    final actor = await _accessControl.requireActor(
-      session,
-      actorId: parseActorId(actorId),
-      organizationId: orgId,
-      allowedRoles: const [
-        'platform_super_admin',
-        'organization_admin',
-        'staff',
-        'guardian',
-      ],
-    );
-    final convId = int.tryParse(conversationId);
-    if (convId == null) {
-      throw ArgumentError.value(
-        conversationId,
-        'conversationId',
-        'Must be an integer conversation id',
-      );
-    }
+    final actor = await getAuthenticatedUser(session);
+    _accessControl.requireRole(actor, allowedRoles: [
+      'platform_super_admin',
+      'organization_admin',
+      'staff',
+      'guardian',
+    ]);
+    final orgId = actor.organizationId!;
 
     await _ensureParticipant(
       session,
       organizationId: orgId,
-      conversationId: convId,
+      conversationId: conversationId,
       userId: actor.id!,
     );
 
@@ -260,7 +215,7 @@ class ChatEndpoint extends Endpoint {
       session,
       ChatMessage(
         organizationId: orgId,
-        conversationId: convId,
+        conversationId: conversationId,
         senderUserId: actor.id!,
         body: content,
         messageType: 'text',
@@ -276,12 +231,13 @@ class ChatEndpoint extends Endpoint {
       organizationId: orgId,
       action: 'chat.send_message',
       entityType: 'chat_message',
-      entityId: message.id,
-      userId: actor.id,
+      entityId: message.id.toString(),
+      userId: actor.id!,
       metadata: 'conversationId=$conversationId',
     );
 
-    final conversation = await ChatConversation.db.findById(session, convId);
+    final conversation =
+        await ChatConversation.db.findById(session, conversationId);
     if (conversation != null) {
       await ChatConversation.db.updateRow(
         session,
@@ -294,37 +250,23 @@ class ChatEndpoint extends Endpoint {
 
   Future<List<ChatMessage>> listMessages(
     Session session, {
-    required String organizationId,
-    required String actorId,
-    required String conversationId,
+    required UuidValue conversationId,
     int page = 0,
     int pageSize = 30,
   }) async {
-    final orgId = parseOrganizationId(organizationId);
-    final actor = await _accessControl.requireActor(
-      session,
-      actorId: parseActorId(actorId),
-      organizationId: orgId,
-      allowedRoles: const [
-        'platform_super_admin',
-        'organization_admin',
-        'staff',
-        'guardian',
-      ],
-    );
-    final convId = int.tryParse(conversationId);
-    if (convId == null) {
-      throw ArgumentError.value(
-        conversationId,
-        'conversationId',
-        'Must be an integer conversation id',
-      );
-    }
+    final actor = await getAuthenticatedUser(session);
+    _accessControl.requireRole(actor, allowedRoles: [
+      'platform_super_admin',
+      'organization_admin',
+      'staff',
+      'guardian',
+    ]);
+    final orgId = actor.organizationId!;
 
     await _ensureParticipant(
       session,
       organizationId: orgId,
-      conversationId: convId,
+      conversationId: conversationId,
       userId: actor.id!,
     );
 
@@ -335,7 +277,7 @@ class ChatEndpoint extends Endpoint {
       session,
       where: (t) =>
           t.organizationId.equals(orgId) &
-          t.conversationId.equals(convId) &
+          t.conversationId.equals(conversationId) &
           t.deletedAt.equals(null),
       orderBy: (t) => t.sentAt,
       orderDescending: false,
@@ -348,23 +290,17 @@ class ChatEndpoint extends Endpoint {
 
   Future<void> markConversationRead(
     Session session, {
-    required String organizationId,
-    required String actorId,
-    required int conversationId,
-    int? lastReadMessageId,
+    required UuidValue conversationId,
+    UuidValue? lastReadMessageId,
   }) async {
-    final orgId = parseOrganizationId(organizationId);
-    final actor = await _accessControl.requireActor(
-      session,
-      actorId: parseActorId(actorId),
-      organizationId: orgId,
-      allowedRoles: const [
-        'platform_super_admin',
-        'organization_admin',
-        'staff',
-        'guardian',
-      ],
-    );
+    final actor = await getAuthenticatedUser(session);
+    _accessControl.requireRole(actor, allowedRoles: [
+      'platform_super_admin',
+      'organization_admin',
+      'staff',
+      'guardian',
+    ]);
+    final orgId = actor.organizationId!;
 
     final participant = await ChatParticipant.db.findFirstRow(
       session,
@@ -390,22 +326,16 @@ class ChatEndpoint extends Endpoint {
   }
 
   Future<Map<String, int>> unreadCounts(
-    Session session, {
-    required String organizationId,
-    required String actorId,
-  }) async {
-    final orgId = parseOrganizationId(organizationId);
-    final actor = await _accessControl.requireActor(
-      session,
-      actorId: parseActorId(actorId),
-      organizationId: orgId,
-      allowedRoles: const [
-        'platform_super_admin',
-        'organization_admin',
-        'staff',
-        'guardian',
-      ],
-    );
+    Session session,
+  ) async {
+    final actor = await getAuthenticatedUser(session);
+    _accessControl.requireRole(actor, allowedRoles: [
+      'platform_super_admin',
+      'organization_admin',
+      'staff',
+      'guardian',
+    ]);
+    final orgId = actor.organizationId!;
 
     final participants = await ChatParticipant.db.find(
       session,
@@ -429,7 +359,7 @@ class ChatEndpoint extends Endpoint {
       final lastReadMessageId = participant.lastReadMessageId;
       final unread = lastReadMessageId == null
           ? messages.length
-          : messages.where((m) => (m.id ?? 0) > lastReadMessageId).length;
+          : messages.where((m) => m.id != null && m.id != lastReadMessageId).length;
 
       result[participant.conversationId.toString()] = unread;
     }
@@ -439,9 +369,9 @@ class ChatEndpoint extends Endpoint {
 
   Future<void> _ensureParticipant(
     Session session, {
-    required int organizationId,
-    required int conversationId,
-    required int userId,
+    required UuidValue organizationId,
+    required UuidValue conversationId,
+    required UuidValue userId,
   }) async {
     final participant = await ChatParticipant.db.findFirstRow(
       session,
@@ -458,10 +388,10 @@ class ChatEndpoint extends Endpoint {
     }
   }
 
-  Future<Set<int>> _guardianChildIds(
+  Future<Set<UuidValue>> _guardianChildIds(
     Session session, {
-    required int organizationId,
-    required int guardianUserId,
+    required UuidValue organizationId,
+    required UuidValue guardianUserId,
   }) async {
     final relations = await ChildGuardianRelation.db.find(
       session,
@@ -474,8 +404,8 @@ class ChatEndpoint extends Endpoint {
 
   Future<ChatConversation?> _findDirectConversation(
     Session session, {
-    required int organizationId,
-    required List<int> participantUserIds,
+    required UuidValue organizationId,
+    required List<UuidValue> participantUserIds,
   }) async {
     final conversations = await ChatConversation.db.find(
       session,

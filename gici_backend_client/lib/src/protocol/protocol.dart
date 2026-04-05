@@ -43,32 +43,33 @@ import 'time_entry.dart' as _i31;
 import 'user_onboarding_state.dart' as _i32;
 import 'package:gici_backend_client/src/protocol/chat_conversation.dart'
     as _i33;
-import 'package:gici_backend_client/src/protocol/chat_message.dart' as _i34;
-import 'package:gici_backend_client/src/protocol/child.dart' as _i35;
+import 'package:uuid/uuid_value.dart' as _i34;
+import 'package:gici_backend_client/src/protocol/chat_message.dart' as _i35;
+import 'package:gici_backend_client/src/protocol/child.dart' as _i36;
 import 'package:gici_backend_client/src/protocol/child_timeline_item.dart'
-    as _i36;
-import 'package:gici_backend_client/src/protocol/classroom.dart' as _i37;
+    as _i37;
+import 'package:gici_backend_client/src/protocol/classroom.dart' as _i38;
 import 'package:gici_backend_client/src/protocol/classroom_assignment.dart'
-    as _i38;
-import 'package:gici_backend_client/src/protocol/data_change_request.dart'
     as _i39;
-import 'package:gici_backend_client/src/protocol/organization_document.dart'
+import 'package:gici_backend_client/src/protocol/data_change_request.dart'
     as _i40;
-import 'package:gici_backend_client/src/protocol/child_document.dart' as _i41;
-import 'package:gici_backend_client/src/protocol/menu_entry.dart' as _i42;
-import 'package:gici_backend_client/src/protocol/gallery.dart' as _i43;
-import 'package:gici_backend_client/src/protocol/gallery_item.dart' as _i44;
-import 'package:gici_backend_client/src/protocol/meal_entry.dart' as _i45;
-import 'package:gici_backend_client/src/protocol/nap_entry.dart' as _i46;
+import 'package:gici_backend_client/src/protocol/organization_document.dart'
+    as _i41;
+import 'package:gici_backend_client/src/protocol/child_document.dart' as _i42;
+import 'package:gici_backend_client/src/protocol/menu_entry.dart' as _i43;
+import 'package:gici_backend_client/src/protocol/gallery.dart' as _i44;
+import 'package:gici_backend_client/src/protocol/gallery_item.dart' as _i45;
+import 'package:gici_backend_client/src/protocol/meal_entry.dart' as _i46;
+import 'package:gici_backend_client/src/protocol/nap_entry.dart' as _i47;
 import 'package:gici_backend_client/src/protocol/bowel_movement_entry.dart'
-    as _i47;
-import 'package:gici_backend_client/src/protocol/notification_record.dart'
     as _i48;
-import 'package:gici_backend_client/src/protocol/organization.dart' as _i49;
+import 'package:gici_backend_client/src/protocol/notification_record.dart'
+    as _i49;
+import 'package:gici_backend_client/src/protocol/organization.dart' as _i50;
 import 'package:gici_backend_client/src/protocol/pedagogical_report.dart'
-    as _i50;
-import 'package:gici_backend_client/src/protocol/time_entry.dart' as _i51;
-import 'package:serverpod_auth_client/serverpod_auth_client.dart' as _i52;
+    as _i51;
+import 'package:gici_backend_client/src/protocol/time_entry.dart' as _i52;
+import 'package:serverpod_auth_client/serverpod_auth_client.dart' as _i53;
 export 'activity_log.dart';
 export 'app_user.dart';
 export 'auth_session.dart';
@@ -322,8 +323,9 @@ class Protocol extends _i1.SerializationManager {
           .map((e) => deserialize<_i5.BowelMovementEntry>(e))
           .toList() as T;
     }
-    if (t == List<int>) {
-      return (data as List).map((e) => deserialize<int>(e)).toList() as T;
+    if (t == List<_i1.UuidValue>) {
+      return (data as List).map((e) => deserialize<_i1.UuidValue>(e)).toList()
+          as T;
     }
     if (t == List<String>) {
       return (data as List).map((e) => deserialize<String>(e)).toList() as T;
@@ -333,98 +335,99 @@ class Protocol extends _i1.SerializationManager {
           .map((e) => deserialize<_i33.ChatConversation>(e))
           .toList() as T;
     }
-    if (t == List<int>) {
-      return (data as List).map((e) => deserialize<int>(e)).toList() as T;
+    if (t == List<_i34.UuidValue>) {
+      return (data as List).map((e) => deserialize<_i34.UuidValue>(e)).toList()
+          as T;
     }
-    if (t == List<_i34.ChatMessage>) {
+    if (t == List<_i35.ChatMessage>) {
       return (data as List)
-          .map((e) => deserialize<_i34.ChatMessage>(e))
+          .map((e) => deserialize<_i35.ChatMessage>(e))
           .toList() as T;
     }
     if (t == Map<String, int>) {
       return (data as Map).map(
           (k, v) => MapEntry(deserialize<String>(k), deserialize<int>(v))) as T;
     }
-    if (t == List<_i35.Child>) {
-      return (data as List).map((e) => deserialize<_i35.Child>(e)).toList()
+    if (t == List<_i36.Child>) {
+      return (data as List).map((e) => deserialize<_i36.Child>(e)).toList()
           as T;
     }
-    if (t == List<_i36.ChildTimelineItem>) {
+    if (t == List<_i37.ChildTimelineItem>) {
       return (data as List)
-          .map((e) => deserialize<_i36.ChildTimelineItem>(e))
+          .map((e) => deserialize<_i37.ChildTimelineItem>(e))
           .toList() as T;
     }
-    if (t == List<_i37.Classroom>) {
-      return (data as List).map((e) => deserialize<_i37.Classroom>(e)).toList()
+    if (t == List<_i38.Classroom>) {
+      return (data as List).map((e) => deserialize<_i38.Classroom>(e)).toList()
           as T;
     }
-    if (t == List<_i38.ClassroomAssignment>) {
+    if (t == List<_i39.ClassroomAssignment>) {
       return (data as List)
-          .map((e) => deserialize<_i38.ClassroomAssignment>(e))
+          .map((e) => deserialize<_i39.ClassroomAssignment>(e))
           .toList() as T;
     }
-    if (t == List<_i39.DataChangeRequest>) {
+    if (t == List<_i40.DataChangeRequest>) {
       return (data as List)
-          .map((e) => deserialize<_i39.DataChangeRequest>(e))
+          .map((e) => deserialize<_i40.DataChangeRequest>(e))
           .toList() as T;
     }
-    if (t == List<_i40.OrganizationDocument>) {
+    if (t == List<_i41.OrganizationDocument>) {
       return (data as List)
-          .map((e) => deserialize<_i40.OrganizationDocument>(e))
+          .map((e) => deserialize<_i41.OrganizationDocument>(e))
           .toList() as T;
     }
-    if (t == List<_i41.ChildDocument>) {
+    if (t == List<_i42.ChildDocument>) {
       return (data as List)
-          .map((e) => deserialize<_i41.ChildDocument>(e))
+          .map((e) => deserialize<_i42.ChildDocument>(e))
           .toList() as T;
     }
-    if (t == List<_i42.MenuEntry>) {
-      return (data as List).map((e) => deserialize<_i42.MenuEntry>(e)).toList()
+    if (t == List<_i43.MenuEntry>) {
+      return (data as List).map((e) => deserialize<_i43.MenuEntry>(e)).toList()
           as T;
     }
-    if (t == List<_i43.Gallery>) {
-      return (data as List).map((e) => deserialize<_i43.Gallery>(e)).toList()
+    if (t == List<_i44.Gallery>) {
+      return (data as List).map((e) => deserialize<_i44.Gallery>(e)).toList()
           as T;
     }
-    if (t == List<_i44.GalleryItem>) {
+    if (t == List<_i45.GalleryItem>) {
       return (data as List)
-          .map((e) => deserialize<_i44.GalleryItem>(e))
+          .map((e) => deserialize<_i45.GalleryItem>(e))
           .toList() as T;
     }
-    if (t == List<_i45.MealEntry>) {
-      return (data as List).map((e) => deserialize<_i45.MealEntry>(e)).toList()
+    if (t == List<_i46.MealEntry>) {
+      return (data as List).map((e) => deserialize<_i46.MealEntry>(e)).toList()
           as T;
     }
-    if (t == List<_i46.NapEntry>) {
-      return (data as List).map((e) => deserialize<_i46.NapEntry>(e)).toList()
+    if (t == List<_i47.NapEntry>) {
+      return (data as List).map((e) => deserialize<_i47.NapEntry>(e)).toList()
           as T;
     }
-    if (t == List<_i47.BowelMovementEntry>) {
+    if (t == List<_i48.BowelMovementEntry>) {
       return (data as List)
-          .map((e) => deserialize<_i47.BowelMovementEntry>(e))
+          .map((e) => deserialize<_i48.BowelMovementEntry>(e))
           .toList() as T;
     }
-    if (t == List<_i48.NotificationRecord>) {
+    if (t == List<_i49.NotificationRecord>) {
       return (data as List)
-          .map((e) => deserialize<_i48.NotificationRecord>(e))
+          .map((e) => deserialize<_i49.NotificationRecord>(e))
           .toList() as T;
     }
-    if (t == List<_i49.Organization>) {
+    if (t == List<_i50.Organization>) {
       return (data as List)
-          .map((e) => deserialize<_i49.Organization>(e))
+          .map((e) => deserialize<_i50.Organization>(e))
           .toList() as T;
     }
-    if (t == List<_i50.PedagogicalReport>) {
+    if (t == List<_i51.PedagogicalReport>) {
       return (data as List)
-          .map((e) => deserialize<_i50.PedagogicalReport>(e))
+          .map((e) => deserialize<_i51.PedagogicalReport>(e))
           .toList() as T;
     }
-    if (t == List<_i51.TimeEntry>) {
-      return (data as List).map((e) => deserialize<_i51.TimeEntry>(e)).toList()
+    if (t == List<_i52.TimeEntry>) {
+      return (data as List).map((e) => deserialize<_i52.TimeEntry>(e)).toList()
           as T;
     }
     try {
-      return _i52.Protocol().deserialize<T>(data, t);
+      return _i53.Protocol().deserialize<T>(data, t);
     } on _i1.DeserializationTypeNotFoundException catch (_) {}
     return super.deserialize<T>(data, t);
   }
@@ -526,7 +529,7 @@ class Protocol extends _i1.SerializationManager {
     if (data is _i32.UserOnboardingState) {
       return 'UserOnboardingState';
     }
-    className = _i52.Protocol().getClassNameForObject(data);
+    className = _i53.Protocol().getClassNameForObject(data);
     if (className != null) {
       return 'serverpod_auth.$className';
     }
@@ -634,7 +637,7 @@ class Protocol extends _i1.SerializationManager {
     }
     if (dataClassName.startsWith('serverpod_auth.')) {
       data['className'] = dataClassName.substring(15);
-      return _i52.Protocol().deserializeByClassName(data);
+      return _i53.Protocol().deserializeByClassName(data);
     }
     return super.deserializeByClassName(data);
   }

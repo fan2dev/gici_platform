@@ -1,7 +1,7 @@
 import 'package:serverpod/serverpod.dart';
 
 import '../generated/protocol.dart';
-import '../helpers/request_scope.dart';
+import '../helpers/session_user_helper.dart';
 import '../services/access_control_service.dart';
 import '../services/activity_log_service.dart';
 import '../services/data_change_request_service.dart';
@@ -15,35 +15,25 @@ class DataChangeRequestEndpoint extends Endpoint {
 
   Future<DataChangeRequest> createRequest(
     Session session, {
-    required String organizationId,
-    required String actorId,
-    int? targetChildId,
+    UuidValue? targetChildId,
     required String requestType,
     required String requestPayload,
   }) async {
-    final orgId = parseOrganizationId(organizationId);
-    final actor = await _accessControl.requireActor(
-      session,
-      actorId: parseActorId(actorId),
-      organizationId: orgId,
-      allowedRoles: const [
-        'platform_super_admin',
-        'organization_admin',
-        'staff',
-        'guardian',
-      ],
-    );
+    final actor = await getAuthenticatedUser(session);
+    _accessControl.requireRole(actor, allowedRoles: const [
+      'platform_super_admin',
+      'organization_admin',
+      'staff',
+      'guardian',
+    ]);
+    final orgId = actor.organizationId!;
 
     if (actor.role == 'guardian' && targetChildId != null) {
-      final canAccess = await _accessControl.isGuardianOfChild(
+      await _accessControl.requireGuardianChildAccess(
         session,
-        organizationId: orgId,
-        guardianUserId: actor.id!,
+        actor: actor,
         childId: targetChildId,
       );
-      if (!canAccess) {
-        throw Exception('Guardian cannot create request for this child.');
-      }
     }
 
     final request = await _requestService.create(
@@ -61,7 +51,7 @@ class DataChangeRequestEndpoint extends Endpoint {
       userId: actor.id,
       action: 'data_change_request.create',
       entityType: 'data_change_request',
-      entityId: request.id,
+      entityId: request.id?.toString(),
       metadata: 'requestType=$requestType',
     );
 
@@ -70,23 +60,17 @@ class DataChangeRequestEndpoint extends Endpoint {
 
   Future<List<DataChangeRequest>> myRequests(
     Session session, {
-    required String organizationId,
-    required String actorId,
     int page = 0,
     int pageSize = 30,
   }) async {
-    final orgId = parseOrganizationId(organizationId);
-    final actor = await _accessControl.requireActor(
-      session,
-      actorId: parseActorId(actorId),
-      organizationId: orgId,
-      allowedRoles: const [
-        'platform_super_admin',
-        'organization_admin',
-        'staff',
-        'guardian',
-      ],
-    );
+    final actor = await getAuthenticatedUser(session);
+    _accessControl.requireRole(actor, allowedRoles: const [
+      'platform_super_admin',
+      'organization_admin',
+      'staff',
+      'guardian',
+    ]);
+    final orgId = actor.organizationId!;
 
     final safePage = page < 0 ? 0 : page;
     final safePageSize = pageSize.clamp(1, 100);
@@ -102,19 +86,17 @@ class DataChangeRequestEndpoint extends Endpoint {
 
   Future<List<DataChangeRequest>> listRequestsForReview(
     Session session, {
-    required String organizationId,
-    required String actorId,
     String? status,
     int page = 0,
     int pageSize = 40,
   }) async {
-    final orgId = parseOrganizationId(organizationId);
-    await _accessControl.requireActor(
-      session,
-      actorId: parseActorId(actorId),
-      organizationId: orgId,
-      allowedRoles: const ['platform_super_admin', 'organization_admin', 'staff'],
-    );
+    final actor = await getAuthenticatedUser(session);
+    _accessControl.requireRole(actor, allowedRoles: const [
+      'platform_super_admin',
+      'organization_admin',
+      'staff',
+    ]);
+    final orgId = actor.organizationId!;
 
     final safePage = page < 0 ? 0 : page;
     final safePageSize = pageSize.clamp(1, 120);
@@ -130,22 +112,16 @@ class DataChangeRequestEndpoint extends Endpoint {
 
   Future<DataChangeRequest> getRequest(
     Session session, {
-    required String organizationId,
-    required String actorId,
-    required int requestId,
+    required UuidValue requestId,
   }) async {
-    final orgId = parseOrganizationId(organizationId);
-    final actor = await _accessControl.requireActor(
-      session,
-      actorId: parseActorId(actorId),
-      organizationId: orgId,
-      allowedRoles: const [
-        'platform_super_admin',
-        'organization_admin',
-        'staff',
-        'guardian',
-      ],
-    );
+    final actor = await getAuthenticatedUser(session);
+    _accessControl.requireRole(actor, allowedRoles: const [
+      'platform_super_admin',
+      'organization_admin',
+      'staff',
+      'guardian',
+    ]);
+    final orgId = actor.organizationId!;
 
     final request = await _requestService.getById(session, requestId: requestId);
     if (request == null || request.organizationId != orgId) {
@@ -161,19 +137,17 @@ class DataChangeRequestEndpoint extends Endpoint {
 
   Future<DataChangeRequest> updateRequestStatus(
     Session session, {
-    required String organizationId,
-    required String actorId,
-    required int requestId,
+    required UuidValue requestId,
     required String status,
     String? resolutionNote,
   }) async {
-    final orgId = parseOrganizationId(organizationId);
-    final actor = await _accessControl.requireActor(
-      session,
-      actorId: parseActorId(actorId),
-      organizationId: orgId,
-      allowedRoles: const ['platform_super_admin', 'organization_admin', 'staff'],
-    );
+    final actor = await getAuthenticatedUser(session);
+    _accessControl.requireRole(actor, allowedRoles: const [
+      'platform_super_admin',
+      'organization_admin',
+      'staff',
+    ]);
+    final orgId = actor.organizationId!;
 
     if (!const ['pending', 'approved', 'rejected'].contains(status)) {
       throw Exception('Invalid status.');
@@ -198,7 +172,7 @@ class DataChangeRequestEndpoint extends Endpoint {
       userId: actor.id,
       action: 'data_change_request.update_status',
       entityType: 'data_change_request',
-      entityId: updated.id,
+      entityId: updated.id?.toString(),
       metadata: 'status=$status;requestId=$requestId',
     );
 

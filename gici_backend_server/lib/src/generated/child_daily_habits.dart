@@ -25,7 +25,7 @@ abstract class ChildDailyHabits
   });
 
   factory ChildDailyHabits({
-    required int childId,
+    required _i1.UuidValue childId,
     required DateTime day,
     required List<_i2.MealEntry> meals,
     required List<_i3.NapEntry> naps,
@@ -34,7 +34,8 @@ abstract class ChildDailyHabits
 
   factory ChildDailyHabits.fromJson(Map<String, dynamic> jsonSerialization) {
     return ChildDailyHabits(
-      childId: jsonSerialization['childId'] as int,
+      childId:
+          _i1.UuidValueJsonExtension.fromJson(jsonSerialization['childId']),
       day: _i1.DateTimeJsonExtension.fromJson(jsonSerialization['day']),
       meals: (jsonSerialization['meals'] as List)
           .map((e) => _i2.MealEntry.fromJson((e as Map<String, dynamic>)))
@@ -49,7 +50,7 @@ abstract class ChildDailyHabits
     );
   }
 
-  int childId;
+  _i1.UuidValue childId;
 
   DateTime day;
 
@@ -63,7 +64,7 @@ abstract class ChildDailyHabits
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
   ChildDailyHabits copyWith({
-    int? childId,
+    _i1.UuidValue? childId,
     DateTime? day,
     List<_i2.MealEntry>? meals,
     List<_i3.NapEntry>? naps,
@@ -72,7 +73,7 @@ abstract class ChildDailyHabits
   @override
   Map<String, dynamic> toJson() {
     return {
-      'childId': childId,
+      'childId': childId.toJson(),
       'day': day.toJson(),
       'meals': meals.toJson(valueToJson: (v) => v.toJson()),
       'naps': naps.toJson(valueToJson: (v) => v.toJson()),
@@ -83,7 +84,7 @@ abstract class ChildDailyHabits
   @override
   Map<String, dynamic> toJsonForProtocol() {
     return {
-      'childId': childId,
+      'childId': childId.toJson(),
       'day': day.toJson(),
       'meals': meals.toJson(valueToJson: (v) => v.toJsonForProtocol()),
       'naps': naps.toJson(valueToJson: (v) => v.toJsonForProtocol()),
@@ -100,7 +101,7 @@ abstract class ChildDailyHabits
 
 class _ChildDailyHabitsImpl extends ChildDailyHabits {
   _ChildDailyHabitsImpl({
-    required int childId,
+    required _i1.UuidValue childId,
     required DateTime day,
     required List<_i2.MealEntry> meals,
     required List<_i3.NapEntry> naps,
@@ -118,7 +119,7 @@ class _ChildDailyHabitsImpl extends ChildDailyHabits {
   @_i1.useResult
   @override
   ChildDailyHabits copyWith({
-    int? childId,
+    _i1.UuidValue? childId,
     DateTime? day,
     List<_i2.MealEntry>? meals,
     List<_i3.NapEntry>? naps,

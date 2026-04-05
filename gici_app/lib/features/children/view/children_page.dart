@@ -26,16 +26,9 @@ class _ChildrenPageState extends State<ChildrenPage> {
   }
 
   Future<void> _createChild(BuildContext context) async {
-    final auth = context.read<AuthCubit>().state;
     final repo = sl<ChildRepository>();
 
-    if (auth.organizationId == null || auth.actorId == null) {
-      return;
-    }
-
     await repo.createChild(
-      organizationId: auth.organizationId!,
-      actorId: auth.actorId!,
       firstName: _firstNameController.text.trim(),
       lastName: _lastNameController.text.trim(),
       dateOfBirth: DateTime.utc(2023, 1, 1),
@@ -53,16 +46,11 @@ class _ChildrenPageState extends State<ChildrenPage> {
     final auth = context.watch<AuthCubit>().state;
     final repo = sl<ChildRepository>();
 
-    if (!auth.isAuthenticated ||
-        auth.organizationId == null ||
-        auth.actorId == null) {
+    if (!auth.isAuthenticated || auth.organizationId == null) {
       return const Scaffold(body: Center(child: Text('Unauthorized')));
     }
 
-    final canManage =
-        auth.role == AppRole.organizationAdmin ||
-        auth.role == AppRole.staff ||
-        auth.role == AppRole.platformSuperAdmin;
+    final canManage = auth.isStaffOrAbove;
 
     return Scaffold(
       appBar: AppBar(
@@ -74,8 +62,6 @@ class _ChildrenPageState extends State<ChildrenPage> {
       ),
       body: FutureBuilder<List<Child>>(
         future: repo.listChildren(
-          organizationId: auth.organizationId!,
-          actorId: auth.actorId!,
           page: 0,
           pageSize: 100,
         ),

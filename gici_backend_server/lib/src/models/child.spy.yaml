@@ -5,7 +5,8 @@ class: Child
 table: child
 
 fields:
-  organizationId: int
+  id: UuidValue?, defaultPersist=random
+  organizationId: UuidValue
   firstName: String
   lastName: String
   dateOfBirth: DateTime
@@ -29,5 +30,3 @@ indexes:
     fields: status
   child_name_idx:
     fields: lastName, firstName
-
-

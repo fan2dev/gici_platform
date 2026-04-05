@@ -7,8 +7,8 @@ class NotificationService {
 
   Future<PushDeviceToken> registerDeviceToken(
     Session session, {
-    required int organizationId,
-    required int userId,
+    required UuidValue organizationId,
+    required UuidValue userId,
     required String token,
     required String platform,
     String? deviceId,
@@ -56,8 +56,8 @@ class NotificationService {
 
   Future<void> removeDeviceToken(
     Session session, {
-    required int organizationId,
-    required int userId,
+    required UuidValue organizationId,
+    required UuidValue userId,
     required String token,
   }) async {
     final row = await PushDeviceToken.db.findFirstRow(
@@ -82,8 +82,8 @@ class NotificationService {
 
   Future<List<NotificationRecord>> listMyNotifications(
     Session session, {
-    required int organizationId,
-    required int userId,
+    required UuidValue organizationId,
+    required UuidValue userId,
     required int limit,
     required int offset,
   }) {
@@ -100,9 +100,9 @@ class NotificationService {
 
   Future<void> markAsRead(
     Session session, {
-    required int organizationId,
-    required int userId,
-    required int notificationId,
+    required UuidValue organizationId,
+    required UuidValue userId,
+    required UuidValue notificationId,
   }) async {
     final row = await NotificationRecord.db.findFirstRow(
       session,
@@ -127,15 +127,15 @@ class NotificationService {
 
   Future<int> createSegmentedNotification(
     Session session, {
-    required int organizationId,
-    required int createdByUserId,
+    required UuidValue organizationId,
+    required UuidValue createdByUserId,
     required String title,
     required String body,
     required String category,
     required String targetScope,
-    int? targetClassroomId,
-    int? targetChildId,
-    int? targetUserId,
+    UuidValue? targetClassroomId,
+    UuidValue? targetChildId,
+    UuidValue? targetUserId,
   }) async {
     final recipientIds = await _resolveRecipients(
       session,
@@ -177,13 +177,13 @@ class NotificationService {
     return recipientIds.length;
   }
 
-  Future<Set<int>> _resolveRecipients(
+  Future<Set<UuidValue>> _resolveRecipients(
     Session session, {
-    required int organizationId,
+    required UuidValue organizationId,
     required String targetScope,
-    int? targetClassroomId,
-    int? targetChildId,
-    int? targetUserId,
+    UuidValue? targetClassroomId,
+    UuidValue? targetChildId,
+    UuidValue? targetUserId,
   }) async {
     switch (targetScope) {
       case 'organization':
@@ -228,7 +228,7 @@ class NotificationService {
         );
         final childIds = assignments.map((a) => a.childId).toSet();
         if (childIds.isEmpty) {
-          return <int>{};
+          return <UuidValue>{};
         }
         final relations = await ChildGuardianRelation.db.find(
           session,

@@ -5,9 +5,10 @@ class: ChatMessage
 table: chat_message
 
 fields:
-  organizationId: int
-  conversationId: int
-  senderUserId: int
+  id: UuidValue?, defaultPersist=random
+  organizationId: UuidValue
+  conversationId: UuidValue
+  senderUserId: UuidValue
   body: String
   messageType: String
   metadataJson: String?
@@ -24,4 +25,3 @@ indexes:
     fields: senderUserId
   msg_sent_idx:
     fields: sentAt
-

@@ -5,7 +5,8 @@ class: OrganizationBranding
 table: organization_branding
 
 fields:
-  organizationId: int
+  id: UuidValue?, defaultPersist=random
+  organizationId: UuidValue
   primaryColor: String?
   secondaryColor: String?
   logoUrl: String?

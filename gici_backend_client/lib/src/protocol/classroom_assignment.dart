@@ -28,14 +28,14 @@ abstract class ClassroomAssignment implements _i1.SerializableModel {
   });
 
   factory ClassroomAssignment({
-    int? id,
-    required int organizationId,
-    required int classroomId,
-    required int childId,
+    _i1.UuidValue? id,
+    required _i1.UuidValue organizationId,
+    required _i1.UuidValue classroomId,
+    required _i1.UuidValue childId,
     required DateTime assignedAt,
-    int? assignedByUserId,
+    _i1.UuidValue? assignedByUserId,
     DateTime? withdrawnAt,
-    int? withdrawnByUserId,
+    _i1.UuidValue? withdrawnByUserId,
     String? withdrawnReason,
     required String status,
     required DateTime createdAt,
@@ -44,18 +44,29 @@ abstract class ClassroomAssignment implements _i1.SerializableModel {
 
   factory ClassroomAssignment.fromJson(Map<String, dynamic> jsonSerialization) {
     return ClassroomAssignment(
-      id: jsonSerialization['id'] as int?,
-      organizationId: jsonSerialization['organizationId'] as int,
-      classroomId: jsonSerialization['classroomId'] as int,
-      childId: jsonSerialization['childId'] as int,
+      id: jsonSerialization['id'] == null
+          ? null
+          : _i1.UuidValueJsonExtension.fromJson(jsonSerialization['id']),
+      organizationId: _i1.UuidValueJsonExtension.fromJson(
+          jsonSerialization['organizationId']),
+      classroomId:
+          _i1.UuidValueJsonExtension.fromJson(jsonSerialization['classroomId']),
+      childId:
+          _i1.UuidValueJsonExtension.fromJson(jsonSerialization['childId']),
       assignedAt:
           _i1.DateTimeJsonExtension.fromJson(jsonSerialization['assignedAt']),
-      assignedByUserId: jsonSerialization['assignedByUserId'] as int?,
+      assignedByUserId: jsonSerialization['assignedByUserId'] == null
+          ? null
+          : _i1.UuidValueJsonExtension.fromJson(
+              jsonSerialization['assignedByUserId']),
       withdrawnAt: jsonSerialization['withdrawnAt'] == null
           ? null
           : _i1.DateTimeJsonExtension.fromJson(
               jsonSerialization['withdrawnAt']),
-      withdrawnByUserId: jsonSerialization['withdrawnByUserId'] as int?,
+      withdrawnByUserId: jsonSerialization['withdrawnByUserId'] == null
+          ? null
+          : _i1.UuidValueJsonExtension.fromJson(
+              jsonSerialization['withdrawnByUserId']),
       withdrawnReason: jsonSerialization['withdrawnReason'] as String?,
       status: jsonSerialization['status'] as String,
       createdAt:
@@ -68,21 +79,21 @@ abstract class ClassroomAssignment implements _i1.SerializableModel {
   /// The database id, set if the object has been inserted into the
   /// database or if it has been fetched from the database. Otherwise,
   /// the id will be null.
-  int? id;
+  _i1.UuidValue? id;
 
-  int organizationId;
+  _i1.UuidValue organizationId;
 
-  int classroomId;
+  _i1.UuidValue classroomId;
 
-  int childId;
+  _i1.UuidValue childId;
 
   DateTime assignedAt;
 
-  int? assignedByUserId;
+  _i1.UuidValue? assignedByUserId;
 
   DateTime? withdrawnAt;
 
-  int? withdrawnByUserId;
+  _i1.UuidValue? withdrawnByUserId;
 
   String? withdrawnReason;
 
@@ -96,14 +107,14 @@ abstract class ClassroomAssignment implements _i1.SerializableModel {
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
   ClassroomAssignment copyWith({
-    int? id,
-    int? organizationId,
-    int? classroomId,
-    int? childId,
+    _i1.UuidValue? id,
+    _i1.UuidValue? organizationId,
+    _i1.UuidValue? classroomId,
+    _i1.UuidValue? childId,
     DateTime? assignedAt,
-    int? assignedByUserId,
+    _i1.UuidValue? assignedByUserId,
     DateTime? withdrawnAt,
-    int? withdrawnByUserId,
+    _i1.UuidValue? withdrawnByUserId,
     String? withdrawnReason,
     String? status,
     DateTime? createdAt,
@@ -112,14 +123,16 @@ abstract class ClassroomAssignment implements _i1.SerializableModel {
   @override
   Map<String, dynamic> toJson() {
     return {
-      if (id != null) 'id': id,
-      'organizationId': organizationId,
-      'classroomId': classroomId,
-      'childId': childId,
+      if (id != null) 'id': id?.toJson(),
+      'organizationId': organizationId.toJson(),
+      'classroomId': classroomId.toJson(),
+      'childId': childId.toJson(),
       'assignedAt': assignedAt.toJson(),
-      if (assignedByUserId != null) 'assignedByUserId': assignedByUserId,
+      if (assignedByUserId != null)
+        'assignedByUserId': assignedByUserId?.toJson(),
       if (withdrawnAt != null) 'withdrawnAt': withdrawnAt?.toJson(),
-      if (withdrawnByUserId != null) 'withdrawnByUserId': withdrawnByUserId,
+      if (withdrawnByUserId != null)
+        'withdrawnByUserId': withdrawnByUserId?.toJson(),
       if (withdrawnReason != null) 'withdrawnReason': withdrawnReason,
       'status': status,
       'createdAt': createdAt.toJson(),
@@ -137,14 +150,14 @@ class _Undefined {}
 
 class _ClassroomAssignmentImpl extends ClassroomAssignment {
   _ClassroomAssignmentImpl({
-    int? id,
-    required int organizationId,
-    required int classroomId,
-    required int childId,
+    _i1.UuidValue? id,
+    required _i1.UuidValue organizationId,
+    required _i1.UuidValue classroomId,
+    required _i1.UuidValue childId,
     required DateTime assignedAt,
-    int? assignedByUserId,
+    _i1.UuidValue? assignedByUserId,
     DateTime? withdrawnAt,
-    int? withdrawnByUserId,
+    _i1.UuidValue? withdrawnByUserId,
     String? withdrawnReason,
     required String status,
     required DateTime createdAt,
@@ -170,9 +183,9 @@ class _ClassroomAssignmentImpl extends ClassroomAssignment {
   @override
   ClassroomAssignment copyWith({
     Object? id = _Undefined,
-    int? organizationId,
-    int? classroomId,
-    int? childId,
+    _i1.UuidValue? organizationId,
+    _i1.UuidValue? classroomId,
+    _i1.UuidValue? childId,
     DateTime? assignedAt,
     Object? assignedByUserId = _Undefined,
     Object? withdrawnAt = _Undefined,
@@ -183,15 +196,16 @@ class _ClassroomAssignmentImpl extends ClassroomAssignment {
     DateTime? updatedAt,
   }) {
     return ClassroomAssignment(
-      id: id is int? ? id : this.id,
+      id: id is _i1.UuidValue? ? id : this.id,
       organizationId: organizationId ?? this.organizationId,
       classroomId: classroomId ?? this.classroomId,
       childId: childId ?? this.childId,
       assignedAt: assignedAt ?? this.assignedAt,
-      assignedByUserId:
-          assignedByUserId is int? ? assignedByUserId : this.assignedByUserId,
+      assignedByUserId: assignedByUserId is _i1.UuidValue?
+          ? assignedByUserId
+          : this.assignedByUserId,
       withdrawnAt: withdrawnAt is DateTime? ? withdrawnAt : this.withdrawnAt,
-      withdrawnByUserId: withdrawnByUserId is int?
+      withdrawnByUserId: withdrawnByUserId is _i1.UuidValue?
           ? withdrawnByUserId
           : this.withdrawnByUserId,
       withdrawnReason:

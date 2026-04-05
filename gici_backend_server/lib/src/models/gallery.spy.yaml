@@ -1,15 +1,18 @@
+# Photo/media gallery
+
 class: Gallery
 
 table: gallery
 
 fields:
-  organizationId: int
+  id: UuidValue?, defaultPersist=random
+  organizationId: UuidValue
   title: String
   description: String?
   audienceType: String
-  audienceClassroomId: int?
-  audienceChildId: int?
-  createdByUserId: int
+  audienceClassroomId: UuidValue?
+  audienceChildId: UuidValue?
+  createdByUserId: UuidValue
   isPublished: bool
   createdAt: DateTime
   updatedAt: DateTime

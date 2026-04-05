@@ -28,14 +28,14 @@ abstract class Gallery implements _i1.SerializableModel {
   });
 
   factory Gallery({
-    int? id,
-    required int organizationId,
+    _i1.UuidValue? id,
+    required _i1.UuidValue organizationId,
     required String title,
     String? description,
     required String audienceType,
-    int? audienceClassroomId,
-    int? audienceChildId,
-    required int createdByUserId,
+    _i1.UuidValue? audienceClassroomId,
+    _i1.UuidValue? audienceChildId,
+    required _i1.UuidValue createdByUserId,
     required bool isPublished,
     required DateTime createdAt,
     required DateTime updatedAt,
@@ -44,14 +44,24 @@ abstract class Gallery implements _i1.SerializableModel {
 
   factory Gallery.fromJson(Map<String, dynamic> jsonSerialization) {
     return Gallery(
-      id: jsonSerialization['id'] as int?,
-      organizationId: jsonSerialization['organizationId'] as int,
+      id: jsonSerialization['id'] == null
+          ? null
+          : _i1.UuidValueJsonExtension.fromJson(jsonSerialization['id']),
+      organizationId: _i1.UuidValueJsonExtension.fromJson(
+          jsonSerialization['organizationId']),
       title: jsonSerialization['title'] as String,
       description: jsonSerialization['description'] as String?,
       audienceType: jsonSerialization['audienceType'] as String,
-      audienceClassroomId: jsonSerialization['audienceClassroomId'] as int?,
-      audienceChildId: jsonSerialization['audienceChildId'] as int?,
-      createdByUserId: jsonSerialization['createdByUserId'] as int,
+      audienceClassroomId: jsonSerialization['audienceClassroomId'] == null
+          ? null
+          : _i1.UuidValueJsonExtension.fromJson(
+              jsonSerialization['audienceClassroomId']),
+      audienceChildId: jsonSerialization['audienceChildId'] == null
+          ? null
+          : _i1.UuidValueJsonExtension.fromJson(
+              jsonSerialization['audienceChildId']),
+      createdByUserId: _i1.UuidValueJsonExtension.fromJson(
+          jsonSerialization['createdByUserId']),
       isPublished: jsonSerialization['isPublished'] as bool,
       createdAt:
           _i1.DateTimeJsonExtension.fromJson(jsonSerialization['createdAt']),
@@ -66,9 +76,9 @@ abstract class Gallery implements _i1.SerializableModel {
   /// The database id, set if the object has been inserted into the
   /// database or if it has been fetched from the database. Otherwise,
   /// the id will be null.
-  int? id;
+  _i1.UuidValue? id;
 
-  int organizationId;
+  _i1.UuidValue organizationId;
 
   String title;
 
@@ -76,11 +86,11 @@ abstract class Gallery implements _i1.SerializableModel {
 
   String audienceType;
 
-  int? audienceClassroomId;
+  _i1.UuidValue? audienceClassroomId;
 
-  int? audienceChildId;
+  _i1.UuidValue? audienceChildId;
 
-  int createdByUserId;
+  _i1.UuidValue createdByUserId;
 
   bool isPublished;
 
@@ -94,14 +104,14 @@ abstract class Gallery implements _i1.SerializableModel {
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
   Gallery copyWith({
-    int? id,
-    int? organizationId,
+    _i1.UuidValue? id,
+    _i1.UuidValue? organizationId,
     String? title,
     String? description,
     String? audienceType,
-    int? audienceClassroomId,
-    int? audienceChildId,
-    int? createdByUserId,
+    _i1.UuidValue? audienceClassroomId,
+    _i1.UuidValue? audienceChildId,
+    _i1.UuidValue? createdByUserId,
     bool? isPublished,
     DateTime? createdAt,
     DateTime? updatedAt,
@@ -110,15 +120,15 @@ abstract class Gallery implements _i1.SerializableModel {
   @override
   Map<String, dynamic> toJson() {
     return {
-      if (id != null) 'id': id,
-      'organizationId': organizationId,
+      if (id != null) 'id': id?.toJson(),
+      'organizationId': organizationId.toJson(),
       'title': title,
       if (description != null) 'description': description,
       'audienceType': audienceType,
       if (audienceClassroomId != null)
-        'audienceClassroomId': audienceClassroomId,
-      if (audienceChildId != null) 'audienceChildId': audienceChildId,
-      'createdByUserId': createdByUserId,
+        'audienceClassroomId': audienceClassroomId?.toJson(),
+      if (audienceChildId != null) 'audienceChildId': audienceChildId?.toJson(),
+      'createdByUserId': createdByUserId.toJson(),
       'isPublished': isPublished,
       'createdAt': createdAt.toJson(),
       'updatedAt': updatedAt.toJson(),
@@ -136,14 +146,14 @@ class _Undefined {}
 
 class _GalleryImpl extends Gallery {
   _GalleryImpl({
-    int? id,
-    required int organizationId,
+    _i1.UuidValue? id,
+    required _i1.UuidValue organizationId,
     required String title,
     String? description,
     required String audienceType,
-    int? audienceClassroomId,
-    int? audienceChildId,
-    required int createdByUserId,
+    _i1.UuidValue? audienceClassroomId,
+    _i1.UuidValue? audienceChildId,
+    required _i1.UuidValue createdByUserId,
     required bool isPublished,
     required DateTime createdAt,
     required DateTime updatedAt,
@@ -169,29 +179,30 @@ class _GalleryImpl extends Gallery {
   @override
   Gallery copyWith({
     Object? id = _Undefined,
-    int? organizationId,
+    _i1.UuidValue? organizationId,
     String? title,
     Object? description = _Undefined,
     String? audienceType,
     Object? audienceClassroomId = _Undefined,
     Object? audienceChildId = _Undefined,
-    int? createdByUserId,
+    _i1.UuidValue? createdByUserId,
     bool? isPublished,
     DateTime? createdAt,
     DateTime? updatedAt,
     Object? deletedAt = _Undefined,
   }) {
     return Gallery(
-      id: id is int? ? id : this.id,
+      id: id is _i1.UuidValue? ? id : this.id,
       organizationId: organizationId ?? this.organizationId,
       title: title ?? this.title,
       description: description is String? ? description : this.description,
       audienceType: audienceType ?? this.audienceType,
-      audienceClassroomId: audienceClassroomId is int?
+      audienceClassroomId: audienceClassroomId is _i1.UuidValue?
           ? audienceClassroomId
           : this.audienceClassroomId,
-      audienceChildId:
-          audienceChildId is int? ? audienceChildId : this.audienceChildId,
+      audienceChildId: audienceChildId is _i1.UuidValue?
+          ? audienceChildId
+          : this.audienceChildId,
       createdByUserId: createdByUserId ?? this.createdByUserId,
       isPublished: isPublished ?? this.isPublished,
       createdAt: createdAt ?? this.createdAt,

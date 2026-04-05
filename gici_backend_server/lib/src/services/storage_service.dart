@@ -1,9 +1,11 @@
+import 'package:serverpod/serverpod.dart';
+
 import '../generated/protocol.dart';
 
 abstract class StorageService {
   String resolveDownloadUrl(FileAsset asset);
   String normalizeStoragePath({
-    required int organizationId,
+    required UuidValue organizationId,
     required String fileType,
     required String originalName,
   });
@@ -19,7 +21,7 @@ class DevelopmentStorageService implements StorageService {
 
   @override
   String normalizeStoragePath({
-    required int organizationId,
+    required UuidValue organizationId,
     required String fileType,
     required String originalName,
   }) {

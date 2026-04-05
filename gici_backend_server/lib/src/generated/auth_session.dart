@@ -23,8 +23,8 @@ abstract class AuthSession
   });
 
   factory AuthSession({
-    required int appUserId,
-    int? organizationId,
+    required _i1.UuidValue appUserId,
+    _i1.UuidValue? organizationId,
     required String email,
     required String role,
     required String firstName,
@@ -33,8 +33,12 @@ abstract class AuthSession
 
   factory AuthSession.fromJson(Map<String, dynamic> jsonSerialization) {
     return AuthSession(
-      appUserId: jsonSerialization['appUserId'] as int,
-      organizationId: jsonSerialization['organizationId'] as int?,
+      appUserId:
+          _i1.UuidValueJsonExtension.fromJson(jsonSerialization['appUserId']),
+      organizationId: jsonSerialization['organizationId'] == null
+          ? null
+          : _i1.UuidValueJsonExtension.fromJson(
+              jsonSerialization['organizationId']),
       email: jsonSerialization['email'] as String,
       role: jsonSerialization['role'] as String,
       firstName: jsonSerialization['firstName'] as String,
@@ -42,9 +46,9 @@ abstract class AuthSession
     );
   }
 
-  int appUserId;
+  _i1.UuidValue appUserId;
 
-  int? organizationId;
+  _i1.UuidValue? organizationId;
 
   String email;
 
@@ -58,8 +62,8 @@ abstract class AuthSession
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
   AuthSession copyWith({
-    int? appUserId,
-    int? organizationId,
+    _i1.UuidValue? appUserId,
+    _i1.UuidValue? organizationId,
     String? email,
     String? role,
     String? firstName,
@@ -68,8 +72,8 @@ abstract class AuthSession
   @override
   Map<String, dynamic> toJson() {
     return {
-      'appUserId': appUserId,
-      if (organizationId != null) 'organizationId': organizationId,
+      'appUserId': appUserId.toJson(),
+      if (organizationId != null) 'organizationId': organizationId?.toJson(),
       'email': email,
       'role': role,
       'firstName': firstName,
@@ -80,8 +84,8 @@ abstract class AuthSession
   @override
   Map<String, dynamic> toJsonForProtocol() {
     return {
-      'appUserId': appUserId,
-      if (organizationId != null) 'organizationId': organizationId,
+      'appUserId': appUserId.toJson(),
+      if (organizationId != null) 'organizationId': organizationId?.toJson(),
       'email': email,
       'role': role,
       'firstName': firstName,
@@ -99,8 +103,8 @@ class _Undefined {}
 
 class _AuthSessionImpl extends AuthSession {
   _AuthSessionImpl({
-    required int appUserId,
-    int? organizationId,
+    required _i1.UuidValue appUserId,
+    _i1.UuidValue? organizationId,
     required String email,
     required String role,
     required String firstName,
@@ -119,7 +123,7 @@ class _AuthSessionImpl extends AuthSession {
   @_i1.useResult
   @override
   AuthSession copyWith({
-    int? appUserId,
+    _i1.UuidValue? appUserId,
     Object? organizationId = _Undefined,
     String? email,
     String? role,
@@ -128,8 +132,9 @@ class _AuthSessionImpl extends AuthSession {
   }) {
     return AuthSession(
       appUserId: appUserId ?? this.appUserId,
-      organizationId:
-          organizationId is int? ? organizationId : this.organizationId,
+      organizationId: organizationId is _i1.UuidValue?
+          ? organizationId
+          : this.organizationId,
       email: email ?? this.email,
       role: role ?? this.role,
       firstName: firstName ?? this.firstName,

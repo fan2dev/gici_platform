@@ -1,10 +1,13 @@
+# User onboarding progress
+
 class: UserOnboardingState
 
 table: user_onboarding_state
 
 fields:
-  organizationId: int?
-  userId: int
+  id: UuidValue?, defaultPersist=random
+  organizationId: UuidValue?
+  userId: UuidValue
   introCompletedAt: DateTime?
   termsAcceptedAt: DateTime?
   completedAt: DateTime?

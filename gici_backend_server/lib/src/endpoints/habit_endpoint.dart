@@ -1,7 +1,7 @@
 import 'package:serverpod/serverpod.dart';
 
 import '../generated/protocol.dart';
-import '../helpers/request_scope.dart';
+import '../helpers/session_user_helper.dart';
 import '../services/access_control_service.dart';
 import '../services/activity_log_service.dart';
 import '../services/habit_service.dart';
@@ -16,8 +16,8 @@ class HabitEndpoint extends Endpoint {
   Future<void> _ensureChildAccess(
     Session session, {
     required AppUser actor,
-    required int organizationId,
-    required int childId,
+    required UuidValue organizationId,
+    required UuidValue childId,
   }) async {
     if (actor.role != 'guardian') {
       return;
@@ -36,24 +36,19 @@ class HabitEndpoint extends Endpoint {
 
   Future<List<MealEntry>> listMealsByChild(
     Session session, {
-    required String organizationId,
-    required String actorId,
-    required int childId,
+    required UuidValue childId,
     int page = 0,
     int pageSize = 50,
   }) async {
-    final orgId = parseOrganizationId(organizationId);
-    final actor = await _accessControl.requireActor(
-      session,
-      actorId: parseActorId(actorId),
-      organizationId: orgId,
-      allowedRoles: const [
-        'platform_super_admin',
-        'organization_admin',
-        'staff',
-        'guardian',
-      ],
-    );
+    final actor = await getAuthenticatedUser(session);
+    _accessControl.requireRole(actor, allowedRoles: [
+      'platform_super_admin',
+      'organization_admin',
+      'staff',
+      'guardian',
+    ]);
+    final orgId = actor.organizationId!;
+
     await _ensureChildAccess(
       session,
       actor: actor,
@@ -74,22 +69,16 @@ class HabitEndpoint extends Endpoint {
 
   Future<MealEntry> createMealEntry(
     Session session, {
-    required String organizationId,
-    required String actorId,
-    required int childId,
+    required UuidValue childId,
     required String mealType,
     required String consumptionLevel,
     DateTime? recordedAt,
     String? menuItems,
     String? notes,
   }) async {
-    final orgId = parseOrganizationId(organizationId);
-    final actor = await _accessControl.requireActor(
-      session,
-      actorId: parseActorId(actorId),
-      organizationId: orgId,
-      allowedRoles: const ['platform_super_admin', 'organization_admin', 'staff'],
-    );
+    final actor = await getAuthenticatedUser(session);
+    _accessControl.requireRole(actor, allowedRoles: ['platform_super_admin', 'organization_admin', 'staff']);
+    final orgId = actor.organizationId!;
 
     final entry = await _habitService.createMeal(
       session,
@@ -106,10 +95,10 @@ class HabitEndpoint extends Endpoint {
     await _activityLogService.log(
       session,
       organizationId: orgId,
-      userId: actor.id,
+      userId: actor.id!,
       action: 'habit.meal.create',
       entityType: 'meal_entry',
-      entityId: entry.id,
+      entityId: entry.id?.toString(),
       metadata: 'childId=$childId;mealType=$mealType',
     );
 
@@ -118,22 +107,16 @@ class HabitEndpoint extends Endpoint {
 
   Future<MealEntry> updateMealEntry(
     Session session, {
-    required String organizationId,
-    required String actorId,
-    required int mealEntryId,
+    required UuidValue mealEntryId,
     String? mealType,
     String? consumptionLevel,
     DateTime? recordedAt,
     String? menuItems,
     String? notes,
   }) async {
-    final orgId = parseOrganizationId(organizationId);
-    final actor = await _accessControl.requireActor(
-      session,
-      actorId: parseActorId(actorId),
-      organizationId: orgId,
-      allowedRoles: const ['platform_super_admin', 'organization_admin', 'staff'],
-    );
+    final actor = await getAuthenticatedUser(session);
+    _accessControl.requireRole(actor, allowedRoles: ['platform_super_admin', 'organization_admin', 'staff']);
+    final orgId = actor.organizationId!;
 
     final entry = await _habitService.getMealById(
       session,
@@ -156,10 +139,10 @@ class HabitEndpoint extends Endpoint {
     await _activityLogService.log(
       session,
       organizationId: orgId,
-      userId: actor.id,
+      userId: actor.id!,
       action: 'habit.meal.update',
       entityType: 'meal_entry',
-      entityId: updated.id,
+      entityId: updated.id?.toString(),
       metadata: 'mealEntryId=$mealEntryId',
     );
 
@@ -168,24 +151,19 @@ class HabitEndpoint extends Endpoint {
 
   Future<List<NapEntry>> listNapsByChild(
     Session session, {
-    required String organizationId,
-    required String actorId,
-    required int childId,
+    required UuidValue childId,
     int page = 0,
     int pageSize = 50,
   }) async {
-    final orgId = parseOrganizationId(organizationId);
-    final actor = await _accessControl.requireActor(
-      session,
-      actorId: parseActorId(actorId),
-      organizationId: orgId,
-      allowedRoles: const [
-        'platform_super_admin',
-        'organization_admin',
-        'staff',
-        'guardian',
-      ],
-    );
+    final actor = await getAuthenticatedUser(session);
+    _accessControl.requireRole(actor, allowedRoles: [
+      'platform_super_admin',
+      'organization_admin',
+      'staff',
+      'guardian',
+    ]);
+    final orgId = actor.organizationId!;
+
     await _ensureChildAccess(
       session,
       actor: actor,
@@ -206,22 +184,16 @@ class HabitEndpoint extends Endpoint {
 
   Future<NapEntry> createNapEntry(
     Session session, {
-    required String organizationId,
-    required String actorId,
-    required int childId,
+    required UuidValue childId,
     required DateTime startedAt,
     DateTime? endedAt,
     int? durationMinutes,
     String? sleepQuality,
     String? notes,
   }) async {
-    final orgId = parseOrganizationId(organizationId);
-    final actor = await _accessControl.requireActor(
-      session,
-      actorId: parseActorId(actorId),
-      organizationId: orgId,
-      allowedRoles: const ['platform_super_admin', 'organization_admin', 'staff'],
-    );
+    final actor = await getAuthenticatedUser(session);
+    _accessControl.requireRole(actor, allowedRoles: ['platform_super_admin', 'organization_admin', 'staff']);
+    final orgId = actor.organizationId!;
 
     final entry = await _habitService.createNap(
       session,
@@ -238,10 +210,10 @@ class HabitEndpoint extends Endpoint {
     await _activityLogService.log(
       session,
       organizationId: orgId,
-      userId: actor.id,
+      userId: actor.id!,
       action: 'habit.nap.create',
       entityType: 'nap_entry',
-      entityId: entry.id,
+      entityId: entry.id?.toString(),
       metadata: 'childId=$childId',
     );
 
@@ -250,22 +222,16 @@ class HabitEndpoint extends Endpoint {
 
   Future<NapEntry> updateNapEntry(
     Session session, {
-    required String organizationId,
-    required String actorId,
-    required int napEntryId,
+    required UuidValue napEntryId,
     DateTime? startedAt,
     DateTime? endedAt,
     int? durationMinutes,
     String? sleepQuality,
     String? notes,
   }) async {
-    final orgId = parseOrganizationId(organizationId);
-    final actor = await _accessControl.requireActor(
-      session,
-      actorId: parseActorId(actorId),
-      organizationId: orgId,
-      allowedRoles: const ['platform_super_admin', 'organization_admin', 'staff'],
-    );
+    final actor = await getAuthenticatedUser(session);
+    _accessControl.requireRole(actor, allowedRoles: ['platform_super_admin', 'organization_admin', 'staff']);
+    final orgId = actor.organizationId!;
 
     final entry = await _habitService.getNapById(
       session,
@@ -288,10 +254,10 @@ class HabitEndpoint extends Endpoint {
     await _activityLogService.log(
       session,
       organizationId: orgId,
-      userId: actor.id,
+      userId: actor.id!,
       action: 'habit.nap.update',
       entityType: 'nap_entry',
-      entityId: updated.id,
+      entityId: updated.id?.toString(),
       metadata: 'napEntryId=$napEntryId',
     );
 
@@ -300,24 +266,19 @@ class HabitEndpoint extends Endpoint {
 
   Future<List<BowelMovementEntry>> listBowelMovementsByChild(
     Session session, {
-    required String organizationId,
-    required String actorId,
-    required int childId,
+    required UuidValue childId,
     int page = 0,
     int pageSize = 50,
   }) async {
-    final orgId = parseOrganizationId(organizationId);
-    final actor = await _accessControl.requireActor(
-      session,
-      actorId: parseActorId(actorId),
-      organizationId: orgId,
-      allowedRoles: const [
-        'platform_super_admin',
-        'organization_admin',
-        'staff',
-        'guardian',
-      ],
-    );
+    final actor = await getAuthenticatedUser(session);
+    _accessControl.requireRole(actor, allowedRoles: [
+      'platform_super_admin',
+      'organization_admin',
+      'staff',
+      'guardian',
+    ]);
+    final orgId = actor.organizationId!;
+
     await _ensureChildAccess(
       session,
       actor: actor,
@@ -338,21 +299,15 @@ class HabitEndpoint extends Endpoint {
 
   Future<BowelMovementEntry> createBowelMovementEntry(
     Session session, {
-    required String organizationId,
-    required String actorId,
-    required int childId,
+    required UuidValue childId,
     DateTime? eventAt,
     required String eventType,
     String? consistency,
     String? notes,
   }) async {
-    final orgId = parseOrganizationId(organizationId);
-    final actor = await _accessControl.requireActor(
-      session,
-      actorId: parseActorId(actorId),
-      organizationId: orgId,
-      allowedRoles: const ['platform_super_admin', 'organization_admin', 'staff'],
-    );
+    final actor = await getAuthenticatedUser(session);
+    _accessControl.requireRole(actor, allowedRoles: ['platform_super_admin', 'organization_admin', 'staff']);
+    final orgId = actor.organizationId!;
 
     final entry = await _habitService.createBowelMovement(
       session,
@@ -368,10 +323,10 @@ class HabitEndpoint extends Endpoint {
     await _activityLogService.log(
       session,
       organizationId: orgId,
-      userId: actor.id,
+      userId: actor.id!,
       action: 'habit.bowel_movement.create',
       entityType: 'bowel_movement_entry',
-      entityId: entry.id,
+      entityId: entry.id?.toString(),
       metadata: 'childId=$childId;eventType=$eventType',
     );
 
@@ -380,21 +335,15 @@ class HabitEndpoint extends Endpoint {
 
   Future<BowelMovementEntry> updateBowelMovementEntry(
     Session session, {
-    required String organizationId,
-    required String actorId,
-    required int entryId,
+    required UuidValue entryId,
     DateTime? eventAt,
     String? eventType,
     String? consistency,
     String? notes,
   }) async {
-    final orgId = parseOrganizationId(organizationId);
-    final actor = await _accessControl.requireActor(
-      session,
-      actorId: parseActorId(actorId),
-      organizationId: orgId,
-      allowedRoles: const ['platform_super_admin', 'organization_admin', 'staff'],
-    );
+    final actor = await getAuthenticatedUser(session);
+    _accessControl.requireRole(actor, allowedRoles: ['platform_super_admin', 'organization_admin', 'staff']);
+    final orgId = actor.organizationId!;
 
     final entry = await _habitService.getBowelMovementById(
       session,
@@ -416,10 +365,10 @@ class HabitEndpoint extends Endpoint {
     await _activityLogService.log(
       session,
       organizationId: orgId,
-      userId: actor.id,
+      userId: actor.id!,
       action: 'habit.bowel_movement.update',
       entityType: 'bowel_movement_entry',
-      entityId: updated.id,
+      entityId: updated.id?.toString(),
       metadata: 'entryId=$entryId',
     );
 
@@ -428,23 +377,18 @@ class HabitEndpoint extends Endpoint {
 
   Future<ChildDailyHabits> getChildDailyHabits(
     Session session, {
-    required String organizationId,
-    required String actorId,
-    required int childId,
+    required UuidValue childId,
     required DateTime day,
   }) async {
-    final orgId = parseOrganizationId(organizationId);
-    final actor = await _accessControl.requireActor(
-      session,
-      actorId: parseActorId(actorId),
-      organizationId: orgId,
-      allowedRoles: const [
-        'platform_super_admin',
-        'organization_admin',
-        'staff',
-        'guardian',
-      ],
-    );
+    final actor = await getAuthenticatedUser(session);
+    _accessControl.requireRole(actor, allowedRoles: [
+      'platform_super_admin',
+      'organization_admin',
+      'staff',
+      'guardian',
+    ]);
+    final orgId = actor.organizationId!;
+
     await _ensureChildAccess(
       session,
       actor: actor,

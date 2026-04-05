@@ -12,7 +12,7 @@
 import 'package:serverpod/serverpod.dart' as _i1;
 
 abstract class PushDeviceToken
-    implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
+    implements _i1.TableRow<_i1.UuidValue?>, _i1.ProtocolSerialization {
   PushDeviceToken._({
     this.id,
     required this.organizationId,
@@ -29,9 +29,9 @@ abstract class PushDeviceToken
   });
 
   factory PushDeviceToken({
-    int? id,
-    required int organizationId,
-    required int userId,
+    _i1.UuidValue? id,
+    required _i1.UuidValue organizationId,
+    required _i1.UuidValue userId,
     required String token,
     required String platform,
     String? deviceId,
@@ -45,9 +45,12 @@ abstract class PushDeviceToken
 
   factory PushDeviceToken.fromJson(Map<String, dynamic> jsonSerialization) {
     return PushDeviceToken(
-      id: jsonSerialization['id'] as int?,
-      organizationId: jsonSerialization['organizationId'] as int,
-      userId: jsonSerialization['userId'] as int,
+      id: jsonSerialization['id'] == null
+          ? null
+          : _i1.UuidValueJsonExtension.fromJson(jsonSerialization['id']),
+      organizationId: _i1.UuidValueJsonExtension.fromJson(
+          jsonSerialization['organizationId']),
+      userId: _i1.UuidValueJsonExtension.fromJson(jsonSerialization['userId']),
       token: jsonSerialization['token'] as String,
       platform: jsonSerialization['platform'] as String,
       deviceId: jsonSerialization['deviceId'] as String?,
@@ -68,11 +71,11 @@ abstract class PushDeviceToken
   static const db = PushDeviceTokenRepository._();
 
   @override
-  int? id;
+  _i1.UuidValue? id;
 
-  int organizationId;
+  _i1.UuidValue organizationId;
 
-  int userId;
+  _i1.UuidValue userId;
 
   String token;
 
@@ -93,15 +96,15 @@ abstract class PushDeviceToken
   DateTime updatedAt;
 
   @override
-  _i1.Table<int?> get table => t;
+  _i1.Table<_i1.UuidValue?> get table => t;
 
   /// Returns a shallow copy of this [PushDeviceToken]
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
   PushDeviceToken copyWith({
-    int? id,
-    int? organizationId,
-    int? userId,
+    _i1.UuidValue? id,
+    _i1.UuidValue? organizationId,
+    _i1.UuidValue? userId,
     String? token,
     String? platform,
     String? deviceId,
@@ -115,9 +118,9 @@ abstract class PushDeviceToken
   @override
   Map<String, dynamic> toJson() {
     return {
-      if (id != null) 'id': id,
-      'organizationId': organizationId,
-      'userId': userId,
+      if (id != null) 'id': id?.toJson(),
+      'organizationId': organizationId.toJson(),
+      'userId': userId.toJson(),
       'token': token,
       'platform': platform,
       if (deviceId != null) 'deviceId': deviceId,
@@ -133,9 +136,9 @@ abstract class PushDeviceToken
   @override
   Map<String, dynamic> toJsonForProtocol() {
     return {
-      if (id != null) 'id': id,
-      'organizationId': organizationId,
-      'userId': userId,
+      if (id != null) 'id': id?.toJson(),
+      'organizationId': organizationId.toJson(),
+      'userId': userId.toJson(),
       'token': token,
       'platform': platform,
       if (deviceId != null) 'deviceId': deviceId,
@@ -182,9 +185,9 @@ class _Undefined {}
 
 class _PushDeviceTokenImpl extends PushDeviceToken {
   _PushDeviceTokenImpl({
-    int? id,
-    required int organizationId,
-    required int userId,
+    _i1.UuidValue? id,
+    required _i1.UuidValue organizationId,
+    required _i1.UuidValue userId,
     required String token,
     required String platform,
     String? deviceId,
@@ -215,8 +218,8 @@ class _PushDeviceTokenImpl extends PushDeviceToken {
   @override
   PushDeviceToken copyWith({
     Object? id = _Undefined,
-    int? organizationId,
-    int? userId,
+    _i1.UuidValue? organizationId,
+    _i1.UuidValue? userId,
     String? token,
     String? platform,
     Object? deviceId = _Undefined,
@@ -228,7 +231,7 @@ class _PushDeviceTokenImpl extends PushDeviceToken {
     DateTime? updatedAt,
   }) {
     return PushDeviceToken(
-      id: id is int? ? id : this.id,
+      id: id is _i1.UuidValue? ? id : this.id,
       organizationId: organizationId ?? this.organizationId,
       userId: userId ?? this.userId,
       token: token ?? this.token,
@@ -244,14 +247,14 @@ class _PushDeviceTokenImpl extends PushDeviceToken {
   }
 }
 
-class PushDeviceTokenTable extends _i1.Table<int?> {
+class PushDeviceTokenTable extends _i1.Table<_i1.UuidValue?> {
   PushDeviceTokenTable({super.tableRelation})
       : super(tableName: 'push_device_token') {
-    organizationId = _i1.ColumnInt(
+    organizationId = _i1.ColumnUuid(
       'organizationId',
       this,
     );
-    userId = _i1.ColumnInt(
+    userId = _i1.ColumnUuid(
       'userId',
       this,
     );
@@ -293,9 +296,9 @@ class PushDeviceTokenTable extends _i1.Table<int?> {
     );
   }
 
-  late final _i1.ColumnInt organizationId;
+  late final _i1.ColumnUuid organizationId;
 
-  late final _i1.ColumnInt userId;
+  late final _i1.ColumnUuid userId;
 
   late final _i1.ColumnString token;
 
@@ -339,7 +342,7 @@ class PushDeviceTokenInclude extends _i1.IncludeObject {
   Map<String, _i1.Include?> get includes => {};
 
   @override
-  _i1.Table<int?> get table => PushDeviceToken.t;
+  _i1.Table<_i1.UuidValue?> get table => PushDeviceToken.t;
 }
 
 class PushDeviceTokenIncludeList extends _i1.IncludeList {
@@ -359,7 +362,7 @@ class PushDeviceTokenIncludeList extends _i1.IncludeList {
   Map<String, _i1.Include?> get includes => include?.includes ?? {};
 
   @override
-  _i1.Table<int?> get table => PushDeviceToken.t;
+  _i1.Table<_i1.UuidValue?> get table => PushDeviceToken.t;
 }
 
 class PushDeviceTokenRepository {
@@ -447,7 +450,7 @@ class PushDeviceTokenRepository {
   /// Finds a single [PushDeviceToken] by its [id] or null if no such row exists.
   Future<PushDeviceToken?> findById(
     _i1.Session session,
-    int id, {
+    _i1.UuidValue id, {
     _i1.Transaction? transaction,
   }) async {
     return session.db.findById<PushDeviceToken>(

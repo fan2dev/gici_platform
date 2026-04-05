@@ -33,6 +33,7 @@ dependencies:
 
   cupertino_icons: ^1.0.8
   serverpod_flutter: 2.9.1
+  serverpod_auth_shared_flutter: 2.9.1
   gici_backend_client:
     path: ../gici_backend_client
   flutter_bloc: ^8.1.6

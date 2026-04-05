@@ -28,10 +28,10 @@ abstract class ChildGuardianRelation implements _i1.SerializableModel {
   });
 
   factory ChildGuardianRelation({
-    int? id,
-    required int organizationId,
-    required int childId,
-    required int guardianUserId,
+    _i1.UuidValue? id,
+    required _i1.UuidValue organizationId,
+    required _i1.UuidValue childId,
+    required _i1.UuidValue guardianUserId,
     required String relation,
     required bool isPrimary,
     required bool canPickup,
@@ -45,10 +45,15 @@ abstract class ChildGuardianRelation implements _i1.SerializableModel {
   factory ChildGuardianRelation.fromJson(
       Map<String, dynamic> jsonSerialization) {
     return ChildGuardianRelation(
-      id: jsonSerialization['id'] as int?,
-      organizationId: jsonSerialization['organizationId'] as int,
-      childId: jsonSerialization['childId'] as int,
-      guardianUserId: jsonSerialization['guardianUserId'] as int,
+      id: jsonSerialization['id'] == null
+          ? null
+          : _i1.UuidValueJsonExtension.fromJson(jsonSerialization['id']),
+      organizationId: _i1.UuidValueJsonExtension.fromJson(
+          jsonSerialization['organizationId']),
+      childId:
+          _i1.UuidValueJsonExtension.fromJson(jsonSerialization['childId']),
+      guardianUserId: _i1.UuidValueJsonExtension.fromJson(
+          jsonSerialization['guardianUserId']),
       relation: jsonSerialization['relation'] as String,
       isPrimary: jsonSerialization['isPrimary'] as bool,
       canPickup: jsonSerialization['canPickup'] as bool,
@@ -65,13 +70,13 @@ abstract class ChildGuardianRelation implements _i1.SerializableModel {
   /// The database id, set if the object has been inserted into the
   /// database or if it has been fetched from the database. Otherwise,
   /// the id will be null.
-  int? id;
+  _i1.UuidValue? id;
 
-  int organizationId;
+  _i1.UuidValue organizationId;
 
-  int childId;
+  _i1.UuidValue childId;
 
-  int guardianUserId;
+  _i1.UuidValue guardianUserId;
 
   String relation;
 
@@ -93,10 +98,10 @@ abstract class ChildGuardianRelation implements _i1.SerializableModel {
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
   ChildGuardianRelation copyWith({
-    int? id,
-    int? organizationId,
-    int? childId,
-    int? guardianUserId,
+    _i1.UuidValue? id,
+    _i1.UuidValue? organizationId,
+    _i1.UuidValue? childId,
+    _i1.UuidValue? guardianUserId,
     String? relation,
     bool? isPrimary,
     bool? canPickup,
@@ -109,10 +114,10 @@ abstract class ChildGuardianRelation implements _i1.SerializableModel {
   @override
   Map<String, dynamic> toJson() {
     return {
-      if (id != null) 'id': id,
-      'organizationId': organizationId,
-      'childId': childId,
-      'guardianUserId': guardianUserId,
+      if (id != null) 'id': id?.toJson(),
+      'organizationId': organizationId.toJson(),
+      'childId': childId.toJson(),
+      'guardianUserId': guardianUserId.toJson(),
       'relation': relation,
       'isPrimary': isPrimary,
       'canPickup': canPickup,
@@ -135,10 +140,10 @@ class _Undefined {}
 
 class _ChildGuardianRelationImpl extends ChildGuardianRelation {
   _ChildGuardianRelationImpl({
-    int? id,
-    required int organizationId,
-    required int childId,
-    required int guardianUserId,
+    _i1.UuidValue? id,
+    required _i1.UuidValue organizationId,
+    required _i1.UuidValue childId,
+    required _i1.UuidValue guardianUserId,
     required String relation,
     required bool isPrimary,
     required bool canPickup,
@@ -168,9 +173,9 @@ class _ChildGuardianRelationImpl extends ChildGuardianRelation {
   @override
   ChildGuardianRelation copyWith({
     Object? id = _Undefined,
-    int? organizationId,
-    int? childId,
-    int? guardianUserId,
+    _i1.UuidValue? organizationId,
+    _i1.UuidValue? childId,
+    _i1.UuidValue? guardianUserId,
     String? relation,
     bool? isPrimary,
     bool? canPickup,
@@ -181,7 +186,7 @@ class _ChildGuardianRelationImpl extends ChildGuardianRelation {
     DateTime? updatedAt,
   }) {
     return ChildGuardianRelation(
-      id: id is int? ? id : this.id,
+      id: id is _i1.UuidValue? ? id : this.id,
       organizationId: organizationId ?? this.organizationId,
       childId: childId ?? this.childId,
       guardianUserId: guardianUserId ?? this.guardianUserId,

@@ -12,7 +12,7 @@
 import 'package:serverpod/serverpod.dart' as _i1;
 
 abstract class ClassroomAssignment
-    implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
+    implements _i1.TableRow<_i1.UuidValue?>, _i1.ProtocolSerialization {
   ClassroomAssignment._({
     this.id,
     required this.organizationId,
@@ -29,14 +29,14 @@ abstract class ClassroomAssignment
   });
 
   factory ClassroomAssignment({
-    int? id,
-    required int organizationId,
-    required int classroomId,
-    required int childId,
+    _i1.UuidValue? id,
+    required _i1.UuidValue organizationId,
+    required _i1.UuidValue classroomId,
+    required _i1.UuidValue childId,
     required DateTime assignedAt,
-    int? assignedByUserId,
+    _i1.UuidValue? assignedByUserId,
     DateTime? withdrawnAt,
-    int? withdrawnByUserId,
+    _i1.UuidValue? withdrawnByUserId,
     String? withdrawnReason,
     required String status,
     required DateTime createdAt,
@@ -45,18 +45,29 @@ abstract class ClassroomAssignment
 
   factory ClassroomAssignment.fromJson(Map<String, dynamic> jsonSerialization) {
     return ClassroomAssignment(
-      id: jsonSerialization['id'] as int?,
-      organizationId: jsonSerialization['organizationId'] as int,
-      classroomId: jsonSerialization['classroomId'] as int,
-      childId: jsonSerialization['childId'] as int,
+      id: jsonSerialization['id'] == null
+          ? null
+          : _i1.UuidValueJsonExtension.fromJson(jsonSerialization['id']),
+      organizationId: _i1.UuidValueJsonExtension.fromJson(
+          jsonSerialization['organizationId']),
+      classroomId:
+          _i1.UuidValueJsonExtension.fromJson(jsonSerialization['classroomId']),
+      childId:
+          _i1.UuidValueJsonExtension.fromJson(jsonSerialization['childId']),
       assignedAt:
           _i1.DateTimeJsonExtension.fromJson(jsonSerialization['assignedAt']),
-      assignedByUserId: jsonSerialization['assignedByUserId'] as int?,
+      assignedByUserId: jsonSerialization['assignedByUserId'] == null
+          ? null
+          : _i1.UuidValueJsonExtension.fromJson(
+              jsonSerialization['assignedByUserId']),
       withdrawnAt: jsonSerialization['withdrawnAt'] == null
           ? null
           : _i1.DateTimeJsonExtension.fromJson(
               jsonSerialization['withdrawnAt']),
-      withdrawnByUserId: jsonSerialization['withdrawnByUserId'] as int?,
+      withdrawnByUserId: jsonSerialization['withdrawnByUserId'] == null
+          ? null
+          : _i1.UuidValueJsonExtension.fromJson(
+              jsonSerialization['withdrawnByUserId']),
       withdrawnReason: jsonSerialization['withdrawnReason'] as String?,
       status: jsonSerialization['status'] as String,
       createdAt:
@@ -71,21 +82,21 @@ abstract class ClassroomAssignment
   static const db = ClassroomAssignmentRepository._();
 
   @override
-  int? id;
+  _i1.UuidValue? id;
 
-  int organizationId;
+  _i1.UuidValue organizationId;
 
-  int classroomId;
+  _i1.UuidValue classroomId;
 
-  int childId;
+  _i1.UuidValue childId;
 
   DateTime assignedAt;
 
-  int? assignedByUserId;
+  _i1.UuidValue? assignedByUserId;
 
   DateTime? withdrawnAt;
 
-  int? withdrawnByUserId;
+  _i1.UuidValue? withdrawnByUserId;
 
   String? withdrawnReason;
 
@@ -96,20 +107,20 @@ abstract class ClassroomAssignment
   DateTime updatedAt;
 
   @override
-  _i1.Table<int?> get table => t;
+  _i1.Table<_i1.UuidValue?> get table => t;
 
   /// Returns a shallow copy of this [ClassroomAssignment]
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
   ClassroomAssignment copyWith({
-    int? id,
-    int? organizationId,
-    int? classroomId,
-    int? childId,
+    _i1.UuidValue? id,
+    _i1.UuidValue? organizationId,
+    _i1.UuidValue? classroomId,
+    _i1.UuidValue? childId,
     DateTime? assignedAt,
-    int? assignedByUserId,
+    _i1.UuidValue? assignedByUserId,
     DateTime? withdrawnAt,
-    int? withdrawnByUserId,
+    _i1.UuidValue? withdrawnByUserId,
     String? withdrawnReason,
     String? status,
     DateTime? createdAt,
@@ -118,14 +129,16 @@ abstract class ClassroomAssignment
   @override
   Map<String, dynamic> toJson() {
     return {
-      if (id != null) 'id': id,
-      'organizationId': organizationId,
-      'classroomId': classroomId,
-      'childId': childId,
+      if (id != null) 'id': id?.toJson(),
+      'organizationId': organizationId.toJson(),
+      'classroomId': classroomId.toJson(),
+      'childId': childId.toJson(),
       'assignedAt': assignedAt.toJson(),
-      if (assignedByUserId != null) 'assignedByUserId': assignedByUserId,
+      if (assignedByUserId != null)
+        'assignedByUserId': assignedByUserId?.toJson(),
       if (withdrawnAt != null) 'withdrawnAt': withdrawnAt?.toJson(),
-      if (withdrawnByUserId != null) 'withdrawnByUserId': withdrawnByUserId,
+      if (withdrawnByUserId != null)
+        'withdrawnByUserId': withdrawnByUserId?.toJson(),
       if (withdrawnReason != null) 'withdrawnReason': withdrawnReason,
       'status': status,
       'createdAt': createdAt.toJson(),
@@ -136,14 +149,16 @@ abstract class ClassroomAssignment
   @override
   Map<String, dynamic> toJsonForProtocol() {
     return {
-      if (id != null) 'id': id,
-      'organizationId': organizationId,
-      'classroomId': classroomId,
-      'childId': childId,
+      if (id != null) 'id': id?.toJson(),
+      'organizationId': organizationId.toJson(),
+      'classroomId': classroomId.toJson(),
+      'childId': childId.toJson(),
       'assignedAt': assignedAt.toJson(),
-      if (assignedByUserId != null) 'assignedByUserId': assignedByUserId,
+      if (assignedByUserId != null)
+        'assignedByUserId': assignedByUserId?.toJson(),
       if (withdrawnAt != null) 'withdrawnAt': withdrawnAt?.toJson(),
-      if (withdrawnByUserId != null) 'withdrawnByUserId': withdrawnByUserId,
+      if (withdrawnByUserId != null)
+        'withdrawnByUserId': withdrawnByUserId?.toJson(),
       if (withdrawnReason != null) 'withdrawnReason': withdrawnReason,
       'status': status,
       'createdAt': createdAt.toJson(),
@@ -185,14 +200,14 @@ class _Undefined {}
 
 class _ClassroomAssignmentImpl extends ClassroomAssignment {
   _ClassroomAssignmentImpl({
-    int? id,
-    required int organizationId,
-    required int classroomId,
-    required int childId,
+    _i1.UuidValue? id,
+    required _i1.UuidValue organizationId,
+    required _i1.UuidValue classroomId,
+    required _i1.UuidValue childId,
     required DateTime assignedAt,
-    int? assignedByUserId,
+    _i1.UuidValue? assignedByUserId,
     DateTime? withdrawnAt,
-    int? withdrawnByUserId,
+    _i1.UuidValue? withdrawnByUserId,
     String? withdrawnReason,
     required String status,
     required DateTime createdAt,
@@ -218,9 +233,9 @@ class _ClassroomAssignmentImpl extends ClassroomAssignment {
   @override
   ClassroomAssignment copyWith({
     Object? id = _Undefined,
-    int? organizationId,
-    int? classroomId,
-    int? childId,
+    _i1.UuidValue? organizationId,
+    _i1.UuidValue? classroomId,
+    _i1.UuidValue? childId,
     DateTime? assignedAt,
     Object? assignedByUserId = _Undefined,
     Object? withdrawnAt = _Undefined,
@@ -231,15 +246,16 @@ class _ClassroomAssignmentImpl extends ClassroomAssignment {
     DateTime? updatedAt,
   }) {
     return ClassroomAssignment(
-      id: id is int? ? id : this.id,
+      id: id is _i1.UuidValue? ? id : this.id,
       organizationId: organizationId ?? this.organizationId,
       classroomId: classroomId ?? this.classroomId,
       childId: childId ?? this.childId,
       assignedAt: assignedAt ?? this.assignedAt,
-      assignedByUserId:
-          assignedByUserId is int? ? assignedByUserId : this.assignedByUserId,
+      assignedByUserId: assignedByUserId is _i1.UuidValue?
+          ? assignedByUserId
+          : this.assignedByUserId,
       withdrawnAt: withdrawnAt is DateTime? ? withdrawnAt : this.withdrawnAt,
-      withdrawnByUserId: withdrawnByUserId is int?
+      withdrawnByUserId: withdrawnByUserId is _i1.UuidValue?
           ? withdrawnByUserId
           : this.withdrawnByUserId,
       withdrawnReason:
@@ -251,18 +267,18 @@ class _ClassroomAssignmentImpl extends ClassroomAssignment {
   }
 }
 
-class ClassroomAssignmentTable extends _i1.Table<int?> {
+class ClassroomAssignmentTable extends _i1.Table<_i1.UuidValue?> {
   ClassroomAssignmentTable({super.tableRelation})
       : super(tableName: 'classroom_assignment') {
-    organizationId = _i1.ColumnInt(
+    organizationId = _i1.ColumnUuid(
       'organizationId',
       this,
     );
-    classroomId = _i1.ColumnInt(
+    classroomId = _i1.ColumnUuid(
       'classroomId',
       this,
     );
-    childId = _i1.ColumnInt(
+    childId = _i1.ColumnUuid(
       'childId',
       this,
     );
@@ -270,7 +286,7 @@ class ClassroomAssignmentTable extends _i1.Table<int?> {
       'assignedAt',
       this,
     );
-    assignedByUserId = _i1.ColumnInt(
+    assignedByUserId = _i1.ColumnUuid(
       'assignedByUserId',
       this,
     );
@@ -278,7 +294,7 @@ class ClassroomAssignmentTable extends _i1.Table<int?> {
       'withdrawnAt',
       this,
     );
-    withdrawnByUserId = _i1.ColumnInt(
+    withdrawnByUserId = _i1.ColumnUuid(
       'withdrawnByUserId',
       this,
     );
@@ -300,19 +316,19 @@ class ClassroomAssignmentTable extends _i1.Table<int?> {
     );
   }
 
-  late final _i1.ColumnInt organizationId;
+  late final _i1.ColumnUuid organizationId;
 
-  late final _i1.ColumnInt classroomId;
+  late final _i1.ColumnUuid classroomId;
 
-  late final _i1.ColumnInt childId;
+  late final _i1.ColumnUuid childId;
 
   late final _i1.ColumnDateTime assignedAt;
 
-  late final _i1.ColumnInt assignedByUserId;
+  late final _i1.ColumnUuid assignedByUserId;
 
   late final _i1.ColumnDateTime withdrawnAt;
 
-  late final _i1.ColumnInt withdrawnByUserId;
+  late final _i1.ColumnUuid withdrawnByUserId;
 
   late final _i1.ColumnString withdrawnReason;
 
@@ -346,7 +362,7 @@ class ClassroomAssignmentInclude extends _i1.IncludeObject {
   Map<String, _i1.Include?> get includes => {};
 
   @override
-  _i1.Table<int?> get table => ClassroomAssignment.t;
+  _i1.Table<_i1.UuidValue?> get table => ClassroomAssignment.t;
 }
 
 class ClassroomAssignmentIncludeList extends _i1.IncludeList {
@@ -366,7 +382,7 @@ class ClassroomAssignmentIncludeList extends _i1.IncludeList {
   Map<String, _i1.Include?> get includes => include?.includes ?? {};
 
   @override
-  _i1.Table<int?> get table => ClassroomAssignment.t;
+  _i1.Table<_i1.UuidValue?> get table => ClassroomAssignment.t;
 }
 
 class ClassroomAssignmentRepository {
@@ -454,7 +470,7 @@ class ClassroomAssignmentRepository {
   /// Finds a single [ClassroomAssignment] by its [id] or null if no such row exists.
   Future<ClassroomAssignment?> findById(
     _i1.Session session,
-    int id, {
+    _i1.UuidValue id, {
     _i1.Transaction? transaction,
   }) async {
     return session.db.findById<ClassroomAssignment>(

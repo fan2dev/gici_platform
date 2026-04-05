@@ -5,17 +5,18 @@ class: TimeEntry
 table: time_entry
 
 fields:
-  organizationId: int
-  userId: int
+  id: UuidValue?, defaultPersist=random
+  organizationId: UuidValue
+  userId: UuidValue
   entryType: String
   recordedAt: DateTime
-  parentEntryId: int?
+  parentEntryId: UuidValue?
   correctionReason: String?
   locationData: String?
   deviceInfo: String?
   notes: String?
   isManualEntry: bool
-  createdByUserId: int
+  createdByUserId: UuidValue
   createdAt: DateTime
 
 indexes:
@@ -29,4 +30,3 @@ indexes:
     fields: userId, recordedAt
   time_parent_idx:
     fields: parentEntryId
-

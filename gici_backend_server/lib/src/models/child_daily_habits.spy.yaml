@@ -1,7 +1,9 @@
+# Daily habits summary DTO (transfer object, no database table)
+
 class: ChildDailyHabits
 
 fields:
-  childId: int
+  childId: UuidValue
   day: DateTime
   meals: List<MealEntry>
   naps: List<NapEntry>

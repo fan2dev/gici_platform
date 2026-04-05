@@ -12,9 +12,10 @@
 import 'package:serverpod/serverpod.dart' as _i1;
 
 abstract class AppUser
-    implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
+    implements _i1.TableRow<_i1.UuidValue?>, _i1.ProtocolSerialization {
   AppUser._({
     this.id,
+    this.serverpodUserId,
     this.organizationId,
     required this.email,
     required this.passwordHash,
@@ -33,8 +34,9 @@ abstract class AppUser
   });
 
   factory AppUser({
-    int? id,
-    int? organizationId,
+    _i1.UuidValue? id,
+    int? serverpodUserId,
+    _i1.UuidValue? organizationId,
     required String email,
     required String passwordHash,
     required String firstName,
@@ -53,8 +55,14 @@ abstract class AppUser
 
   factory AppUser.fromJson(Map<String, dynamic> jsonSerialization) {
     return AppUser(
-      id: jsonSerialization['id'] as int?,
-      organizationId: jsonSerialization['organizationId'] as int?,
+      id: jsonSerialization['id'] == null
+          ? null
+          : _i1.UuidValueJsonExtension.fromJson(jsonSerialization['id']),
+      serverpodUserId: jsonSerialization['serverpodUserId'] as int?,
+      organizationId: jsonSerialization['organizationId'] == null
+          ? null
+          : _i1.UuidValueJsonExtension.fromJson(
+              jsonSerialization['organizationId']),
       email: jsonSerialization['email'] as String,
       passwordHash: jsonSerialization['passwordHash'] as String,
       firstName: jsonSerialization['firstName'] as String,
@@ -84,9 +92,11 @@ abstract class AppUser
   static const db = AppUserRepository._();
 
   @override
-  int? id;
+  _i1.UuidValue? id;
 
-  int? organizationId;
+  int? serverpodUserId;
+
+  _i1.UuidValue? organizationId;
 
   String email;
 
@@ -117,14 +127,15 @@ abstract class AppUser
   DateTime? deletedAt;
 
   @override
-  _i1.Table<int?> get table => t;
+  _i1.Table<_i1.UuidValue?> get table => t;
 
   /// Returns a shallow copy of this [AppUser]
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
   AppUser copyWith({
-    int? id,
-    int? organizationId,
+    _i1.UuidValue? id,
+    int? serverpodUserId,
+    _i1.UuidValue? organizationId,
     String? email,
     String? passwordHash,
     String? firstName,
@@ -143,8 +154,9 @@ abstract class AppUser
   @override
   Map<String, dynamic> toJson() {
     return {
-      if (id != null) 'id': id,
-      if (organizationId != null) 'organizationId': organizationId,
+      if (id != null) 'id': id?.toJson(),
+      if (serverpodUserId != null) 'serverpodUserId': serverpodUserId,
+      if (organizationId != null) 'organizationId': organizationId?.toJson(),
       'email': email,
       'passwordHash': passwordHash,
       'firstName': firstName,
@@ -165,8 +177,9 @@ abstract class AppUser
   @override
   Map<String, dynamic> toJsonForProtocol() {
     return {
-      if (id != null) 'id': id,
-      if (organizationId != null) 'organizationId': organizationId,
+      if (id != null) 'id': id?.toJson(),
+      if (serverpodUserId != null) 'serverpodUserId': serverpodUserId,
+      if (organizationId != null) 'organizationId': organizationId?.toJson(),
       'email': email,
       'passwordHash': passwordHash,
       'firstName': firstName,
@@ -218,8 +231,9 @@ class _Undefined {}
 
 class _AppUserImpl extends AppUser {
   _AppUserImpl({
-    int? id,
-    int? organizationId,
+    _i1.UuidValue? id,
+    int? serverpodUserId,
+    _i1.UuidValue? organizationId,
     required String email,
     required String passwordHash,
     required String firstName,
@@ -236,6 +250,7 @@ class _AppUserImpl extends AppUser {
     DateTime? deletedAt,
   }) : super._(
           id: id,
+          serverpodUserId: serverpodUserId,
           organizationId: organizationId,
           email: email,
           passwordHash: passwordHash,
@@ -259,6 +274,7 @@ class _AppUserImpl extends AppUser {
   @override
   AppUser copyWith({
     Object? id = _Undefined,
+    Object? serverpodUserId = _Undefined,
     Object? organizationId = _Undefined,
     String? email,
     String? passwordHash,
@@ -276,9 +292,12 @@ class _AppUserImpl extends AppUser {
     Object? deletedAt = _Undefined,
   }) {
     return AppUser(
-      id: id is int? ? id : this.id,
-      organizationId:
-          organizationId is int? ? organizationId : this.organizationId,
+      id: id is _i1.UuidValue? ? id : this.id,
+      serverpodUserId:
+          serverpodUserId is int? ? serverpodUserId : this.serverpodUserId,
+      organizationId: organizationId is _i1.UuidValue?
+          ? organizationId
+          : this.organizationId,
       email: email ?? this.email,
       passwordHash: passwordHash ?? this.passwordHash,
       firstName: firstName ?? this.firstName,
@@ -297,9 +316,13 @@ class _AppUserImpl extends AppUser {
   }
 }
 
-class AppUserTable extends _i1.Table<int?> {
+class AppUserTable extends _i1.Table<_i1.UuidValue?> {
   AppUserTable({super.tableRelation}) : super(tableName: 'app_user') {
-    organizationId = _i1.ColumnInt(
+    serverpodUserId = _i1.ColumnInt(
+      'serverpodUserId',
+      this,
+    );
+    organizationId = _i1.ColumnUuid(
       'organizationId',
       this,
     );
@@ -361,7 +384,9 @@ class AppUserTable extends _i1.Table<int?> {
     );
   }
 
-  late final _i1.ColumnInt organizationId;
+  late final _i1.ColumnInt serverpodUserId;
+
+  late final _i1.ColumnUuid organizationId;
 
   late final _i1.ColumnString email;
 
@@ -394,6 +419,7 @@ class AppUserTable extends _i1.Table<int?> {
   @override
   List<_i1.Column> get columns => [
         id,
+        serverpodUserId,
         organizationId,
         email,
         passwordHash,
@@ -419,7 +445,7 @@ class AppUserInclude extends _i1.IncludeObject {
   Map<String, _i1.Include?> get includes => {};
 
   @override
-  _i1.Table<int?> get table => AppUser.t;
+  _i1.Table<_i1.UuidValue?> get table => AppUser.t;
 }
 
 class AppUserIncludeList extends _i1.IncludeList {
@@ -439,7 +465,7 @@ class AppUserIncludeList extends _i1.IncludeList {
   Map<String, _i1.Include?> get includes => include?.includes ?? {};
 
   @override
-  _i1.Table<int?> get table => AppUser.t;
+  _i1.Table<_i1.UuidValue?> get table => AppUser.t;
 }
 
 class AppUserRepository {
@@ -527,7 +553,7 @@ class AppUserRepository {
   /// Finds a single [AppUser] by its [id] or null if no such row exists.
   Future<AppUser?> findById(
     _i1.Session session,
-    int id, {
+    _i1.UuidValue id, {
     _i1.Transaction? transaction,
   }) async {
     return session.db.findById<AppUser>(

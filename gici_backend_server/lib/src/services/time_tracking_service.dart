@@ -7,12 +7,12 @@ class TimeTrackingService {
 
   Future<TimeEntry> register(
     Session session, {
-    required int organizationId,
-    required int userId,
-    required int createdByUserId,
+    required UuidValue organizationId,
+    required UuidValue userId,
+    required UuidValue createdByUserId,
     required String entryType,
     String? notes,
-    int? parentEntryId,
+    UuidValue? parentEntryId,
     String? correctionReason,
   }) {
     final now = DateTime.now().toUtc();
@@ -36,8 +36,8 @@ class TimeTrackingService {
 
   Future<List<TimeEntry>> myEntries(
     Session session, {
-    required int organizationId,
-    required int userId,
+    required UuidValue organizationId,
+    required UuidValue userId,
     required int limit,
     required int offset,
   }) {
@@ -54,8 +54,8 @@ class TimeTrackingService {
 
   Future<List<TimeEntry>> listEntries(
     Session session, {
-    required int organizationId,
-    int? userId,
+    required UuidValue organizationId,
+    UuidValue? userId,
     DateTime? from,
     DateTime? to,
     required int limit,
@@ -93,17 +93,17 @@ class TimeTrackingService {
 
   Future<TimeEntry?> getById(
     Session session, {
-    required int entryId,
+    required UuidValue entryId,
   }) {
     return TimeEntry.db.findById(session, entryId);
   }
 
   Future<TimeEntry> createCorrection(
     Session session, {
-    required int organizationId,
-    required int userId,
-    required int createdByUserId,
-    required int parentEntryId,
+    required UuidValue organizationId,
+    required UuidValue userId,
+    required UuidValue createdByUserId,
+    required UuidValue parentEntryId,
     required String correctedEntryType,
     required String correctionReason,
     String? notes,

@@ -1,8 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:uuid/uuid_value.dart';
 
 import '../data/auth_repository.dart';
-import '../data/auth_session_storage.dart';
 
 enum AppRole { platformSuperAdmin, organizationAdmin, staff, guardian }
 
@@ -10,46 +10,72 @@ class AuthState extends Equatable {
   const AuthState({
     required this.isLoading,
     required this.isAuthenticated,
-    required this.role,
-    required this.organizationId,
-    required this.actorId,
-    required this.email,
-    required this.errorMessage,
+    this.role,
+    this.organizationId,
+    this.userId,
+    this.email,
+    this.firstName,
+    this.lastName,
+    this.errorMessage,
   });
 
   const AuthState.unauthenticated()
-    : isLoading = false,
-      isAuthenticated = false,
-      role = null,
-      organizationId = null,
-      actorId = null,
-      email = null,
-      errorMessage = null;
+      : isLoading = false,
+        isAuthenticated = false,
+        role = null,
+        organizationId = null,
+        userId = null,
+        email = null,
+        firstName = null,
+        lastName = null,
+        errorMessage = null;
 
   const AuthState.loading()
-    : isLoading = true,
-      isAuthenticated = false,
-      role = null,
-      organizationId = null,
-      actorId = null,
-      email = null,
-      errorMessage = null;
+      : isLoading = true,
+        isAuthenticated = false,
+        role = null,
+        organizationId = null,
+        userId = null,
+        email = null,
+        firstName = null,
+        lastName = null,
+        errorMessage = null;
 
   final bool isLoading;
   final bool isAuthenticated;
   final AppRole? role;
-  final String? organizationId;
-  final String? actorId;
+  final UuidValue? organizationId;
+  final UuidValue? userId;
   final String? email;
+  final String? firstName;
+  final String? lastName;
   final String? errorMessage;
+
+  bool get isStaffOrAbove =>
+      role == AppRole.platformSuperAdmin ||
+      role == AppRole.organizationAdmin ||
+      role == AppRole.staff;
+
+  bool get isAdmin =>
+      role == AppRole.platformSuperAdmin ||
+      role == AppRole.organizationAdmin;
+
+  bool get isGuardian => role == AppRole.guardian;
+
+  String get displayName {
+    if (firstName != null && lastName != null) return '$firstName $lastName';
+    return email ?? '';
+  }
 
   AuthState copyWith({
     bool? isLoading,
     bool? isAuthenticated,
     AppRole? role,
-    String? organizationId,
-    String? actorId,
+    UuidValue? organizationId,
+    UuidValue? userId,
     String? email,
+    String? firstName,
+    String? lastName,
     String? errorMessage,
   }) {
     return AuthState(
@@ -57,57 +83,58 @@ class AuthState extends Equatable {
       isAuthenticated: isAuthenticated ?? this.isAuthenticated,
       role: role ?? this.role,
       organizationId: organizationId ?? this.organizationId,
-      actorId: actorId ?? this.actorId,
+      userId: userId ?? this.userId,
       email: email ?? this.email,
+      firstName: firstName ?? this.firstName,
+      lastName: lastName ?? this.lastName,
       errorMessage: errorMessage,
     );
   }
 
   @override
   List<Object?> get props => [
-    isLoading,
-    isAuthenticated,
-    role,
-    organizationId,
-    actorId,
-    email,
-    errorMessage,
-  ];
+        isLoading,
+        isAuthenticated,
+        role,
+        organizationId,
+        userId,
+        email,
+        firstName,
+        lastName,
+        errorMessage,
+      ];
 }
 
 class AuthCubit extends Cubit<AuthState> {
-  AuthCubit(this._authRepository, this._sessionStorage)
-    : super(const AuthState.unauthenticated());
+  AuthCubit(this._authRepository) : super(const AuthState.unauthenticated());
 
   final AuthRepository _authRepository;
-  final AuthSessionStorage _sessionStorage;
 
+  /// Try to restore the session from the stored auth key.
+  /// Serverpod's FlutterAuthenticationKeyManager handles token persistence.
   Future<void> bootstrap() async {
     emit(const AuthState.loading());
-    final appUserId = await _sessionStorage.readAppUserId();
-    if (appUserId == null) {
-      emit(const AuthState.unauthenticated());
-      return;
-    }
 
-    final me = await _authRepository.me(appUserId: appUserId);
-    if (me == null) {
-      await _sessionStorage.clear();
-      emit(const AuthState.unauthenticated());
-      return;
-    }
+    try {
+      final session = await _authRepository.me();
+      if (session == null) {
+        emit(const AuthState.unauthenticated());
+        return;
+      }
 
-    emit(
-      AuthState(
+      emit(AuthState(
         isLoading: false,
         isAuthenticated: true,
-        role: _parseRole(me.role),
-        organizationId: me.organizationId?.toString(),
-        actorId: me.appUserId.toString(),
-        email: me.email,
-        errorMessage: null,
-      ),
-    );
+        role: _parseRole(session.role),
+        organizationId: session.organizationId,
+        userId: session.appUserId,
+        email: session.email,
+        firstName: session.firstName,
+        lastName: session.lastName,
+      ));
+    } catch (_) {
+      emit(const AuthState.unauthenticated());
+    }
   }
 
   Future<void> signInWithEmailPassword({
@@ -117,33 +144,49 @@ class AuthCubit extends Cubit<AuthState> {
     emit(const AuthState.loading());
 
     try {
-      final authSession = await _authRepository.signInWithEmailPassword(
+      final session = await _authRepository.signInWithEmailPassword(
         email: email,
         password: password,
       );
-      emit(
-        AuthState(
-          isLoading: false,
-          isAuthenticated: true,
-          role: _parseRole(authSession.role),
-          organizationId: authSession.organizationId?.toString(),
-          actorId: authSession.appUserId.toString(),
-          email: authSession.email,
-          errorMessage: null,
-        ),
-      );
-      await _sessionStorage.saveAppUserId(authSession.appUserId);
+      emit(AuthState(
+        isLoading: false,
+        isAuthenticated: true,
+        role: _parseRole(session.role),
+        organizationId: session.organizationId,
+        userId: session.appUserId,
+        email: session.email,
+        firstName: session.firstName,
+        lastName: session.lastName,
+      ));
     } catch (e) {
-      emit(
-        const AuthState.unauthenticated().copyWith(
-          errorMessage: 'Invalid credentials or backend unavailable.',
-        ),
+      emit(const AuthState.unauthenticated().copyWith(
+        errorMessage: 'Credenciales incorrectas o servidor no disponible.',
+      ));
+    }
+  }
+
+  Future<void> requestPasswordReset({required String email}) async {
+    await _authRepository.requestPasswordReset(email: email);
+  }
+
+  Future<bool> resetPassword({
+    required String email,
+    required String code,
+    required String newPassword,
+  }) async {
+    try {
+      return await _authRepository.resetPassword(
+        email: email,
+        code: code,
+        newPassword: newPassword,
       );
+    } catch (_) {
+      return false;
     }
   }
 
   Future<void> signOut() async {
-    await _sessionStorage.clear();
+    await _authRepository.signOut();
     emit(const AuthState.unauthenticated());
   }
 
@@ -158,22 +201,6 @@ class AuthCubit extends Cubit<AuthState> {
       case 'guardian':
       default:
         return AppRole.guardian;
-    }
-  }
-}
-
-extension AuthStateApi on AuthState {
-  String get apiRole {
-    switch (role) {
-      case AppRole.platformSuperAdmin:
-        return 'platform_super_admin';
-      case AppRole.organizationAdmin:
-        return 'organization_admin';
-      case AppRole.staff:
-        return 'staff';
-      case AppRole.guardian:
-      case null:
-        return 'guardian';
     }
   }
 }

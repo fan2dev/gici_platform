@@ -1,10 +1,12 @@
+# Child timeline item DTO (transfer object, no database table)
+
 class: ChildTimelineItem
 
 fields:
-  childId: int
+  childId: UuidValue
   eventAt: DateTime
   eventType: String
   title: String
   description: String?
   referenceType: String?
-  referenceId: int?
+  referenceId: String?

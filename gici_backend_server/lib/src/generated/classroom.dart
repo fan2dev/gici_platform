@@ -12,7 +12,7 @@
 import 'package:serverpod/serverpod.dart' as _i1;
 
 abstract class Classroom
-    implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
+    implements _i1.TableRow<_i1.UuidValue?>, _i1.ProtocolSerialization {
   Classroom._({
     this.id,
     required this.organizationId,
@@ -30,8 +30,8 @@ abstract class Classroom
   });
 
   factory Classroom({
-    int? id,
-    required int organizationId,
+    _i1.UuidValue? id,
+    required _i1.UuidValue organizationId,
     required String name,
     String? description,
     int? ageGroupMin,
@@ -47,8 +47,11 @@ abstract class Classroom
 
   factory Classroom.fromJson(Map<String, dynamic> jsonSerialization) {
     return Classroom(
-      id: jsonSerialization['id'] as int?,
-      organizationId: jsonSerialization['organizationId'] as int,
+      id: jsonSerialization['id'] == null
+          ? null
+          : _i1.UuidValueJsonExtension.fromJson(jsonSerialization['id']),
+      organizationId: _i1.UuidValueJsonExtension.fromJson(
+          jsonSerialization['organizationId']),
       name: jsonSerialization['name'] as String,
       description: jsonSerialization['description'] as String?,
       ageGroupMin: jsonSerialization['ageGroupMin'] as int?,
@@ -72,9 +75,9 @@ abstract class Classroom
   static const db = ClassroomRepository._();
 
   @override
-  int? id;
+  _i1.UuidValue? id;
 
-  int organizationId;
+  _i1.UuidValue organizationId;
 
   String name;
 
@@ -99,14 +102,14 @@ abstract class Classroom
   DateTime? deletedAt;
 
   @override
-  _i1.Table<int?> get table => t;
+  _i1.Table<_i1.UuidValue?> get table => t;
 
   /// Returns a shallow copy of this [Classroom]
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
   Classroom copyWith({
-    int? id,
-    int? organizationId,
+    _i1.UuidValue? id,
+    _i1.UuidValue? organizationId,
     String? name,
     String? description,
     int? ageGroupMin,
@@ -122,8 +125,8 @@ abstract class Classroom
   @override
   Map<String, dynamic> toJson() {
     return {
-      if (id != null) 'id': id,
-      'organizationId': organizationId,
+      if (id != null) 'id': id?.toJson(),
+      'organizationId': organizationId.toJson(),
       'name': name,
       if (description != null) 'description': description,
       if (ageGroupMin != null) 'ageGroupMin': ageGroupMin,
@@ -141,8 +144,8 @@ abstract class Classroom
   @override
   Map<String, dynamic> toJsonForProtocol() {
     return {
-      if (id != null) 'id': id,
-      'organizationId': organizationId,
+      if (id != null) 'id': id?.toJson(),
+      'organizationId': organizationId.toJson(),
       'name': name,
       if (description != null) 'description': description,
       if (ageGroupMin != null) 'ageGroupMin': ageGroupMin,
@@ -191,8 +194,8 @@ class _Undefined {}
 
 class _ClassroomImpl extends Classroom {
   _ClassroomImpl({
-    int? id,
-    required int organizationId,
+    _i1.UuidValue? id,
+    required _i1.UuidValue organizationId,
     required String name,
     String? description,
     int? ageGroupMin,
@@ -226,7 +229,7 @@ class _ClassroomImpl extends Classroom {
   @override
   Classroom copyWith({
     Object? id = _Undefined,
-    int? organizationId,
+    _i1.UuidValue? organizationId,
     String? name,
     Object? description = _Undefined,
     Object? ageGroupMin = _Undefined,
@@ -240,7 +243,7 @@ class _ClassroomImpl extends Classroom {
     Object? deletedAt = _Undefined,
   }) {
     return Classroom(
-      id: id is int? ? id : this.id,
+      id: id is _i1.UuidValue? ? id : this.id,
       organizationId: organizationId ?? this.organizationId,
       name: name ?? this.name,
       description: description is String? ? description : this.description,
@@ -257,9 +260,9 @@ class _ClassroomImpl extends Classroom {
   }
 }
 
-class ClassroomTable extends _i1.Table<int?> {
+class ClassroomTable extends _i1.Table<_i1.UuidValue?> {
   ClassroomTable({super.tableRelation}) : super(tableName: 'classroom') {
-    organizationId = _i1.ColumnInt(
+    organizationId = _i1.ColumnUuid(
       'organizationId',
       this,
     );
@@ -309,7 +312,7 @@ class ClassroomTable extends _i1.Table<int?> {
     );
   }
 
-  late final _i1.ColumnInt organizationId;
+  late final _i1.ColumnUuid organizationId;
 
   late final _i1.ColumnString name;
 
@@ -358,7 +361,7 @@ class ClassroomInclude extends _i1.IncludeObject {
   Map<String, _i1.Include?> get includes => {};
 
   @override
-  _i1.Table<int?> get table => Classroom.t;
+  _i1.Table<_i1.UuidValue?> get table => Classroom.t;
 }
 
 class ClassroomIncludeList extends _i1.IncludeList {
@@ -378,7 +381,7 @@ class ClassroomIncludeList extends _i1.IncludeList {
   Map<String, _i1.Include?> get includes => include?.includes ?? {};
 
   @override
-  _i1.Table<int?> get table => Classroom.t;
+  _i1.Table<_i1.UuidValue?> get table => Classroom.t;
 }
 
 class ClassroomRepository {
@@ -466,7 +469,7 @@ class ClassroomRepository {
   /// Finds a single [Classroom] by its [id] or null if no such row exists.
   Future<Classroom?> findById(
     _i1.Session session,
-    int id, {
+    _i1.UuidValue id, {
     _i1.Transaction? transaction,
   }) async {
     return session.db.findById<Classroom>(

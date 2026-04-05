@@ -34,9 +34,9 @@ abstract class FileAsset implements _i1.SerializableModel {
   });
 
   factory FileAsset({
-    int? id,
-    required int organizationId,
-    required int uploadedByUserId,
+    _i1.UuidValue? id,
+    required _i1.UuidValue organizationId,
+    required _i1.UuidValue uploadedByUserId,
     required String fileName,
     required String originalName,
     required String mimeType,
@@ -56,9 +56,13 @@ abstract class FileAsset implements _i1.SerializableModel {
 
   factory FileAsset.fromJson(Map<String, dynamic> jsonSerialization) {
     return FileAsset(
-      id: jsonSerialization['id'] as int?,
-      organizationId: jsonSerialization['organizationId'] as int,
-      uploadedByUserId: jsonSerialization['uploadedByUserId'] as int,
+      id: jsonSerialization['id'] == null
+          ? null
+          : _i1.UuidValueJsonExtension.fromJson(jsonSerialization['id']),
+      organizationId: _i1.UuidValueJsonExtension.fromJson(
+          jsonSerialization['organizationId']),
+      uploadedByUserId: _i1.UuidValueJsonExtension.fromJson(
+          jsonSerialization['uploadedByUserId']),
       fileName: jsonSerialization['fileName'] as String,
       originalName: jsonSerialization['originalName'] as String,
       mimeType: jsonSerialization['mimeType'] as String,
@@ -86,11 +90,11 @@ abstract class FileAsset implements _i1.SerializableModel {
   /// The database id, set if the object has been inserted into the
   /// database or if it has been fetched from the database. Otherwise,
   /// the id will be null.
-  int? id;
+  _i1.UuidValue? id;
 
-  int organizationId;
+  _i1.UuidValue organizationId;
 
-  int uploadedByUserId;
+  _i1.UuidValue uploadedByUserId;
 
   String fileName;
 
@@ -126,9 +130,9 @@ abstract class FileAsset implements _i1.SerializableModel {
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
   FileAsset copyWith({
-    int? id,
-    int? organizationId,
-    int? uploadedByUserId,
+    _i1.UuidValue? id,
+    _i1.UuidValue? organizationId,
+    _i1.UuidValue? uploadedByUserId,
     String? fileName,
     String? originalName,
     String? mimeType,
@@ -148,9 +152,9 @@ abstract class FileAsset implements _i1.SerializableModel {
   @override
   Map<String, dynamic> toJson() {
     return {
-      if (id != null) 'id': id,
-      'organizationId': organizationId,
-      'uploadedByUserId': uploadedByUserId,
+      if (id != null) 'id': id?.toJson(),
+      'organizationId': organizationId.toJson(),
+      'uploadedByUserId': uploadedByUserId.toJson(),
       'fileName': fileName,
       'originalName': originalName,
       'mimeType': mimeType,
@@ -179,9 +183,9 @@ class _Undefined {}
 
 class _FileAssetImpl extends FileAsset {
   _FileAssetImpl({
-    int? id,
-    required int organizationId,
-    required int uploadedByUserId,
+    _i1.UuidValue? id,
+    required _i1.UuidValue organizationId,
+    required _i1.UuidValue uploadedByUserId,
     required String fileName,
     required String originalName,
     required String mimeType,
@@ -224,8 +228,8 @@ class _FileAssetImpl extends FileAsset {
   @override
   FileAsset copyWith({
     Object? id = _Undefined,
-    int? organizationId,
-    int? uploadedByUserId,
+    _i1.UuidValue? organizationId,
+    _i1.UuidValue? uploadedByUserId,
     String? fileName,
     String? originalName,
     String? mimeType,
@@ -243,7 +247,7 @@ class _FileAssetImpl extends FileAsset {
     Object? deletedAt = _Undefined,
   }) {
     return FileAsset(
-      id: id is int? ? id : this.id,
+      id: id is _i1.UuidValue? ? id : this.id,
       organizationId: organizationId ?? this.organizationId,
       uploadedByUserId: uploadedByUserId ?? this.uploadedByUserId,
       fileName: fileName ?? this.fileName,

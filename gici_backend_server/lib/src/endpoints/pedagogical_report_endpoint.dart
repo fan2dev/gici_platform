@@ -1,7 +1,7 @@
 import 'package:serverpod/serverpod.dart';
 
 import '../generated/protocol.dart';
-import '../helpers/request_scope.dart';
+import '../helpers/session_user_helper.dart';
 import '../services/access_control_service.dart';
 import '../services/activity_log_service.dart';
 import '../services/pedagogical_report_service.dart';
@@ -15,36 +15,24 @@ class PedagogicalReportEndpoint extends Endpoint {
 
   Future<List<PedagogicalReport>> listReportsByChild(
     Session session, {
-    required String organizationId,
-    required String actorId,
-    required int childId,
+    required UuidValue childId,
     int page = 0,
     int pageSize = 30,
   }) async {
-    final orgId = parseOrganizationId(organizationId);
-    final actor = await _accessControl.requireActor(
-      session,
-      actorId: parseActorId(actorId),
-      organizationId: orgId,
-      allowedRoles: const [
-        'platform_super_admin',
-        'organization_admin',
-        'staff',
-        'guardian',
-      ],
-    );
+    final actor = await getAuthenticatedUser(session);
+    _accessControl.requireRole(actor, allowedRoles: const [
+      'platform_super_admin',
+      'organization_admin',
+      'staff',
+      'guardian',
+    ]);
+    final orgId = actor.organizationId!;
 
-    if (actor.role == 'guardian') {
-      final canAccess = await _accessControl.isGuardianOfChild(
-        session,
-        organizationId: orgId,
-        guardianUserId: actor.id!,
-        childId: childId,
-      );
-      if (!canAccess) {
-        throw Exception('Guardian cannot access these reports.');
-      }
-    }
+    await _accessControl.requireGuardianChildAccess(
+      session,
+      actor: actor,
+      childId: childId,
+    );
 
     final safePage = page < 0 ? 0 : page;
     final safePageSize = pageSize.clamp(1, 100);
@@ -61,22 +49,16 @@ class PedagogicalReportEndpoint extends Endpoint {
 
   Future<PedagogicalReport> getReport(
     Session session, {
-    required String organizationId,
-    required String actorId,
-    required int reportId,
+    required UuidValue reportId,
   }) async {
-    final orgId = parseOrganizationId(organizationId);
-    final actor = await _accessControl.requireActor(
-      session,
-      actorId: parseActorId(actorId),
-      organizationId: orgId,
-      allowedRoles: const [
-        'platform_super_admin',
-        'organization_admin',
-        'staff',
-        'guardian',
-      ],
-    );
+    final actor = await getAuthenticatedUser(session);
+    _accessControl.requireRole(actor, allowedRoles: const [
+      'platform_super_admin',
+      'organization_admin',
+      'staff',
+      'guardian',
+    ]);
+    final orgId = actor.organizationId!;
 
     final report = await _reportService.getById(session, reportId: reportId);
     if (report == null || report.organizationId != orgId || report.deletedAt != null) {
@@ -84,15 +66,11 @@ class PedagogicalReportEndpoint extends Endpoint {
     }
 
     if (actor.role == 'guardian') {
-      final canAccess = await _accessControl.isGuardianOfChild(
+      await _accessControl.requireGuardianChildAccess(
         session,
-        organizationId: orgId,
-        guardianUserId: actor.id!,
+        actor: actor,
         childId: report.childId,
       );
-      if (!canAccess) {
-        throw Exception('Guardian cannot access this report.');
-      }
       if (report.visibility != 'guardian' && report.visibility != 'all') {
         throw Exception('Report is not visible to guardian.');
       }
@@ -103,9 +81,7 @@ class PedagogicalReportEndpoint extends Endpoint {
 
   Future<PedagogicalReport> createReport(
     Session session, {
-    required String organizationId,
-    required String actorId,
-    required int childId,
+    required UuidValue childId,
     required DateTime reportDate,
     required String title,
     required String summary,
@@ -113,13 +89,13 @@ class PedagogicalReportEndpoint extends Endpoint {
     String status = 'published',
     String visibility = 'guardian',
   }) async {
-    final orgId = parseOrganizationId(organizationId);
-    final actor = await _accessControl.requireActor(
-      session,
-      actorId: parseActorId(actorId),
-      organizationId: orgId,
-      allowedRoles: const ['platform_super_admin', 'organization_admin', 'staff'],
-    );
+    final actor = await getAuthenticatedUser(session);
+    _accessControl.requireRole(actor, allowedRoles: const [
+      'platform_super_admin',
+      'organization_admin',
+      'staff',
+    ]);
+    final orgId = actor.organizationId!;
 
     final report = await _reportService.create(
       session,
@@ -140,7 +116,7 @@ class PedagogicalReportEndpoint extends Endpoint {
       userId: actor.id,
       action: 'pedagogical_report.create',
       entityType: 'pedagogical_report',
-      entityId: report.id,
+      entityId: report.id?.toString(),
       metadata: 'childId=$childId;status=$status',
     );
 
@@ -149,9 +125,7 @@ class PedagogicalReportEndpoint extends Endpoint {
 
   Future<PedagogicalReport> updateReport(
     Session session, {
-    required String organizationId,
-    required String actorId,
-    required int reportId,
+    required UuidValue reportId,
     DateTime? reportDate,
     String? title,
     String? summary,
@@ -159,13 +133,13 @@ class PedagogicalReportEndpoint extends Endpoint {
     String? status,
     String? visibility,
   }) async {
-    final orgId = parseOrganizationId(organizationId);
-    final actor = await _accessControl.requireActor(
-      session,
-      actorId: parseActorId(actorId),
-      organizationId: orgId,
-      allowedRoles: const ['platform_super_admin', 'organization_admin', 'staff'],
-    );
+    final actor = await getAuthenticatedUser(session);
+    _accessControl.requireRole(actor, allowedRoles: const [
+      'platform_super_admin',
+      'organization_admin',
+      'staff',
+    ]);
+    final orgId = actor.organizationId!;
 
     final report = await _reportService.getById(session, reportId: reportId);
     if (report == null || report.organizationId != orgId || report.deletedAt != null) {
@@ -190,7 +164,7 @@ class PedagogicalReportEndpoint extends Endpoint {
       userId: actor.id,
       action: 'pedagogical_report.update',
       entityType: 'pedagogical_report',
-      entityId: updated.id,
+      entityId: updated.id?.toString(),
       metadata: 'reportId=$reportId',
     );
 

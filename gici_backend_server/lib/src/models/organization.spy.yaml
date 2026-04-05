@@ -6,6 +6,7 @@ class: Organization
 table: organization
 
 fields:
+  id: UuidValue?, defaultPersist=random
   name: String
   legalName: String?
   slug: String
@@ -27,4 +28,3 @@ indexes:
     unique: true
   organization_status_idx:
     fields: status
-

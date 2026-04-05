@@ -5,12 +5,13 @@ class: ChatConversation
 table: chat_conversation
 
 fields:
-  organizationId: int
+  id: UuidValue?, defaultPersist=random
+  organizationId: UuidValue
   title: String?
   conversationType: String
-  relatedChildId: int?
-  relatedClassroomId: int?
-  createdByUserId: int
+  relatedChildId: UuidValue?
+  relatedClassroomId: UuidValue?
+  createdByUserId: UuidValue
   isArchived: bool
   lastMessageAt: DateTime?
   createdAt: DateTime
@@ -27,4 +28,3 @@ indexes:
     fields: relatedClassroomId
   conv_last_message_idx:
     fields: lastMessageAt
-

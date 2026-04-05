@@ -1,15 +1,18 @@
+# Child-specific document
+
 class: ChildDocument
 
 table: child_document
 
 fields:
-  organizationId: int
-  childId: int
-  fileAssetId: int
+  id: UuidValue?, defaultPersist=random
+  organizationId: UuidValue
+  childId: UuidValue
+  fileAssetId: UuidValue
   title: String
   description: String?
   visibleToGuardians: bool
-  createdByUserId: int
+  createdByUserId: UuidValue
   createdAt: DateTime
   updatedAt: DateTime
   deletedAt: DateTime?

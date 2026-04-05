@@ -1,10 +1,12 @@
+# Child profile overview DTO (transfer object, no database table)
+
 class: ChildProfileOverview
 
 fields:
   child: Child
-  activeClassroomId: int?
+  activeClassroomId: UuidValue?
   activeClassroomName: String?
-  guardianUserIds: List<int>
+  guardianUserIds: List<UuidValue>
   guardianDisplayNames: List<String>
   documentsCount: int
   reportsCount: int

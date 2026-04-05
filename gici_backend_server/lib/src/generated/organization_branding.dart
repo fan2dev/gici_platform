@@ -12,7 +12,7 @@
 import 'package:serverpod/serverpod.dart' as _i1;
 
 abstract class OrganizationBranding
-    implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
+    implements _i1.TableRow<_i1.UuidValue?>, _i1.ProtocolSerialization {
   OrganizationBranding._({
     this.id,
     required this.organizationId,
@@ -27,8 +27,8 @@ abstract class OrganizationBranding
   });
 
   factory OrganizationBranding({
-    int? id,
-    required int organizationId,
+    _i1.UuidValue? id,
+    required _i1.UuidValue organizationId,
     String? primaryColor,
     String? secondaryColor,
     String? logoUrl,
@@ -42,8 +42,11 @@ abstract class OrganizationBranding
   factory OrganizationBranding.fromJson(
       Map<String, dynamic> jsonSerialization) {
     return OrganizationBranding(
-      id: jsonSerialization['id'] as int?,
-      organizationId: jsonSerialization['organizationId'] as int,
+      id: jsonSerialization['id'] == null
+          ? null
+          : _i1.UuidValueJsonExtension.fromJson(jsonSerialization['id']),
+      organizationId: _i1.UuidValueJsonExtension.fromJson(
+          jsonSerialization['organizationId']),
       primaryColor: jsonSerialization['primaryColor'] as String?,
       secondaryColor: jsonSerialization['secondaryColor'] as String?,
       logoUrl: jsonSerialization['logoUrl'] as String?,
@@ -62,9 +65,9 @@ abstract class OrganizationBranding
   static const db = OrganizationBrandingRepository._();
 
   @override
-  int? id;
+  _i1.UuidValue? id;
 
-  int organizationId;
+  _i1.UuidValue organizationId;
 
   String? primaryColor;
 
@@ -83,14 +86,14 @@ abstract class OrganizationBranding
   DateTime updatedAt;
 
   @override
-  _i1.Table<int?> get table => t;
+  _i1.Table<_i1.UuidValue?> get table => t;
 
   /// Returns a shallow copy of this [OrganizationBranding]
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
   OrganizationBranding copyWith({
-    int? id,
-    int? organizationId,
+    _i1.UuidValue? id,
+    _i1.UuidValue? organizationId,
     String? primaryColor,
     String? secondaryColor,
     String? logoUrl,
@@ -103,8 +106,8 @@ abstract class OrganizationBranding
   @override
   Map<String, dynamic> toJson() {
     return {
-      if (id != null) 'id': id,
-      'organizationId': organizationId,
+      if (id != null) 'id': id?.toJson(),
+      'organizationId': organizationId.toJson(),
       if (primaryColor != null) 'primaryColor': primaryColor,
       if (secondaryColor != null) 'secondaryColor': secondaryColor,
       if (logoUrl != null) 'logoUrl': logoUrl,
@@ -119,8 +122,8 @@ abstract class OrganizationBranding
   @override
   Map<String, dynamic> toJsonForProtocol() {
     return {
-      if (id != null) 'id': id,
-      'organizationId': organizationId,
+      if (id != null) 'id': id?.toJson(),
+      'organizationId': organizationId.toJson(),
       if (primaryColor != null) 'primaryColor': primaryColor,
       if (secondaryColor != null) 'secondaryColor': secondaryColor,
       if (logoUrl != null) 'logoUrl': logoUrl,
@@ -166,8 +169,8 @@ class _Undefined {}
 
 class _OrganizationBrandingImpl extends OrganizationBranding {
   _OrganizationBrandingImpl({
-    int? id,
-    required int organizationId,
+    _i1.UuidValue? id,
+    required _i1.UuidValue organizationId,
     String? primaryColor,
     String? secondaryColor,
     String? logoUrl,
@@ -195,7 +198,7 @@ class _OrganizationBrandingImpl extends OrganizationBranding {
   @override
   OrganizationBranding copyWith({
     Object? id = _Undefined,
-    int? organizationId,
+    _i1.UuidValue? organizationId,
     Object? primaryColor = _Undefined,
     Object? secondaryColor = _Undefined,
     Object? logoUrl = _Undefined,
@@ -206,7 +209,7 @@ class _OrganizationBrandingImpl extends OrganizationBranding {
     DateTime? updatedAt,
   }) {
     return OrganizationBranding(
-      id: id is int? ? id : this.id,
+      id: id is _i1.UuidValue? ? id : this.id,
       organizationId: organizationId ?? this.organizationId,
       primaryColor: primaryColor is String? ? primaryColor : this.primaryColor,
       secondaryColor:
@@ -221,10 +224,10 @@ class _OrganizationBrandingImpl extends OrganizationBranding {
   }
 }
 
-class OrganizationBrandingTable extends _i1.Table<int?> {
+class OrganizationBrandingTable extends _i1.Table<_i1.UuidValue?> {
   OrganizationBrandingTable({super.tableRelation})
       : super(tableName: 'organization_branding') {
-    organizationId = _i1.ColumnInt(
+    organizationId = _i1.ColumnUuid(
       'organizationId',
       this,
     );
@@ -262,7 +265,7 @@ class OrganizationBrandingTable extends _i1.Table<int?> {
     );
   }
 
-  late final _i1.ColumnInt organizationId;
+  late final _i1.ColumnUuid organizationId;
 
   late final _i1.ColumnString primaryColor;
 
@@ -302,7 +305,7 @@ class OrganizationBrandingInclude extends _i1.IncludeObject {
   Map<String, _i1.Include?> get includes => {};
 
   @override
-  _i1.Table<int?> get table => OrganizationBranding.t;
+  _i1.Table<_i1.UuidValue?> get table => OrganizationBranding.t;
 }
 
 class OrganizationBrandingIncludeList extends _i1.IncludeList {
@@ -322,7 +325,7 @@ class OrganizationBrandingIncludeList extends _i1.IncludeList {
   Map<String, _i1.Include?> get includes => include?.includes ?? {};
 
   @override
-  _i1.Table<int?> get table => OrganizationBranding.t;
+  _i1.Table<_i1.UuidValue?> get table => OrganizationBranding.t;
 }
 
 class OrganizationBrandingRepository {
@@ -410,7 +413,7 @@ class OrganizationBrandingRepository {
   /// Finds a single [OrganizationBranding] by its [id] or null if no such row exists.
   Future<OrganizationBranding?> findById(
     _i1.Session session,
-    int id, {
+    _i1.UuidValue id, {
     _i1.Transaction? transaction,
   }) async {
     return session.db.findById<OrganizationBranding>(

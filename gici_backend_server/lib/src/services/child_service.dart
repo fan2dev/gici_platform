@@ -7,7 +7,7 @@ class ChildService {
 
   Future<List<Child>> listByOrganization(
     Session session, {
-    required int organizationId,
+    required UuidValue organizationId,
     required int limit,
     required int offset,
   }) {
@@ -24,7 +24,7 @@ class ChildService {
 
   Future<Child> create(
     Session session, {
-    required int organizationId,
+    required UuidValue organizationId,
     required String firstName,
     required String lastName,
     required DateTime dateOfBirth,
@@ -53,8 +53,8 @@ class ChildService {
 
   Future<Child?> getById(
     Session session, {
-    required int organizationId,
-    required int childId,
+    required UuidValue organizationId,
+    required UuidValue childId,
   }) {
     return Child.db.findFirstRow(
       session,
@@ -67,8 +67,8 @@ class ChildService {
 
   Future<List<Child>> listForGuardian(
     Session session, {
-    required int organizationId,
-    required int guardianUserId,
+    required UuidValue organizationId,
+    required UuidValue guardianUserId,
     required int limit,
     required int offset,
   }) async {

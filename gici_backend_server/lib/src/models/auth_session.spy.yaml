@@ -9,3 +9,5 @@ fields:
   role: String
   firstName: String
   lastName: String
+  keyId: int
+  key: String

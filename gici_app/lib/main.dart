@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 import 'app/app.dart';
 import 'core/config/app_config.dart';
@@ -13,6 +14,7 @@ Future<void> bootstrap(AppConfig config) async {
   AppConfig.current = config;
   BackendClientProvider.configure(serverUrl: config.apiUrl);
 
+  await initializeDateFormatting('es_ES');
   await configureDependencies();
   runApp(const GiciApp());
 }

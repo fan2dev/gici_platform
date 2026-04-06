@@ -6,18 +6,27 @@ class AuthRepository {
 
   final Client _client;
 
+  /// Sign in and store the auth key for subsequent requests.
   Future<AuthSession> signInWithEmailPassword({
     required String email,
     required String password,
-  }) {
-    return _client.auth.signInWithEmailPassword(
+  }) async {
+    final session = await _client.auth.signInWithEmailPassword(
       email: email,
       password: password,
     );
+
+    // Store the auth key so FlutterAuthenticationKeyManager includes it
+    // in all subsequent requests. Format: "keyId:key"
+    final keyManager = _client.authenticationKeyManager;
+    if (keyManager is FlutterAuthenticationKeyManager) {
+      await keyManager.put('${session.keyId}:${session.key}');
+    }
+
+    return session;
   }
 
   /// Get current authenticated user session.
-  /// The session token is automatically included by FlutterAuthenticationKeyManager.
   Future<AuthSession?> me() {
     return _client.auth.me();
   }
@@ -39,7 +48,6 @@ class AuthRepository {
   }
 
   Future<void> signOut() async {
-    // Clear the stored authentication key
     final keyManager = _client.authenticationKeyManager;
     if (keyManager is FlutterAuthenticationKeyManager) {
       await keyManager.remove();

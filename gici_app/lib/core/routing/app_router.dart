@@ -10,6 +10,7 @@ import '../../features/auth/view/login_page.dart';
 import '../../features/auth/view/forgot_password_page.dart';
 import '../../features/chat/view/chat_page.dart';
 import '../../features/chat/view/chat_conversation_page.dart';
+import '../../features/chat/view/create_conversation_page.dart';
 import '../../features/children/view/child_detail_page.dart';
 import '../../features/children/view/children_page.dart';
 import '../../features/child_timeline/view/child_timeline_page.dart';
@@ -24,6 +25,7 @@ import '../../features/notifications/view/notifications_page.dart';
 import '../../features/pedagogical_reports/view/pedagogical_report_detail_page.dart';
 import '../../features/pedagogical_reports/view/pedagogical_reports_page.dart';
 import '../../features/settings/view/settings_page.dart';
+import '../../features/staff_management/view/staff_page.dart';
 import '../../features/time_tracking/view/time_tracking_page.dart';
 
 GoRouter buildAppRouter(AuthCubit authCubit) {
@@ -92,6 +94,10 @@ GoRouter buildAppRouter(AuthCubit authCubit) {
             builder: (_, __) => const ChatPage(),
           ),
           GoRoute(
+            path: '/chat/create',
+            builder: (_, __) => const CreateConversationPage(),
+          ),
+          GoRoute(
             path: '/chat/:conversationId',
             builder: (_, state) {
               final id = _parseUuid(state.pathParameters['conversationId']);
@@ -157,6 +163,10 @@ GoRouter buildAppRouter(AuthCubit authCubit) {
           GoRoute(
             path: '/settings',
             builder: (_, __) => const SettingsPage(),
+          ),
+          GoRoute(
+            path: '/staff',
+            builder: (_, __) => const StaffPage(),
           ),
         ],
       ),

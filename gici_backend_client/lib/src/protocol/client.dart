@@ -23,32 +23,35 @@ import 'package:gici_backend_client/src/protocol/child_timeline_item.dart'
 import 'package:gici_backend_client/src/protocol/classroom.dart' as _i10;
 import 'package:gici_backend_client/src/protocol/classroom_assignment.dart'
     as _i11;
-import 'package:gici_backend_client/src/protocol/data_change_request.dart'
+import 'package:gici_backend_client/src/protocol/dashboard_summary.dart'
     as _i12;
-import 'package:gici_backend_client/src/protocol/organization_document.dart'
+import 'package:gici_backend_client/src/protocol/data_change_request.dart'
     as _i13;
-import 'package:gici_backend_client/src/protocol/child_document.dart' as _i14;
+import 'package:gici_backend_client/src/protocol/organization_document.dart'
+    as _i14;
+import 'package:gici_backend_client/src/protocol/child_document.dart' as _i15;
 import 'package:gici_backend_client/src/protocol/user_onboarding_state.dart'
-    as _i15;
-import 'package:gici_backend_client/src/protocol/organization.dart' as _i16;
-import 'package:gici_backend_client/src/protocol/menu_entry.dart' as _i17;
-import 'package:gici_backend_client/src/protocol/gallery.dart' as _i18;
-import 'package:gici_backend_client/src/protocol/gallery_item.dart' as _i19;
-import 'package:gici_backend_client/src/protocol/meal_entry.dart' as _i20;
-import 'package:gici_backend_client/src/protocol/nap_entry.dart' as _i21;
+    as _i16;
+import 'package:gici_backend_client/src/protocol/organization.dart' as _i17;
+import 'package:gici_backend_client/src/protocol/menu_entry.dart' as _i18;
+import 'package:gici_backend_client/src/protocol/gallery.dart' as _i19;
+import 'package:gici_backend_client/src/protocol/gallery_item.dart' as _i20;
+import 'package:gici_backend_client/src/protocol/meal_entry.dart' as _i21;
+import 'package:gici_backend_client/src/protocol/nap_entry.dart' as _i22;
 import 'package:gici_backend_client/src/protocol/bowel_movement_entry.dart'
-    as _i22;
-import 'package:gici_backend_client/src/protocol/child_daily_habits.dart'
     as _i23;
-import 'package:gici_backend_client/src/protocol/push_device_token.dart'
+import 'package:gici_backend_client/src/protocol/child_daily_habits.dart'
     as _i24;
-import 'package:gici_backend_client/src/protocol/notification_record.dart'
+import 'package:gici_backend_client/src/protocol/push_device_token.dart'
     as _i25;
-import 'package:gici_backend_client/src/protocol/pedagogical_report.dart'
+import 'package:gici_backend_client/src/protocol/notification_record.dart'
     as _i26;
-import 'package:gici_backend_client/src/protocol/time_entry.dart' as _i27;
-import 'package:serverpod_auth_client/serverpod_auth_client.dart' as _i28;
-import 'protocol.dart' as _i29;
+import 'package:gici_backend_client/src/protocol/pedagogical_report.dart'
+    as _i27;
+import 'package:gici_backend_client/src/protocol/app_user.dart' as _i28;
+import 'package:gici_backend_client/src/protocol/time_entry.dart' as _i29;
+import 'package:serverpod_auth_client/serverpod_auth_client.dart' as _i30;
+import 'protocol.dart' as _i31;
 
 /// {@category Endpoint}
 class EndpointAuth extends _i1.EndpointRef {
@@ -417,18 +420,34 @@ class EndpointClassroom extends _i1.EndpointRef {
 }
 
 /// {@category Endpoint}
+class EndpointDashboard extends _i1.EndpointRef {
+  EndpointDashboard(_i1.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'dashboard';
+
+  /// Get a summary of key metrics for the dashboard.
+  _i2.Future<_i12.DashboardSummary> getSummary() =>
+      caller.callServerEndpoint<_i12.DashboardSummary>(
+        'dashboard',
+        'getSummary',
+        {},
+      );
+}
+
+/// {@category Endpoint}
 class EndpointDataChangeRequest extends _i1.EndpointRef {
   EndpointDataChangeRequest(_i1.EndpointCaller caller) : super(caller);
 
   @override
   String get name => 'dataChangeRequest';
 
-  _i2.Future<_i12.DataChangeRequest> createRequest({
+  _i2.Future<_i13.DataChangeRequest> createRequest({
     _i5.UuidValue? targetChildId,
     required String requestType,
     required String requestPayload,
   }) =>
-      caller.callServerEndpoint<_i12.DataChangeRequest>(
+      caller.callServerEndpoint<_i13.DataChangeRequest>(
         'dataChangeRequest',
         'createRequest',
         {
@@ -438,11 +457,11 @@ class EndpointDataChangeRequest extends _i1.EndpointRef {
         },
       );
 
-  _i2.Future<List<_i12.DataChangeRequest>> myRequests({
+  _i2.Future<List<_i13.DataChangeRequest>> myRequests({
     required int page,
     required int pageSize,
   }) =>
-      caller.callServerEndpoint<List<_i12.DataChangeRequest>>(
+      caller.callServerEndpoint<List<_i13.DataChangeRequest>>(
         'dataChangeRequest',
         'myRequests',
         {
@@ -451,12 +470,12 @@ class EndpointDataChangeRequest extends _i1.EndpointRef {
         },
       );
 
-  _i2.Future<List<_i12.DataChangeRequest>> listRequestsForReview({
+  _i2.Future<List<_i13.DataChangeRequest>> listRequestsForReview({
     String? status,
     required int page,
     required int pageSize,
   }) =>
-      caller.callServerEndpoint<List<_i12.DataChangeRequest>>(
+      caller.callServerEndpoint<List<_i13.DataChangeRequest>>(
         'dataChangeRequest',
         'listRequestsForReview',
         {
@@ -466,20 +485,20 @@ class EndpointDataChangeRequest extends _i1.EndpointRef {
         },
       );
 
-  _i2.Future<_i12.DataChangeRequest> getRequest(
+  _i2.Future<_i13.DataChangeRequest> getRequest(
           {required _i5.UuidValue requestId}) =>
-      caller.callServerEndpoint<_i12.DataChangeRequest>(
+      caller.callServerEndpoint<_i13.DataChangeRequest>(
         'dataChangeRequest',
         'getRequest',
         {'requestId': requestId},
       );
 
-  _i2.Future<_i12.DataChangeRequest> updateRequestStatus({
+  _i2.Future<_i13.DataChangeRequest> updateRequestStatus({
     required _i5.UuidValue requestId,
     required String status,
     String? resolutionNote,
   }) =>
-      caller.callServerEndpoint<_i12.DataChangeRequest>(
+      caller.callServerEndpoint<_i13.DataChangeRequest>(
         'dataChangeRequest',
         'updateRequestStatus',
         {
@@ -497,11 +516,11 @@ class EndpointDocument extends _i1.EndpointRef {
   @override
   String get name => 'document';
 
-  _i2.Future<List<_i13.OrganizationDocument>> listOrganizationDocuments({
+  _i2.Future<List<_i14.OrganizationDocument>> listOrganizationDocuments({
     required int page,
     required int pageSize,
   }) =>
-      caller.callServerEndpoint<List<_i13.OrganizationDocument>>(
+      caller.callServerEndpoint<List<_i14.OrganizationDocument>>(
         'document',
         'listOrganizationDocuments',
         {
@@ -510,7 +529,7 @@ class EndpointDocument extends _i1.EndpointRef {
         },
       );
 
-  _i2.Future<_i13.OrganizationDocument> createOrganizationDocument({
+  _i2.Future<_i14.OrganizationDocument> createOrganizationDocument({
     required String title,
     String? description,
     required String visibility,
@@ -519,7 +538,7 @@ class EndpointDocument extends _i1.EndpointRef {
     required int sizeBytes,
     String? storagePath,
   }) =>
-      caller.callServerEndpoint<_i13.OrganizationDocument>(
+      caller.callServerEndpoint<_i14.OrganizationDocument>(
         'document',
         'createOrganizationDocument',
         {
@@ -533,12 +552,12 @@ class EndpointDocument extends _i1.EndpointRef {
         },
       );
 
-  _i2.Future<List<_i14.ChildDocument>> listChildDocuments({
+  _i2.Future<List<_i15.ChildDocument>> listChildDocuments({
     required _i5.UuidValue childId,
     required int page,
     required int pageSize,
   }) =>
-      caller.callServerEndpoint<List<_i14.ChildDocument>>(
+      caller.callServerEndpoint<List<_i15.ChildDocument>>(
         'document',
         'listChildDocuments',
         {
@@ -548,7 +567,7 @@ class EndpointDocument extends _i1.EndpointRef {
         },
       );
 
-  _i2.Future<_i14.ChildDocument> createChildDocument({
+  _i2.Future<_i15.ChildDocument> createChildDocument({
     required _i5.UuidValue childId,
     required String title,
     String? description,
@@ -558,7 +577,7 @@ class EndpointDocument extends _i1.EndpointRef {
     required int sizeBytes,
     String? storagePath,
   }) =>
-      caller.callServerEndpoint<_i14.ChildDocument>(
+      caller.callServerEndpoint<_i15.ChildDocument>(
         'document',
         'createChildDocument',
         {
@@ -589,35 +608,35 @@ class EndpointExperience extends _i1.EndpointRef {
   @override
   String get name => 'experience';
 
-  _i2.Future<_i15.UserOnboardingState?> getOnboardingState() =>
-      caller.callServerEndpoint<_i15.UserOnboardingState?>(
+  _i2.Future<_i16.UserOnboardingState?> getOnboardingState() =>
+      caller.callServerEndpoint<_i16.UserOnboardingState?>(
         'experience',
         'getOnboardingState',
         {},
       );
 
-  _i2.Future<_i15.UserOnboardingState> completeOnboarding(
+  _i2.Future<_i16.UserOnboardingState> completeOnboarding(
           {required bool acceptTerms}) =>
-      caller.callServerEndpoint<_i15.UserOnboardingState>(
+      caller.callServerEndpoint<_i16.UserOnboardingState>(
         'experience',
         'completeOnboarding',
         {'acceptTerms': acceptTerms},
       );
 
-  _i2.Future<_i16.Organization> getCenterInfo() =>
-      caller.callServerEndpoint<_i16.Organization>(
+  _i2.Future<_i17.Organization> getCenterInfo() =>
+      caller.callServerEndpoint<_i17.Organization>(
         'experience',
         'getCenterInfo',
         {},
       );
 
-  _i2.Future<List<_i17.MenuEntry>> listMenuEntries({
+  _i2.Future<List<_i18.MenuEntry>> listMenuEntries({
     DateTime? from,
     DateTime? to,
     required int page,
     required int pageSize,
   }) =>
-      caller.callServerEndpoint<List<_i17.MenuEntry>>(
+      caller.callServerEndpoint<List<_i18.MenuEntry>>(
         'experience',
         'listMenuEntries',
         {
@@ -628,22 +647,22 @@ class EndpointExperience extends _i1.EndpointRef {
         },
       );
 
-  _i2.Future<_i17.MenuEntry?> getMenuEntry(
+  _i2.Future<_i18.MenuEntry?> getMenuEntry(
           {required _i5.UuidValue menuEntryId}) =>
-      caller.callServerEndpoint<_i17.MenuEntry?>(
+      caller.callServerEndpoint<_i18.MenuEntry?>(
         'experience',
         'getMenuEntry',
         {'menuEntryId': menuEntryId},
       );
 
-  _i2.Future<_i17.MenuEntry> createMenuEntry({
+  _i2.Future<_i18.MenuEntry> createMenuEntry({
     required DateTime menuDate,
     required String mealType,
     required String title,
     String? description,
     _i5.UuidValue? classroomId,
   }) =>
-      caller.callServerEndpoint<_i17.MenuEntry>(
+      caller.callServerEndpoint<_i18.MenuEntry>(
         'experience',
         'createMenuEntry',
         {
@@ -655,7 +674,7 @@ class EndpointExperience extends _i1.EndpointRef {
         },
       );
 
-  _i2.Future<_i17.MenuEntry> updateMenuEntry({
+  _i2.Future<_i18.MenuEntry> updateMenuEntry({
     required _i5.UuidValue menuEntryId,
     DateTime? menuDate,
     String? mealType,
@@ -663,7 +682,7 @@ class EndpointExperience extends _i1.EndpointRef {
     String? description,
     _i5.UuidValue? classroomId,
   }) =>
-      caller.callServerEndpoint<_i17.MenuEntry>(
+      caller.callServerEndpoint<_i18.MenuEntry>(
         'experience',
         'updateMenuEntry',
         {
@@ -684,11 +703,11 @@ class EndpointGallery extends _i1.EndpointRef {
   @override
   String get name => 'gallery';
 
-  _i2.Future<List<_i18.Gallery>> listGalleries({
+  _i2.Future<List<_i19.Gallery>> listGalleries({
     required int page,
     required int pageSize,
   }) =>
-      caller.callServerEndpoint<List<_i18.Gallery>>(
+      caller.callServerEndpoint<List<_i19.Gallery>>(
         'gallery',
         'listGalleries',
         {
@@ -697,21 +716,21 @@ class EndpointGallery extends _i1.EndpointRef {
         },
       );
 
-  _i2.Future<_i18.Gallery> getGallery({required _i5.UuidValue galleryId}) =>
-      caller.callServerEndpoint<_i18.Gallery>(
+  _i2.Future<_i19.Gallery> getGallery({required _i5.UuidValue galleryId}) =>
+      caller.callServerEndpoint<_i19.Gallery>(
         'gallery',
         'getGallery',
         {'galleryId': galleryId},
       );
 
-  _i2.Future<_i18.Gallery> createGallery({
+  _i2.Future<_i19.Gallery> createGallery({
     required String title,
     String? description,
     required String audienceType,
     _i5.UuidValue? audienceClassroomId,
     _i5.UuidValue? audienceChildId,
   }) =>
-      caller.callServerEndpoint<_i18.Gallery>(
+      caller.callServerEndpoint<_i19.Gallery>(
         'gallery',
         'createGallery',
         {
@@ -723,7 +742,7 @@ class EndpointGallery extends _i1.EndpointRef {
         },
       );
 
-  _i2.Future<_i18.Gallery> updateGallery({
+  _i2.Future<_i19.Gallery> updateGallery({
     required _i5.UuidValue galleryId,
     String? title,
     String? description,
@@ -732,7 +751,7 @@ class EndpointGallery extends _i1.EndpointRef {
     _i5.UuidValue? audienceChildId,
     bool? isPublished,
   }) =>
-      caller.callServerEndpoint<_i18.Gallery>(
+      caller.callServerEndpoint<_i19.Gallery>(
         'gallery',
         'updateGallery',
         {
@@ -746,13 +765,13 @@ class EndpointGallery extends _i1.EndpointRef {
         },
       );
 
-  _i2.Future<_i19.GalleryItem> addGalleryItem({
+  _i2.Future<_i20.GalleryItem> addGalleryItem({
     required _i5.UuidValue galleryId,
     required _i5.UuidValue fileAssetId,
     String? caption,
     int? sortOrder,
   }) =>
-      caller.callServerEndpoint<_i19.GalleryItem>(
+      caller.callServerEndpoint<_i20.GalleryItem>(
         'gallery',
         'addGalleryItem',
         {
@@ -763,12 +782,12 @@ class EndpointGallery extends _i1.EndpointRef {
         },
       );
 
-  _i2.Future<List<_i19.GalleryItem>> listGalleryItems({
+  _i2.Future<List<_i20.GalleryItem>> listGalleryItems({
     required _i5.UuidValue galleryId,
     required int page,
     required int pageSize,
   }) =>
-      caller.callServerEndpoint<List<_i19.GalleryItem>>(
+      caller.callServerEndpoint<List<_i20.GalleryItem>>(
         'gallery',
         'listGalleryItems',
         {
@@ -786,12 +805,12 @@ class EndpointHabit extends _i1.EndpointRef {
   @override
   String get name => 'habit';
 
-  _i2.Future<List<_i20.MealEntry>> listMealsByChild({
+  _i2.Future<List<_i21.MealEntry>> listMealsByChild({
     required _i5.UuidValue childId,
     required int page,
     required int pageSize,
   }) =>
-      caller.callServerEndpoint<List<_i20.MealEntry>>(
+      caller.callServerEndpoint<List<_i21.MealEntry>>(
         'habit',
         'listMealsByChild',
         {
@@ -801,7 +820,7 @@ class EndpointHabit extends _i1.EndpointRef {
         },
       );
 
-  _i2.Future<_i20.MealEntry> createMealEntry({
+  _i2.Future<_i21.MealEntry> createMealEntry({
     required _i5.UuidValue childId,
     required String mealType,
     required String consumptionLevel,
@@ -809,7 +828,7 @@ class EndpointHabit extends _i1.EndpointRef {
     String? menuItems,
     String? notes,
   }) =>
-      caller.callServerEndpoint<_i20.MealEntry>(
+      caller.callServerEndpoint<_i21.MealEntry>(
         'habit',
         'createMealEntry',
         {
@@ -822,7 +841,7 @@ class EndpointHabit extends _i1.EndpointRef {
         },
       );
 
-  _i2.Future<_i20.MealEntry> updateMealEntry({
+  _i2.Future<_i21.MealEntry> updateMealEntry({
     required _i5.UuidValue mealEntryId,
     String? mealType,
     String? consumptionLevel,
@@ -830,7 +849,7 @@ class EndpointHabit extends _i1.EndpointRef {
     String? menuItems,
     String? notes,
   }) =>
-      caller.callServerEndpoint<_i20.MealEntry>(
+      caller.callServerEndpoint<_i21.MealEntry>(
         'habit',
         'updateMealEntry',
         {
@@ -843,12 +862,12 @@ class EndpointHabit extends _i1.EndpointRef {
         },
       );
 
-  _i2.Future<List<_i21.NapEntry>> listNapsByChild({
+  _i2.Future<List<_i22.NapEntry>> listNapsByChild({
     required _i5.UuidValue childId,
     required int page,
     required int pageSize,
   }) =>
-      caller.callServerEndpoint<List<_i21.NapEntry>>(
+      caller.callServerEndpoint<List<_i22.NapEntry>>(
         'habit',
         'listNapsByChild',
         {
@@ -858,7 +877,7 @@ class EndpointHabit extends _i1.EndpointRef {
         },
       );
 
-  _i2.Future<_i21.NapEntry> createNapEntry({
+  _i2.Future<_i22.NapEntry> createNapEntry({
     required _i5.UuidValue childId,
     required DateTime startedAt,
     DateTime? endedAt,
@@ -866,7 +885,7 @@ class EndpointHabit extends _i1.EndpointRef {
     String? sleepQuality,
     String? notes,
   }) =>
-      caller.callServerEndpoint<_i21.NapEntry>(
+      caller.callServerEndpoint<_i22.NapEntry>(
         'habit',
         'createNapEntry',
         {
@@ -879,7 +898,7 @@ class EndpointHabit extends _i1.EndpointRef {
         },
       );
 
-  _i2.Future<_i21.NapEntry> updateNapEntry({
+  _i2.Future<_i22.NapEntry> updateNapEntry({
     required _i5.UuidValue napEntryId,
     DateTime? startedAt,
     DateTime? endedAt,
@@ -887,7 +906,7 @@ class EndpointHabit extends _i1.EndpointRef {
     String? sleepQuality,
     String? notes,
   }) =>
-      caller.callServerEndpoint<_i21.NapEntry>(
+      caller.callServerEndpoint<_i22.NapEntry>(
         'habit',
         'updateNapEntry',
         {
@@ -900,12 +919,12 @@ class EndpointHabit extends _i1.EndpointRef {
         },
       );
 
-  _i2.Future<List<_i22.BowelMovementEntry>> listBowelMovementsByChild({
+  _i2.Future<List<_i23.BowelMovementEntry>> listBowelMovementsByChild({
     required _i5.UuidValue childId,
     required int page,
     required int pageSize,
   }) =>
-      caller.callServerEndpoint<List<_i22.BowelMovementEntry>>(
+      caller.callServerEndpoint<List<_i23.BowelMovementEntry>>(
         'habit',
         'listBowelMovementsByChild',
         {
@@ -915,14 +934,14 @@ class EndpointHabit extends _i1.EndpointRef {
         },
       );
 
-  _i2.Future<_i22.BowelMovementEntry> createBowelMovementEntry({
+  _i2.Future<_i23.BowelMovementEntry> createBowelMovementEntry({
     required _i5.UuidValue childId,
     DateTime? eventAt,
     required String eventType,
     String? consistency,
     String? notes,
   }) =>
-      caller.callServerEndpoint<_i22.BowelMovementEntry>(
+      caller.callServerEndpoint<_i23.BowelMovementEntry>(
         'habit',
         'createBowelMovementEntry',
         {
@@ -934,14 +953,14 @@ class EndpointHabit extends _i1.EndpointRef {
         },
       );
 
-  _i2.Future<_i22.BowelMovementEntry> updateBowelMovementEntry({
+  _i2.Future<_i23.BowelMovementEntry> updateBowelMovementEntry({
     required _i5.UuidValue entryId,
     DateTime? eventAt,
     String? eventType,
     String? consistency,
     String? notes,
   }) =>
-      caller.callServerEndpoint<_i22.BowelMovementEntry>(
+      caller.callServerEndpoint<_i23.BowelMovementEntry>(
         'habit',
         'updateBowelMovementEntry',
         {
@@ -953,11 +972,11 @@ class EndpointHabit extends _i1.EndpointRef {
         },
       );
 
-  _i2.Future<_i23.ChildDailyHabits> getChildDailyHabits({
+  _i2.Future<_i24.ChildDailyHabits> getChildDailyHabits({
     required _i5.UuidValue childId,
     required DateTime day,
   }) =>
-      caller.callServerEndpoint<_i23.ChildDailyHabits>(
+      caller.callServerEndpoint<_i24.ChildDailyHabits>(
         'habit',
         'getChildDailyHabits',
         {
@@ -974,14 +993,14 @@ class EndpointNotification extends _i1.EndpointRef {
   @override
   String get name => 'notification';
 
-  _i2.Future<_i24.PushDeviceToken> registerDeviceToken({
+  _i2.Future<_i25.PushDeviceToken> registerDeviceToken({
     required String token,
     required String platform,
     String? deviceId,
     String? deviceModel,
     String? appVersion,
   }) =>
-      caller.callServerEndpoint<_i24.PushDeviceToken>(
+      caller.callServerEndpoint<_i25.PushDeviceToken>(
         'notification',
         'registerDeviceToken',
         {
@@ -1000,11 +1019,11 @@ class EndpointNotification extends _i1.EndpointRef {
         {'token': token},
       );
 
-  _i2.Future<List<_i25.NotificationRecord>> myNotifications({
+  _i2.Future<List<_i26.NotificationRecord>> myNotifications({
     required int page,
     required int pageSize,
   }) =>
-      caller.callServerEndpoint<List<_i25.NotificationRecord>>(
+      caller.callServerEndpoint<List<_i26.NotificationRecord>>(
         'notification',
         'myNotifications',
         {
@@ -1052,11 +1071,11 @@ class EndpointOrganization extends _i1.EndpointRef {
   @override
   String get name => 'organization';
 
-  _i2.Future<List<_i16.Organization>> listOrganizations({
+  _i2.Future<List<_i17.Organization>> listOrganizations({
     required int page,
     required int pageSize,
   }) =>
-      caller.callServerEndpoint<List<_i16.Organization>>(
+      caller.callServerEndpoint<List<_i17.Organization>>(
         'organization',
         'listOrganizations',
         {
@@ -1065,20 +1084,20 @@ class EndpointOrganization extends _i1.EndpointRef {
         },
       );
 
-  _i2.Future<_i16.Organization?> getOrganization(
+  _i2.Future<_i17.Organization?> getOrganization(
           {required _i5.UuidValue organizationId}) =>
-      caller.callServerEndpoint<_i16.Organization?>(
+      caller.callServerEndpoint<_i17.Organization?>(
         'organization',
         'getOrganization',
         {'organizationId': organizationId},
       );
 
-  _i2.Future<_i16.Organization> createOrganization({
+  _i2.Future<_i17.Organization> createOrganization({
     required String name,
     required String slug,
     required String contactEmail,
   }) =>
-      caller.callServerEndpoint<_i16.Organization>(
+      caller.callServerEndpoint<_i17.Organization>(
         'organization',
         'createOrganization',
         {
@@ -1096,12 +1115,12 @@ class EndpointPedagogicalReport extends _i1.EndpointRef {
   @override
   String get name => 'pedagogicalReport';
 
-  _i2.Future<List<_i26.PedagogicalReport>> listReportsByChild({
+  _i2.Future<List<_i27.PedagogicalReport>> listReportsByChild({
     required _i5.UuidValue childId,
     required int page,
     required int pageSize,
   }) =>
-      caller.callServerEndpoint<List<_i26.PedagogicalReport>>(
+      caller.callServerEndpoint<List<_i27.PedagogicalReport>>(
         'pedagogicalReport',
         'listReportsByChild',
         {
@@ -1111,15 +1130,15 @@ class EndpointPedagogicalReport extends _i1.EndpointRef {
         },
       );
 
-  _i2.Future<_i26.PedagogicalReport> getReport(
+  _i2.Future<_i27.PedagogicalReport> getReport(
           {required _i5.UuidValue reportId}) =>
-      caller.callServerEndpoint<_i26.PedagogicalReport>(
+      caller.callServerEndpoint<_i27.PedagogicalReport>(
         'pedagogicalReport',
         'getReport',
         {'reportId': reportId},
       );
 
-  _i2.Future<_i26.PedagogicalReport> createReport({
+  _i2.Future<_i27.PedagogicalReport> createReport({
     required _i5.UuidValue childId,
     required DateTime reportDate,
     required String title,
@@ -1128,7 +1147,7 @@ class EndpointPedagogicalReport extends _i1.EndpointRef {
     required String status,
     required String visibility,
   }) =>
-      caller.callServerEndpoint<_i26.PedagogicalReport>(
+      caller.callServerEndpoint<_i27.PedagogicalReport>(
         'pedagogicalReport',
         'createReport',
         {
@@ -1142,7 +1161,7 @@ class EndpointPedagogicalReport extends _i1.EndpointRef {
         },
       );
 
-  _i2.Future<_i26.PedagogicalReport> updateReport({
+  _i2.Future<_i27.PedagogicalReport> updateReport({
     required _i5.UuidValue reportId,
     DateTime? reportDate,
     String? title,
@@ -1151,7 +1170,7 @@ class EndpointPedagogicalReport extends _i1.EndpointRef {
     String? status,
     String? visibility,
   }) =>
-      caller.callServerEndpoint<_i26.PedagogicalReport>(
+      caller.callServerEndpoint<_i27.PedagogicalReport>(
         'pedagogicalReport',
         'updateReport',
         {
@@ -1167,31 +1186,111 @@ class EndpointPedagogicalReport extends _i1.EndpointRef {
 }
 
 /// {@category Endpoint}
+class EndpointStaff extends _i1.EndpointRef {
+  EndpointStaff(_i1.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'staff';
+
+  /// List staff members (staff + organization_admin roles).
+  _i2.Future<List<_i28.AppUser>> listStaff({
+    required int page,
+    required int pageSize,
+  }) =>
+      caller.callServerEndpoint<List<_i28.AppUser>>(
+        'staff',
+        'listStaff',
+        {
+          'page': page,
+          'pageSize': pageSize,
+        },
+      );
+
+  /// List guardian users.
+  _i2.Future<List<_i28.AppUser>> listGuardians({
+    required int page,
+    required int pageSize,
+  }) =>
+      caller.callServerEndpoint<List<_i28.AppUser>>(
+        'staff',
+        'listGuardians',
+        {
+          'page': page,
+          'pageSize': pageSize,
+        },
+      );
+
+  /// Create a new staff or admin user.
+  _i2.Future<_i28.AppUser> createStaffUser({
+    required String email,
+    required String password,
+    required String firstName,
+    required String lastName,
+    required String role,
+    String? phone,
+  }) =>
+      caller.callServerEndpoint<_i28.AppUser>(
+        'staff',
+        'createStaffUser',
+        {
+          'email': email,
+          'password': password,
+          'firstName': firstName,
+          'lastName': lastName,
+          'role': role,
+          'phone': phone,
+        },
+      );
+
+  /// Update a staff user's details.
+  _i2.Future<_i28.AppUser> updateStaffUser({
+    required _i5.UuidValue userId,
+    String? firstName,
+    String? lastName,
+    String? phone,
+    String? role,
+    bool? isActive,
+  }) =>
+      caller.callServerEndpoint<_i28.AppUser>(
+        'staff',
+        'updateStaffUser',
+        {
+          'userId': userId,
+          'firstName': firstName,
+          'lastName': lastName,
+          'phone': phone,
+          'role': role,
+          'isActive': isActive,
+        },
+      );
+}
+
+/// {@category Endpoint}
 class EndpointTimeTracking extends _i1.EndpointRef {
   EndpointTimeTracking(_i1.EndpointCaller caller) : super(caller);
 
   @override
   String get name => 'timeTracking';
 
-  _i2.Future<_i27.TimeEntry> checkIn({String? notes}) =>
-      caller.callServerEndpoint<_i27.TimeEntry>(
+  _i2.Future<_i29.TimeEntry> checkIn({String? notes}) =>
+      caller.callServerEndpoint<_i29.TimeEntry>(
         'timeTracking',
         'checkIn',
         {'notes': notes},
       );
 
-  _i2.Future<_i27.TimeEntry> checkOut({String? notes}) =>
-      caller.callServerEndpoint<_i27.TimeEntry>(
+  _i2.Future<_i29.TimeEntry> checkOut({String? notes}) =>
+      caller.callServerEndpoint<_i29.TimeEntry>(
         'timeTracking',
         'checkOut',
         {'notes': notes},
       );
 
-  _i2.Future<List<_i27.TimeEntry>> myEntries({
+  _i2.Future<List<_i29.TimeEntry>> myEntries({
     required int page,
     required int pageSize,
   }) =>
-      caller.callServerEndpoint<List<_i27.TimeEntry>>(
+      caller.callServerEndpoint<List<_i29.TimeEntry>>(
         'timeTracking',
         'myEntries',
         {
@@ -1200,14 +1299,14 @@ class EndpointTimeTracking extends _i1.EndpointRef {
         },
       );
 
-  _i2.Future<List<_i27.TimeEntry>> listEntries({
+  _i2.Future<List<_i29.TimeEntry>> listEntries({
     _i5.UuidValue? userId,
     DateTime? from,
     DateTime? to,
     required int page,
     required int pageSize,
   }) =>
-      caller.callServerEndpoint<List<_i27.TimeEntry>>(
+      caller.callServerEndpoint<List<_i29.TimeEntry>>(
         'timeTracking',
         'listEntries',
         {
@@ -1219,20 +1318,20 @@ class EndpointTimeTracking extends _i1.EndpointRef {
         },
       );
 
-  _i2.Future<_i27.TimeEntry> getEntry({required _i5.UuidValue entryId}) =>
-      caller.callServerEndpoint<_i27.TimeEntry>(
+  _i2.Future<_i29.TimeEntry> getEntry({required _i5.UuidValue entryId}) =>
+      caller.callServerEndpoint<_i29.TimeEntry>(
         'timeTracking',
         'getEntry',
         {'entryId': entryId},
       );
 
-  _i2.Future<_i27.TimeEntry> correctEntry({
+  _i2.Future<_i29.TimeEntry> correctEntry({
     required _i5.UuidValue targetEntryId,
     required String correctedEntryType,
     required String correctionReason,
     String? notes,
   }) =>
-      caller.callServerEndpoint<_i27.TimeEntry>(
+      caller.callServerEndpoint<_i29.TimeEntry>(
         'timeTracking',
         'correctEntry',
         {
@@ -1242,14 +1341,31 @@ class EndpointTimeTracking extends _i1.EndpointRef {
           'notes': notes,
         },
       );
+
+  /// Export time entries as CSV string for Spanish labor law compliance
+  /// (Registro diario de jornada).
+  _i2.Future<String> exportTimeEntries({
+    required DateTime from,
+    required DateTime to,
+    _i5.UuidValue? userId,
+  }) =>
+      caller.callServerEndpoint<String>(
+        'timeTracking',
+        'exportTimeEntries',
+        {
+          'from': from,
+          'to': to,
+          'userId': userId,
+        },
+      );
 }
 
 class Modules {
   Modules(Client client) {
-    auth = _i28.Caller(client);
+    auth = _i30.Caller(client);
   }
 
-  late final _i28.Caller auth;
+  late final _i30.Caller auth;
 }
 
 class Client extends _i1.ServerpodClientShared {
@@ -1268,7 +1384,7 @@ class Client extends _i1.ServerpodClientShared {
     bool? disconnectStreamsOnLostInternetConnection,
   }) : super(
           host,
-          _i29.Protocol(),
+          _i31.Protocol(),
           securityContext: securityContext,
           authenticationKeyManager: authenticationKeyManager,
           streamingConnectionTimeout: streamingConnectionTimeout,
@@ -1284,6 +1400,7 @@ class Client extends _i1.ServerpodClientShared {
     child = EndpointChild(this);
     childTimeline = EndpointChildTimeline(this);
     classroom = EndpointClassroom(this);
+    dashboard = EndpointDashboard(this);
     dataChangeRequest = EndpointDataChangeRequest(this);
     document = EndpointDocument(this);
     experience = EndpointExperience(this);
@@ -1292,6 +1409,7 @@ class Client extends _i1.ServerpodClientShared {
     notification = EndpointNotification(this);
     organization = EndpointOrganization(this);
     pedagogicalReport = EndpointPedagogicalReport(this);
+    staff = EndpointStaff(this);
     timeTracking = EndpointTimeTracking(this);
     modules = Modules(this);
   }
@@ -1307,6 +1425,8 @@ class Client extends _i1.ServerpodClientShared {
   late final EndpointChildTimeline childTimeline;
 
   late final EndpointClassroom classroom;
+
+  late final EndpointDashboard dashboard;
 
   late final EndpointDataChangeRequest dataChangeRequest;
 
@@ -1324,6 +1444,8 @@ class Client extends _i1.ServerpodClientShared {
 
   late final EndpointPedagogicalReport pedagogicalReport;
 
+  late final EndpointStaff staff;
+
   late final EndpointTimeTracking timeTracking;
 
   late final Modules modules;
@@ -1336,6 +1458,7 @@ class Client extends _i1.ServerpodClientShared {
         'child': child,
         'childTimeline': childTimeline,
         'classroom': classroom,
+        'dashboard': dashboard,
         'dataChangeRequest': dataChangeRequest,
         'document': document,
         'experience': experience,
@@ -1344,6 +1467,7 @@ class Client extends _i1.ServerpodClientShared {
         'notification': notification,
         'organization': organization,
         'pedagogicalReport': pedagogicalReport,
+        'staff': staff,
         'timeTracking': timeTracking,
       };
 

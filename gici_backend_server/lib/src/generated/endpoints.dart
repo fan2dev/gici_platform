@@ -16,17 +16,19 @@ import '../endpoints/chat_endpoint.dart' as _i4;
 import '../endpoints/child_endpoint.dart' as _i5;
 import '../endpoints/child_timeline_endpoint.dart' as _i6;
 import '../endpoints/classroom_endpoint.dart' as _i7;
-import '../endpoints/data_change_request_endpoint.dart' as _i8;
-import '../endpoints/document_endpoint.dart' as _i9;
-import '../endpoints/experience_endpoint.dart' as _i10;
-import '../endpoints/gallery_endpoint.dart' as _i11;
-import '../endpoints/habit_endpoint.dart' as _i12;
-import '../endpoints/notification_endpoint.dart' as _i13;
-import '../endpoints/organization_endpoint.dart' as _i14;
-import '../endpoints/pedagogical_report_endpoint.dart' as _i15;
-import '../endpoints/time_tracking_endpoint.dart' as _i16;
-import 'package:uuid/uuid_value.dart' as _i17;
-import 'package:serverpod_auth_server/serverpod_auth_server.dart' as _i18;
+import '../endpoints/dashboard_endpoint.dart' as _i8;
+import '../endpoints/data_change_request_endpoint.dart' as _i9;
+import '../endpoints/document_endpoint.dart' as _i10;
+import '../endpoints/experience_endpoint.dart' as _i11;
+import '../endpoints/gallery_endpoint.dart' as _i12;
+import '../endpoints/habit_endpoint.dart' as _i13;
+import '../endpoints/notification_endpoint.dart' as _i14;
+import '../endpoints/organization_endpoint.dart' as _i15;
+import '../endpoints/pedagogical_report_endpoint.dart' as _i16;
+import '../endpoints/staff_endpoint.dart' as _i17;
+import '../endpoints/time_tracking_endpoint.dart' as _i18;
+import 'package:uuid/uuid_value.dart' as _i19;
+import 'package:serverpod_auth_server/serverpod_auth_server.dart' as _i20;
 
 class Endpoints extends _i1.EndpointDispatch {
   @override
@@ -68,55 +70,67 @@ class Endpoints extends _i1.EndpointDispatch {
           'classroom',
           null,
         ),
-      'dataChangeRequest': _i8.DataChangeRequestEndpoint()
+      'dashboard': _i8.DashboardEndpoint()
+        ..initialize(
+          server,
+          'dashboard',
+          null,
+        ),
+      'dataChangeRequest': _i9.DataChangeRequestEndpoint()
         ..initialize(
           server,
           'dataChangeRequest',
           null,
         ),
-      'document': _i9.DocumentEndpoint()
+      'document': _i10.DocumentEndpoint()
         ..initialize(
           server,
           'document',
           null,
         ),
-      'experience': _i10.ExperienceEndpoint()
+      'experience': _i11.ExperienceEndpoint()
         ..initialize(
           server,
           'experience',
           null,
         ),
-      'gallery': _i11.GalleryEndpoint()
+      'gallery': _i12.GalleryEndpoint()
         ..initialize(
           server,
           'gallery',
           null,
         ),
-      'habit': _i12.HabitEndpoint()
+      'habit': _i13.HabitEndpoint()
         ..initialize(
           server,
           'habit',
           null,
         ),
-      'notification': _i13.NotificationEndpoint()
+      'notification': _i14.NotificationEndpoint()
         ..initialize(
           server,
           'notification',
           null,
         ),
-      'organization': _i14.OrganizationEndpoint()
+      'organization': _i15.OrganizationEndpoint()
         ..initialize(
           server,
           'organization',
           null,
         ),
-      'pedagogicalReport': _i15.PedagogicalReportEndpoint()
+      'pedagogicalReport': _i16.PedagogicalReportEndpoint()
         ..initialize(
           server,
           'pedagogicalReport',
           null,
         ),
-      'timeTracking': _i16.TimeTrackingEndpoint()
+      'staff': _i17.StaffEndpoint()
+        ..initialize(
+          server,
+          'staff',
+          null,
+        ),
+      'timeTracking': _i18.TimeTrackingEndpoint()
         ..initialize(
           server,
           'timeTracking',
@@ -267,7 +281,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'conversationId': _i1.ParameterDescription(
               name: 'conversationId',
-              type: _i1.getType<_i17.UuidValue>(),
+              type: _i1.getType<_i19.UuidValue>(),
               nullable: false,
             )
           },
@@ -295,17 +309,17 @@ class Endpoints extends _i1.EndpointDispatch {
             ),
             'relatedChildId': _i1.ParameterDescription(
               name: 'relatedChildId',
-              type: _i1.getType<_i17.UuidValue?>(),
+              type: _i1.getType<_i19.UuidValue?>(),
               nullable: true,
             ),
             'relatedClassroomId': _i1.ParameterDescription(
               name: 'relatedClassroomId',
-              type: _i1.getType<_i17.UuidValue?>(),
+              type: _i1.getType<_i19.UuidValue?>(),
               nullable: true,
             ),
             'participantUserIds': _i1.ParameterDescription(
               name: 'participantUserIds',
-              type: _i1.getType<List<_i17.UuidValue>>(),
+              type: _i1.getType<List<_i19.UuidValue>>(),
               nullable: false,
             ),
           },
@@ -327,7 +341,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'conversationId': _i1.ParameterDescription(
               name: 'conversationId',
-              type: _i1.getType<_i17.UuidValue>(),
+              type: _i1.getType<_i19.UuidValue>(),
               nullable: false,
             ),
             'content': _i1.ParameterDescription(
@@ -351,7 +365,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'conversationId': _i1.ParameterDescription(
               name: 'conversationId',
-              type: _i1.getType<_i17.UuidValue>(),
+              type: _i1.getType<_i19.UuidValue>(),
               nullable: false,
             ),
             'page': _i1.ParameterDescription(
@@ -381,12 +395,12 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'conversationId': _i1.ParameterDescription(
               name: 'conversationId',
-              type: _i1.getType<_i17.UuidValue>(),
+              type: _i1.getType<_i19.UuidValue>(),
               nullable: false,
             ),
             'lastReadMessageId': _i1.ParameterDescription(
               name: 'lastReadMessageId',
-              type: _i1.getType<_i17.UuidValue?>(),
+              type: _i1.getType<_i19.UuidValue?>(),
               nullable: true,
             ),
           },
@@ -474,7 +488,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'childId': _i1.ParameterDescription(
               name: 'childId',
-              type: _i1.getType<_i17.UuidValue>(),
+              type: _i1.getType<_i19.UuidValue>(),
               nullable: false,
             )
           },
@@ -492,7 +506,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'childId': _i1.ParameterDescription(
               name: 'childId',
-              type: _i1.getType<_i17.UuidValue>(),
+              type: _i1.getType<_i19.UuidValue>(),
               nullable: false,
             ),
             'firstName': _i1.ParameterDescription(
@@ -552,7 +566,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'childId': _i1.ParameterDescription(
               name: 'childId',
-              type: _i1.getType<_i17.UuidValue>(),
+              type: _i1.getType<_i19.UuidValue>(),
               nullable: false,
             )
           },
@@ -576,7 +590,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'childId': _i1.ParameterDescription(
               name: 'childId',
-              type: _i1.getType<_i17.UuidValue>(),
+              type: _i1.getType<_i19.UuidValue>(),
               nullable: false,
             ),
             'page': _i1.ParameterDescription(
@@ -685,7 +699,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'classroomId': _i1.ParameterDescription(
               name: 'classroomId',
-              type: _i1.getType<_i17.UuidValue>(),
+              type: _i1.getType<_i19.UuidValue>(),
               nullable: false,
             ),
             'name': _i1.ParameterDescription(
@@ -745,12 +759,12 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'classroomId': _i1.ParameterDescription(
               name: 'classroomId',
-              type: _i1.getType<_i17.UuidValue>(),
+              type: _i1.getType<_i19.UuidValue>(),
               nullable: false,
             ),
             'childId': _i1.ParameterDescription(
               name: 'childId',
-              type: _i1.getType<_i17.UuidValue>(),
+              type: _i1.getType<_i19.UuidValue>(),
               nullable: false,
             ),
           },
@@ -770,12 +784,12 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'classroomId': _i1.ParameterDescription(
               name: 'classroomId',
-              type: _i1.getType<_i17.UuidValue?>(),
+              type: _i1.getType<_i19.UuidValue?>(),
               nullable: true,
             ),
             'childId': _i1.ParameterDescription(
               name: 'childId',
-              type: _i1.getType<_i17.UuidValue?>(),
+              type: _i1.getType<_i19.UuidValue?>(),
               nullable: true,
             ),
             'onlyActive': _i1.ParameterDescription(
@@ -809,6 +823,22 @@ class Endpoints extends _i1.EndpointDispatch {
         ),
       },
     );
+    connectors['dashboard'] = _i1.EndpointConnector(
+      name: 'dashboard',
+      endpoint: endpoints['dashboard']!,
+      methodConnectors: {
+        'getSummary': _i1.MethodConnector(
+          name: 'getSummary',
+          params: {},
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['dashboard'] as _i8.DashboardEndpoint)
+                  .getSummary(session),
+        )
+      },
+    );
     connectors['dataChangeRequest'] = _i1.EndpointConnector(
       name: 'dataChangeRequest',
       endpoint: endpoints['dataChangeRequest']!,
@@ -818,7 +848,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'targetChildId': _i1.ParameterDescription(
               name: 'targetChildId',
-              type: _i1.getType<_i17.UuidValue?>(),
+              type: _i1.getType<_i19.UuidValue?>(),
               nullable: true,
             ),
             'requestType': _i1.ParameterDescription(
@@ -836,7 +866,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['dataChangeRequest'] as _i8.DataChangeRequestEndpoint)
+              (endpoints['dataChangeRequest'] as _i9.DataChangeRequestEndpoint)
                   .createRequest(
             session,
             targetChildId: params['targetChildId'],
@@ -862,7 +892,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['dataChangeRequest'] as _i8.DataChangeRequestEndpoint)
+              (endpoints['dataChangeRequest'] as _i9.DataChangeRequestEndpoint)
                   .myRequests(
             session,
             page: params['page'],
@@ -892,7 +922,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['dataChangeRequest'] as _i8.DataChangeRequestEndpoint)
+              (endpoints['dataChangeRequest'] as _i9.DataChangeRequestEndpoint)
                   .listRequestsForReview(
             session,
             status: params['status'],
@@ -905,7 +935,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'requestId': _i1.ParameterDescription(
               name: 'requestId',
-              type: _i1.getType<_i17.UuidValue>(),
+              type: _i1.getType<_i19.UuidValue>(),
               nullable: false,
             )
           },
@@ -913,7 +943,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['dataChangeRequest'] as _i8.DataChangeRequestEndpoint)
+              (endpoints['dataChangeRequest'] as _i9.DataChangeRequestEndpoint)
                   .getRequest(
             session,
             requestId: params['requestId'],
@@ -924,7 +954,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'requestId': _i1.ParameterDescription(
               name: 'requestId',
-              type: _i1.getType<_i17.UuidValue>(),
+              type: _i1.getType<_i19.UuidValue>(),
               nullable: false,
             ),
             'status': _i1.ParameterDescription(
@@ -942,7 +972,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['dataChangeRequest'] as _i8.DataChangeRequestEndpoint)
+              (endpoints['dataChangeRequest'] as _i9.DataChangeRequestEndpoint)
                   .updateRequestStatus(
             session,
             requestId: params['requestId'],
@@ -974,7 +1004,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['document'] as _i9.DocumentEndpoint)
+              (endpoints['document'] as _i10.DocumentEndpoint)
                   .listOrganizationDocuments(
             session,
             page: params['page'],
@@ -1024,7 +1054,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['document'] as _i9.DocumentEndpoint)
+              (endpoints['document'] as _i10.DocumentEndpoint)
                   .createOrganizationDocument(
             session,
             title: params['title'],
@@ -1041,7 +1071,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'childId': _i1.ParameterDescription(
               name: 'childId',
-              type: _i1.getType<_i17.UuidValue>(),
+              type: _i1.getType<_i19.UuidValue>(),
               nullable: false,
             ),
             'page': _i1.ParameterDescription(
@@ -1059,7 +1089,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['document'] as _i9.DocumentEndpoint)
+              (endpoints['document'] as _i10.DocumentEndpoint)
                   .listChildDocuments(
             session,
             childId: params['childId'],
@@ -1072,7 +1102,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'childId': _i1.ParameterDescription(
               name: 'childId',
-              type: _i1.getType<_i17.UuidValue>(),
+              type: _i1.getType<_i19.UuidValue>(),
               nullable: false,
             ),
             'title': _i1.ParameterDescription(
@@ -1115,7 +1145,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['document'] as _i9.DocumentEndpoint)
+              (endpoints['document'] as _i10.DocumentEndpoint)
                   .createChildDocument(
             session,
             childId: params['childId'],
@@ -1133,7 +1163,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'fileAssetId': _i1.ParameterDescription(
               name: 'fileAssetId',
-              type: _i1.getType<_i17.UuidValue>(),
+              type: _i1.getType<_i19.UuidValue>(),
               nullable: false,
             )
           },
@@ -1141,7 +1171,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['document'] as _i9.DocumentEndpoint)
+              (endpoints['document'] as _i10.DocumentEndpoint)
                   .resolveFileDownloadUrl(
             session,
             fileAssetId: params['fileAssetId'],
@@ -1160,7 +1190,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['experience'] as _i10.ExperienceEndpoint)
+              (endpoints['experience'] as _i11.ExperienceEndpoint)
                   .getOnboardingState(session),
         ),
         'completeOnboarding': _i1.MethodConnector(
@@ -1176,7 +1206,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['experience'] as _i10.ExperienceEndpoint)
+              (endpoints['experience'] as _i11.ExperienceEndpoint)
                   .completeOnboarding(
             session,
             acceptTerms: params['acceptTerms'],
@@ -1189,7 +1219,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['experience'] as _i10.ExperienceEndpoint)
+              (endpoints['experience'] as _i11.ExperienceEndpoint)
                   .getCenterInfo(session),
         ),
         'listMenuEntries': _i1.MethodConnector(
@@ -1220,7 +1250,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['experience'] as _i10.ExperienceEndpoint)
+              (endpoints['experience'] as _i11.ExperienceEndpoint)
                   .listMenuEntries(
             session,
             from: params['from'],
@@ -1234,7 +1264,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'menuEntryId': _i1.ParameterDescription(
               name: 'menuEntryId',
-              type: _i1.getType<_i17.UuidValue>(),
+              type: _i1.getType<_i19.UuidValue>(),
               nullable: false,
             )
           },
@@ -1242,7 +1272,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['experience'] as _i10.ExperienceEndpoint).getMenuEntry(
+              (endpoints['experience'] as _i11.ExperienceEndpoint).getMenuEntry(
             session,
             menuEntryId: params['menuEntryId'],
           ),
@@ -1272,7 +1302,7 @@ class Endpoints extends _i1.EndpointDispatch {
             ),
             'classroomId': _i1.ParameterDescription(
               name: 'classroomId',
-              type: _i1.getType<_i17.UuidValue?>(),
+              type: _i1.getType<_i19.UuidValue?>(),
               nullable: true,
             ),
           },
@@ -1280,7 +1310,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['experience'] as _i10.ExperienceEndpoint)
+              (endpoints['experience'] as _i11.ExperienceEndpoint)
                   .createMenuEntry(
             session,
             menuDate: params['menuDate'],
@@ -1295,7 +1325,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'menuEntryId': _i1.ParameterDescription(
               name: 'menuEntryId',
-              type: _i1.getType<_i17.UuidValue>(),
+              type: _i1.getType<_i19.UuidValue>(),
               nullable: false,
             ),
             'menuDate': _i1.ParameterDescription(
@@ -1320,7 +1350,7 @@ class Endpoints extends _i1.EndpointDispatch {
             ),
             'classroomId': _i1.ParameterDescription(
               name: 'classroomId',
-              type: _i1.getType<_i17.UuidValue?>(),
+              type: _i1.getType<_i19.UuidValue?>(),
               nullable: true,
             ),
           },
@@ -1328,7 +1358,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['experience'] as _i10.ExperienceEndpoint)
+              (endpoints['experience'] as _i11.ExperienceEndpoint)
                   .updateMenuEntry(
             session,
             menuEntryId: params['menuEntryId'],
@@ -1363,7 +1393,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['gallery'] as _i11.GalleryEndpoint).listGalleries(
+              (endpoints['gallery'] as _i12.GalleryEndpoint).listGalleries(
             session,
             page: params['page'],
             pageSize: params['pageSize'],
@@ -1374,7 +1404,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'galleryId': _i1.ParameterDescription(
               name: 'galleryId',
-              type: _i1.getType<_i17.UuidValue>(),
+              type: _i1.getType<_i19.UuidValue>(),
               nullable: false,
             )
           },
@@ -1382,7 +1412,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['gallery'] as _i11.GalleryEndpoint).getGallery(
+              (endpoints['gallery'] as _i12.GalleryEndpoint).getGallery(
             session,
             galleryId: params['galleryId'],
           ),
@@ -1407,12 +1437,12 @@ class Endpoints extends _i1.EndpointDispatch {
             ),
             'audienceClassroomId': _i1.ParameterDescription(
               name: 'audienceClassroomId',
-              type: _i1.getType<_i17.UuidValue?>(),
+              type: _i1.getType<_i19.UuidValue?>(),
               nullable: true,
             ),
             'audienceChildId': _i1.ParameterDescription(
               name: 'audienceChildId',
-              type: _i1.getType<_i17.UuidValue?>(),
+              type: _i1.getType<_i19.UuidValue?>(),
               nullable: true,
             ),
           },
@@ -1420,7 +1450,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['gallery'] as _i11.GalleryEndpoint).createGallery(
+              (endpoints['gallery'] as _i12.GalleryEndpoint).createGallery(
             session,
             title: params['title'],
             description: params['description'],
@@ -1434,7 +1464,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'galleryId': _i1.ParameterDescription(
               name: 'galleryId',
-              type: _i1.getType<_i17.UuidValue>(),
+              type: _i1.getType<_i19.UuidValue>(),
               nullable: false,
             ),
             'title': _i1.ParameterDescription(
@@ -1454,12 +1484,12 @@ class Endpoints extends _i1.EndpointDispatch {
             ),
             'audienceClassroomId': _i1.ParameterDescription(
               name: 'audienceClassroomId',
-              type: _i1.getType<_i17.UuidValue?>(),
+              type: _i1.getType<_i19.UuidValue?>(),
               nullable: true,
             ),
             'audienceChildId': _i1.ParameterDescription(
               name: 'audienceChildId',
-              type: _i1.getType<_i17.UuidValue?>(),
+              type: _i1.getType<_i19.UuidValue?>(),
               nullable: true,
             ),
             'isPublished': _i1.ParameterDescription(
@@ -1472,7 +1502,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['gallery'] as _i11.GalleryEndpoint).updateGallery(
+              (endpoints['gallery'] as _i12.GalleryEndpoint).updateGallery(
             session,
             galleryId: params['galleryId'],
             title: params['title'],
@@ -1488,12 +1518,12 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'galleryId': _i1.ParameterDescription(
               name: 'galleryId',
-              type: _i1.getType<_i17.UuidValue>(),
+              type: _i1.getType<_i19.UuidValue>(),
               nullable: false,
             ),
             'fileAssetId': _i1.ParameterDescription(
               name: 'fileAssetId',
-              type: _i1.getType<_i17.UuidValue>(),
+              type: _i1.getType<_i19.UuidValue>(),
               nullable: false,
             ),
             'caption': _i1.ParameterDescription(
@@ -1511,7 +1541,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['gallery'] as _i11.GalleryEndpoint).addGalleryItem(
+              (endpoints['gallery'] as _i12.GalleryEndpoint).addGalleryItem(
             session,
             galleryId: params['galleryId'],
             fileAssetId: params['fileAssetId'],
@@ -1524,7 +1554,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'galleryId': _i1.ParameterDescription(
               name: 'galleryId',
-              type: _i1.getType<_i17.UuidValue>(),
+              type: _i1.getType<_i19.UuidValue>(),
               nullable: false,
             ),
             'page': _i1.ParameterDescription(
@@ -1542,7 +1572,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['gallery'] as _i11.GalleryEndpoint).listGalleryItems(
+              (endpoints['gallery'] as _i12.GalleryEndpoint).listGalleryItems(
             session,
             galleryId: params['galleryId'],
             page: params['page'],
@@ -1560,7 +1590,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'childId': _i1.ParameterDescription(
               name: 'childId',
-              type: _i1.getType<_i17.UuidValue>(),
+              type: _i1.getType<_i19.UuidValue>(),
               nullable: false,
             ),
             'page': _i1.ParameterDescription(
@@ -1578,7 +1608,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['habit'] as _i12.HabitEndpoint).listMealsByChild(
+              (endpoints['habit'] as _i13.HabitEndpoint).listMealsByChild(
             session,
             childId: params['childId'],
             page: params['page'],
@@ -1590,7 +1620,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'childId': _i1.ParameterDescription(
               name: 'childId',
-              type: _i1.getType<_i17.UuidValue>(),
+              type: _i1.getType<_i19.UuidValue>(),
               nullable: false,
             ),
             'mealType': _i1.ParameterDescription(
@@ -1623,7 +1653,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['habit'] as _i12.HabitEndpoint).createMealEntry(
+              (endpoints['habit'] as _i13.HabitEndpoint).createMealEntry(
             session,
             childId: params['childId'],
             mealType: params['mealType'],
@@ -1638,7 +1668,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'mealEntryId': _i1.ParameterDescription(
               name: 'mealEntryId',
-              type: _i1.getType<_i17.UuidValue>(),
+              type: _i1.getType<_i19.UuidValue>(),
               nullable: false,
             ),
             'mealType': _i1.ParameterDescription(
@@ -1671,7 +1701,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['habit'] as _i12.HabitEndpoint).updateMealEntry(
+              (endpoints['habit'] as _i13.HabitEndpoint).updateMealEntry(
             session,
             mealEntryId: params['mealEntryId'],
             mealType: params['mealType'],
@@ -1686,7 +1716,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'childId': _i1.ParameterDescription(
               name: 'childId',
-              type: _i1.getType<_i17.UuidValue>(),
+              type: _i1.getType<_i19.UuidValue>(),
               nullable: false,
             ),
             'page': _i1.ParameterDescription(
@@ -1704,7 +1734,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['habit'] as _i12.HabitEndpoint).listNapsByChild(
+              (endpoints['habit'] as _i13.HabitEndpoint).listNapsByChild(
             session,
             childId: params['childId'],
             page: params['page'],
@@ -1716,7 +1746,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'childId': _i1.ParameterDescription(
               name: 'childId',
-              type: _i1.getType<_i17.UuidValue>(),
+              type: _i1.getType<_i19.UuidValue>(),
               nullable: false,
             ),
             'startedAt': _i1.ParameterDescription(
@@ -1749,7 +1779,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['habit'] as _i12.HabitEndpoint).createNapEntry(
+              (endpoints['habit'] as _i13.HabitEndpoint).createNapEntry(
             session,
             childId: params['childId'],
             startedAt: params['startedAt'],
@@ -1764,7 +1794,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'napEntryId': _i1.ParameterDescription(
               name: 'napEntryId',
-              type: _i1.getType<_i17.UuidValue>(),
+              type: _i1.getType<_i19.UuidValue>(),
               nullable: false,
             ),
             'startedAt': _i1.ParameterDescription(
@@ -1797,7 +1827,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['habit'] as _i12.HabitEndpoint).updateNapEntry(
+              (endpoints['habit'] as _i13.HabitEndpoint).updateNapEntry(
             session,
             napEntryId: params['napEntryId'],
             startedAt: params['startedAt'],
@@ -1812,7 +1842,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'childId': _i1.ParameterDescription(
               name: 'childId',
-              type: _i1.getType<_i17.UuidValue>(),
+              type: _i1.getType<_i19.UuidValue>(),
               nullable: false,
             ),
             'page': _i1.ParameterDescription(
@@ -1830,7 +1860,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['habit'] as _i12.HabitEndpoint)
+              (endpoints['habit'] as _i13.HabitEndpoint)
                   .listBowelMovementsByChild(
             session,
             childId: params['childId'],
@@ -1843,7 +1873,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'childId': _i1.ParameterDescription(
               name: 'childId',
-              type: _i1.getType<_i17.UuidValue>(),
+              type: _i1.getType<_i19.UuidValue>(),
               nullable: false,
             ),
             'eventAt': _i1.ParameterDescription(
@@ -1871,7 +1901,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['habit'] as _i12.HabitEndpoint)
+              (endpoints['habit'] as _i13.HabitEndpoint)
                   .createBowelMovementEntry(
             session,
             childId: params['childId'],
@@ -1886,7 +1916,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'entryId': _i1.ParameterDescription(
               name: 'entryId',
-              type: _i1.getType<_i17.UuidValue>(),
+              type: _i1.getType<_i19.UuidValue>(),
               nullable: false,
             ),
             'eventAt': _i1.ParameterDescription(
@@ -1914,7 +1944,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['habit'] as _i12.HabitEndpoint)
+              (endpoints['habit'] as _i13.HabitEndpoint)
                   .updateBowelMovementEntry(
             session,
             entryId: params['entryId'],
@@ -1929,7 +1959,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'childId': _i1.ParameterDescription(
               name: 'childId',
-              type: _i1.getType<_i17.UuidValue>(),
+              type: _i1.getType<_i19.UuidValue>(),
               nullable: false,
             ),
             'day': _i1.ParameterDescription(
@@ -1942,7 +1972,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['habit'] as _i12.HabitEndpoint).getChildDailyHabits(
+              (endpoints['habit'] as _i13.HabitEndpoint).getChildDailyHabits(
             session,
             childId: params['childId'],
             day: params['day'],
@@ -1987,7 +2017,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['notification'] as _i13.NotificationEndpoint)
+              (endpoints['notification'] as _i14.NotificationEndpoint)
                   .registerDeviceToken(
             session,
             token: params['token'],
@@ -2010,7 +2040,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['notification'] as _i13.NotificationEndpoint)
+              (endpoints['notification'] as _i14.NotificationEndpoint)
                   .removeDeviceToken(
             session,
             token: params['token'],
@@ -2034,7 +2064,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['notification'] as _i13.NotificationEndpoint)
+              (endpoints['notification'] as _i14.NotificationEndpoint)
                   .myNotifications(
             session,
             page: params['page'],
@@ -2046,7 +2076,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'notificationId': _i1.ParameterDescription(
               name: 'notificationId',
-              type: _i1.getType<_i17.UuidValue>(),
+              type: _i1.getType<_i19.UuidValue>(),
               nullable: false,
             )
           },
@@ -2054,7 +2084,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['notification'] as _i13.NotificationEndpoint)
+              (endpoints['notification'] as _i14.NotificationEndpoint)
                   .markNotificationRead(
             session,
             notificationId: params['notificationId'],
@@ -2085,17 +2115,17 @@ class Endpoints extends _i1.EndpointDispatch {
             ),
             'targetClassroomId': _i1.ParameterDescription(
               name: 'targetClassroomId',
-              type: _i1.getType<_i17.UuidValue?>(),
+              type: _i1.getType<_i19.UuidValue?>(),
               nullable: true,
             ),
             'targetChildId': _i1.ParameterDescription(
               name: 'targetChildId',
-              type: _i1.getType<_i17.UuidValue?>(),
+              type: _i1.getType<_i19.UuidValue?>(),
               nullable: true,
             ),
             'targetUserId': _i1.ParameterDescription(
               name: 'targetUserId',
-              type: _i1.getType<_i17.UuidValue?>(),
+              type: _i1.getType<_i19.UuidValue?>(),
               nullable: true,
             ),
           },
@@ -2103,7 +2133,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['notification'] as _i13.NotificationEndpoint)
+              (endpoints['notification'] as _i14.NotificationEndpoint)
                   .createSegmentedNotification(
             session,
             title: params['title'],
@@ -2139,7 +2169,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['organization'] as _i14.OrganizationEndpoint)
+              (endpoints['organization'] as _i15.OrganizationEndpoint)
                   .listOrganizations(
             session,
             page: params['page'],
@@ -2151,7 +2181,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'organizationId': _i1.ParameterDescription(
               name: 'organizationId',
-              type: _i1.getType<_i17.UuidValue>(),
+              type: _i1.getType<_i19.UuidValue>(),
               nullable: false,
             )
           },
@@ -2159,7 +2189,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['organization'] as _i14.OrganizationEndpoint)
+              (endpoints['organization'] as _i15.OrganizationEndpoint)
                   .getOrganization(
             session,
             organizationId: params['organizationId'],
@@ -2188,7 +2218,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['organization'] as _i14.OrganizationEndpoint)
+              (endpoints['organization'] as _i15.OrganizationEndpoint)
                   .createOrganization(
             session,
             name: params['name'],
@@ -2207,7 +2237,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'childId': _i1.ParameterDescription(
               name: 'childId',
-              type: _i1.getType<_i17.UuidValue>(),
+              type: _i1.getType<_i19.UuidValue>(),
               nullable: false,
             ),
             'page': _i1.ParameterDescription(
@@ -2225,7 +2255,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['pedagogicalReport'] as _i15.PedagogicalReportEndpoint)
+              (endpoints['pedagogicalReport'] as _i16.PedagogicalReportEndpoint)
                   .listReportsByChild(
             session,
             childId: params['childId'],
@@ -2238,7 +2268,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'reportId': _i1.ParameterDescription(
               name: 'reportId',
-              type: _i1.getType<_i17.UuidValue>(),
+              type: _i1.getType<_i19.UuidValue>(),
               nullable: false,
             )
           },
@@ -2246,7 +2276,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['pedagogicalReport'] as _i15.PedagogicalReportEndpoint)
+              (endpoints['pedagogicalReport'] as _i16.PedagogicalReportEndpoint)
                   .getReport(
             session,
             reportId: params['reportId'],
@@ -2257,7 +2287,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'childId': _i1.ParameterDescription(
               name: 'childId',
-              type: _i1.getType<_i17.UuidValue>(),
+              type: _i1.getType<_i19.UuidValue>(),
               nullable: false,
             ),
             'reportDate': _i1.ParameterDescription(
@@ -2295,7 +2325,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['pedagogicalReport'] as _i15.PedagogicalReportEndpoint)
+              (endpoints['pedagogicalReport'] as _i16.PedagogicalReportEndpoint)
                   .createReport(
             session,
             childId: params['childId'],
@@ -2312,7 +2342,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'reportId': _i1.ParameterDescription(
               name: 'reportId',
-              type: _i1.getType<_i17.UuidValue>(),
+              type: _i1.getType<_i19.UuidValue>(),
               nullable: false,
             ),
             'reportDate': _i1.ParameterDescription(
@@ -2350,7 +2380,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['pedagogicalReport'] as _i15.PedagogicalReportEndpoint)
+              (endpoints['pedagogicalReport'] as _i16.PedagogicalReportEndpoint)
                   .updateReport(
             session,
             reportId: params['reportId'],
@@ -2360,6 +2390,156 @@ class Endpoints extends _i1.EndpointDispatch {
             body: params['body'],
             status: params['status'],
             visibility: params['visibility'],
+          ),
+        ),
+      },
+    );
+    connectors['staff'] = _i1.EndpointConnector(
+      name: 'staff',
+      endpoint: endpoints['staff']!,
+      methodConnectors: {
+        'listStaff': _i1.MethodConnector(
+          name: 'listStaff',
+          params: {
+            'page': _i1.ParameterDescription(
+              name: 'page',
+              type: _i1.getType<int>(),
+              nullable: false,
+            ),
+            'pageSize': _i1.ParameterDescription(
+              name: 'pageSize',
+              type: _i1.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['staff'] as _i17.StaffEndpoint).listStaff(
+            session,
+            page: params['page'],
+            pageSize: params['pageSize'],
+          ),
+        ),
+        'listGuardians': _i1.MethodConnector(
+          name: 'listGuardians',
+          params: {
+            'page': _i1.ParameterDescription(
+              name: 'page',
+              type: _i1.getType<int>(),
+              nullable: false,
+            ),
+            'pageSize': _i1.ParameterDescription(
+              name: 'pageSize',
+              type: _i1.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['staff'] as _i17.StaffEndpoint).listGuardians(
+            session,
+            page: params['page'],
+            pageSize: params['pageSize'],
+          ),
+        ),
+        'createStaffUser': _i1.MethodConnector(
+          name: 'createStaffUser',
+          params: {
+            'email': _i1.ParameterDescription(
+              name: 'email',
+              type: _i1.getType<String>(),
+              nullable: false,
+            ),
+            'password': _i1.ParameterDescription(
+              name: 'password',
+              type: _i1.getType<String>(),
+              nullable: false,
+            ),
+            'firstName': _i1.ParameterDescription(
+              name: 'firstName',
+              type: _i1.getType<String>(),
+              nullable: false,
+            ),
+            'lastName': _i1.ParameterDescription(
+              name: 'lastName',
+              type: _i1.getType<String>(),
+              nullable: false,
+            ),
+            'role': _i1.ParameterDescription(
+              name: 'role',
+              type: _i1.getType<String>(),
+              nullable: false,
+            ),
+            'phone': _i1.ParameterDescription(
+              name: 'phone',
+              type: _i1.getType<String?>(),
+              nullable: true,
+            ),
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['staff'] as _i17.StaffEndpoint).createStaffUser(
+            session,
+            email: params['email'],
+            password: params['password'],
+            firstName: params['firstName'],
+            lastName: params['lastName'],
+            role: params['role'],
+            phone: params['phone'],
+          ),
+        ),
+        'updateStaffUser': _i1.MethodConnector(
+          name: 'updateStaffUser',
+          params: {
+            'userId': _i1.ParameterDescription(
+              name: 'userId',
+              type: _i1.getType<_i19.UuidValue>(),
+              nullable: false,
+            ),
+            'firstName': _i1.ParameterDescription(
+              name: 'firstName',
+              type: _i1.getType<String?>(),
+              nullable: true,
+            ),
+            'lastName': _i1.ParameterDescription(
+              name: 'lastName',
+              type: _i1.getType<String?>(),
+              nullable: true,
+            ),
+            'phone': _i1.ParameterDescription(
+              name: 'phone',
+              type: _i1.getType<String?>(),
+              nullable: true,
+            ),
+            'role': _i1.ParameterDescription(
+              name: 'role',
+              type: _i1.getType<String?>(),
+              nullable: true,
+            ),
+            'isActive': _i1.ParameterDescription(
+              name: 'isActive',
+              type: _i1.getType<bool?>(),
+              nullable: true,
+            ),
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['staff'] as _i17.StaffEndpoint).updateStaffUser(
+            session,
+            userId: params['userId'],
+            firstName: params['firstName'],
+            lastName: params['lastName'],
+            phone: params['phone'],
+            role: params['role'],
+            isActive: params['isActive'],
           ),
         ),
       },
@@ -2381,7 +2561,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['timeTracking'] as _i16.TimeTrackingEndpoint).checkIn(
+              (endpoints['timeTracking'] as _i18.TimeTrackingEndpoint).checkIn(
             session,
             notes: params['notes'],
           ),
@@ -2399,7 +2579,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['timeTracking'] as _i16.TimeTrackingEndpoint).checkOut(
+              (endpoints['timeTracking'] as _i18.TimeTrackingEndpoint).checkOut(
             session,
             notes: params['notes'],
           ),
@@ -2422,7 +2602,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['timeTracking'] as _i16.TimeTrackingEndpoint)
+              (endpoints['timeTracking'] as _i18.TimeTrackingEndpoint)
                   .myEntries(
             session,
             page: params['page'],
@@ -2434,7 +2614,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'userId': _i1.ParameterDescription(
               name: 'userId',
-              type: _i1.getType<_i17.UuidValue?>(),
+              type: _i1.getType<_i19.UuidValue?>(),
               nullable: true,
             ),
             'from': _i1.ParameterDescription(
@@ -2462,7 +2642,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['timeTracking'] as _i16.TimeTrackingEndpoint)
+              (endpoints['timeTracking'] as _i18.TimeTrackingEndpoint)
                   .listEntries(
             session,
             userId: params['userId'],
@@ -2477,7 +2657,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'entryId': _i1.ParameterDescription(
               name: 'entryId',
-              type: _i1.getType<_i17.UuidValue>(),
+              type: _i1.getType<_i19.UuidValue>(),
               nullable: false,
             )
           },
@@ -2485,7 +2665,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['timeTracking'] as _i16.TimeTrackingEndpoint).getEntry(
+              (endpoints['timeTracking'] as _i18.TimeTrackingEndpoint).getEntry(
             session,
             entryId: params['entryId'],
           ),
@@ -2495,7 +2675,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'targetEntryId': _i1.ParameterDescription(
               name: 'targetEntryId',
-              type: _i1.getType<_i17.UuidValue>(),
+              type: _i1.getType<_i19.UuidValue>(),
               nullable: false,
             ),
             'correctedEntryType': _i1.ParameterDescription(
@@ -2518,7 +2698,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['timeTracking'] as _i16.TimeTrackingEndpoint)
+              (endpoints['timeTracking'] as _i18.TimeTrackingEndpoint)
                   .correctEntry(
             session,
             targetEntryId: params['targetEntryId'],
@@ -2527,8 +2707,39 @@ class Endpoints extends _i1.EndpointDispatch {
             notes: params['notes'],
           ),
         ),
+        'exportTimeEntries': _i1.MethodConnector(
+          name: 'exportTimeEntries',
+          params: {
+            'from': _i1.ParameterDescription(
+              name: 'from',
+              type: _i1.getType<DateTime>(),
+              nullable: false,
+            ),
+            'to': _i1.ParameterDescription(
+              name: 'to',
+              type: _i1.getType<DateTime>(),
+              nullable: false,
+            ),
+            'userId': _i1.ParameterDescription(
+              name: 'userId',
+              type: _i1.getType<_i19.UuidValue?>(),
+              nullable: true,
+            ),
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['timeTracking'] as _i18.TimeTrackingEndpoint)
+                  .exportTimeEntries(
+            session,
+            from: params['from'],
+            to: params['to'],
+            userId: params['userId'],
+          ),
+        ),
       },
     );
-    modules['serverpod_auth'] = _i18.Endpoints()..initializeEndpoints(server);
+    modules['serverpod_auth'] = _i20.Endpoints()..initializeEndpoints(server);
   }
 }

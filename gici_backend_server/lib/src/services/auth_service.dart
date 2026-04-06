@@ -69,7 +69,7 @@ class AuthService {
     }
 
     // Create authentication key (session token) via Serverpod Auth
-    await auth.UserAuthentication.signInUser(
+    final authKey = await auth.UserAuthentication.signInUser(
       session,
       serverpodUserId,
       'email',
@@ -87,6 +87,8 @@ class AuthService {
       role: appUser.role,
       firstName: appUser.firstName,
       lastName: appUser.lastName,
+      keyId: authKey.id!,
+      key: authKey.key!,
     );
   }
 
@@ -101,6 +103,8 @@ class AuthService {
         role: appUser.role,
         firstName: appUser.firstName,
         lastName: appUser.lastName,
+        keyId: 0,
+        key: '',
       );
     } catch (_) {
       return null;

@@ -3,6 +3,8 @@ import 'package:gici_backend_client/gici_backend_server_client.dart';
 
 import '../../features/auth/data/auth_repository.dart';
 import '../../features/chat/data/chat_repository.dart';
+import '../../features/dashboard/data/dashboard_repository.dart';
+import '../../features/staff_management/data/staff_repository.dart';
 import '../../features/children/data/child_repository.dart';
 import '../../features/child_timeline/data/child_timeline_repository.dart';
 import '../../features/classrooms/data/classroom_repository.dart';
@@ -21,6 +23,12 @@ final sl = GetIt.instance;
 Future<void> configureDependencies() async {
   if (!sl.isRegistered<Client>()) {
     sl.registerLazySingleton<Client>(() => BackendClientProvider.instance);
+  }
+
+  if (!sl.isRegistered<DashboardRepository>()) {
+    sl.registerLazySingleton<DashboardRepository>(
+      () => DashboardRepository(sl<Client>()),
+    );
   }
 
   if (!sl.isRegistered<AuthRepository>()) {
@@ -98,6 +106,12 @@ Future<void> configureDependencies() async {
   if (!sl.isRegistered<DataChangeRequestRepository>()) {
     sl.registerLazySingleton<DataChangeRequestRepository>(
       () => DataChangeRequestRepository(sl<Client>()),
+    );
+  }
+
+  if (!sl.isRegistered<StaffRepository>()) {
+    sl.registerLazySingleton<StaffRepository>(
+      () => StaffRepository(sl<Client>()),
     );
   }
 }

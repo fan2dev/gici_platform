@@ -27,50 +27,52 @@ import 'child_profile_overview.dart' as _i15;
 import 'child_timeline_item.dart' as _i16;
 import 'classroom.dart' as _i17;
 import 'classroom_assignment.dart' as _i18;
-import 'data_change_request.dart' as _i19;
-import 'file_asset.dart' as _i20;
-import 'gallery.dart' as _i21;
-import 'gallery_item.dart' as _i22;
-import 'meal_entry.dart' as _i23;
-import 'menu_entry.dart' as _i24;
-import 'nap_entry.dart' as _i25;
-import 'notification_record.dart' as _i26;
-import 'organization.dart' as _i27;
-import 'organization_branding.dart' as _i28;
-import 'organization_document.dart' as _i29;
-import 'organization_settings.dart' as _i30;
-import 'pedagogical_report.dart' as _i31;
-import 'push_device_token.dart' as _i32;
-import 'time_entry.dart' as _i33;
-import 'user_onboarding_state.dart' as _i34;
+import 'dashboard_summary.dart' as _i19;
+import 'data_change_request.dart' as _i20;
+import 'file_asset.dart' as _i21;
+import 'gallery.dart' as _i22;
+import 'gallery_item.dart' as _i23;
+import 'meal_entry.dart' as _i24;
+import 'menu_entry.dart' as _i25;
+import 'nap_entry.dart' as _i26;
+import 'notification_record.dart' as _i27;
+import 'organization.dart' as _i28;
+import 'organization_branding.dart' as _i29;
+import 'organization_document.dart' as _i30;
+import 'organization_settings.dart' as _i31;
+import 'pedagogical_report.dart' as _i32;
+import 'push_device_token.dart' as _i33;
+import 'time_entry.dart' as _i34;
+import 'user_onboarding_state.dart' as _i35;
 import 'package:gici_backend_server/src/generated/chat_conversation.dart'
-    as _i35;
-import 'package:uuid/uuid_value.dart' as _i36;
-import 'package:gici_backend_server/src/generated/chat_message.dart' as _i37;
-import 'package:gici_backend_server/src/generated/child.dart' as _i38;
+    as _i36;
+import 'package:uuid/uuid_value.dart' as _i37;
+import 'package:gici_backend_server/src/generated/chat_message.dart' as _i38;
+import 'package:gici_backend_server/src/generated/child.dart' as _i39;
 import 'package:gici_backend_server/src/generated/child_timeline_item.dart'
-    as _i39;
-import 'package:gici_backend_server/src/generated/classroom.dart' as _i40;
+    as _i40;
+import 'package:gici_backend_server/src/generated/classroom.dart' as _i41;
 import 'package:gici_backend_server/src/generated/classroom_assignment.dart'
-    as _i41;
-import 'package:gici_backend_server/src/generated/data_change_request.dart'
     as _i42;
-import 'package:gici_backend_server/src/generated/organization_document.dart'
+import 'package:gici_backend_server/src/generated/data_change_request.dart'
     as _i43;
-import 'package:gici_backend_server/src/generated/child_document.dart' as _i44;
-import 'package:gici_backend_server/src/generated/menu_entry.dart' as _i45;
-import 'package:gici_backend_server/src/generated/gallery.dart' as _i46;
-import 'package:gici_backend_server/src/generated/gallery_item.dart' as _i47;
-import 'package:gici_backend_server/src/generated/meal_entry.dart' as _i48;
-import 'package:gici_backend_server/src/generated/nap_entry.dart' as _i49;
+import 'package:gici_backend_server/src/generated/organization_document.dart'
+    as _i44;
+import 'package:gici_backend_server/src/generated/child_document.dart' as _i45;
+import 'package:gici_backend_server/src/generated/menu_entry.dart' as _i46;
+import 'package:gici_backend_server/src/generated/gallery.dart' as _i47;
+import 'package:gici_backend_server/src/generated/gallery_item.dart' as _i48;
+import 'package:gici_backend_server/src/generated/meal_entry.dart' as _i49;
+import 'package:gici_backend_server/src/generated/nap_entry.dart' as _i50;
 import 'package:gici_backend_server/src/generated/bowel_movement_entry.dart'
-    as _i50;
-import 'package:gici_backend_server/src/generated/notification_record.dart'
     as _i51;
-import 'package:gici_backend_server/src/generated/organization.dart' as _i52;
+import 'package:gici_backend_server/src/generated/notification_record.dart'
+    as _i52;
+import 'package:gici_backend_server/src/generated/organization.dart' as _i53;
 import 'package:gici_backend_server/src/generated/pedagogical_report.dart'
-    as _i53;
-import 'package:gici_backend_server/src/generated/time_entry.dart' as _i54;
+    as _i54;
+import 'package:gici_backend_server/src/generated/app_user.dart' as _i55;
+import 'package:gici_backend_server/src/generated/time_entry.dart' as _i56;
 export 'activity_log.dart';
 export 'app_user.dart';
 export 'auth_session.dart';
@@ -86,6 +88,7 @@ export 'child_profile_overview.dart';
 export 'child_timeline_item.dart';
 export 'classroom.dart';
 export 'classroom_assignment.dart';
+export 'dashboard_summary.dart';
 export 'data_change_request.dart';
 export 'file_asset.dart';
 export 'gallery.dart';
@@ -4116,53 +4119,56 @@ class Protocol extends _i1.SerializationManagerServer {
     if (t == _i18.ClassroomAssignment) {
       return _i18.ClassroomAssignment.fromJson(data) as T;
     }
-    if (t == _i19.DataChangeRequest) {
-      return _i19.DataChangeRequest.fromJson(data) as T;
+    if (t == _i19.DashboardSummary) {
+      return _i19.DashboardSummary.fromJson(data) as T;
     }
-    if (t == _i20.FileAsset) {
-      return _i20.FileAsset.fromJson(data) as T;
+    if (t == _i20.DataChangeRequest) {
+      return _i20.DataChangeRequest.fromJson(data) as T;
     }
-    if (t == _i21.Gallery) {
-      return _i21.Gallery.fromJson(data) as T;
+    if (t == _i21.FileAsset) {
+      return _i21.FileAsset.fromJson(data) as T;
     }
-    if (t == _i22.GalleryItem) {
-      return _i22.GalleryItem.fromJson(data) as T;
+    if (t == _i22.Gallery) {
+      return _i22.Gallery.fromJson(data) as T;
     }
-    if (t == _i23.MealEntry) {
-      return _i23.MealEntry.fromJson(data) as T;
+    if (t == _i23.GalleryItem) {
+      return _i23.GalleryItem.fromJson(data) as T;
     }
-    if (t == _i24.MenuEntry) {
-      return _i24.MenuEntry.fromJson(data) as T;
+    if (t == _i24.MealEntry) {
+      return _i24.MealEntry.fromJson(data) as T;
     }
-    if (t == _i25.NapEntry) {
-      return _i25.NapEntry.fromJson(data) as T;
+    if (t == _i25.MenuEntry) {
+      return _i25.MenuEntry.fromJson(data) as T;
     }
-    if (t == _i26.NotificationRecord) {
-      return _i26.NotificationRecord.fromJson(data) as T;
+    if (t == _i26.NapEntry) {
+      return _i26.NapEntry.fromJson(data) as T;
     }
-    if (t == _i27.Organization) {
-      return _i27.Organization.fromJson(data) as T;
+    if (t == _i27.NotificationRecord) {
+      return _i27.NotificationRecord.fromJson(data) as T;
     }
-    if (t == _i28.OrganizationBranding) {
-      return _i28.OrganizationBranding.fromJson(data) as T;
+    if (t == _i28.Organization) {
+      return _i28.Organization.fromJson(data) as T;
     }
-    if (t == _i29.OrganizationDocument) {
-      return _i29.OrganizationDocument.fromJson(data) as T;
+    if (t == _i29.OrganizationBranding) {
+      return _i29.OrganizationBranding.fromJson(data) as T;
     }
-    if (t == _i30.OrganizationSettings) {
-      return _i30.OrganizationSettings.fromJson(data) as T;
+    if (t == _i30.OrganizationDocument) {
+      return _i30.OrganizationDocument.fromJson(data) as T;
     }
-    if (t == _i31.PedagogicalReport) {
-      return _i31.PedagogicalReport.fromJson(data) as T;
+    if (t == _i31.OrganizationSettings) {
+      return _i31.OrganizationSettings.fromJson(data) as T;
     }
-    if (t == _i32.PushDeviceToken) {
-      return _i32.PushDeviceToken.fromJson(data) as T;
+    if (t == _i32.PedagogicalReport) {
+      return _i32.PedagogicalReport.fromJson(data) as T;
     }
-    if (t == _i33.TimeEntry) {
-      return _i33.TimeEntry.fromJson(data) as T;
+    if (t == _i33.PushDeviceToken) {
+      return _i33.PushDeviceToken.fromJson(data) as T;
     }
-    if (t == _i34.UserOnboardingState) {
-      return _i34.UserOnboardingState.fromJson(data) as T;
+    if (t == _i34.TimeEntry) {
+      return _i34.TimeEntry.fromJson(data) as T;
+    }
+    if (t == _i35.UserOnboardingState) {
+      return _i35.UserOnboardingState.fromJson(data) as T;
     }
     if (t == _i1.getType<_i4.ActivityLog?>()) {
       return (data != null ? _i4.ActivityLog.fromJson(data) : null) as T;
@@ -4212,65 +4218,68 @@ class Protocol extends _i1.SerializationManagerServer {
       return (data != null ? _i18.ClassroomAssignment.fromJson(data) : null)
           as T;
     }
-    if (t == _i1.getType<_i19.DataChangeRequest?>()) {
-      return (data != null ? _i19.DataChangeRequest.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i19.DashboardSummary?>()) {
+      return (data != null ? _i19.DashboardSummary.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i20.FileAsset?>()) {
-      return (data != null ? _i20.FileAsset.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i20.DataChangeRequest?>()) {
+      return (data != null ? _i20.DataChangeRequest.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i21.Gallery?>()) {
-      return (data != null ? _i21.Gallery.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i21.FileAsset?>()) {
+      return (data != null ? _i21.FileAsset.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i22.GalleryItem?>()) {
-      return (data != null ? _i22.GalleryItem.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i22.Gallery?>()) {
+      return (data != null ? _i22.Gallery.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i23.MealEntry?>()) {
-      return (data != null ? _i23.MealEntry.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i23.GalleryItem?>()) {
+      return (data != null ? _i23.GalleryItem.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i24.MenuEntry?>()) {
-      return (data != null ? _i24.MenuEntry.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i24.MealEntry?>()) {
+      return (data != null ? _i24.MealEntry.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i25.NapEntry?>()) {
-      return (data != null ? _i25.NapEntry.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i25.MenuEntry?>()) {
+      return (data != null ? _i25.MenuEntry.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i26.NotificationRecord?>()) {
-      return (data != null ? _i26.NotificationRecord.fromJson(data) : null)
+    if (t == _i1.getType<_i26.NapEntry?>()) {
+      return (data != null ? _i26.NapEntry.fromJson(data) : null) as T;
+    }
+    if (t == _i1.getType<_i27.NotificationRecord?>()) {
+      return (data != null ? _i27.NotificationRecord.fromJson(data) : null)
           as T;
     }
-    if (t == _i1.getType<_i27.Organization?>()) {
-      return (data != null ? _i27.Organization.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i28.Organization?>()) {
+      return (data != null ? _i28.Organization.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i28.OrganizationBranding?>()) {
-      return (data != null ? _i28.OrganizationBranding.fromJson(data) : null)
+    if (t == _i1.getType<_i29.OrganizationBranding?>()) {
+      return (data != null ? _i29.OrganizationBranding.fromJson(data) : null)
           as T;
     }
-    if (t == _i1.getType<_i29.OrganizationDocument?>()) {
-      return (data != null ? _i29.OrganizationDocument.fromJson(data) : null)
+    if (t == _i1.getType<_i30.OrganizationDocument?>()) {
+      return (data != null ? _i30.OrganizationDocument.fromJson(data) : null)
           as T;
     }
-    if (t == _i1.getType<_i30.OrganizationSettings?>()) {
-      return (data != null ? _i30.OrganizationSettings.fromJson(data) : null)
+    if (t == _i1.getType<_i31.OrganizationSettings?>()) {
+      return (data != null ? _i31.OrganizationSettings.fromJson(data) : null)
           as T;
     }
-    if (t == _i1.getType<_i31.PedagogicalReport?>()) {
-      return (data != null ? _i31.PedagogicalReport.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i32.PedagogicalReport?>()) {
+      return (data != null ? _i32.PedagogicalReport.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i32.PushDeviceToken?>()) {
-      return (data != null ? _i32.PushDeviceToken.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i33.PushDeviceToken?>()) {
+      return (data != null ? _i33.PushDeviceToken.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i33.TimeEntry?>()) {
-      return (data != null ? _i33.TimeEntry.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i34.TimeEntry?>()) {
+      return (data != null ? _i34.TimeEntry.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i34.UserOnboardingState?>()) {
-      return (data != null ? _i34.UserOnboardingState.fromJson(data) : null)
+    if (t == _i1.getType<_i35.UserOnboardingState?>()) {
+      return (data != null ? _i35.UserOnboardingState.fromJson(data) : null)
           as T;
     }
-    if (t == List<_i23.MealEntry>) {
-      return (data as List).map((e) => deserialize<_i23.MealEntry>(e)).toList()
+    if (t == List<_i24.MealEntry>) {
+      return (data as List).map((e) => deserialize<_i24.MealEntry>(e)).toList()
           as T;
     }
-    if (t == List<_i25.NapEntry>) {
-      return (data as List).map((e) => deserialize<_i25.NapEntry>(e)).toList()
+    if (t == List<_i26.NapEntry>) {
+      return (data as List).map((e) => deserialize<_i26.NapEntry>(e)).toList()
           as T;
     }
     if (t == List<_i7.BowelMovementEntry>) {
@@ -4285,100 +4294,113 @@ class Protocol extends _i1.SerializationManagerServer {
     if (t == List<String>) {
       return (data as List).map((e) => deserialize<String>(e)).toList() as T;
     }
-    if (t == List<_i35.ChatConversation>) {
-      return (data as List)
-          .map((e) => deserialize<_i35.ChatConversation>(e))
-          .toList() as T;
-    }
-    if (t == List<_i36.UuidValue>) {
-      return (data as List).map((e) => deserialize<_i36.UuidValue>(e)).toList()
+    if (t == List<_i25.MenuEntry>) {
+      return (data as List).map((e) => deserialize<_i25.MenuEntry>(e)).toList()
           as T;
     }
-    if (t == List<_i37.ChatMessage>) {
+    if (t == List<_i27.NotificationRecord>) {
       return (data as List)
-          .map((e) => deserialize<_i37.ChatMessage>(e))
+          .map((e) => deserialize<_i27.NotificationRecord>(e))
+          .toList() as T;
+    }
+    if (t == List<_i36.ChatConversation>) {
+      return (data as List)
+          .map((e) => deserialize<_i36.ChatConversation>(e))
+          .toList() as T;
+    }
+    if (t == List<_i37.UuidValue>) {
+      return (data as List).map((e) => deserialize<_i37.UuidValue>(e)).toList()
+          as T;
+    }
+    if (t == List<_i38.ChatMessage>) {
+      return (data as List)
+          .map((e) => deserialize<_i38.ChatMessage>(e))
           .toList() as T;
     }
     if (t == Map<String, int>) {
       return (data as Map).map(
           (k, v) => MapEntry(deserialize<String>(k), deserialize<int>(v))) as T;
     }
-    if (t == List<_i38.Child>) {
-      return (data as List).map((e) => deserialize<_i38.Child>(e)).toList()
+    if (t == List<_i39.Child>) {
+      return (data as List).map((e) => deserialize<_i39.Child>(e)).toList()
           as T;
     }
-    if (t == List<_i39.ChildTimelineItem>) {
+    if (t == List<_i40.ChildTimelineItem>) {
       return (data as List)
-          .map((e) => deserialize<_i39.ChildTimelineItem>(e))
+          .map((e) => deserialize<_i40.ChildTimelineItem>(e))
           .toList() as T;
     }
-    if (t == List<_i40.Classroom>) {
-      return (data as List).map((e) => deserialize<_i40.Classroom>(e)).toList()
+    if (t == List<_i41.Classroom>) {
+      return (data as List).map((e) => deserialize<_i41.Classroom>(e)).toList()
           as T;
     }
-    if (t == List<_i41.ClassroomAssignment>) {
+    if (t == List<_i42.ClassroomAssignment>) {
       return (data as List)
-          .map((e) => deserialize<_i41.ClassroomAssignment>(e))
+          .map((e) => deserialize<_i42.ClassroomAssignment>(e))
           .toList() as T;
     }
-    if (t == List<_i42.DataChangeRequest>) {
+    if (t == List<_i43.DataChangeRequest>) {
       return (data as List)
-          .map((e) => deserialize<_i42.DataChangeRequest>(e))
+          .map((e) => deserialize<_i43.DataChangeRequest>(e))
           .toList() as T;
     }
-    if (t == List<_i43.OrganizationDocument>) {
+    if (t == List<_i44.OrganizationDocument>) {
       return (data as List)
-          .map((e) => deserialize<_i43.OrganizationDocument>(e))
+          .map((e) => deserialize<_i44.OrganizationDocument>(e))
           .toList() as T;
     }
-    if (t == List<_i44.ChildDocument>) {
+    if (t == List<_i45.ChildDocument>) {
       return (data as List)
-          .map((e) => deserialize<_i44.ChildDocument>(e))
+          .map((e) => deserialize<_i45.ChildDocument>(e))
           .toList() as T;
     }
-    if (t == List<_i45.MenuEntry>) {
-      return (data as List).map((e) => deserialize<_i45.MenuEntry>(e)).toList()
+    if (t == List<_i46.MenuEntry>) {
+      return (data as List).map((e) => deserialize<_i46.MenuEntry>(e)).toList()
           as T;
     }
-    if (t == List<_i46.Gallery>) {
-      return (data as List).map((e) => deserialize<_i46.Gallery>(e)).toList()
+    if (t == List<_i47.Gallery>) {
+      return (data as List).map((e) => deserialize<_i47.Gallery>(e)).toList()
           as T;
     }
-    if (t == List<_i47.GalleryItem>) {
+    if (t == List<_i48.GalleryItem>) {
       return (data as List)
-          .map((e) => deserialize<_i47.GalleryItem>(e))
+          .map((e) => deserialize<_i48.GalleryItem>(e))
           .toList() as T;
     }
-    if (t == List<_i48.MealEntry>) {
-      return (data as List).map((e) => deserialize<_i48.MealEntry>(e)).toList()
+    if (t == List<_i49.MealEntry>) {
+      return (data as List).map((e) => deserialize<_i49.MealEntry>(e)).toList()
           as T;
     }
-    if (t == List<_i49.NapEntry>) {
-      return (data as List).map((e) => deserialize<_i49.NapEntry>(e)).toList()
+    if (t == List<_i50.NapEntry>) {
+      return (data as List).map((e) => deserialize<_i50.NapEntry>(e)).toList()
           as T;
     }
-    if (t == List<_i50.BowelMovementEntry>) {
+    if (t == List<_i51.BowelMovementEntry>) {
       return (data as List)
-          .map((e) => deserialize<_i50.BowelMovementEntry>(e))
+          .map((e) => deserialize<_i51.BowelMovementEntry>(e))
           .toList() as T;
     }
-    if (t == List<_i51.NotificationRecord>) {
+    if (t == List<_i52.NotificationRecord>) {
       return (data as List)
-          .map((e) => deserialize<_i51.NotificationRecord>(e))
+          .map((e) => deserialize<_i52.NotificationRecord>(e))
           .toList() as T;
     }
-    if (t == List<_i52.Organization>) {
+    if (t == List<_i53.Organization>) {
       return (data as List)
-          .map((e) => deserialize<_i52.Organization>(e))
+          .map((e) => deserialize<_i53.Organization>(e))
           .toList() as T;
     }
-    if (t == List<_i53.PedagogicalReport>) {
+    if (t == List<_i54.PedagogicalReport>) {
       return (data as List)
-          .map((e) => deserialize<_i53.PedagogicalReport>(e))
+          .map((e) => deserialize<_i54.PedagogicalReport>(e))
           .toList() as T;
     }
-    if (t == List<_i54.TimeEntry>) {
-      return (data as List).map((e) => deserialize<_i54.TimeEntry>(e)).toList()
+    if (t == List<_i55.AppUser>) {
+      return (data as List).map((e) => deserialize<_i55.AppUser>(e)).toList()
+          as T;
+    }
+    if (t == List<_i56.TimeEntry>) {
+      return (data as List).map((e) => deserialize<_i56.TimeEntry>(e)).toList()
           as T;
     }
     try {
@@ -4439,52 +4461,55 @@ class Protocol extends _i1.SerializationManagerServer {
     if (data is _i18.ClassroomAssignment) {
       return 'ClassroomAssignment';
     }
-    if (data is _i19.DataChangeRequest) {
+    if (data is _i19.DashboardSummary) {
+      return 'DashboardSummary';
+    }
+    if (data is _i20.DataChangeRequest) {
       return 'DataChangeRequest';
     }
-    if (data is _i20.FileAsset) {
+    if (data is _i21.FileAsset) {
       return 'FileAsset';
     }
-    if (data is _i21.Gallery) {
+    if (data is _i22.Gallery) {
       return 'Gallery';
     }
-    if (data is _i22.GalleryItem) {
+    if (data is _i23.GalleryItem) {
       return 'GalleryItem';
     }
-    if (data is _i23.MealEntry) {
+    if (data is _i24.MealEntry) {
       return 'MealEntry';
     }
-    if (data is _i24.MenuEntry) {
+    if (data is _i25.MenuEntry) {
       return 'MenuEntry';
     }
-    if (data is _i25.NapEntry) {
+    if (data is _i26.NapEntry) {
       return 'NapEntry';
     }
-    if (data is _i26.NotificationRecord) {
+    if (data is _i27.NotificationRecord) {
       return 'NotificationRecord';
     }
-    if (data is _i27.Organization) {
+    if (data is _i28.Organization) {
       return 'Organization';
     }
-    if (data is _i28.OrganizationBranding) {
+    if (data is _i29.OrganizationBranding) {
       return 'OrganizationBranding';
     }
-    if (data is _i29.OrganizationDocument) {
+    if (data is _i30.OrganizationDocument) {
       return 'OrganizationDocument';
     }
-    if (data is _i30.OrganizationSettings) {
+    if (data is _i31.OrganizationSettings) {
       return 'OrganizationSettings';
     }
-    if (data is _i31.PedagogicalReport) {
+    if (data is _i32.PedagogicalReport) {
       return 'PedagogicalReport';
     }
-    if (data is _i32.PushDeviceToken) {
+    if (data is _i33.PushDeviceToken) {
       return 'PushDeviceToken';
     }
-    if (data is _i33.TimeEntry) {
+    if (data is _i34.TimeEntry) {
       return 'TimeEntry';
     }
-    if (data is _i34.UserOnboardingState) {
+    if (data is _i35.UserOnboardingState) {
       return 'UserOnboardingState';
     }
     className = _i2.Protocol().getClassNameForObject(data);
@@ -4549,53 +4574,56 @@ class Protocol extends _i1.SerializationManagerServer {
     if (dataClassName == 'ClassroomAssignment') {
       return deserialize<_i18.ClassroomAssignment>(data['data']);
     }
+    if (dataClassName == 'DashboardSummary') {
+      return deserialize<_i19.DashboardSummary>(data['data']);
+    }
     if (dataClassName == 'DataChangeRequest') {
-      return deserialize<_i19.DataChangeRequest>(data['data']);
+      return deserialize<_i20.DataChangeRequest>(data['data']);
     }
     if (dataClassName == 'FileAsset') {
-      return deserialize<_i20.FileAsset>(data['data']);
+      return deserialize<_i21.FileAsset>(data['data']);
     }
     if (dataClassName == 'Gallery') {
-      return deserialize<_i21.Gallery>(data['data']);
+      return deserialize<_i22.Gallery>(data['data']);
     }
     if (dataClassName == 'GalleryItem') {
-      return deserialize<_i22.GalleryItem>(data['data']);
+      return deserialize<_i23.GalleryItem>(data['data']);
     }
     if (dataClassName == 'MealEntry') {
-      return deserialize<_i23.MealEntry>(data['data']);
+      return deserialize<_i24.MealEntry>(data['data']);
     }
     if (dataClassName == 'MenuEntry') {
-      return deserialize<_i24.MenuEntry>(data['data']);
+      return deserialize<_i25.MenuEntry>(data['data']);
     }
     if (dataClassName == 'NapEntry') {
-      return deserialize<_i25.NapEntry>(data['data']);
+      return deserialize<_i26.NapEntry>(data['data']);
     }
     if (dataClassName == 'NotificationRecord') {
-      return deserialize<_i26.NotificationRecord>(data['data']);
+      return deserialize<_i27.NotificationRecord>(data['data']);
     }
     if (dataClassName == 'Organization') {
-      return deserialize<_i27.Organization>(data['data']);
+      return deserialize<_i28.Organization>(data['data']);
     }
     if (dataClassName == 'OrganizationBranding') {
-      return deserialize<_i28.OrganizationBranding>(data['data']);
+      return deserialize<_i29.OrganizationBranding>(data['data']);
     }
     if (dataClassName == 'OrganizationDocument') {
-      return deserialize<_i29.OrganizationDocument>(data['data']);
+      return deserialize<_i30.OrganizationDocument>(data['data']);
     }
     if (dataClassName == 'OrganizationSettings') {
-      return deserialize<_i30.OrganizationSettings>(data['data']);
+      return deserialize<_i31.OrganizationSettings>(data['data']);
     }
     if (dataClassName == 'PedagogicalReport') {
-      return deserialize<_i31.PedagogicalReport>(data['data']);
+      return deserialize<_i32.PedagogicalReport>(data['data']);
     }
     if (dataClassName == 'PushDeviceToken') {
-      return deserialize<_i32.PushDeviceToken>(data['data']);
+      return deserialize<_i33.PushDeviceToken>(data['data']);
     }
     if (dataClassName == 'TimeEntry') {
-      return deserialize<_i33.TimeEntry>(data['data']);
+      return deserialize<_i34.TimeEntry>(data['data']);
     }
     if (dataClassName == 'UserOnboardingState') {
-      return deserialize<_i34.UserOnboardingState>(data['data']);
+      return deserialize<_i35.UserOnboardingState>(data['data']);
     }
     if (dataClassName.startsWith('serverpod.')) {
       data['className'] = dataClassName.substring(10);
@@ -4645,38 +4673,38 @@ class Protocol extends _i1.SerializationManagerServer {
         return _i17.Classroom.t;
       case _i18.ClassroomAssignment:
         return _i18.ClassroomAssignment.t;
-      case _i19.DataChangeRequest:
-        return _i19.DataChangeRequest.t;
-      case _i20.FileAsset:
-        return _i20.FileAsset.t;
-      case _i21.Gallery:
-        return _i21.Gallery.t;
-      case _i22.GalleryItem:
-        return _i22.GalleryItem.t;
-      case _i23.MealEntry:
-        return _i23.MealEntry.t;
-      case _i24.MenuEntry:
-        return _i24.MenuEntry.t;
-      case _i25.NapEntry:
-        return _i25.NapEntry.t;
-      case _i26.NotificationRecord:
-        return _i26.NotificationRecord.t;
-      case _i27.Organization:
-        return _i27.Organization.t;
-      case _i28.OrganizationBranding:
-        return _i28.OrganizationBranding.t;
-      case _i29.OrganizationDocument:
-        return _i29.OrganizationDocument.t;
-      case _i30.OrganizationSettings:
-        return _i30.OrganizationSettings.t;
-      case _i31.PedagogicalReport:
-        return _i31.PedagogicalReport.t;
-      case _i32.PushDeviceToken:
-        return _i32.PushDeviceToken.t;
-      case _i33.TimeEntry:
-        return _i33.TimeEntry.t;
-      case _i34.UserOnboardingState:
-        return _i34.UserOnboardingState.t;
+      case _i20.DataChangeRequest:
+        return _i20.DataChangeRequest.t;
+      case _i21.FileAsset:
+        return _i21.FileAsset.t;
+      case _i22.Gallery:
+        return _i22.Gallery.t;
+      case _i23.GalleryItem:
+        return _i23.GalleryItem.t;
+      case _i24.MealEntry:
+        return _i24.MealEntry.t;
+      case _i25.MenuEntry:
+        return _i25.MenuEntry.t;
+      case _i26.NapEntry:
+        return _i26.NapEntry.t;
+      case _i27.NotificationRecord:
+        return _i27.NotificationRecord.t;
+      case _i28.Organization:
+        return _i28.Organization.t;
+      case _i29.OrganizationBranding:
+        return _i29.OrganizationBranding.t;
+      case _i30.OrganizationDocument:
+        return _i30.OrganizationDocument.t;
+      case _i31.OrganizationSettings:
+        return _i31.OrganizationSettings.t;
+      case _i32.PedagogicalReport:
+        return _i32.PedagogicalReport.t;
+      case _i33.PushDeviceToken:
+        return _i33.PushDeviceToken.t;
+      case _i34.TimeEntry:
+        return _i34.TimeEntry.t;
+      case _i35.UserOnboardingState:
+        return _i35.UserOnboardingState.t;
     }
     return null;
   }

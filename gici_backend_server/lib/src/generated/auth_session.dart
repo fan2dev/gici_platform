@@ -20,6 +20,8 @@ abstract class AuthSession
     required this.role,
     required this.firstName,
     required this.lastName,
+    required this.keyId,
+    required this.key,
   });
 
   factory AuthSession({
@@ -29,6 +31,8 @@ abstract class AuthSession
     required String role,
     required String firstName,
     required String lastName,
+    required int keyId,
+    required String key,
   }) = _AuthSessionImpl;
 
   factory AuthSession.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -43,6 +47,8 @@ abstract class AuthSession
       role: jsonSerialization['role'] as String,
       firstName: jsonSerialization['firstName'] as String,
       lastName: jsonSerialization['lastName'] as String,
+      keyId: jsonSerialization['keyId'] as int,
+      key: jsonSerialization['key'] as String,
     );
   }
 
@@ -58,6 +64,10 @@ abstract class AuthSession
 
   String lastName;
 
+  int keyId;
+
+  String key;
+
   /// Returns a shallow copy of this [AuthSession]
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
@@ -68,6 +78,8 @@ abstract class AuthSession
     String? role,
     String? firstName,
     String? lastName,
+    int? keyId,
+    String? key,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -78,6 +90,8 @@ abstract class AuthSession
       'role': role,
       'firstName': firstName,
       'lastName': lastName,
+      'keyId': keyId,
+      'key': key,
     };
   }
 
@@ -90,6 +104,8 @@ abstract class AuthSession
       'role': role,
       'firstName': firstName,
       'lastName': lastName,
+      'keyId': keyId,
+      'key': key,
     };
   }
 
@@ -109,6 +125,8 @@ class _AuthSessionImpl extends AuthSession {
     required String role,
     required String firstName,
     required String lastName,
+    required int keyId,
+    required String key,
   }) : super._(
           appUserId: appUserId,
           organizationId: organizationId,
@@ -116,6 +134,8 @@ class _AuthSessionImpl extends AuthSession {
           role: role,
           firstName: firstName,
           lastName: lastName,
+          keyId: keyId,
+          key: key,
         );
 
   /// Returns a shallow copy of this [AuthSession]
@@ -129,6 +149,8 @@ class _AuthSessionImpl extends AuthSession {
     String? role,
     String? firstName,
     String? lastName,
+    int? keyId,
+    String? key,
   }) {
     return AuthSession(
       appUserId: appUserId ?? this.appUserId,
@@ -139,6 +161,8 @@ class _AuthSessionImpl extends AuthSession {
       role: role ?? this.role,
       firstName: firstName ?? this.firstName,
       lastName: lastName ?? this.lastName,
+      keyId: keyId ?? this.keyId,
+      key: key ?? this.key,
     );
   }
 }

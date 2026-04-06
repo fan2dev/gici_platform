@@ -48,6 +48,22 @@ class ChatRepository {
     );
   }
 
+  Future<ChatConversation> createConversation({
+    required String conversationType,
+    String? title,
+    UuidValue? relatedChildId,
+    UuidValue? relatedClassroomId,
+    required List<UuidValue> participantUserIds,
+  }) {
+    return _client.chat.createConversation(
+      conversationType: conversationType,
+      title: title,
+      relatedChildId: relatedChildId,
+      relatedClassroomId: relatedClassroomId,
+      participantUserIds: participantUserIds,
+    );
+  }
+
   Future<ChatMessage> sendMessage({
     required UuidValue conversationId,
     required String content,

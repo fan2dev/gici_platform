@@ -1,0 +1,12 @@
+# Dashboard summary DTO (transfer object, no database table)
+
+class: DashboardSummary
+
+fields:
+  childrenCount: int
+  classroomsCount: int
+  staffCount: int
+  unreadNotifications: int
+  pendingRequests: int
+  todayMenuEntries: List<MenuEntry>
+  recentNotifications: List<NotificationRecord>

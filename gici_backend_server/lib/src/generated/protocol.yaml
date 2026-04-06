@@ -27,6 +27,8 @@ classroom:
   - updateClassroom:
   - assignChildToClassroom:
   - listAssignments:
+dashboard:
+  - getSummary:
 dataChangeRequest:
   - createRequest:
   - myRequests:
@@ -80,6 +82,11 @@ pedagogicalReport:
   - getReport:
   - createReport:
   - updateReport:
+staff:
+  - listStaff:
+  - listGuardians:
+  - createStaffUser:
+  - updateStaffUser:
 timeTracking:
   - checkIn:
   - checkOut:
@@ -87,3 +94,4 @@ timeTracking:
   - listEntries:
   - getEntry:
   - correctEntry:
+  - exportTimeEntries:

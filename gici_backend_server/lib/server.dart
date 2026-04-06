@@ -5,9 +5,7 @@ import 'src/generated/protocol.dart';
 import 'src/generated/endpoints.dart';
 
 void run(List<String> args) async {
-  final pod = Serverpod(args, Protocol(), Endpoints());
-
-  // Initialize Serverpod Auth module
+  // Initialize Serverpod Auth config before starting
   auth.AuthConfig.set(auth.AuthConfig(
     sendValidationEmail: (session, email, validationCode) async {
       // TODO: Integrate real email provider (SendGrid, SES, etc.)
@@ -20,6 +18,13 @@ void run(List<String> args) async {
       return true;
     },
   ));
+
+  final pod = Serverpod(
+    args,
+    Protocol(),
+    Endpoints(),
+    authenticationHandler: auth.authenticationHandler,
+  );
 
   await pod.start();
 }

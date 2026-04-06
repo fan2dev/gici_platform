@@ -183,4 +183,53 @@ class TimeTrackingEndpoint extends Endpoint {
 
     return correction;
   }
+
+  /// Export time entries as CSV string for Spanish labor law compliance
+  /// (Registro diario de jornada).
+  Future<String> exportTimeEntries(
+    Session session, {
+    required DateTime from,
+    required DateTime to,
+    UuidValue? userId,
+  }) async {
+    final actor = await getAuthenticatedUser(session);
+    _accessControl.requireRole(actor, allowedRoles: [
+      'platform_super_admin',
+      'organization_admin',
+    ]);
+    final orgId = actor.organizationId!;
+
+    final entries = await _timeTrackingService.listEntries(
+      session,
+      organizationId: orgId,
+      userId: userId,
+      from: from,
+      to: to,
+      limit: 10000,
+      offset: 0,
+    );
+
+    // Build CSV: Spanish labor law requires employee name, date, check-in, check-out
+    final buffer = StringBuffer();
+    buffer.writeln('Empleado ID,Tipo,Fecha,Hora,Motivo corrección,Notas');
+
+    for (final entry in entries) {
+      final date = entry.recordedAt.toIso8601String().split('T')[0];
+      final time = entry.recordedAt.toIso8601String().split('T')[1].split('.')[0];
+      final correction = entry.correctionReason ?? '';
+      final notes = entry.notes?.replaceAll(',', ';') ?? '';
+      buffer.writeln(
+          '${entry.userId},${entry.entryType},$date,$time,$correction,$notes');
+    }
+
+    await _activityLogService.log(
+      session,
+      organizationId: orgId,
+      userId: actor.id!,
+      action: 'time_tracking.export',
+      metadata: 'from=${from.toIso8601String()};to=${to.toIso8601String()}',
+    );
+
+    return buffer.toString();
+  }
 }

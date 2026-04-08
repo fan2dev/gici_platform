@@ -1,5 +1,4 @@
 import 'package:gici_backend_client/gici_backend_server_client.dart';
-import 'package:uuid/uuid_value.dart';
 
 class ExperienceRepository {
   const ExperienceRepository(this._client);
@@ -25,12 +24,14 @@ class ExperienceRepository {
   Future<List<MenuEntry>> listMenuEntries({
     DateTime? from,
     DateTime? to,
+    String? menuTrack,
     int page = 0,
     int pageSize = 30,
   }) {
     return _client.experience.listMenuEntries(
       from: from,
       to: to,
+      menuTrack: menuTrack,
       page: page,
       pageSize: pageSize,
     );
@@ -41,14 +42,46 @@ class ExperienceRepository {
     required String mealType,
     required String title,
     String? description,
-    UuidValue? classroomId,
+    String menuTrack = 'normal',
   }) {
     return _client.experience.createMenuEntry(
       menuDate: menuDate,
       mealType: mealType,
       title: title,
       description: description,
-      classroomId: classroomId,
+      menuTrack: menuTrack,
+    );
+  }
+
+  Future<MenuEntry> updateMenuEntry({
+    required UuidValue menuEntryId,
+    DateTime? menuDate,
+    String? mealType,
+    String? title,
+    String? description,
+    String? menuTrack,
+  }) {
+    return _client.experience.updateMenuEntry(
+      menuEntryId: menuEntryId,
+      menuDate: menuDate,
+      mealType: mealType,
+      title: title,
+      description: description,
+      menuTrack: menuTrack,
+    );
+  }
+
+  Future<int> bulkUploadMonthlyMenu({
+    required int year,
+    required int month,
+    required String menuTrack,
+    required List<String> entries,
+  }) {
+    return _client.experience.bulkUploadMonthlyMenu(
+      year: year,
+      month: month,
+      menuTrack: menuTrack,
+      entries: entries,
     );
   }
 }

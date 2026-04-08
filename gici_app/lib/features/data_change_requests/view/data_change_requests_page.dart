@@ -4,7 +4,9 @@ import 'package:go_router/go_router.dart';
 
 import '../../../app/widgets/empty_state.dart';
 import '../../../app/widgets/error_state.dart';
+import '../../../app/widgets/gici_card.dart';
 import '../../../app/widgets/loading_state.dart';
+import '../../../app/widgets/status_pill.dart';
 import '../../../core/di/injection.dart';
 import '../../auth/cubit/auth_cubit.dart';
 import '../cubit/data_change_requests_cubit.dart';
@@ -44,22 +46,25 @@ class _DataChangeRequestsView extends StatelessWidget {
     final isStaff = auth.isStaffOrAbove;
 
     return Scaffold(
+      backgroundColor: const Color(0xFFF5F5F7),
       appBar: AppBar(
         title: Text(
-          isStaff
-              ? 'Solicitudes de cambio'
-              : 'Mis solicitudes',
+          isStaff ? 'Solicitudes de cambio' : 'Mis solicitudes',
+          style: const TextStyle(fontWeight: FontWeight.w700),
         ),
+        backgroundColor: Colors.white,
+        surfaceTintColor: Colors.white,
+        elevation: 0,
         leading: IconButton(
           onPressed: () => context.go('/dashboard'),
           icon: const Icon(Icons.arrow_back),
         ),
       ),
       floatingActionButton: !isStaff
-          ? FloatingActionButton.extended(
+          ? FloatingActionButton(
               onPressed: () => _showCreateRequestForm(context),
-              icon: const Icon(Icons.add),
-              label: const Text('Nueva solicitud'),
+              backgroundColor: Theme.of(context).colorScheme.primary,
+              child: const Icon(Icons.add, color: Colors.white),
             )
           : null,
       body: BlocBuilder<DataChangeRequestsCubit,
@@ -91,7 +96,7 @@ class _DataChangeRequestsView extends StatelessWidget {
             return EmptyState(
               icon: Icons.swap_horiz,
               message: isStaff
-                  ? 'No hay solicitudes pendientes de revision'
+                  ? 'No hay solicitudes pendientes de revisión'
                   : 'No has enviado ninguna solicitud',
               action: !isStaff
                   ? FilledButton.icon(
@@ -99,6 +104,11 @@ class _DataChangeRequestsView extends StatelessWidget {
                           _showCreateRequestForm(context),
                       icon: const Icon(Icons.add),
                       label: const Text('Nueva solicitud'),
+                      style: FilledButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(100),
+                        ),
+                      ),
                     )
                   : null,
             );
@@ -116,11 +126,9 @@ class _DataChangeRequestsView extends StatelessWidget {
                     .loadMyRequests();
               }
             },
-            child: ListView.separated(
-              padding: const EdgeInsets.all(16),
+            child: ListView.builder(
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 80),
               itemCount: state.requests.length,
-              separatorBuilder: (_, __) =>
-                  const SizedBox(height: 8),
               itemBuilder: (context, index) {
                 final request = state.requests[index];
                 if (isStaff) {
@@ -145,6 +153,9 @@ class _DataChangeRequestsView extends StatelessWidget {
     showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
       builder: (sheetContext) {
         return Padding(
           padding: EdgeInsets.only(
@@ -152,7 +163,7 @@ class _DataChangeRequestsView extends StatelessWidget {
                 MediaQuery.of(sheetContext).viewInsets.bottom,
           ),
           child: Padding(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(20),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -161,23 +172,28 @@ class _DataChangeRequestsView extends StatelessWidget {
                   child: Container(
                     width: 40,
                     height: 4,
-                    margin: const EdgeInsets.only(bottom: 16),
+                    margin: const EdgeInsets.only(bottom: 20),
                     decoration: BoxDecoration(
-                      color: Colors.grey[300],
+                      color: Colors.grey.shade300,
                       borderRadius: BorderRadius.circular(2),
                     ),
                   ),
                 ),
-                Text(
+                const Text(
                   'Nueva solicitud de cambio',
-                  style:
-                      Theme.of(sheetContext).textTheme.titleLarge,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w700,
+                    fontSize: 18,
+                  ),
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 20),
                 DropdownButtonFormField<String>(
                   value: requestTypeController.text,
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     labelText: 'Tipo de solicitud',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
                   ),
                   items: const [
                     DropdownMenuItem(
@@ -186,11 +202,11 @@ class _DataChangeRequestsView extends StatelessWidget {
                     ),
                     DropdownMenuItem(
                       value: 'contact_update',
-                      child: Text('Actualizacion de contacto'),
+                      child: Text('Actualización de contacto'),
                     ),
                     DropdownMenuItem(
                       value: 'medical_update',
-                      child: Text('Actualizacion medica'),
+                      child: Text('Actualización médica'),
                     ),
                     DropdownMenuItem(
                       value: 'other',
@@ -204,30 +220,48 @@ class _DataChangeRequestsView extends StatelessWidget {
                 const SizedBox(height: 12),
                 TextField(
                   controller: payloadController,
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     labelText: 'Detalle del cambio solicitado *',
                     hintText:
                         'Describe el cambio que necesitas...',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    alignLabelWithHint: true,
                   ),
                   minLines: 3,
                   maxLines: 5,
                 ),
-                const SizedBox(height: 16),
-                FilledButton(
-                  onPressed: () {
-                    final payload =
-                        payloadController.text.trim();
-                    if (payload.isEmpty) return;
-                    context
-                        .read<DataChangeRequestsCubit>()
-                        .createRequest(
-                          requestType:
-                              requestTypeController.text,
-                          requestPayload: payload,
-                        );
-                    Navigator.of(sheetContext).pop();
-                  },
-                  child: const Text('Enviar solicitud'),
+                const SizedBox(height: 20),
+                SizedBox(
+                  height: 50,
+                  child: FilledButton(
+                    onPressed: () {
+                      final payload =
+                          payloadController.text.trim();
+                      if (payload.isEmpty) return;
+                      context
+                          .read<DataChangeRequestsCubit>()
+                          .createRequest(
+                            requestType:
+                                requestTypeController.text,
+                            requestPayload: payload,
+                          );
+                      Navigator.of(sheetContext).pop();
+                    },
+                    style: FilledButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(100),
+                      ),
+                    ),
+                    child: const Text(
+                      'Enviar solicitud',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 15,
+                      ),
+                    ),
+                  ),
                 ),
                 const SizedBox(height: 8),
               ],
@@ -246,52 +280,42 @@ class _GuardianRequestCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    _requestTypeLabel(request.requestType),
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleSmall
-                        ?.copyWith(fontWeight: FontWeight.bold),
-                  ),
-                ),
-                _StatusChip(status: request.status),
-              ],
-            ),
-            const SizedBox(height: 8),
-            Text(
-              request.requestPayload,
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-            if (request.resolutionNote != null &&
-                request.resolutionNote!.isNotEmpty) ...[
-              const SizedBox(height: 8),
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: Theme.of(context)
-                      .colorScheme
-                      .surfaceContainerHighest,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Text(
-                  'Nota: ${request.resolutionNote}',
-                  style:
-                      Theme.of(context).textTheme.bodySmall,
+    return GiciCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              _RequestTypeBadge(type: request.requestType),
+              const Spacer(),
+              _statusPill(request.status),
+            ],
+          ),
+          const SizedBox(height: 10),
+          Text(
+            request.requestPayload,
+            style: const TextStyle(fontSize: 14),
+          ),
+          if (request.resolutionNote != null &&
+              request.resolutionNote!.isNotEmpty) ...[
+            const SizedBox(height: 10),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: Colors.grey.shade50,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Text(
+                'Nota: ${request.resolutionNote}',
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Colors.grey.shade600,
                 ),
               ),
-            ],
+            ),
           ],
-        ),
+        ],
       ),
     );
   }
@@ -306,77 +330,82 @@ class _StaffRequestCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final isPending = request.status == 'pending';
 
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+    return GiciCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              _RequestTypeBadge(type: request.requestType),
+              const Spacer(),
+              _statusPill(request.status),
+            ],
+          ),
+          const SizedBox(height: 10),
+          Text(
+            request.requestPayload,
+            style: const TextStyle(fontSize: 14),
+          ),
+          if (isPending) ...[
+            const SizedBox(height: 14),
             Row(
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Expanded(
-                  child: Text(
-                    _requestTypeLabel(request.requestType),
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleSmall
-                        ?.copyWith(fontWeight: FontWeight.bold),
+                OutlinedButton.icon(
+                  onPressed: () =>
+                      _showResolveDialog(context, 'rejected'),
+                  icon: const Icon(Icons.close, size: 16),
+                  label: const Text('Rechazar',
+                      style: TextStyle(fontSize: 13)),
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: Colors.red,
+                    side: const BorderSide(color: Colors.red),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(100),
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 8),
                   ),
                 ),
-                _StatusChip(status: request.status),
+                const SizedBox(width: 8),
+                FilledButton.icon(
+                  onPressed: () =>
+                      _showResolveDialog(context, 'approved'),
+                  icon: const Icon(Icons.check, size: 16),
+                  label: const Text('Aprobar',
+                      style: TextStyle(fontSize: 13)),
+                  style: FilledButton.styleFrom(
+                    backgroundColor: Colors.green,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(100),
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 8),
+                  ),
+                ),
               ],
             ),
-            const SizedBox(height: 8),
-            Text(
-              request.requestPayload,
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-            if (isPending) ...[
-              const SizedBox(height: 12),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  OutlinedButton.icon(
-                    onPressed: () =>
-                        _showResolveDialog(context, 'rejected'),
-                    icon: const Icon(Icons.close, size: 18),
-                    label: const Text('Rechazar'),
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor:
-                          Theme.of(context).colorScheme.error,
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  FilledButton.icon(
-                    onPressed: () =>
-                        _showResolveDialog(context, 'approved'),
-                    icon: const Icon(Icons.check, size: 18),
-                    label: const Text('Aprobar'),
-                  ),
-                ],
-              ),
-            ],
-            if (request.resolutionNote != null &&
-                request.resolutionNote!.isNotEmpty) ...[
-              const SizedBox(height: 8),
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: Theme.of(context)
-                      .colorScheme
-                      .surfaceContainerHighest,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Text(
-                  'Nota: ${request.resolutionNote}',
-                  style:
-                      Theme.of(context).textTheme.bodySmall,
-                ),
-              ),
-            ],
           ],
-        ),
+          if (request.resolutionNote != null &&
+              request.resolutionNote!.isNotEmpty) ...[
+            const SizedBox(height: 10),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: Colors.grey.shade50,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Text(
+                'Nota: ${request.resolutionNote}',
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Colors.grey.shade600,
+                ),
+              ),
+            ),
+          ],
+        ],
       ),
     );
   }
@@ -388,15 +417,21 @@ class _StaffRequestCard extends StatelessWidget {
       context: context,
       builder: (dialogContext) {
         return AlertDialog(
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20)),
           title: Text(
             status == 'approved'
                 ? 'Aprobar solicitud'
                 : 'Rechazar solicitud',
+            style: const TextStyle(fontWeight: FontWeight.w700),
           ),
           content: TextField(
             controller: noteController,
-            decoration: const InputDecoration(
-              labelText: 'Nota de resolucion (opcional)',
+            decoration: InputDecoration(
+              labelText: 'Nota de resolución (opcional)',
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
             ),
             maxLines: 3,
           ),
@@ -419,6 +454,13 @@ class _StaffRequestCard extends StatelessWidget {
                     );
                 Navigator.of(dialogContext).pop();
               },
+              style: FilledButton.styleFrom(
+                backgroundColor:
+                    status == 'approved' ? Colors.green : Colors.red,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(100),
+                ),
+              ),
               child: Text(
                 status == 'approved' ? 'Aprobar' : 'Rechazar',
               ),
@@ -430,35 +472,31 @@ class _StaffRequestCard extends StatelessWidget {
   }
 }
 
-class _StatusChip extends StatelessWidget {
-  const _StatusChip({required this.status});
+class _RequestTypeBadge extends StatelessWidget {
+  const _RequestTypeBadge({required this.type});
 
-  final String status;
+  final String type;
 
   @override
   Widget build(BuildContext context) {
-    final (label, color) = switch (status) {
-      'pending' => ('Pendiente', Colors.orange),
-      'approved' => ('Aprobada', Colors.green),
-      'rejected' => ('Rechazada', Colors.red),
-      _ => (status, Colors.grey),
-    };
-
-    return Container(
-      padding:
-          const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Text(
-        label,
-        style: Theme.of(context).textTheme.labelSmall?.copyWith(
-              color: color,
-              fontWeight: FontWeight.bold,
-            ),
-      ),
+    return StatusPill(
+      label: _requestTypeLabel(type),
+      color: Theme.of(context).colorScheme.primary,
+      small: true,
     );
+  }
+}
+
+Widget _statusPill(String status) {
+  switch (status) {
+    case 'pending':
+      return StatusPill.pending();
+    case 'approved':
+      return StatusPill.approved();
+    case 'rejected':
+      return StatusPill.rejected();
+    default:
+      return StatusPill(label: status, color: Colors.grey, small: true);
   }
 }
 
@@ -467,9 +505,17 @@ String _requestTypeLabel(String type) {
     case 'child_profile_change':
       return 'Cambio en perfil';
     case 'contact_update':
-      return 'Actualizacion de contacto';
+      return 'Actualización de contacto';
     case 'medical_update':
-      return 'Actualizacion medica';
+      return 'Actualización médica';
+    case 'update_contact':
+      return 'Actualizar contacto';
+    case 'update_medical':
+      return 'Info médica';
+    case 'update_personal':
+      return 'Datos personales';
+    case 'delete_data':
+      return 'Eliminar datos';
     default:
       return type;
   }

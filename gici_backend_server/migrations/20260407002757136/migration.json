@@ -1,0 +1,175 @@
+{
+  "actions": [
+    {
+      "type": "deleteTable",
+      "deleteTable": "menu_entry"
+    },
+    {
+      "type": "createTable",
+      "createTable": {
+        "name": "menu_entry",
+        "dartName": "MenuEntry",
+        "module": "gici_backend",
+        "schema": "public",
+        "columns": [
+          {
+            "name": "id",
+            "columnType": 7,
+            "isNullable": false,
+            "columnDefault": "gen_random_uuid()",
+            "dartType": "UuidValue?"
+          },
+          {
+            "name": "organizationId",
+            "columnType": 7,
+            "isNullable": false,
+            "dartType": "UuidValue"
+          },
+          {
+            "name": "menuDate",
+            "columnType": 4,
+            "isNullable": false,
+            "dartType": "DateTime"
+          },
+          {
+            "name": "menuTrack",
+            "columnType": 0,
+            "isNullable": false,
+            "dartType": "String"
+          },
+          {
+            "name": "mealType",
+            "columnType": 0,
+            "isNullable": false,
+            "dartType": "String"
+          },
+          {
+            "name": "title",
+            "columnType": 0,
+            "isNullable": false,
+            "dartType": "String"
+          },
+          {
+            "name": "description",
+            "columnType": 0,
+            "isNullable": true,
+            "dartType": "String?"
+          },
+          {
+            "name": "createdByUserId",
+            "columnType": 7,
+            "isNullable": false,
+            "dartType": "UuidValue"
+          },
+          {
+            "name": "createdAt",
+            "columnType": 4,
+            "isNullable": false,
+            "dartType": "DateTime"
+          },
+          {
+            "name": "updatedAt",
+            "columnType": 4,
+            "isNullable": false,
+            "dartType": "DateTime"
+          },
+          {
+            "name": "deletedAt",
+            "columnType": 4,
+            "isNullable": true,
+            "dartType": "DateTime?"
+          }
+        ],
+        "foreignKeys": [],
+        "indexes": [
+          {
+            "indexName": "menu_entry_pkey",
+            "elements": [
+              {
+                "type": 0,
+                "definition": "id"
+              }
+            ],
+            "type": "btree",
+            "isUnique": true,
+            "isPrimary": true
+          },
+          {
+            "indexName": "menu_org_idx",
+            "elements": [
+              {
+                "type": 0,
+                "definition": "organizationId"
+              }
+            ],
+            "type": "btree",
+            "isUnique": false,
+            "isPrimary": false
+          },
+          {
+            "indexName": "menu_date_idx",
+            "elements": [
+              {
+                "type": 0,
+                "definition": "menuDate"
+              }
+            ],
+            "type": "btree",
+            "isUnique": false,
+            "isPrimary": false
+          },
+          {
+            "indexName": "menu_org_date_idx",
+            "elements": [
+              {
+                "type": 0,
+                "definition": "organizationId"
+              },
+              {
+                "type": 0,
+                "definition": "menuDate"
+              }
+            ],
+            "type": "btree",
+            "isUnique": false,
+            "isPrimary": false
+          },
+          {
+            "indexName": "menu_track_idx",
+            "elements": [
+              {
+                "type": 0,
+                "definition": "menuTrack"
+              }
+            ],
+            "type": "btree",
+            "isUnique": false,
+            "isPrimary": false
+          }
+        ],
+        "managed": true
+      }
+    }
+  ],
+  "warnings": [
+    {
+      "type": "columnDropped",
+      "message": "Column \"classroomId\" of table \"menu_entry\" will be dropped.",
+      "table": "menu_entry",
+      "columns": [
+        "classroomId"
+      ],
+      "destrucive": true
+    },
+    {
+      "type": "tableDropped",
+      "message": "One or more columns are added to table \"menu_entry\" which cannot be added in a table migration. The complete table will be deleted and recreated.",
+      "table": "menu_entry",
+      "columns": [
+        "menuTrack"
+      ],
+      "destrucive": true
+    }
+  ],
+  "migrationApiVersion": 1
+}

@@ -22,6 +22,9 @@ abstract class AppUser implements _i1.SerializableModel {
     required this.lastName,
     this.phone,
     this.avatarUrl,
+    this.dni,
+    this.address,
+    this.gender,
     required this.role,
     required this.isActive,
     required this.emailVerified,
@@ -42,6 +45,9 @@ abstract class AppUser implements _i1.SerializableModel {
     required String lastName,
     String? phone,
     String? avatarUrl,
+    String? dni,
+    String? address,
+    String? gender,
     required String role,
     required bool isActive,
     required bool emailVerified,
@@ -68,6 +74,9 @@ abstract class AppUser implements _i1.SerializableModel {
       lastName: jsonSerialization['lastName'] as String,
       phone: jsonSerialization['phone'] as String?,
       avatarUrl: jsonSerialization['avatarUrl'] as String?,
+      dni: jsonSerialization['dni'] as String?,
+      address: jsonSerialization['address'] as String?,
+      gender: jsonSerialization['gender'] as String?,
       role: jsonSerialization['role'] as String,
       isActive: jsonSerialization['isActive'] as bool,
       emailVerified: jsonSerialization['emailVerified'] as bool,
@@ -107,6 +116,12 @@ abstract class AppUser implements _i1.SerializableModel {
 
   String? avatarUrl;
 
+  String? dni;
+
+  String? address;
+
+  String? gender;
+
   String role;
 
   bool isActive;
@@ -136,6 +151,9 @@ abstract class AppUser implements _i1.SerializableModel {
     String? lastName,
     String? phone,
     String? avatarUrl,
+    String? dni,
+    String? address,
+    String? gender,
     String? role,
     bool? isActive,
     bool? emailVerified,
@@ -157,6 +175,9 @@ abstract class AppUser implements _i1.SerializableModel {
       'lastName': lastName,
       if (phone != null) 'phone': phone,
       if (avatarUrl != null) 'avatarUrl': avatarUrl,
+      if (dni != null) 'dni': dni,
+      if (address != null) 'address': address,
+      if (gender != null) 'gender': gender,
       'role': role,
       'isActive': isActive,
       'emailVerified': emailVerified,
@@ -187,6 +208,9 @@ class _AppUserImpl extends AppUser {
     required String lastName,
     String? phone,
     String? avatarUrl,
+    String? dni,
+    String? address,
+    String? gender,
     required String role,
     required bool isActive,
     required bool emailVerified,
@@ -205,6 +229,9 @@ class _AppUserImpl extends AppUser {
           lastName: lastName,
           phone: phone,
           avatarUrl: avatarUrl,
+          dni: dni,
+          address: address,
+          gender: gender,
           role: role,
           isActive: isActive,
           emailVerified: emailVerified,
@@ -229,6 +256,9 @@ class _AppUserImpl extends AppUser {
     String? lastName,
     Object? phone = _Undefined,
     Object? avatarUrl = _Undefined,
+    Object? dni = _Undefined,
+    Object? address = _Undefined,
+    Object? gender = _Undefined,
     String? role,
     bool? isActive,
     bool? emailVerified,
@@ -251,6 +281,9 @@ class _AppUserImpl extends AppUser {
       lastName: lastName ?? this.lastName,
       phone: phone is String? ? phone : this.phone,
       avatarUrl: avatarUrl is String? ? avatarUrl : this.avatarUrl,
+      dni: dni is String? ? dni : this.dni,
+      address: address is String? ? address : this.address,
+      gender: gender is String? ? gender : this.gender,
       role: role ?? this.role,
       isActive: isActive ?? this.isActive,
       emailVerified: emailVerified ?? this.emailVerified,

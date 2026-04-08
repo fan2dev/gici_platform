@@ -97,7 +97,7 @@ class ExperienceCubit extends Cubit<ExperienceState> {
     required String mealType,
     required String title,
     String? description,
-    UuidValue? classroomId,
+    String menuTrack = 'normal',
   }) async {
     try {
       await _repository.createMenuEntry(
@@ -105,7 +105,7 @@ class ExperienceCubit extends Cubit<ExperienceState> {
         mealType: mealType,
         title: title,
         description: description,
-        classroomId: classroomId,
+        menuTrack: menuTrack,
       );
       await load();
     } catch (e) {

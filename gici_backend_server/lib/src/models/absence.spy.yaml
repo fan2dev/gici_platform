@@ -1,0 +1,28 @@
+# Child absence record
+
+class: Absence
+
+table: absence
+
+fields:
+  id: UuidValue?, defaultPersist=random
+  organizationId: UuidValue
+  childId: UuidValue
+  date: DateTime
+  reason: String?
+  isJustified: bool
+  reportedByUserId: UuidValue
+  notes: String?
+  createdAt: DateTime
+  updatedAt: DateTime
+
+indexes:
+  absence_org_idx:
+    fields: organizationId
+  absence_child_idx:
+    fields: childId
+  absence_date_idx:
+    fields: date
+  absence_child_date_idx:
+    fields: childId, date
+    unique: true

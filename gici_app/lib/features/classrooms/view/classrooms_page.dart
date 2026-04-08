@@ -27,7 +27,7 @@ class ClassroomsPage extends StatelessWidget {
         ),
         BlocProvider(
           create: (_) =>
-              ChildrenListCubit(sl<ChildRepository>())..loadChildren(),
+              ChildrenListCubit(sl<ChildRepository>(), sl<ClassroomRepository>())..loadChildren(),
         ),
       ],
       child: const _ClassroomsView(),
@@ -207,6 +207,17 @@ class _ClassroomsView extends StatelessWidget {
   }
 }
 
+String _statusLabel(String status) {
+  switch (status) {
+    case 'active':
+      return 'Activa';
+    case 'inactive':
+      return 'Inactiva';
+    default:
+      return status;
+  }
+}
+
 // ---------------------------------------------------------------------------
 // Classroom card
 // ---------------------------------------------------------------------------
@@ -300,9 +311,7 @@ class _ClassroomCard extends StatelessWidget {
                           ),
                           const Spacer(),
                           StatusPill(
-                            label: classroom.status == 'active'
-                                ? 'Activa'
-                                : classroom.status,
+                            label: _statusLabel(classroom.status),
                             color: classroom.status == 'active'
                                 ? const Color(0xFF43A047)
                                 : Colors.grey,
@@ -370,7 +379,7 @@ class _ClassroomDetailSheet extends StatelessWidget {
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  'Capacidad: ${classroom.capacity} | Estado: ${classroom.status}',
+                  'Capacidad: ${classroom.capacity} | Estado: ${_statusLabel(classroom.status)}',
                   style: TextStyle(
                     color: Colors.grey.shade500,
                     fontSize: 14,
@@ -613,8 +622,8 @@ class _ClassroomFormPageState extends State<ClassroomFormPage> {
                         TextFormField(
                           controller: _descriptionController,
                           decoration: _inputDec(
-                            'Descripcion',
-                            hint: 'Descripcion opcional del aula',
+                            'Descripción',
+                            hint: 'Descripción opcional del aula',
                           ),
                           maxLines: 3,
                         ),
@@ -623,7 +632,7 @@ class _ClassroomFormPageState extends State<ClassroomFormPage> {
                           controller: _capacityController,
                           decoration: _inputDec(
                             'Capacidad *',
-                            hint: 'Numero maximo de alumnos',
+                            hint: 'Número máximo de alumnos',
                             icon: Icons.people_outline,
                           ),
                           keyboardType: TextInputType.number,
@@ -633,7 +642,7 @@ class _ClassroomFormPageState extends State<ClassroomFormPage> {
                             }
                             final n = int.tryParse(v);
                             if (n == null || n <= 0) {
-                              return 'Introduce un numero valido';
+                              return 'Introduce un número válido';
                             }
                             return null;
                           },

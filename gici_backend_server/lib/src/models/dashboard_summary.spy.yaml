@@ -9,4 +9,5 @@ fields:
   unreadNotifications: int
   pendingRequests: int
   todayMenuEntries: List<MenuEntry>
+  todayEvents: List<SchoolCalendarEvent>
   recentNotifications: List<NotificationRecord>

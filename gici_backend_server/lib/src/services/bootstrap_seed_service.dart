@@ -455,7 +455,7 @@ class BootstrapSeedService {
     }
 
     // =========================================================
-    // 14. MENU ENTRIES (this week)
+    // 14. MENU ENTRIES (this week) — normal track
     // =========================================================
     final menuItems = [
       ('Puré de verduras con pollo', 'Arroz con tomate y tortilla francesa', 'Fruta de temporada'),
@@ -472,6 +472,7 @@ class BootstrapSeedService {
         MenuEntry(
           organizationId: orgId,
           menuDate: menuDate,
+          menuTrack: 'normal',
           mealType: 'lunch_first',
           title: first,
           createdByUserId: alejandro.id!,
@@ -481,6 +482,7 @@ class BootstrapSeedService {
         MenuEntry(
           organizationId: orgId,
           menuDate: menuDate,
+          menuTrack: 'normal',
           mealType: 'lunch_second',
           title: second,
           createdByUserId: alejandro.id!,
@@ -490,6 +492,55 @@ class BootstrapSeedService {
         MenuEntry(
           organizationId: orgId,
           menuDate: menuDate,
+          menuTrack: 'normal',
+          mealType: 'dessert',
+          title: dessert,
+          createdByUserId: alejandro.id!,
+          createdAt: now,
+          updatedAt: now,
+        ),
+      ]);
+    }
+
+    // =========================================================
+    // 14b. MENU ENTRIES (this week) — menu2 track (triturado)
+    // =========================================================
+    final menu2Items = [
+      ('Puré suave de verduras con pollo triturado', 'Arroz pasado con tomate natural', 'Compota de manzana'),
+      ('Crema fina de calabaza', 'Pasta muy cocida con atún triturado', 'Yogur natural sin trozos'),
+      ('Puré de lentejas con verduras', 'Merluza triturada con patata', 'Compota de pera'),
+      ('Caldo con fideos finos', 'Pollo triturado con guisantes', 'Natillas suaves'),
+      ('Crema de zanahoria fina', 'Albóndigas trituradas con arroz', 'Compota de frutas'),
+    ];
+
+    for (var d = 0; d < 5; d++) {
+      final menuDate = today.subtract(Duration(days: today.weekday - 1 - d));
+      final (first, second, dessert) = menu2Items[d];
+      await MenuEntry.db.insert(session, [
+        MenuEntry(
+          organizationId: orgId,
+          menuDate: menuDate,
+          menuTrack: 'menu2',
+          mealType: 'lunch_first',
+          title: first,
+          createdByUserId: alejandro.id!,
+          createdAt: now,
+          updatedAt: now,
+        ),
+        MenuEntry(
+          organizationId: orgId,
+          menuDate: menuDate,
+          menuTrack: 'menu2',
+          mealType: 'lunch_second',
+          title: second,
+          createdByUserId: alejandro.id!,
+          createdAt: now,
+          updatedAt: now,
+        ),
+        MenuEntry(
+          organizationId: orgId,
+          menuDate: menuDate,
+          menuTrack: 'menu2',
           mealType: 'dessert',
           title: dessert,
           createdByUserId: alejandro.id!,
@@ -568,115 +619,194 @@ class BootstrapSeedService {
     }
 
     // =========================================================
-    // 17. CHAT CONVERSATIONS (3)
+    // 17. CHAT CONVERSATIONS — One child_group per child
     // =========================================================
-    // Guardian-center conversation
-    final conv1 = await ChatConversation.db.insertRow(
-      session,
-      ChatConversation(
-        organizationId: orgId,
-        title: null,
-        conversationType: 'direct',
-        createdByUserId: guardians[0].id!, // Ana
-        isArchived: false,
-        lastMessageAt: now.subtract(const Duration(hours: 2)),
-        createdAt: now.subtract(const Duration(days: 3)),
-        updatedAt: now,
-      ),
-    );
+    // Build a map of childIndex → list of guardian users
+    final childGuardianMap = <int, List<AppUser>>{};
+    for (final (gi, chi, _, _) in relations) {
+      childGuardianMap.putIfAbsent(chi, () => []);
+      childGuardianMap[chi]!.add(guardians[gi]);
+    }
 
-    await ChatParticipant.db.insert(session, [
-      ChatParticipant(
-        organizationId: orgId,
-        conversationId: conv1.id!,
-        userId: guardians[0].id!,
-        joinedAt: now,
-        isActive: true,
-        createdAt: now,
-        updatedAt: now,
-      ),
-      ChatParticipant(
-        organizationId: orgId,
-        conversationId: conv1.id!,
-        userId: staffUsers[1].id!, // Marc
-        joinedAt: now,
-        isActive: true,
-        createdAt: now,
-        updatedAt: now,
-      ),
-    ]);
+    // Build a map of childIndex → classroom index (for staff assignment)
+    final childClassroomMap = <int, int>{};
+    for (final (ci, chi) in assignments) {
+      childClassroomMap[chi] = ci;
+    }
 
+    // Collect admin users (organization_admin role)
+    final adminUsers = <AppUser>[alejandro];
+    for (final s in staffUsers) {
+      if (s.role == 'organization_admin') adminUsers.add(s);
+    }
+
+    // Staff assigned per classroom index:
+    // Laura (admin) → all, Marc → Pollets + Ànecs, Nuria → Ovelles, Carla → Cavalls + Estrelles
+    final classroomStaffMap = <int, List<AppUser>>{
+      0: [staffUsers[1]], // Pollets: Marc
+      1: [staffUsers[1]], // Ànecs: Marc
+      2: [staffUsers[2]], // Ovelles: Nuria
+      3: [staffUsers[3]], // Cavalls: Carla
+      4: [staffUsers[3]], // Estrelles: Carla
+    };
+
+    final childConversations = <int, ChatConversation>{};
+    for (var chi = 0; chi < children.length; chi++) {
+      final child = children[chi];
+      final childName = '${child.firstName} ${child.lastName}';
+
+      final conv = await ChatConversation.db.insertRow(
+        session,
+        ChatConversation(
+          organizationId: orgId,
+          title: childName,
+          conversationType: 'child_group',
+          relatedChildId: child.id!,
+          createdByUserId: alejandro.id!,
+          isArchived: false,
+          lastMessageAt: null,
+          createdAt: now.subtract(const Duration(days: 5)),
+          updatedAt: now,
+        ),
+      );
+      childConversations[chi] = conv;
+
+      // Collect participants: guardians + classroom staff + all admins
+      final participantIds = <UuidValue>{};
+
+      // Add guardians
+      final guardianList = childGuardianMap[chi] ?? [];
+      for (final g in guardianList) {
+        participantIds.add(g.id!);
+      }
+
+      // Add classroom staff
+      final classroomIdx = childClassroomMap[chi];
+      if (classroomIdx != null) {
+        final staff = classroomStaffMap[classroomIdx] ?? [];
+        for (final s in staff) {
+          participantIds.add(s.id!);
+        }
+      }
+
+      // Add all admins
+      for (final a in adminUsers) {
+        participantIds.add(a.id!);
+      }
+
+      // Insert participants
+      for (final userId in participantIds) {
+        await ChatParticipant.db.insertRow(
+          session,
+          ChatParticipant(
+            organizationId: orgId,
+            conversationId: conv.id!,
+            userId: userId,
+            joinedAt: now,
+            isActive: true,
+            createdAt: now,
+            updatedAt: now,
+          ),
+        );
+      }
+    }
+
+    // Add sample messages to a few child chats
+    // Leo (index 0) — Ana asks about his day
+    final convLeo = childConversations[0]!;
     await ChatMessage.db.insert(session, [
       ChatMessage(
         organizationId: orgId,
-        conversationId: conv1.id!,
-        senderUserId: guardians[0].id!,
-        body: 'Buenos días, quería preguntar cómo ha ido el día de Leo.',
+        conversationId: convLeo.id!,
+        senderUserId: guardians[0].id!, // Ana
+        body: 'Buenos dias, queria preguntar como ha ido el dia de Leo.',
         messageType: 'text',
         sentAt: now.subtract(const Duration(hours: 3)),
         createdAt: now.subtract(const Duration(hours: 3)),
       ),
       ChatMessage(
         organizationId: orgId,
-        conversationId: conv1.id!,
-        senderUserId: staffUsers[1].id!,
-        body: 'Hola Ana! Leo ha tenido un día estupendo. Ha comido bien y ha dormido la siesta completa.',
+        conversationId: convLeo.id!,
+        senderUserId: staffUsers[1].id!, // Marc
+        body: 'Hola Ana! Leo ha tenido un dia estupendo. Ha comido bien y ha dormido la siesta completa.',
         messageType: 'text',
         sentAt: now.subtract(const Duration(hours: 2)),
         createdAt: now.subtract(const Duration(hours: 2)),
       ),
-    ]);
-
-    // Staff internal conversation
-    final conv2 = await ChatConversation.db.insertRow(
-      session,
-      ChatConversation(
+      ChatMessage(
         organizationId: orgId,
-        title: 'Equipo Ovelles',
-        conversationType: 'group',
-        createdByUserId: staffUsers[0].id!,
-        isArchived: false,
-        lastMessageAt: now.subtract(const Duration(hours: 1)),
-        createdAt: now.subtract(const Duration(days: 10)),
-        updatedAt: now,
+        conversationId: convLeo.id!,
+        senderUserId: guardians[0].id!, // Ana
+        body: 'Genial, muchas gracias!',
+        messageType: 'text',
+        sentAt: now.subtract(const Duration(hours: 1, minutes: 50)),
+        createdAt: now.subtract(const Duration(hours: 1, minutes: 50)),
+      ),
+    ]);
+    await ChatConversation.db.updateRow(
+      session,
+      convLeo.copyWith(
+        lastMessageAt: now.subtract(const Duration(hours: 1, minutes: 50)),
       ),
     );
 
-    for (final staff in staffUsers) {
-      await ChatParticipant.db.insertRow(
-        session,
-        ChatParticipant(
-          organizationId: orgId,
-          conversationId: conv2.id!,
-          userId: staff.id!,
-          joinedAt: now,
-          isActive: true,
-          createdAt: now,
-          updatedAt: now,
-        ),
-      );
-    }
-
+    // Mia (index 1) — Jordi asks about food
+    final convMia = childConversations[1]!;
     await ChatMessage.db.insert(session, [
       ChatMessage(
         organizationId: orgId,
-        conversationId: conv2.id!,
-        senderUserId: staffUsers[2].id!, // Nuria
-        body: 'Recordad que mañana hacemos la actividad de pintura con los Ovelles.',
+        conversationId: convMia.id!,
+        senderUserId: guardians[1].id!, // Jordi
+        body: 'Buenas tardes, Mia tiene intolerancia a la lactosa. Han tenido en cuenta eso en el almuerzo?',
         messageType: 'text',
         sentAt: now.subtract(const Duration(hours: 5)),
         createdAt: now.subtract(const Duration(hours: 5)),
       ),
       ChatMessage(
         organizationId: orgId,
-        conversationId: conv2.id!,
-        senderUserId: staffUsers[3].id!, // Carla
-        body: 'Perfecto, ya tengo los materiales preparados!',
+        conversationId: convMia.id!,
+        senderUserId: staffUsers[2].id!, // Nuria
+        body: 'Si Jordi, siempre le preparamos el menu sin lactosa. Hoy ha comido muy bien!',
         messageType: 'text',
-        sentAt: now.subtract(const Duration(hours: 1)),
-        createdAt: now.subtract(const Duration(hours: 1)),
+        sentAt: now.subtract(const Duration(hours: 4)),
+        createdAt: now.subtract(const Duration(hours: 4)),
       ),
     ]);
+    await ChatConversation.db.updateRow(
+      session,
+      convMia.copyWith(
+        lastMessageAt: now.subtract(const Duration(hours: 4)),
+      ),
+    );
+
+    // Hugo (index 2) — Maria asks about asthma
+    final convHugo = childConversations[2]!;
+    await ChatMessage.db.insert(session, [
+      ChatMessage(
+        organizationId: orgId,
+        conversationId: convHugo.id!,
+        senderUserId: guardians[2].id!, // Maria
+        body: 'Hola, Hugo ha mejorado del asma. El medico dice que ya no necesita inhalador.',
+        messageType: 'text',
+        sentAt: now.subtract(const Duration(hours: 8)),
+        createdAt: now.subtract(const Duration(hours: 8)),
+      ),
+      ChatMessage(
+        organizationId: orgId,
+        conversationId: convHugo.id!,
+        senderUserId: staffUsers[3].id!, // Carla
+        body: 'Que buena noticia Maria! Lo anotamos en su ficha.',
+        messageType: 'text',
+        sentAt: now.subtract(const Duration(hours: 7)),
+        createdAt: now.subtract(const Duration(hours: 7)),
+      ),
+    ]);
+    await ChatConversation.db.updateRow(
+      session,
+      convHugo.copyWith(
+        lastMessageAt: now.subtract(const Duration(hours: 7)),
+      ),
+    );
 
     // =========================================================
     // 18. DATA CHANGE REQUESTS (2)

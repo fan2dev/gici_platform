@@ -32,6 +32,15 @@ class ChatListLoaded extends ChatListState {
   final List<ChatConversation> conversations;
   final Map<String, int> unreadCounts;
 
+  /// If there is exactly one conversation, returns its id as a string
+  /// so the UI can auto-navigate (useful for guardians with a single child).
+  String? get singleConversationId {
+    if (conversations.length == 1) {
+      return conversations.first.id?.toString();
+    }
+    return null;
+  }
+
   @override
   List<Object?> get props => [conversations, unreadCounts];
 }

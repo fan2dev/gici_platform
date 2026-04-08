@@ -47,11 +47,9 @@ class StaffCubit extends Cubit<StaffState> {
     emit(state.copyWith(status: StaffStatus.loading));
     try {
       final staff = await _repository.listStaff();
-      final guardians = await _repository.listGuardians();
       emit(state.copyWith(
         status: StaffStatus.loaded,
         staff: staff,
-        guardians: guardians,
       ));
     } catch (e) {
       emit(state.copyWith(

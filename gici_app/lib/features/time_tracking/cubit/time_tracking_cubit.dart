@@ -105,7 +105,7 @@ class TimeTrackingCubit extends Cubit<TimeTrackingState> {
   Future<void> loadMyEntries() async {
     emit(state.copyWith(isLoading: true, clearError: true));
     try {
-      final entries = await _repo.myEntries(page: 0, pageSize: 50);
+      final entries = await _repo.myEntries(page: 0, pageSize: 200);
       // Derive last action from entries
       LastAction lastAction = LastAction.none;
       DateTime? lastActionTime;

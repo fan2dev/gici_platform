@@ -2,20 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:uuid/uuid_value.dart';
 
-import '../../../app/widgets/adaptive_page.dart';
+import '../../../app/widgets/gici_card.dart';
+import '../../../app/widgets/section_header.dart';
 import '../../../core/di/injection.dart';
 import '../data/chat_repository.dart';
 
 /// Conversation type options for the create form.
 enum _ConversationType {
-  direct('direct', 'Directa', Icons.person_outline),
-  group('group', 'Grupo', Icons.group_outlined),
-  childContext('child_context', 'Contexto alumno/a', Icons.child_care_outlined);
+  direct('direct', 'Directa', Icons.person_outline, 'Conversacion uno a uno'),
+  group('group', 'Grupo', Icons.group_outlined, 'Chat con varios participantes'),
+  childContext('child_context', 'Por alumno', Icons.child_care_outlined, 'Sobre un alumno/a');
 
-  const _ConversationType(this.value, this.label, this.icon);
+  const _ConversationType(this.value, this.label, this.icon, this.description);
   final String value;
   final String label;
   final IconData icon;
+  final String description;
 }
 
 class CreateConversationPage extends StatefulWidget {
@@ -96,131 +98,269 @@ class _CreateConversationPageState extends State<CreateConversationPage> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final primary = Theme.of(context).colorScheme.primary;
 
-    return AdaptivePage(
-      title: 'Nueva conversacion',
-      maxWidth: 600,
-      child: Form(
-        key: _formKey,
-        child: ListView(
-          children: [
-            // ---- Conversation type selector ----
-            Text('Tipo de conversacion',
-                style: theme.textTheme.titleSmall),
-            const SizedBox(height: 8),
-            SegmentedButton<_ConversationType>(
-              segments: _ConversationType.values
-                  .map((t) => ButtonSegment(
-                        value: t,
-                        label: Text(t.label),
-                        icon: Icon(t.icon),
-                      ))
-                  .toList(),
-              selected: {_selectedType},
-              onSelectionChanged: (selected) {
-                setState(() => _selectedType = selected.first);
-              },
-            ),
-            const SizedBox(height: 24),
-
-            // ---- Participant ID ----
-            TextFormField(
-              controller: _participantController,
-              decoration: const InputDecoration(
-                labelText: 'ID del participante (UUID)',
-                hintText: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
-                prefixIcon: Icon(Icons.person_add_outlined),
-                border: OutlineInputBorder(),
-              ),
-              validator: (value) {
-                if (value == null || value.trim().isEmpty) {
-                  return 'Introduce el ID del participante';
-                }
-                try {
-                  UuidValue.fromString(value.trim());
-                } catch (_) {
-                  return 'UUID no valido';
-                }
-                return null;
-              },
-            ),
-            const SizedBox(height: 16),
-
-            // ---- Title (optional, mainly for groups) ----
-            if (_selectedType != _ConversationType.direct) ...[
-              TextFormField(
-                controller: _titleController,
-                decoration: const InputDecoration(
-                  labelText: 'Titulo (opcional)',
-                  prefixIcon: Icon(Icons.title),
-                  border: OutlineInputBorder(),
+    return Scaffold(
+      backgroundColor: const Color(0xFFF5F5F7),
+      appBar: AppBar(
+        title: const Text(
+          'Nueva conversacion',
+          style: TextStyle(fontWeight: FontWeight.w700),
+        ),
+        backgroundColor: Colors.white,
+        surfaceTintColor: Colors.white,
+        elevation: 0,
+      ),
+      body: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 600),
+          child: Form(
+            key: _formKey,
+            child: ListView(
+              padding: const EdgeInsets.all(16),
+              children: [
+                // ---- Conversation type selector ----
+                const SectionHeader(
+                  title: 'Tipo de conversacion',
+                  icon: '\u{1F4AC}',
                 ),
-              ),
-              const SizedBox(height: 16),
-            ],
-
-            // ---- Related child ID (for child-context) ----
-            if (_selectedType == _ConversationType.childContext) ...[
-              TextFormField(
-                controller: _childIdController,
-                decoration: const InputDecoration(
-                  labelText: 'ID del alumno/a (UUID, opcional)',
-                  prefixIcon: Icon(Icons.child_care_outlined),
-                  border: OutlineInputBorder(),
+                ..._ConversationType.values.map(
+                  (type) => _TypeSelectorCard(
+                    type: type,
+                    isSelected: _selectedType == type,
+                    onTap: () => setState(() => _selectedType = type),
+                  ),
                 ),
-                validator: (value) {
-                  if (value != null && value.trim().isNotEmpty) {
-                    try {
-                      UuidValue.fromString(value.trim());
-                    } catch (_) {
-                      return 'UUID no valido';
-                    }
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 16),
-            ],
 
-            // ---- Related classroom ID (optional for group / child-context) ----
-            if (_selectedType != _ConversationType.direct) ...[
-              TextFormField(
-                controller: _classroomIdController,
-                decoration: const InputDecoration(
-                  labelText: 'ID del aula (UUID, opcional)',
-                  prefixIcon: Icon(Icons.class_outlined),
-                  border: OutlineInputBorder(),
+                const SizedBox(height: 20),
+
+                // ---- Form fields ----
+                const SectionHeader(
+                  title: 'Detalles',
+                  icon: '\u{270F}\uFE0F',
                 ),
-                validator: (value) {
-                  if (value != null && value.trim().isNotEmpty) {
-                    try {
-                      UuidValue.fromString(value.trim());
-                    } catch (_) {
-                      return 'UUID no valido';
-                    }
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 16),
-            ],
+                GiciCard(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Participant ID
+                      TextFormField(
+                        controller: _participantController,
+                        decoration: InputDecoration(
+                          labelText: 'ID del participante (UUID)',
+                          hintText: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
+                          prefixIcon: const Icon(Icons.person_add_outlined),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.trim().isEmpty) {
+                            return 'Introduce el ID del participante';
+                          }
+                          try {
+                            UuidValue.fromString(value.trim());
+                          } catch (_) {
+                            return 'UUID no valido';
+                          }
+                          return null;
+                        },
+                      ),
 
-            const SizedBox(height: 16),
+                      // Title (optional, mainly for groups)
+                      if (_selectedType != _ConversationType.direct) ...[
+                        const SizedBox(height: 14),
+                        TextFormField(
+                          controller: _titleController,
+                          decoration: InputDecoration(
+                            labelText: 'Titulo (opcional)',
+                            prefixIcon: const Icon(Icons.title),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                          ),
+                        ),
+                      ],
 
-            // ---- Submit ----
-            FilledButton.icon(
-              onPressed: _isSubmitting ? null : _submit,
-              icon: _isSubmitting
-                  ? const SizedBox(
-                      width: 18,
-                      height: 18,
-                      child: CircularProgressIndicator(strokeWidth: 2),
-                    )
-                  : const Icon(Icons.send),
-              label: const Text('Crear conversacion'),
+                      // Related child ID (for child-context)
+                      if (_selectedType ==
+                          _ConversationType.childContext) ...[
+                        const SizedBox(height: 14),
+                        TextFormField(
+                          controller: _childIdController,
+                          decoration: InputDecoration(
+                            labelText: 'ID del alumno/a (UUID, opcional)',
+                            prefixIcon:
+                                const Icon(Icons.child_care_outlined),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                          ),
+                          validator: (value) {
+                            if (value != null &&
+                                value.trim().isNotEmpty) {
+                              try {
+                                UuidValue.fromString(value.trim());
+                              } catch (_) {
+                                return 'UUID no valido';
+                              }
+                            }
+                            return null;
+                          },
+                        ),
+                      ],
+
+                      // Related classroom ID
+                      if (_selectedType != _ConversationType.direct) ...[
+                        const SizedBox(height: 14),
+                        TextFormField(
+                          controller: _classroomIdController,
+                          decoration: InputDecoration(
+                            labelText: 'ID del aula (UUID, opcional)',
+                            prefixIcon:
+                                const Icon(Icons.class_outlined),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                          ),
+                          validator: (value) {
+                            if (value != null &&
+                                value.trim().isNotEmpty) {
+                              try {
+                                UuidValue.fromString(value.trim());
+                              } catch (_) {
+                                return 'UUID no valido';
+                              }
+                            }
+                            return null;
+                          },
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+
+                const SizedBox(height: 20),
+
+                // ---- Submit ----
+                SizedBox(
+                  height: 52,
+                  child: FilledButton.icon(
+                    onPressed: _isSubmitting ? null : _submit,
+                    icon: _isSubmitting
+                        ? const SizedBox(
+                            width: 18,
+                            height: 18,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: Colors.white,
+                            ),
+                          )
+                        : const Icon(Icons.send),
+                    label: const Text(
+                      'Crear conversacion',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 15,
+                      ),
+                    ),
+                    style: FilledButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(100),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _TypeSelectorCard extends StatelessWidget {
+  const _TypeSelectorCard({
+    required this.type,
+    required this.isSelected,
+    required this.onTap,
+  });
+
+  final _ConversationType type;
+  final bool isSelected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final primary = Theme.of(context).colorScheme.primary;
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Material(
+        color: isSelected ? primary.withValues(alpha: 0.08) : Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        clipBehavior: Clip.antiAlias,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(20),
+          child: Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(
+                color: isSelected ? primary : Colors.grey.shade100,
+                width: isSelected ? 2 : 1,
+              ),
+            ),
+            child: Row(
+              children: [
+                Container(
+                  width: 48,
+                  height: 48,
+                  decoration: BoxDecoration(
+                    color: isSelected
+                        ? primary.withValues(alpha: 0.15)
+                        : Colors.grey.shade100,
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                  child: Icon(
+                    type.icon,
+                    color: isSelected ? primary : Colors.grey.shade500,
+                    size: 24,
+                  ),
+                ),
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        type.label,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 15,
+                          color: isSelected
+                              ? primary
+                              : Colors.grey.shade800,
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        type.description,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.grey.shade500,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                if (isSelected)
+                  Icon(Icons.check_circle, color: primary, size: 22),
+              ],
+            ),
+          ),
         ),
       ),
     );

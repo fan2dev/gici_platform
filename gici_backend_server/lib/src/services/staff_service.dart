@@ -21,7 +21,8 @@ class StaffService {
           t.organizationId.equals(organizationId) &
           t.deletedAt.equals(null) &
           (t.role.equals('staff') |
-              t.role.equals('organization_admin')),
+              t.role.equals('organization_admin') |
+              t.role.equals('other_staff')),
       orderBy: (t) => t.lastName,
       limit: safePageSize,
       offset: safePage * safePageSize,
@@ -39,8 +40,8 @@ class StaffService {
     String? phone,
   }) async {
     // Validate role
-    if (!['staff', 'organization_admin'].contains(role)) {
-      throw Exception('Invalid role for staff user: $role');
+    if (!['staff', 'organization_admin', 'other_staff', 'guardian'].contains(role)) {
+      throw Exception('Invalid role for user: $role');
     }
 
     // Check email uniqueness
@@ -118,6 +119,89 @@ class StaffService {
       orderBy: (t) => t.lastName,
       limit: safePageSize,
       offset: safePage * safePageSize,
+    );
+  }
+
+  Future<StaffClassroomPermission> assignClassroomPermission(
+    Session session, {
+    required UuidValue organizationId,
+    required UuidValue userId,
+    required UuidValue classroomId,
+    required String role,
+  }) async {
+    // Verify the user belongs to the organization
+    final user = await AppUser.db.findById(session, userId);
+    if (user == null || user.organizationId != organizationId) {
+      throw Exception('User not found in this organization.');
+    }
+
+    // Check for existing permission
+    final existing = await StaffClassroomPermission.db.findFirstRow(
+      session,
+      where: (t) =>
+          t.userId.equals(userId) &
+          t.classroomId.equals(classroomId),
+    );
+
+    if (existing != null) {
+      // Update existing permission role
+      final updated = existing.copyWith(
+        role: role,
+        updatedAt: DateTime.now().toUtc(),
+      );
+      return await StaffClassroomPermission.db.updateRow(session, updated);
+    }
+
+    final now = DateTime.now().toUtc();
+
+    final permission = StaffClassroomPermission(
+      organizationId: organizationId,
+      userId: userId,
+      classroomId: classroomId,
+      role: role,
+      createdAt: now,
+      updatedAt: now,
+    );
+
+    return await StaffClassroomPermission.db.insertRow(session, permission);
+  }
+
+  Future<void> removeClassroomPermission(
+    Session session, {
+    required UuidValue organizationId,
+    required UuidValue userId,
+    required UuidValue classroomId,
+  }) async {
+    final permission = await StaffClassroomPermission.db.findFirstRow(
+      session,
+      where: (t) =>
+          t.organizationId.equals(organizationId) &
+          t.userId.equals(userId) &
+          t.classroomId.equals(classroomId),
+    );
+
+    if (permission == null) {
+      throw Exception('Permission not found.');
+    }
+
+    await StaffClassroomPermission.db.deleteRow(session, permission);
+  }
+
+  Future<List<StaffClassroomPermission>> listStaffPermissions(
+    Session session, {
+    required UuidValue organizationId,
+    UuidValue? userId,
+  }) async {
+    return await StaffClassroomPermission.db.find(
+      session,
+      where: (t) {
+        var condition = t.organizationId.equals(organizationId);
+        if (userId != null) {
+          condition = condition & t.userId.equals(userId);
+        }
+        return condition;
+      },
+      orderBy: (t) => t.classroomId,
     );
   }
 }

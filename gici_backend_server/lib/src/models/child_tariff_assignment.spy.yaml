@@ -1,0 +1,24 @@
+# Assignment of a tariff to a child
+
+class: ChildTariffAssignment
+
+table: child_tariff_assignment
+
+fields:
+  id: UuidValue?, defaultPersist=random
+  organizationId: UuidValue
+  childId: UuidValue
+  tariffId: UuidValue
+  startDate: DateTime
+  endDate: DateTime?
+  notes: String?
+  createdAt: DateTime
+  updatedAt: DateTime
+
+indexes:
+  cta_org_idx:
+    fields: organizationId
+  cta_child_idx:
+    fields: childId
+  cta_tariff_idx:
+    fields: tariffId

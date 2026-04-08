@@ -74,7 +74,6 @@ class _ChatConversationBodyState extends State<_ChatConversationBody> {
   @override
   Widget build(BuildContext context) {
     final auth = context.watch<AuthCubit>().state;
-    final primary = Theme.of(context).colorScheme.primary;
 
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5F7),
@@ -90,8 +89,7 @@ class _ChatConversationBodyState extends State<_ChatConversationBody> {
           builder: (context, state) {
             if (state is ChatConversationLoaded) {
               final convo = state.conversation;
-              final title =
-                  convo.title ?? _fallbackTitle(convo.conversationType);
+              final title = convo.title ?? 'Chat de alumno/a';
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -104,7 +102,7 @@ class _ChatConversationBodyState extends State<_ChatConversationBody> {
                     ),
                   ),
                   Text(
-                    _conversationSubtitle(convo.conversationType),
+                    'Grupo del alumno/a',
                     style: TextStyle(
                       fontSize: 12,
                       color: Colors.grey.shade500,
@@ -140,7 +138,6 @@ class _ChatConversationBodyState extends State<_ChatConversationBody> {
               ),
             ChatConversationLoaded(
               :final messages,
-              :final conversation,
               :final isSending,
             ) =>
               Column(
@@ -169,7 +166,6 @@ class _ChatConversationBodyState extends State<_ChatConversationBody> {
                           )
                         : _MessageList(
                             messages: messages,
-                            conversation: conversation,
                             currentUserId: auth.userId,
                             scrollController: _scrollController,
                           ),
@@ -186,32 +182,6 @@ class _ChatConversationBodyState extends State<_ChatConversationBody> {
       ),
     );
   }
-
-  String _fallbackTitle(String type) {
-    switch (type) {
-      case 'direct':
-        return 'Conversacion directa';
-      case 'group':
-        return 'Grupo';
-      case 'child_context':
-        return 'Sobre alumno/a';
-      default:
-        return 'Chat';
-    }
-  }
-
-  String _conversationSubtitle(String type) {
-    switch (type) {
-      case 'direct':
-        return 'Conversacion directa';
-      case 'group':
-        return 'Grupo';
-      case 'child_context':
-        return 'Contexto alumno/a';
-      default:
-        return type;
-    }
-  }
 }
 
 // ---------------------------------------------------------------------------
@@ -221,13 +191,11 @@ class _ChatConversationBodyState extends State<_ChatConversationBody> {
 class _MessageList extends StatelessWidget {
   const _MessageList({
     required this.messages,
-    required this.conversation,
     required this.currentUserId,
     required this.scrollController,
   });
 
   final List<dynamic> messages;
-  final dynamic conversation;
   final UuidValue? currentUserId;
   final ScrollController scrollController;
 
@@ -240,7 +208,6 @@ class _MessageList extends StatelessWidget {
       itemBuilder: (context, index) {
         final message = messages[index];
         final isMine = message.senderUserId == currentUserId;
-        final isGroup = conversation.conversationType != 'direct';
 
         final showDateHeader = index == 0 ||
             !_isSameDay(messages[index - 1].sentAt, message.sentAt);
@@ -251,7 +218,7 @@ class _MessageList extends StatelessWidget {
             _MessageBubble(
               message: message,
               isMine: isMine,
-              showSenderName: isGroup && !isMine,
+              showSenderName: !isMine,
             ),
           ],
         );

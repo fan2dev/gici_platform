@@ -18,6 +18,9 @@ fields:
   emergencyContactName: String?
   emergencyContactPhone: String?
   enrollmentDate: DateTime?
+  transportEnabled: bool?
+  busRoute: String?
+  menuType: String?
   status: String
   createdAt: DateTime
   updatedAt: DateTime

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:serverpod/serverpod.dart';
 
 import '../generated/protocol.dart';
@@ -89,6 +91,7 @@ class ExperienceEndpoint extends Endpoint {
     Session session, {
     DateTime? from,
     DateTime? to,
+    String? menuTrack,
     int page = 0,
     int pageSize = 30,
   }) async {
@@ -109,6 +112,7 @@ class ExperienceEndpoint extends Endpoint {
       organizationId: orgId,
       from: from,
       to: to,
+      menuTrack: menuTrack,
       limit: safePageSize,
       offset: safePage * safePageSize,
     );
@@ -140,7 +144,7 @@ class ExperienceEndpoint extends Endpoint {
     required String mealType,
     required String title,
     String? description,
-    UuidValue? classroomId,
+    String menuTrack = 'normal',
   }) async {
     final actor = await getAuthenticatedUser(session);
     _accessControl.requireRole(actor, allowedRoles: const [
@@ -158,7 +162,7 @@ class ExperienceEndpoint extends Endpoint {
       mealType: mealType,
       title: title,
       description: description,
-      classroomId: classroomId,
+      menuTrack: menuTrack,
     );
 
     await _activityLogService.log(
@@ -168,7 +172,7 @@ class ExperienceEndpoint extends Endpoint {
       action: 'menu.create',
       entityType: 'menu_entry',
       entityId: menuEntry.id?.toString(),
-      metadata: 'mealType=$mealType;title=$title',
+      metadata: 'mealType=$mealType;title=$title;menuTrack=$menuTrack',
     );
 
     return menuEntry;
@@ -181,7 +185,7 @@ class ExperienceEndpoint extends Endpoint {
     String? mealType,
     String? title,
     String? description,
-    UuidValue? classroomId,
+    String? menuTrack,
   }) async {
     final actor = await getAuthenticatedUser(session);
     _accessControl.requireRole(actor, allowedRoles: const [
@@ -207,7 +211,7 @@ class ExperienceEndpoint extends Endpoint {
       mealType: mealType,
       title: title,
       description: description,
-      classroomId: classroomId,
+      menuTrack: menuTrack,
     );
 
     await _activityLogService.log(
@@ -221,5 +225,73 @@ class ExperienceEndpoint extends Endpoint {
     );
 
     return updated;
+  }
+
+  /// Bulk-upload a full month of menu entries for a given track.
+  /// [entries] is a JSON-encoded list where each item has:
+  ///   { "date": "2026-04-01", "lunch_first": "...", "lunch_second": "...", "dessert": "..." }
+  /// Empty meal strings are skipped (no entry created for that slot).
+  Future<int> bulkUploadMonthlyMenu(
+    Session session, {
+    required int year,
+    required int month,
+    required String menuTrack,
+    required List<String> entries,
+  }) async {
+    final actor = await getAuthenticatedUser(session);
+    _accessControl.requireRole(actor, allowedRoles: const [
+      'platform_super_admin',
+      'organization_admin',
+    ]);
+    final orgId = actor.organizationId!;
+
+    // Decode each JSON string into menu entries
+    final menuEntries = <MenuEntry>[];
+    for (final jsonStr in entries) {
+      final data = jsonDecode(jsonStr) as Map<String, dynamic>;
+      final date = DateTime.parse(data['date'] as String);
+
+      final slots = {
+        'lunch_first': data['lunch_first'] as String? ?? '',
+        'lunch_second': data['lunch_second'] as String? ?? '',
+        'dessert': data['dessert'] as String? ?? '',
+      };
+
+      for (final entry in slots.entries) {
+        final title = entry.value.trim();
+        if (title.isEmpty) continue;
+        menuEntries.add(MenuEntry(
+          organizationId: orgId,
+          menuDate: date,
+          menuTrack: menuTrack,
+          mealType: entry.key,
+          title: title,
+          createdByUserId: actor.id!,
+          createdAt: DateTime.now().toUtc(),
+          updatedAt: DateTime.now().toUtc(),
+        ));
+      }
+    }
+
+    final result = await _experienceService.bulkCreateMenuEntries(
+      session,
+      organizationId: orgId,
+      createdByUserId: actor.id!,
+      year: year,
+      month: month,
+      menuTrack: menuTrack,
+      entries: menuEntries,
+    );
+
+    await _activityLogService.log(
+      session,
+      organizationId: orgId,
+      userId: actor.id,
+      action: 'menu.bulk_upload',
+      entityType: 'menu_entry',
+      metadata: 'year=$year;month=$month;menuTrack=$menuTrack;count=${result.length}',
+    );
+
+    return result.length;
   }
 }

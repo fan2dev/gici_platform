@@ -1,3 +1,8 @@
+absence:
+  - reportAbsence:
+  - listAbsencesByChild:
+  - listAbsencesByDate:
+  - listAbsencesByClassroom:
 auth:
   - signInWithEmailPassword:
   - me:
@@ -5,6 +10,11 @@ auth:
   - resetPassword:
 bootstrap:
   - seedDemoData:
+calendar:
+  - listEvents:
+  - createEvent:
+  - updateEvent:
+  - deleteEvent:
 chat:
   - listConversations:
   - getConversation:
@@ -19,6 +29,8 @@ child:
   - getChild:
   - updateChild:
   - getChildProfileOverview:
+  - linkGuardian:
+  - listGuardians:
 childTimeline:
   - getChildTimeline:
 classroom:
@@ -27,6 +39,11 @@ classroom:
   - updateClassroom:
   - assignChildToClassroom:
   - listAssignments:
+consent:
+  - getMyConsents:
+  - acceptConsent:
+  - revokeConsent:
+  - listConsentsForChild:
 dashboard:
   - getSummary:
 dataChangeRequest:
@@ -49,6 +66,7 @@ experience:
   - getMenuEntry:
   - createMenuEntry:
   - updateMenuEntry:
+  - bulkUploadMonthlyMenu:
 gallery:
   - listGalleries:
   - getGallery:
@@ -87,6 +105,15 @@ staff:
   - listGuardians:
   - createStaffUser:
   - updateStaffUser:
+  - assignClassroomPermission:
+  - removeClassroomPermission:
+  - listStaffPermissions:
+tariff:
+  - listTariffs:
+  - createTariff:
+  - updateTariff:
+  - assignTariffToChild:
+  - listChildTariffs:
 timeTracking:
   - checkIn:
   - checkOut:

@@ -1,0 +1,25 @@
+# Staff permission per classroom (teacher, assistant)
+
+class: StaffClassroomPermission
+
+table: staff_classroom_permission
+
+fields:
+  id: UuidValue?, defaultPersist=random
+  organizationId: UuidValue
+  userId: UuidValue
+  classroomId: UuidValue
+  role: String
+  createdAt: DateTime
+  updatedAt: DateTime
+
+indexes:
+  scp_org_idx:
+    fields: organizationId
+  scp_user_idx:
+    fields: userId
+  scp_classroom_idx:
+    fields: classroomId
+  scp_unique:
+    fields: userId, classroomId
+    unique: true

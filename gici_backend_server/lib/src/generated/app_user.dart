@@ -23,6 +23,9 @@ abstract class AppUser
     required this.lastName,
     this.phone,
     this.avatarUrl,
+    this.dni,
+    this.address,
+    this.gender,
     required this.role,
     required this.isActive,
     required this.emailVerified,
@@ -43,6 +46,9 @@ abstract class AppUser
     required String lastName,
     String? phone,
     String? avatarUrl,
+    String? dni,
+    String? address,
+    String? gender,
     required String role,
     required bool isActive,
     required bool emailVerified,
@@ -69,6 +75,9 @@ abstract class AppUser
       lastName: jsonSerialization['lastName'] as String,
       phone: jsonSerialization['phone'] as String?,
       avatarUrl: jsonSerialization['avatarUrl'] as String?,
+      dni: jsonSerialization['dni'] as String?,
+      address: jsonSerialization['address'] as String?,
+      gender: jsonSerialization['gender'] as String?,
       role: jsonSerialization['role'] as String,
       isActive: jsonSerialization['isActive'] as bool,
       emailVerified: jsonSerialization['emailVerified'] as bool,
@@ -110,6 +119,12 @@ abstract class AppUser
 
   String? avatarUrl;
 
+  String? dni;
+
+  String? address;
+
+  String? gender;
+
   String role;
 
   bool isActive;
@@ -142,6 +157,9 @@ abstract class AppUser
     String? lastName,
     String? phone,
     String? avatarUrl,
+    String? dni,
+    String? address,
+    String? gender,
     String? role,
     bool? isActive,
     bool? emailVerified,
@@ -163,6 +181,9 @@ abstract class AppUser
       'lastName': lastName,
       if (phone != null) 'phone': phone,
       if (avatarUrl != null) 'avatarUrl': avatarUrl,
+      if (dni != null) 'dni': dni,
+      if (address != null) 'address': address,
+      if (gender != null) 'gender': gender,
       'role': role,
       'isActive': isActive,
       'emailVerified': emailVerified,
@@ -186,6 +207,9 @@ abstract class AppUser
       'lastName': lastName,
       if (phone != null) 'phone': phone,
       if (avatarUrl != null) 'avatarUrl': avatarUrl,
+      if (dni != null) 'dni': dni,
+      if (address != null) 'address': address,
+      if (gender != null) 'gender': gender,
       'role': role,
       'isActive': isActive,
       'emailVerified': emailVerified,
@@ -240,6 +264,9 @@ class _AppUserImpl extends AppUser {
     required String lastName,
     String? phone,
     String? avatarUrl,
+    String? dni,
+    String? address,
+    String? gender,
     required String role,
     required bool isActive,
     required bool emailVerified,
@@ -258,6 +285,9 @@ class _AppUserImpl extends AppUser {
           lastName: lastName,
           phone: phone,
           avatarUrl: avatarUrl,
+          dni: dni,
+          address: address,
+          gender: gender,
           role: role,
           isActive: isActive,
           emailVerified: emailVerified,
@@ -282,6 +312,9 @@ class _AppUserImpl extends AppUser {
     String? lastName,
     Object? phone = _Undefined,
     Object? avatarUrl = _Undefined,
+    Object? dni = _Undefined,
+    Object? address = _Undefined,
+    Object? gender = _Undefined,
     String? role,
     bool? isActive,
     bool? emailVerified,
@@ -304,6 +337,9 @@ class _AppUserImpl extends AppUser {
       lastName: lastName ?? this.lastName,
       phone: phone is String? ? phone : this.phone,
       avatarUrl: avatarUrl is String? ? avatarUrl : this.avatarUrl,
+      dni: dni is String? ? dni : this.dni,
+      address: address is String? ? address : this.address,
+      gender: gender is String? ? gender : this.gender,
       role: role ?? this.role,
       isActive: isActive ?? this.isActive,
       emailVerified: emailVerified ?? this.emailVerified,
@@ -348,6 +384,18 @@ class AppUserTable extends _i1.Table<_i1.UuidValue?> {
     );
     avatarUrl = _i1.ColumnString(
       'avatarUrl',
+      this,
+    );
+    dni = _i1.ColumnString(
+      'dni',
+      this,
+    );
+    address = _i1.ColumnString(
+      'address',
+      this,
+    );
+    gender = _i1.ColumnString(
+      'gender',
       this,
     );
     role = _i1.ColumnString(
@@ -400,6 +448,12 @@ class AppUserTable extends _i1.Table<_i1.UuidValue?> {
 
   late final _i1.ColumnString avatarUrl;
 
+  late final _i1.ColumnString dni;
+
+  late final _i1.ColumnString address;
+
+  late final _i1.ColumnString gender;
+
   late final _i1.ColumnString role;
 
   late final _i1.ColumnBool isActive;
@@ -427,6 +481,9 @@ class AppUserTable extends _i1.Table<_i1.UuidValue?> {
         lastName,
         phone,
         avatarUrl,
+        dni,
+        address,
+        gender,
         role,
         isActive,
         emailVerified,

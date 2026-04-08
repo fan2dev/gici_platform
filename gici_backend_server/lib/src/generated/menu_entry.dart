@@ -17,10 +17,10 @@ abstract class MenuEntry
     this.id,
     required this.organizationId,
     required this.menuDate,
+    required this.menuTrack,
     required this.mealType,
     required this.title,
     this.description,
-    this.classroomId,
     required this.createdByUserId,
     required this.createdAt,
     required this.updatedAt,
@@ -31,10 +31,10 @@ abstract class MenuEntry
     _i1.UuidValue? id,
     required _i1.UuidValue organizationId,
     required DateTime menuDate,
+    required String menuTrack,
     required String mealType,
     required String title,
     String? description,
-    _i1.UuidValue? classroomId,
     required _i1.UuidValue createdByUserId,
     required DateTime createdAt,
     required DateTime updatedAt,
@@ -50,13 +50,10 @@ abstract class MenuEntry
           jsonSerialization['organizationId']),
       menuDate:
           _i1.DateTimeJsonExtension.fromJson(jsonSerialization['menuDate']),
+      menuTrack: jsonSerialization['menuTrack'] as String,
       mealType: jsonSerialization['mealType'] as String,
       title: jsonSerialization['title'] as String,
       description: jsonSerialization['description'] as String?,
-      classroomId: jsonSerialization['classroomId'] == null
-          ? null
-          : _i1.UuidValueJsonExtension.fromJson(
-              jsonSerialization['classroomId']),
       createdByUserId: _i1.UuidValueJsonExtension.fromJson(
           jsonSerialization['createdByUserId']),
       createdAt:
@@ -80,13 +77,13 @@ abstract class MenuEntry
 
   DateTime menuDate;
 
+  String menuTrack;
+
   String mealType;
 
   String title;
 
   String? description;
-
-  _i1.UuidValue? classroomId;
 
   _i1.UuidValue createdByUserId;
 
@@ -106,10 +103,10 @@ abstract class MenuEntry
     _i1.UuidValue? id,
     _i1.UuidValue? organizationId,
     DateTime? menuDate,
+    String? menuTrack,
     String? mealType,
     String? title,
     String? description,
-    _i1.UuidValue? classroomId,
     _i1.UuidValue? createdByUserId,
     DateTime? createdAt,
     DateTime? updatedAt,
@@ -121,10 +118,10 @@ abstract class MenuEntry
       if (id != null) 'id': id?.toJson(),
       'organizationId': organizationId.toJson(),
       'menuDate': menuDate.toJson(),
+      'menuTrack': menuTrack,
       'mealType': mealType,
       'title': title,
       if (description != null) 'description': description,
-      if (classroomId != null) 'classroomId': classroomId?.toJson(),
       'createdByUserId': createdByUserId.toJson(),
       'createdAt': createdAt.toJson(),
       'updatedAt': updatedAt.toJson(),
@@ -138,10 +135,10 @@ abstract class MenuEntry
       if (id != null) 'id': id?.toJson(),
       'organizationId': organizationId.toJson(),
       'menuDate': menuDate.toJson(),
+      'menuTrack': menuTrack,
       'mealType': mealType,
       'title': title,
       if (description != null) 'description': description,
-      if (classroomId != null) 'classroomId': classroomId?.toJson(),
       'createdByUserId': createdByUserId.toJson(),
       'createdAt': createdAt.toJson(),
       'updatedAt': updatedAt.toJson(),
@@ -186,10 +183,10 @@ class _MenuEntryImpl extends MenuEntry {
     _i1.UuidValue? id,
     required _i1.UuidValue organizationId,
     required DateTime menuDate,
+    required String menuTrack,
     required String mealType,
     required String title,
     String? description,
-    _i1.UuidValue? classroomId,
     required _i1.UuidValue createdByUserId,
     required DateTime createdAt,
     required DateTime updatedAt,
@@ -198,10 +195,10 @@ class _MenuEntryImpl extends MenuEntry {
           id: id,
           organizationId: organizationId,
           menuDate: menuDate,
+          menuTrack: menuTrack,
           mealType: mealType,
           title: title,
           description: description,
-          classroomId: classroomId,
           createdByUserId: createdByUserId,
           createdAt: createdAt,
           updatedAt: updatedAt,
@@ -216,10 +213,10 @@ class _MenuEntryImpl extends MenuEntry {
     Object? id = _Undefined,
     _i1.UuidValue? organizationId,
     DateTime? menuDate,
+    String? menuTrack,
     String? mealType,
     String? title,
     Object? description = _Undefined,
-    Object? classroomId = _Undefined,
     _i1.UuidValue? createdByUserId,
     DateTime? createdAt,
     DateTime? updatedAt,
@@ -229,11 +226,10 @@ class _MenuEntryImpl extends MenuEntry {
       id: id is _i1.UuidValue? ? id : this.id,
       organizationId: organizationId ?? this.organizationId,
       menuDate: menuDate ?? this.menuDate,
+      menuTrack: menuTrack ?? this.menuTrack,
       mealType: mealType ?? this.mealType,
       title: title ?? this.title,
       description: description is String? ? description : this.description,
-      classroomId:
-          classroomId is _i1.UuidValue? ? classroomId : this.classroomId,
       createdByUserId: createdByUserId ?? this.createdByUserId,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
@@ -252,6 +248,10 @@ class MenuEntryTable extends _i1.Table<_i1.UuidValue?> {
       'menuDate',
       this,
     );
+    menuTrack = _i1.ColumnString(
+      'menuTrack',
+      this,
+    );
     mealType = _i1.ColumnString(
       'mealType',
       this,
@@ -262,10 +262,6 @@ class MenuEntryTable extends _i1.Table<_i1.UuidValue?> {
     );
     description = _i1.ColumnString(
       'description',
-      this,
-    );
-    classroomId = _i1.ColumnUuid(
-      'classroomId',
       this,
     );
     createdByUserId = _i1.ColumnUuid(
@@ -290,13 +286,13 @@ class MenuEntryTable extends _i1.Table<_i1.UuidValue?> {
 
   late final _i1.ColumnDateTime menuDate;
 
+  late final _i1.ColumnString menuTrack;
+
   late final _i1.ColumnString mealType;
 
   late final _i1.ColumnString title;
 
   late final _i1.ColumnString description;
-
-  late final _i1.ColumnUuid classroomId;
 
   late final _i1.ColumnUuid createdByUserId;
 
@@ -311,10 +307,10 @@ class MenuEntryTable extends _i1.Table<_i1.UuidValue?> {
         id,
         organizationId,
         menuDate,
+        menuTrack,
         mealType,
         title,
         description,
-        classroomId,
         createdByUserId,
         createdAt,
         updatedAt,

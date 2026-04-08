@@ -15,6 +15,10 @@ import '../../features/galleries/data/gallery_repository.dart';
 import '../../features/habits/data/habit_repository.dart';
 import '../../features/notifications/data/notification_repository.dart';
 import '../../features/pedagogical_reports/data/pedagogical_report_repository.dart';
+import '../../features/tariffs/data/tariff_repository.dart';
+import '../../features/absences/data/absence_repository.dart';
+import '../../features/calendar/data/calendar_repository.dart';
+import '../../features/consent/data/consent_repository.dart';
 import '../../features/time_tracking/data/time_tracking_repository.dart';
 import '../network/backend_client.dart';
 
@@ -112,6 +116,30 @@ Future<void> configureDependencies() async {
   if (!sl.isRegistered<StaffRepository>()) {
     sl.registerLazySingleton<StaffRepository>(
       () => StaffRepository(sl<Client>()),
+    );
+  }
+
+  if (!sl.isRegistered<TariffRepository>()) {
+    sl.registerLazySingleton<TariffRepository>(
+      () => TariffRepository(sl<Client>()),
+    );
+  }
+
+  if (!sl.isRegistered<AbsenceRepository>()) {
+    sl.registerLazySingleton<AbsenceRepository>(
+      () => AbsenceRepository(sl<Client>()),
+    );
+  }
+
+  if (!sl.isRegistered<CalendarRepository>()) {
+    sl.registerLazySingleton<CalendarRepository>(
+      () => CalendarRepository(sl<Client>()),
+    );
+  }
+
+  if (!sl.isRegistered<ConsentRepository>()) {
+    sl.registerLazySingleton<ConsentRepository>(
+      () => ConsentRepository(sl<Client>()),
     );
   }
 }

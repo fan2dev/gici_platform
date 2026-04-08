@@ -47,7 +47,7 @@ class _SendNotificationPageState extends State<SendNotificationPage> {
 
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Notificacion enviada')),
+        const SnackBar(content: Text('Notificación enviada')),
       );
       Navigator.of(context).pop();
     }
@@ -61,7 +61,7 @@ class _SendNotificationPageState extends State<SendNotificationPage> {
       backgroundColor: const Color(0xFFF5F5F7),
       appBar: AppBar(
         title: const Text(
-          'Enviar notificacion',
+          'Enviar notificación',
           style: TextStyle(fontWeight: FontWeight.w700),
         ),
         backgroundColor: Colors.white,
@@ -94,14 +94,14 @@ class _SendNotificationPageState extends State<SendNotificationPage> {
                         TextFormField(
                           controller: _titleController,
                           decoration: InputDecoration(
-                            labelText: 'Titulo',
-                            hintText: 'Titulo de la notificacion',
+                            labelText: 'Título',
+                            hintText: 'Título de la notificación',
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(16),
                             ),
                           ),
                           validator: (v) => (v == null || v.trim().isEmpty)
-                              ? 'El titulo es obligatorio'
+                              ? 'El título es obligatorio'
                               : null,
                           onChanged: (_) => setState(() {}),
                         ),
@@ -110,7 +110,7 @@ class _SendNotificationPageState extends State<SendNotificationPage> {
                           controller: _bodyController,
                           decoration: InputDecoration(
                             labelText: 'Mensaje',
-                            hintText: 'Contenido de la notificacion',
+                            hintText: 'Contenido de la notificación',
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(16),
                             ),
@@ -126,7 +126,7 @@ class _SendNotificationPageState extends State<SendNotificationPage> {
                         DropdownButtonFormField<String>(
                           value: _category,
                           decoration: InputDecoration(
-                            labelText: 'Categoria',
+                            labelText: 'Categoría',
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(16),
                             ),
@@ -190,7 +190,7 @@ class _SendNotificationPageState extends State<SendNotificationPage> {
                         if (_targetScope == 'classroom') ...[
                           const SizedBox(height: 12),
                           Text(
-                            'Se enviara a todos los miembros del aula seleccionada.',
+                            'Se enviará a todos los miembros del aula seleccionada.',
                             style: TextStyle(
                               fontSize: 12,
                               color: Colors.grey.shade500,
@@ -200,7 +200,7 @@ class _SendNotificationPageState extends State<SendNotificationPage> {
                         if (_targetScope == 'child') ...[
                           const SizedBox(height: 12),
                           Text(
-                            'Se enviara a los tutores del alumno seleccionado.',
+                            'Se enviará a los tutores del alumno seleccionado.',
                             style: TextStyle(
                               fontSize: 12,
                               color: Colors.grey.shade500,
@@ -250,7 +250,7 @@ class _SendNotificationPageState extends State<SendNotificationPage> {
                               children: [
                                 Text(
                                   _titleController.text.trim().isEmpty
-                                      ? 'Titulo'
+                                      ? 'Título'
                                       : _titleController.text.trim(),
                                   style: const TextStyle(
                                     fontWeight: FontWeight.w700,
@@ -304,7 +304,7 @@ class _SendNotificationPageState extends State<SendNotificationPage> {
                             )
                           : const Icon(Icons.send),
                       label: const Text(
-                        'Enviar notificacion',
+                        'Enviar notificación',
                         style: TextStyle(
                           fontWeight: FontWeight.w700,
                           fontSize: 15,

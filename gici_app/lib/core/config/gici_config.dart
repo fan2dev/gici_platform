@@ -10,6 +10,6 @@ const giciConfig = AppConfig(
   seedColor: Color(0xFFFF6D00),          // Orange primary
   secondaryColor: Color(0xFF757575),      // Grey secondary
   accentColor: Color(0xFFFF9100),         // Bright orange accent
-  surfaceColor: Color(0xFFFAFAFA),        // Light grey surface
+  surfaceColor: Color(0xFFFFF5EB),        // Warmer cream surface
   logoAsset: null,
 );

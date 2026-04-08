@@ -11,6 +11,7 @@ import '../../../core/di/injection.dart';
 import '../../auth/cubit/auth_cubit.dart';
 import '../../children/cubit/children_list_cubit.dart';
 import '../../children/data/child_repository.dart';
+import '../../classrooms/data/classroom_repository.dart';
 import '../cubit/documents_cubit.dart';
 import '../data/document_repository.dart';
 
@@ -27,7 +28,7 @@ class DocumentsPage extends StatelessWidget {
         ),
         BlocProvider(
           create: (_) =>
-              ChildrenListCubit(sl<ChildRepository>())..loadChildren(),
+              ChildrenListCubit(sl<ChildRepository>(), sl<ClassroomRepository>())..loadChildren(),
         ),
       ],
       child: const _DocumentsView(),
@@ -291,7 +292,7 @@ class _DocumentCard extends StatelessWidget {
                 Row(
                   children: [
                     StatusPill(
-                      label: isPublic ? 'Publico' : doc.visibility,
+                      label: _visibilityLabel(doc.visibility),
                       color: isPublic ? Colors.green : Colors.orange,
                       small: true,
                     ),
@@ -415,5 +416,14 @@ class _ChildDocsTab extends StatelessWidget {
         );
       },
     );
+  }
+}
+
+String _visibilityLabel(String v) {
+  switch (v) {
+    case 'all': return 'Público';
+    case 'staff': return 'Solo personal';
+    case 'guardian': return 'Familias';
+    default: return v;
   }
 }

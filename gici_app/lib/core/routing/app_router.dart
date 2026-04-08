@@ -10,7 +10,6 @@ import '../../features/auth/view/login_page.dart';
 import '../../features/auth/view/forgot_password_page.dart';
 import '../../features/chat/view/chat_page.dart';
 import '../../features/chat/view/chat_conversation_page.dart';
-import '../../features/chat/view/create_conversation_page.dart';
 import '../../features/children/view/child_detail_page.dart';
 import '../../features/children/view/children_page.dart';
 import '../../features/child_timeline/view/child_timeline_page.dart';
@@ -19,14 +18,22 @@ import '../../features/data_change_requests/view/data_change_requests_page.dart'
 import '../../features/dashboard/view/dashboard_page.dart';
 import '../../features/documents/view/documents_page.dart';
 import '../../features/experience/view/experience_page.dart';
+import '../../features/experience/view/menu_editor_page.dart';
 import '../../features/galleries/view/galleries_page.dart';
 import '../../features/habits/view/habits_page.dart';
 import '../../features/notifications/view/notifications_page.dart';
 import '../../features/pedagogical_reports/view/pedagogical_report_detail_page.dart';
 import '../../features/pedagogical_reports/view/pedagogical_reports_page.dart';
+import '../../features/parent_preview/view/parent_preview_page.dart';
 import '../../features/settings/view/settings_page.dart';
 import '../../features/staff_management/view/staff_page.dart';
+import '../../features/tariffs/view/tariffs_page.dart';
+import '../../features/absences/view/absences_page.dart';
+import '../../features/calendar/view/calendar_page.dart';
+import '../../features/consent/view/consent_page.dart';
 import '../../features/time_tracking/view/time_tracking_page.dart';
+import '../../features/direccion/view/direccion_page.dart';
+import '../../features/direccion/view/admin_time_tracking_page.dart';
 
 GoRouter buildAppRouter(AuthCubit authCubit) {
   return GoRouter(
@@ -48,7 +55,20 @@ GoRouter buildAppRouter(AuthCubit authCubit) {
       if (authState.isAuthenticated && authState.isGuardian) {
         if (path.startsWith('/time-tracking') ||
             path.startsWith('/classrooms') ||
-            path.startsWith('/staff')) {
+            path.startsWith('/staff') ||
+            path.startsWith('/tariffs') ||
+            path.startsWith('/absences') ||
+            path.startsWith('/direccion') ||
+            path.startsWith('/menu-editor')) {
+          return '/dashboard';
+        }
+      }
+
+      // Other-staff restrictions: only dashboard, time-tracking, settings
+      if (authState.isAuthenticated && authState.isOtherStaff) {
+        const allowedPrefixes = ['/dashboard', '/time-tracking', '/settings'];
+        final isAllowed = allowedPrefixes.any((p) => path.startsWith(p));
+        if (!isAllowed) {
           return '/dashboard';
         }
       }
@@ -92,10 +112,6 @@ GoRouter buildAppRouter(AuthCubit authCubit) {
           GoRoute(
             path: '/chat',
             builder: (_, __) => const ChatPage(),
-          ),
-          GoRoute(
-            path: '/chat/create',
-            builder: (_, __) => const CreateConversationPage(),
           ),
           GoRoute(
             path: '/chat/:conversationId',
@@ -161,12 +177,44 @@ GoRouter buildAppRouter(AuthCubit authCubit) {
             builder: (_, __) => const ExperiencePage(),
           ),
           GoRoute(
+            path: '/menu-editor',
+            builder: (_, __) => const MenuEditorPage(),
+          ),
+          GoRoute(
             path: '/settings',
             builder: (_, __) => const SettingsPage(),
           ),
           GoRoute(
             path: '/staff',
             builder: (_, __) => const StaffPage(),
+          ),
+          GoRoute(
+            path: '/tariffs',
+            builder: (_, __) => const TariffsPage(),
+          ),
+          GoRoute(
+            path: '/absences',
+            builder: (_, __) => const AbsencesPage(),
+          ),
+          GoRoute(
+            path: '/calendar',
+            builder: (_, __) => const CalendarPage(),
+          ),
+          GoRoute(
+            path: '/consent',
+            builder: (_, __) => const ConsentPage(),
+          ),
+          GoRoute(
+            path: '/direccion',
+            builder: (_, __) => const DireccionPage(),
+          ),
+          GoRoute(
+            path: '/direccion/time-tracking',
+            builder: (_, __) => const AdminTimeTrackingPage(),
+          ),
+          GoRoute(
+            path: '/parent-preview',
+            builder: (_, __) => const ParentPreviewSelectorPage(),
           ),
         ],
       ),

@@ -59,13 +59,20 @@ class ExperienceService {
     required UuidValue organizationId,
     DateTime? from,
     DateTime? to,
+    String? menuTrack,
     required int limit,
     required int offset,
   }) async {
     final rows = await MenuEntry.db.find(
       session,
-      where: (t) =>
-          t.organizationId.equals(organizationId) & t.deletedAt.equals(null),
+      where: (t) {
+        var expr = t.organizationId.equals(organizationId) &
+            t.deletedAt.equals(null);
+        if (menuTrack != null) {
+          expr = expr & t.menuTrack.equals(menuTrack);
+        }
+        return expr;
+      },
       orderBy: (t) => t.menuDate,
       orderDescending: false,
       limit: 2000,
@@ -95,7 +102,7 @@ class ExperienceService {
     required String mealType,
     required String title,
     String? description,
-    UuidValue? classroomId,
+    String menuTrack = 'normal',
   }) {
     final now = DateTime.now().toUtc();
     return MenuEntry.db.insertRow(
@@ -103,10 +110,10 @@ class ExperienceService {
       MenuEntry(
         organizationId: organizationId,
         menuDate: menuDate,
+        menuTrack: menuTrack,
         mealType: mealType,
         title: title,
         description: description,
-        classroomId: classroomId,
         createdByUserId: createdByUserId,
         createdAt: now,
         updatedAt: now,
@@ -136,7 +143,7 @@ class ExperienceService {
     String? mealType,
     String? title,
     String? description,
-    UuidValue? classroomId,
+    String? menuTrack,
   }) {
     return MenuEntry.db.updateRow(
       session,
@@ -145,9 +152,62 @@ class ExperienceService {
         mealType: mealType,
         title: title,
         description: description,
-        classroomId: classroomId,
+        menuTrack: menuTrack,
         updatedAt: DateTime.now().toUtc(),
       ),
     );
+  }
+
+  /// Bulk-create menu entries for an entire month.
+  /// Deletes existing entries for the given month, organization, and track,
+  /// then inserts all new entries in a single batch.
+  Future<List<MenuEntry>> bulkCreateMenuEntries(
+    Session session, {
+    required UuidValue organizationId,
+    required UuidValue createdByUserId,
+    required int year,
+    required int month,
+    required String menuTrack,
+    required List<MenuEntry> entries,
+  }) async {
+    // Determine month boundaries
+    final monthStart = DateTime.utc(year, month, 1);
+    final monthEnd = DateTime.utc(year, month + 1, 1);
+
+    // Find and soft-delete existing entries for this month + track
+    final existing = await MenuEntry.db.find(
+      session,
+      where: (t) =>
+          t.organizationId.equals(organizationId) &
+          t.menuTrack.equals(menuTrack) &
+          t.deletedAt.equals(null),
+      limit: 5000,
+    );
+
+    final now = DateTime.now().toUtc();
+    final toDelete = existing.where((e) =>
+        !e.menuDate.isBefore(monthStart) && e.menuDate.isBefore(monthEnd));
+
+    if (toDelete.isNotEmpty) {
+      final softDeleted =
+          toDelete.map((e) => e.copyWith(deletedAt: now, updatedAt: now)).toList();
+      await MenuEntry.db.update(session, softDeleted);
+    }
+
+    // Stamp each entry with correct org, track, user, and timestamps
+    final stamped = entries.map((e) => MenuEntry(
+          organizationId: organizationId,
+          menuDate: e.menuDate,
+          menuTrack: menuTrack,
+          mealType: e.mealType,
+          title: e.title,
+          description: e.description,
+          createdByUserId: createdByUserId,
+          createdAt: now,
+          updatedAt: now,
+        )).toList();
+
+    if (stamped.isEmpty) return [];
+    return MenuEntry.db.insert(session, stamped);
   }
 }

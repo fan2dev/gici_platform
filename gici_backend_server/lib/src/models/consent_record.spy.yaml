@@ -1,0 +1,27 @@
+# RGPD / privacy consent record
+
+class: ConsentRecord
+
+table: consent_record
+
+fields:
+  id: UuidValue?, defaultPersist=random
+  organizationId: UuidValue
+  userId: UuidValue
+  childId: UuidValue?
+  consentType: String
+  isAccepted: bool
+  acceptedAt: DateTime?
+  ipAddress: String?
+  createdAt: DateTime
+  updatedAt: DateTime
+
+indexes:
+  consent_org_idx:
+    fields: organizationId
+  consent_user_idx:
+    fields: userId
+  consent_child_idx:
+    fields: childId
+  consent_type_idx:
+    fields: consentType

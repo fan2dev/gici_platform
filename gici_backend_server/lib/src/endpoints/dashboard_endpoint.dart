@@ -98,6 +98,16 @@ class DashboardEndpoint extends Endpoint {
       orderBy: (t) => t.mealType,
     );
 
+    // Today's calendar events
+    final todayEvents = await SchoolCalendarEvent.db.find(
+      session,
+      where: (t) =>
+          t.organizationId.equals(orgId) &
+          t.deletedAt.equals(null) &
+          t.eventDate.between(todayStart, todayEnd),
+      orderBy: (t) => t.eventDate,
+    );
+
     // Recent notifications (last 5)
     final recentNotifs = await NotificationRecord.db.find(
       session,
@@ -115,6 +125,7 @@ class DashboardEndpoint extends Endpoint {
       unreadNotifications: unreadNotifications,
       pendingRequests: pendingRequests,
       todayMenuEntries: todayMenu,
+      todayEvents: todayEvents,
       recentNotifications: recentNotifs,
     );
   }

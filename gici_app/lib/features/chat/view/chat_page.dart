@@ -8,7 +8,6 @@ import '../../../app/widgets/error_state.dart';
 import '../../../app/widgets/gici_avatar.dart';
 import '../../../app/widgets/gici_card.dart';
 import '../../../app/widgets/loading_state.dart';
-import '../../../app/widgets/section_header.dart';
 import '../../../core/di/injection.dart';
 import '../../auth/cubit/auth_cubit.dart';
 import '../cubit/chat_list_cubit.dart';
@@ -28,13 +27,15 @@ class ChatPage extends StatelessWidget {
     return BlocProvider(
       create: (_) =>
           ChatListCubit(sl<ChatRepository>())..loadConversations(),
-      child: const _ChatPageBody(),
+      child: _ChatPageBody(isGuardian: authState.isGuardian),
     );
   }
 }
 
 class _ChatPageBody extends StatelessWidget {
-  const _ChatPageBody();
+  const _ChatPageBody({required this.isGuardian});
+
+  final bool isGuardian;
 
   @override
   Widget build(BuildContext context) {
@@ -42,19 +43,23 @@ class _ChatPageBody extends StatelessWidget {
       backgroundColor: const Color(0xFFF5F5F7),
       appBar: AppBar(
         title: const Text(
-          'Chat',
+          'Mensajes',
           style: TextStyle(fontWeight: FontWeight.w700),
         ),
         backgroundColor: Colors.white,
         surfaceTintColor: Colors.white,
         elevation: 0,
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => context.push('/chat/create'),
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        child: const Icon(Icons.edit_outlined, color: Colors.white),
-      ),
-      body: BlocBuilder<ChatListCubit, ChatListState>(
+      body: BlocConsumer<ChatListCubit, ChatListState>(
+        listener: (context, state) {
+          // Auto-navigate if guardian has only 1 conversation
+          if (isGuardian && state is ChatListLoaded) {
+            final singleId = state.singleConversationId;
+            if (singleId != null) {
+              context.go('/chat/$singleId');
+            }
+          }
+        },
         builder: (context, state) {
           return switch (state) {
             ChatListInitial() ||
@@ -67,20 +72,10 @@ class _ChatPageBody extends StatelessWidget {
               ),
             ChatListLoaded(:final conversations, :final unreadCounts) =>
               conversations.isEmpty
-                  ? EmptyState(
+                  ? const EmptyState(
                       icon: Icons.chat_bubble_outline,
                       message:
-                          'No tienes conversaciones todavia.\nPulsa el boton para iniciar una.',
-                      action: FilledButton.icon(
-                        onPressed: () => context.push('/chat/create'),
-                        icon: const Icon(Icons.add),
-                        label: const Text('Nueva conversacion'),
-                        style: FilledButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(100),
-                          ),
-                        ),
-                      ),
+                          'No tienes conversaciones todavía.\nLas conversaciones se crean automáticamente para cada alumno/a.',
                     )
                   : _ConversationList(
                       conversations: conversations,
@@ -108,7 +103,7 @@ class _ConversationList extends StatelessWidget {
       onRefresh: () => context.read<ChatListCubit>().refresh(),
       child: ListView.builder(
         physics: const AlwaysScrollableScrollPhysics(),
-        padding: const EdgeInsets.fromLTRB(16, 16, 16, 80),
+        padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
         itemCount: conversations.length,
         itemBuilder: (context, index) {
           final convo = conversations[index];
@@ -138,10 +133,8 @@ class _ConversationTile extends StatelessWidget {
     final theme = Theme.of(context);
     final hasUnread = unreadCount > 0;
 
-    final title = conversation.title ?? _fallbackTitle(conversation);
-    final subtitle = _lastMessagePreview(conversation);
+    final title = conversation.title ?? 'Chat de alumno/a';
     final timeText = _formatRelativeTime(conversation.lastMessageAt);
-    final isGroup = conversation.conversationType == 'group';
 
     return GiciCard(
       onTap: () => context.push('/chat/${conversation.id}'),
@@ -164,10 +157,10 @@ class _ConversationTile extends StatelessWidget {
                   ),
                 ],
               ),
-              child: Center(
+              child: const Center(
                 child: Text(
-                  isGroup ? '\u{1F465}' : '\u{1F4AC}',
-                  style: const TextStyle(fontSize: 10),
+                  '\u{1F465}',
+                  style: TextStyle(fontSize: 10),
                 ),
               ),
             ),
@@ -190,17 +183,19 @@ class _ConversationTile extends StatelessWidget {
                         ),
                       ),
                     ),
-                    const SizedBox(width: 8),
-                    Text(
-                      timeText,
-                      style: theme.textTheme.labelSmall?.copyWith(
-                        color: hasUnread
-                            ? theme.colorScheme.primary
-                            : Colors.grey.shade500,
-                        fontWeight:
-                            hasUnread ? FontWeight.w600 : FontWeight.normal,
+                    if (timeText.isNotEmpty) ...[
+                      const SizedBox(width: 8),
+                      Text(
+                        timeText,
+                        style: theme.textTheme.labelSmall?.copyWith(
+                          color: hasUnread
+                              ? theme.colorScheme.primary
+                              : Colors.grey.shade500,
+                          fontWeight:
+                              hasUnread ? FontWeight.w600 : FontWeight.normal,
+                        ),
                       ),
-                    ),
+                    ],
                   ],
                 ),
                 const SizedBox(height: 4),
@@ -208,7 +203,7 @@ class _ConversationTile extends StatelessWidget {
                   children: [
                     Expanded(
                       child: Text(
-                        subtitle,
+                        'Grupo del alumno/a',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: theme.textTheme.bodySmall?.copyWith(
@@ -247,27 +242,6 @@ class _ConversationTile extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  String _fallbackTitle(dynamic convo) {
-    final type = convo.conversationType as String;
-    if (type == 'direct') return 'Conversacion directa';
-    if (type == 'group') return 'Grupo';
-    if (type == 'child_context') return 'Sobre alumno/a';
-    return 'Conversacion';
-  }
-
-  String _lastMessagePreview(dynamic convo) {
-    switch (convo.conversationType as String) {
-      case 'direct':
-        return 'Conversacion directa';
-      case 'group':
-        return 'Grupo';
-      case 'child_context':
-        return 'Contexto alumno/a';
-      default:
-        return convo.conversationType as String;
-    }
   }
 
   String _formatRelativeTime(DateTime? dateTime) {

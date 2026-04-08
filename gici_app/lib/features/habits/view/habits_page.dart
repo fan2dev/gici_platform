@@ -8,11 +8,11 @@ import '../../../app/widgets/error_state.dart';
 import '../../../app/widgets/gici_avatar.dart';
 import '../../../app/widgets/gici_card.dart';
 import '../../../app/widgets/loading_state.dart';
-import '../../../app/widgets/section_header.dart';
 import '../../../app/widgets/status_pill.dart';
 import '../../../core/di/injection.dart';
 import '../../auth/cubit/auth_cubit.dart';
 import '../../children/data/child_repository.dart';
+import '../../classrooms/data/classroom_repository.dart';
 import '../cubit/habits_cubit.dart';
 import '../data/habit_repository.dart';
 import 'bowel_form_page.dart';
@@ -28,34 +28,15 @@ class HabitsPage extends StatelessWidget {
       create: (_) => HabitsCubit(
         habitRepository: sl<HabitRepository>(),
         childRepository: sl<ChildRepository>(),
-      )..loadChildren(),
+        classroomRepository: sl<ClassroomRepository>(),
+      )..loadClassrooms(),
       child: const _HabitsView(),
     );
   }
 }
 
-class _HabitsView extends StatefulWidget {
+class _HabitsView extends StatelessWidget {
   const _HabitsView();
-
-  @override
-  State<_HabitsView> createState() => _HabitsViewState();
-}
-
-class _HabitsViewState extends State<_HabitsView>
-    with SingleTickerProviderStateMixin {
-  late final TabController _tabController;
-
-  @override
-  void initState() {
-    super.initState();
-    _tabController = TabController(length: 3, vsync: this);
-  }
-
-  @override
-  void dispose() {
-    _tabController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -97,74 +78,23 @@ class _HabitsViewState extends State<_HabitsView>
                       ),
                     )
                   : null,
-          body: Column(
-            children: [
-              // Child selector
-              _buildChildSelector(context, state),
-              // Date nav
-              _buildDateNav(context, state),
-              const SizedBox(height: 8),
-              // Tab bar
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 16),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: Colors.grey.shade100),
-                ),
-                child: TabBar(
-                  controller: _tabController,
-                  indicatorSize: TabBarIndicatorSize.tab,
-                  dividerColor: Colors.transparent,
-                  indicator: BoxDecoration(
-                    borderRadius: BorderRadius.circular(14),
-                    color: Theme.of(context)
-                        .colorScheme
-                        .primary
-                        .withValues(alpha: 0.1),
-                  ),
-                  labelColor: Theme.of(context).colorScheme.primary,
-                  unselectedLabelColor: Colors.grey.shade500,
-                  labelStyle: const TextStyle(
-                    fontWeight: FontWeight.w700,
-                    fontSize: 13,
-                  ),
-                  tabs: const [
-                    Tab(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text('\u{1F37D}\u{FE0F} '),
-                          Text('Comidas'),
-                        ],
-                      ),
-                    ),
-                    Tab(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text('\u{1F634} '),
-                          Text('Siestas'),
-                        ],
-                      ),
-                    ),
-                    Tab(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text('\u{1F6BD} '),
-                          Text('Dep.'),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+          body: CustomScrollView(
+            slivers: [
+              // Classroom selector
+              SliverToBoxAdapter(
+                child: _buildClassroomSelector(context, state),
               ),
-              const SizedBox(height: 12),
-              // Content
-              Expanded(
-                child: _buildContent(context, state, canManage),
+              // Date navigator
+              SliverToBoxAdapter(
+                child: _buildDateNav(context, state),
               ),
+              const SliverToBoxAdapter(child: SizedBox(height: 8)),
+              // Children grid
+              SliverToBoxAdapter(
+                child: _buildChildrenGrid(context, state),
+              ),
+              // Timeline content
+              _buildTimelineContent(context, state, canManage),
             ],
           ),
         );
@@ -172,19 +102,19 @@ class _HabitsViewState extends State<_HabitsView>
     );
   }
 
-  Widget _buildChildSelector(BuildContext context, HabitsState state) {
-    if (state.isLoadingChildren) {
+  // -- Classroom selector -----------------------------------------------------
+
+  Widget _buildClassroomSelector(BuildContext context, HabitsState state) {
+    if (state.isLoadingClassrooms) {
       return const Padding(
         padding: EdgeInsets.all(16),
         child: LinearProgressIndicator(),
       );
     }
 
-    if (state.children.isEmpty) {
+    if (state.classrooms.isEmpty) {
       return const SizedBox.shrink();
     }
-
-    final selectedChild = state.selectedChild;
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 8, 16, 4),
@@ -193,18 +123,21 @@ class _HabitsViewState extends State<_HabitsView>
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         child: DropdownButtonHideUnderline(
           child: DropdownButton<UuidValue>(
-            value: state.selectedChildId,
+            value: state.selectedClassroomId,
             isExpanded: true,
             icon: const Icon(Icons.keyboard_arrow_down_rounded),
             selectedItemBuilder: (context) {
-              return state.children.map((c) {
-                final name = '${c.firstName} ${c.lastName}';
+              return state.classrooms.map((c) {
                 return Row(
                   children: [
-                    GiciAvatar(name: name, radius: 16),
+                    Icon(
+                      Icons.class_rounded,
+                      size: 20,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
                     const SizedBox(width: 10),
                     Text(
-                      name,
+                      c.name,
                       style: const TextStyle(
                         fontWeight: FontWeight.w700,
                         fontSize: 15,
@@ -214,17 +147,17 @@ class _HabitsViewState extends State<_HabitsView>
                 );
               }).toList();
             },
-            items: state.children
+            items: state.classrooms
                 .map(
                   (c) => DropdownMenuItem<UuidValue>(
                     value: c.id,
-                    child: Text('${c.firstName} ${c.lastName}'),
+                    child: Text(c.name),
                   ),
                 )
                 .toList(),
             onChanged: (value) {
               if (value != null) {
-                context.read<HabitsCubit>().selectChild(value);
+                context.read<HabitsCubit>().selectClassroom(value);
               }
             },
           ),
@@ -232,6 +165,8 @@ class _HabitsViewState extends State<_HabitsView>
       ),
     );
   }
+
+  // -- Date navigator ---------------------------------------------------------
 
   Widget _buildDateNav(BuildContext context, HabitsState state) {
     final date = state.selectedDate ?? DateTime.now();
@@ -311,60 +246,255 @@ class _HabitsViewState extends State<_HabitsView>
     );
   }
 
-  Widget _buildContent(
+  // -- Children grid ----------------------------------------------------------
+
+  Widget _buildChildrenGrid(BuildContext context, HabitsState state) {
+    if (state.isLoadingChildren) {
+      return const Padding(
+        padding: EdgeInsets.all(16),
+        child: Center(child: LinearProgressIndicator()),
+      );
+    }
+
+    if (state.classroomChildren.isEmpty) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        child: Container(
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: Colors.grey.shade100),
+          ),
+          child: Center(
+            child: Text(
+              'No hay alumnos en esta aula.',
+              style: TextStyle(
+                color: Colors.grey.shade500,
+                fontSize: 14,
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+
+    final primary = Theme.of(context).colorScheme.primary;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      child: Wrap(
+        spacing: 8,
+        runSpacing: 8,
+        children: state.classroomChildren.map((child) {
+          final isSelected = child.id == state.selectedChildId;
+          final name = '${child.firstName} ${child.lastName}';
+          return GestureDetector(
+            onTap: () => context.read<HabitsCubit>().selectChild(child.id!),
+            child: Container(
+              width: (MediaQuery.of(context).size.width - 32 - 24) / 4,
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 4),
+              decoration: BoxDecoration(
+                color: isSelected
+                    ? primary.withValues(alpha: 0.08)
+                    : Colors.white,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: isSelected ? primary : Colors.grey.shade200,
+                  width: isSelected ? 2 : 1,
+                ),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  GiciAvatar(
+                    name: name,
+                    radius: 20,
+                    color: isSelected ? primary : null,
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    child.firstName,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 11,
+                      fontWeight:
+                          isSelected ? FontWeight.w700 : FontWeight.w500,
+                      color: isSelected ? primary : Colors.grey.shade700,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        }).toList(),
+      ),
+    );
+  }
+
+  // -- Timeline content -------------------------------------------------------
+
+  SliverPadding _buildTimelineContent(
     BuildContext context,
     HabitsState state,
     bool canManage,
   ) {
-    if (state.children.isEmpty && !state.isLoadingChildren) {
-      return const EmptyState(
-        message: 'No hay alumnos disponibles.',
-        icon: Icons.child_care,
+    // No child selected
+    if (state.selectedChildId == null) {
+      return const SliverPadding(
+        padding: EdgeInsets.only(top: 40),
+        sliver: SliverToBoxAdapter(
+          child: EmptyState(
+            message: 'Selecciona un alumno para ver sus h\u00E1bitos.',
+            icon: Icons.person_search,
+          ),
+        ),
       );
     }
 
+    // Error
     if (state.errorMessage != null && state.dailyHabits == null) {
-      return ErrorState(
-        message: state.errorMessage!,
-        onRetry: () => context.read<HabitsCubit>().loadDailyHabits(),
+      return SliverPadding(
+        padding: const EdgeInsets.only(top: 20),
+        sliver: SliverToBoxAdapter(
+          child: ErrorState(
+            message: state.errorMessage!,
+            onRetry: () => context.read<HabitsCubit>().loadDailyHabits(),
+          ),
+        ),
       );
     }
 
+    // Loading
     if (state.isLoadingHabits) {
-      return const LoadingState(message: 'Cargando habitos...');
+      return const SliverPadding(
+        padding: EdgeInsets.only(top: 20),
+        sliver: SliverToBoxAdapter(
+          child: LoadingState(message: 'Cargando h\u00E1bitos...'),
+        ),
+      );
     }
 
     final daily = state.dailyHabits;
     if (daily == null) {
-      return const EmptyState(
-        message: 'Selecciona un alumno para ver sus habitos.',
-        icon: Icons.person_search,
+      return const SliverPadding(
+        padding: EdgeInsets.only(top: 40),
+        sliver: SliverToBoxAdapter(
+          child: EmptyState(
+            message: 'Cargando...',
+            icon: Icons.hourglass_empty,
+          ),
+        ),
       );
     }
 
-    return TabBarView(
-      controller: _tabController,
-      children: [
-        _MealsTab(
-          meals: daily.meals,
-          canManage: canManage,
-          onAdd: () => _openMealForm(context),
-          onEdit: (m) => _openMealForm(context, existing: m),
+    // Build combined timeline entries
+    final entries = _buildTimelineEntries(daily);
+
+    if (entries.isEmpty) {
+      return const SliverPadding(
+        padding: EdgeInsets.only(top: 40),
+        sliver: SliverToBoxAdapter(
+          child: EmptyState(
+            message: 'Sin registros para este d\u00EDa.',
+            icon: Icons.event_note_outlined,
+          ),
         ),
-        _NapsTab(
-          naps: daily.naps,
-          canManage: canManage,
-          onAdd: () => _openNapForm(context),
-          onEdit: (n) => _openNapForm(context, existing: n),
+      );
+    }
+
+    return SliverPadding(
+      padding: const EdgeInsets.fromLTRB(16, 12, 16, 88),
+      sliver: SliverList(
+        delegate: SliverChildBuilderDelegate(
+          (context, index) {
+            final entry = entries[index];
+            final isLast = index == entries.length - 1;
+            return _VisualTimelineItem(
+              entry: entry,
+              isLast: isLast,
+              canManage: canManage,
+              onEdit: canManage ? () => _onEditEntry(context, entry) : null,
+            );
+          },
+          childCount: entries.length,
         ),
-        _BowelTab(
-          entries: daily.bowelMovements,
-          canManage: canManage,
-          onAdd: () => _openBowelForm(context),
-          onEdit: (b) => _openBowelForm(context, existing: b),
-        ),
-      ],
+      ),
     );
+  }
+
+  // -- Timeline entry builder -------------------------------------------------
+
+  void _onEditEntry(BuildContext context, _TimelineEntry entry) {
+    if (entry.meal != null) {
+      _openMealForm(context, existing: entry.meal);
+    } else if (entry.nap != null) {
+      _openNapForm(context, existing: entry.nap);
+    } else if (entry.bowel != null) {
+      _openBowelForm(context, existing: entry.bowel);
+    }
+  }
+
+  List<_TimelineEntry> _buildTimelineEntries(ChildDailyHabits daily) {
+    final entries = <_TimelineEntry>[];
+
+    // Meals
+    for (final meal in daily.meals) {
+      entries.add(_TimelineEntry(
+        sortTime: meal.recordedAt,
+        accentColor: const Color(0xFFFF8A65),
+        emoji: _mealEmoji(meal.mealType),
+        timeLabel: _formatTime(meal.recordedAt),
+        typeBadge: _mealTypeLabel(meal.mealType),
+        detailBadge: _consumptionLabel(meal.consumptionLevel),
+        detailColor: _consumptionColor(meal.consumptionLevel),
+        notes: meal.notes,
+        meal: meal,
+      ));
+    }
+
+    // Naps
+    for (final nap in daily.naps) {
+      final duration =
+          nap.durationMinutes != null ? '${nap.durationMinutes} min' : null;
+      entries.add(_TimelineEntry(
+        sortTime: nap.startedAt,
+        accentColor: const Color(0xFF7986CB),
+        emoji: '\u{1F634}',
+        timeLabel: _formatTime(nap.startedAt),
+        timeSubLabel:
+            nap.endedAt != null ? _formatTime(nap.endedAt!) : null,
+        typeBadge: 'Siesta',
+        detailBadge: duration,
+        detailColor: const Color(0xFF7986CB),
+        notes: nap.notes,
+        nap: nap,
+      ));
+    }
+
+    // Bowel movements
+    for (final bowel in daily.bowelMovements) {
+      entries.add(_TimelineEntry(
+        sortTime: bowel.eventAt,
+        accentColor: const Color(0xFF4DB6AC),
+        emoji: '\u{1F6BD}',
+        timeLabel: _formatTime(bowel.eventAt),
+        typeBadge: _bowelTypeLabel(bowel.eventType),
+        detailBadge: bowel.consistency != null && bowel.consistency!.isNotEmpty
+            ? _consistencyLabel(bowel.consistency!)
+            : null,
+        detailColor: const Color(0xFF4DB6AC),
+        subtitle: null,
+        notes: bowel.notes,
+        bowel: bowel,
+      ));
+    }
+
+    // Sort by time descending (most recent first)
+    entries.sort((a, b) => b.sortTime.compareTo(a.sortTime));
+    return entries;
   }
 
   // -- Navigation helpers ---------------------------------------------------
@@ -431,7 +561,7 @@ class _HabitsViewState extends State<_HabitsView>
                       Expanded(
                         child: _AddOptionCard(
                           emoji: '\u{1F6BD}',
-                          label: 'Deposicion',
+                          label: 'Deposici\u00F3n',
                           color: const Color(0xFF4DB6AC),
                           onTap: () {
                             Navigator.pop(sheetCtx);
@@ -487,6 +617,8 @@ class _HabitsViewState extends State<_HabitsView>
     );
   }
 
+  // -- Formatting helpers ---------------------------------------------------
+
   static String _formatShortDate(DateTime d) {
     const months = [
       'ene', 'feb', 'mar', 'abr', 'may', 'jun',
@@ -494,6 +626,307 @@ class _HabitsViewState extends State<_HabitsView>
     ];
     return '${d.day} ${months[d.month - 1]} ${d.year}';
   }
+
+  static String _formatTime(DateTime dt) {
+    return '${dt.hour.toString().padLeft(2, '0')}:${dt.minute.toString().padLeft(2, '0')}';
+  }
+
+  static String _mealTypeLabel(String type) {
+    switch (type) {
+      case 'bottle':
+        return 'Biber\u00F3n';
+      case 'breakfast':
+        return 'Desayuno';
+      case 'lunch':
+        return 'Comida';
+      case 'lunch_first':
+        return 'Primer plato';
+      case 'lunch_second':
+        return 'Segundo plato';
+      case 'snack':
+        return 'Merienda';
+      case 'dessert':
+        return 'Postre';
+      default:
+        return type;
+    }
+  }
+
+  static String _mealEmoji(String type) {
+    switch (type) {
+      case 'bottle':
+        return '\u{1F37C}';
+      case 'breakfast':
+        return '\u{1F305}';
+      case 'lunch':
+        return '\u{1F37D}\u{FE0F}';
+      case 'snack':
+        return '\u{1F36A}';
+      default:
+        return '\u{1F37D}\u{FE0F}';
+    }
+  }
+
+  static String _consumptionLabel(String level) {
+    switch (level) {
+      case 'none':
+        return 'Nada';
+      case 'little':
+        return 'Poco';
+      case 'half':
+        return 'Mitad';
+      case 'most':
+        return 'Bastante';
+      case 'all':
+        return 'Todo';
+      default:
+        return level;
+    }
+  }
+
+  static Color _consumptionColor(String level) {
+    switch (level) {
+      case 'little':
+        return const Color(0xFFFF7043);
+      case 'most':
+        return const Color(0xFF66BB6A);
+      case 'all':
+        return const Color(0xFF43A047);
+      default:
+        return Colors.grey;
+    }
+  }
+
+  static String _bowelTypeLabel(String type) {
+    switch (type) {
+      case 'toilet':
+        return 'WC';
+      case 'diaper':
+        return 'Pa\u00F1al';
+      case 'diaper_change':
+        return 'Cambio pa\u00F1al';
+      case 'accident':
+        return 'Accidente';
+      default:
+        return type;
+    }
+  }
+
+  static String _consistencyLabel(String consistency) {
+    switch (consistency) {
+      case 'liquid':
+        return 'L\u00EDquido';
+      case 'normal':
+        return 'Normal';
+      case 'hard':
+        return 'Dura';
+      default:
+        return consistency;
+    }
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Visual timeline item (dots + vertical line, like child_timeline_page)
+// ---------------------------------------------------------------------------
+
+class _VisualTimelineItem extends StatelessWidget {
+  const _VisualTimelineItem({
+    required this.entry,
+    required this.isLast,
+    required this.canManage,
+    this.onEdit,
+  });
+
+  final _TimelineEntry entry;
+  final bool isLast;
+  final bool canManage;
+  final VoidCallback? onEdit;
+
+  @override
+  Widget build(BuildContext context) {
+    return IntrinsicHeight(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          // Timeline line + dot
+          SizedBox(
+            width: 32,
+            child: Column(
+              children: [
+                // Dot
+                Container(
+                  width: 14,
+                  height: 14,
+                  decoration: BoxDecoration(
+                    color: entry.accentColor,
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: entry.accentColor.withValues(alpha: 0.3),
+                      width: 3,
+                    ),
+                  ),
+                ),
+                // Connecting line
+                if (!isLast)
+                  Expanded(
+                    child: Container(
+                      width: 2,
+                      color: Colors.grey.shade300,
+                    ),
+                  ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 12),
+          // Event card
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 16),
+              child: GestureDetector(
+                onTap: onEdit,
+                child: Container(
+                  padding: const EdgeInsets.all(14),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: Colors.grey.shade100),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.03),
+                        blurRadius: 8,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Top row: emoji + time + badges
+                      Row(
+                        children: [
+                          Text(
+                            entry.emoji,
+                            style: const TextStyle(fontSize: 20),
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            entry.timeLabel,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w800,
+                              fontSize: 14,
+                            ),
+                          ),
+                          if (entry.timeSubLabel != null) ...[
+                            Text(
+                              ' - ${entry.timeSubLabel}',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 12,
+                                color: Colors.grey.shade500,
+                              ),
+                            ),
+                          ],
+                          const Spacer(),
+                          if (canManage)
+                            Icon(
+                              Icons.edit_rounded,
+                              size: 16,
+                              color: Colors.grey.shade300,
+                            ),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      // Badges row
+                      Row(
+                        children: [
+                          StatusPill(
+                            label: entry.typeBadge,
+                            color: entry.accentColor,
+                            small: true,
+                          ),
+                          if (entry.detailBadge != null) ...[
+                            const SizedBox(width: 6),
+                            StatusPill(
+                              label: entry.detailBadge!,
+                              color: entry.detailColor ?? Colors.grey,
+                              small: true,
+                            ),
+                          ],
+                        ],
+                      ),
+                      // Subtitle
+                      if (entry.subtitle != null) ...[
+                        const SizedBox(height: 6),
+                        Text(
+                          entry.subtitle!,
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: Colors.grey.shade600,
+                          ),
+                        ),
+                      ],
+                      // Notes
+                      if (entry.notes != null &&
+                          entry.notes!.isNotEmpty) ...[
+                        const SizedBox(height: 6),
+                        Text(
+                          entry.notes!,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.grey.shade500,
+                            fontStyle: FontStyle.italic,
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Timeline entry model (private)
+// ---------------------------------------------------------------------------
+
+class _TimelineEntry {
+  _TimelineEntry({
+    required this.sortTime,
+    required this.accentColor,
+    required this.emoji,
+    required this.timeLabel,
+    this.timeSubLabel,
+    required this.typeBadge,
+    this.detailBadge,
+    this.detailColor,
+    this.subtitle,
+    this.notes,
+    this.meal,
+    this.nap,
+    this.bowel,
+  });
+
+  final DateTime sortTime;
+  final Color accentColor;
+  final String emoji;
+  final String timeLabel;
+  final String? timeSubLabel;
+  final String typeBadge;
+  final String? detailBadge;
+  final Color? detailColor;
+  final String? subtitle;
+  final String? notes;
+  final MealEntry? meal;
+  final NapEntry? nap;
+  final BowelMovementEntry? bowel;
 }
 
 // ---------------------------------------------------------------------------
@@ -539,413 +972,5 @@ class _AddOptionCard extends StatelessWidget {
         ),
       ),
     );
-  }
-}
-
-// ---------------------------------------------------------------------------
-// Formatting helpers
-// ---------------------------------------------------------------------------
-String _formatTime(DateTime dt) {
-  return '${dt.hour.toString().padLeft(2, '0')}:${dt.minute.toString().padLeft(2, '0')}';
-}
-
-String _mealTypeLabel(String type) {
-  switch (type) {
-    case 'breakfast':
-      return 'Desayuno';
-    case 'lunch':
-      return 'Almuerzo';
-    case 'snack':
-      return 'Merienda';
-    case 'dinner':
-      return 'Cena';
-    default:
-      return type;
-  }
-}
-
-String _consumptionLabel(String level) {
-  switch (level) {
-    case 'none':
-      return 'Nada';
-    case 'little':
-      return 'Poco';
-    case 'half':
-      return 'Mitad';
-    case 'most':
-      return 'Casi todo';
-    case 'all':
-      return 'Todo';
-    default:
-      return level;
-  }
-}
-
-Color _consumptionColor(String level) {
-  switch (level) {
-    case 'none':
-      return const Color(0xFFE53935);
-    case 'little':
-      return const Color(0xFFFF7043);
-    case 'half':
-      return const Color(0xFFFFA726);
-    case 'most':
-      return const Color(0xFF66BB6A);
-    case 'all':
-      return const Color(0xFF43A047);
-    default:
-      return Colors.grey;
-  }
-}
-
-// ---------------------------------------------------------------------------
-// Meals tab
-// ---------------------------------------------------------------------------
-class _MealsTab extends StatelessWidget {
-  const _MealsTab({
-    required this.meals,
-    required this.canManage,
-    required this.onAdd,
-    required this.onEdit,
-  });
-
-  final List<MealEntry> meals;
-  final bool canManage;
-  final VoidCallback onAdd;
-  final void Function(MealEntry) onEdit;
-
-  @override
-  Widget build(BuildContext context) {
-    if (meals.isEmpty) {
-      return const EmptyState(
-        icon: Icons.restaurant_outlined,
-        message: 'Sin comidas registradas.',
-      );
-    }
-
-    return ListView.builder(
-      padding: const EdgeInsets.fromLTRB(16, 0, 16, 88),
-      itemCount: meals.length,
-      itemBuilder: (context, i) {
-        final meal = meals[i];
-        return GiciCard(
-          onTap: canManage ? () => onEdit(meal) : null,
-          child: Row(
-            children: [
-              // Time
-              Container(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 12, vertical: 8),
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade50,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Text(
-                  _formatTime(meal.recordedAt),
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w800,
-                    fontSize: 16,
-                  ),
-                ),
-              ),
-              const SizedBox(width: 14),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    StatusPill(
-                      label: _mealTypeLabel(meal.mealType),
-                      color: const Color(0xFFFF8A65),
-                      small: true,
-                    ),
-                    const SizedBox(height: 6),
-                    StatusPill(
-                      label: _consumptionLabel(meal.consumptionLevel),
-                      color: _consumptionColor(meal.consumptionLevel),
-                      small: true,
-                    ),
-                    if (meal.notes != null && meal.notes!.isNotEmpty) ...[
-                      const SizedBox(height: 4),
-                      Text(
-                        meal.notes!,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.grey.shade500,
-                        ),
-                      ),
-                    ],
-                  ],
-                ),
-              ),
-              if (canManage)
-                Icon(
-                  Icons.edit_rounded,
-                  size: 18,
-                  color: Colors.grey.shade300,
-                ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-}
-
-// ---------------------------------------------------------------------------
-// Naps tab
-// ---------------------------------------------------------------------------
-class _NapsTab extends StatelessWidget {
-  const _NapsTab({
-    required this.naps,
-    required this.canManage,
-    required this.onAdd,
-    required this.onEdit,
-  });
-
-  final List<NapEntry> naps;
-  final bool canManage;
-  final VoidCallback onAdd;
-  final void Function(NapEntry) onEdit;
-
-  @override
-  Widget build(BuildContext context) {
-    if (naps.isEmpty) {
-      return const EmptyState(
-        icon: Icons.bedtime_outlined,
-        message: 'Sin siestas registradas.',
-      );
-    }
-
-    return ListView.builder(
-      padding: const EdgeInsets.fromLTRB(16, 0, 16, 88),
-      itemCount: naps.length,
-      itemBuilder: (context, i) {
-        final nap = naps[i];
-        final duration =
-            nap.durationMinutes != null ? '${nap.durationMinutes} min' : '';
-
-        return GiciCard(
-          onTap: canManage ? () => onEdit(nap) : null,
-          child: Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 12, vertical: 8),
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade50,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Column(
-                  children: [
-                    Text(
-                      _formatTime(nap.startedAt),
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w800,
-                        fontSize: 14,
-                      ),
-                    ),
-                    if (nap.endedAt != null) ...[
-                      Text(
-                        _formatTime(nap.endedAt!),
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 12,
-                          color: Colors.grey.shade500,
-                        ),
-                      ),
-                    ],
-                  ],
-                ),
-              ),
-              const SizedBox(width: 14),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    if (duration.isNotEmpty)
-                      Text(
-                        duration,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w700,
-                          fontSize: 15,
-                        ),
-                      ),
-                    if (nap.sleepQuality != null) ...[
-                      const SizedBox(height: 4),
-                      StatusPill(
-                        label: _qualityLabel(nap.sleepQuality!),
-                        color: _qualityColor(nap.sleepQuality!),
-                        small: true,
-                      ),
-                    ],
-                    if (nap.notes != null && nap.notes!.isNotEmpty) ...[
-                      const SizedBox(height: 4),
-                      Text(
-                        nap.notes!,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.grey.shade500,
-                        ),
-                      ),
-                    ],
-                  ],
-                ),
-              ),
-              if (canManage)
-                Icon(
-                  Icons.edit_rounded,
-                  size: 18,
-                  color: Colors.grey.shade300,
-                ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  String _qualityLabel(String q) {
-    switch (q) {
-      case 'good':
-        return 'Buena';
-      case 'fair':
-        return 'Regular';
-      case 'poor':
-        return 'Mala';
-      case 'restless':
-        return 'Inquieto';
-      default:
-        return q;
-    }
-  }
-
-  Color _qualityColor(String q) {
-    switch (q) {
-      case 'good':
-        return const Color(0xFF43A047);
-      case 'fair':
-        return const Color(0xFFFFA726);
-      case 'poor':
-        return const Color(0xFFE53935);
-      case 'restless':
-        return const Color(0xFFFF7043);
-      default:
-        return Colors.grey;
-    }
-  }
-}
-
-// ---------------------------------------------------------------------------
-// Bowel tab
-// ---------------------------------------------------------------------------
-class _BowelTab extends StatelessWidget {
-  const _BowelTab({
-    required this.entries,
-    required this.canManage,
-    required this.onAdd,
-    required this.onEdit,
-  });
-
-  final List<BowelMovementEntry> entries;
-  final bool canManage;
-  final VoidCallback onAdd;
-  final void Function(BowelMovementEntry) onEdit;
-
-  @override
-  Widget build(BuildContext context) {
-    if (entries.isEmpty) {
-      return const EmptyState(
-        icon: Icons.baby_changing_station_outlined,
-        message: 'Sin deposiciones registradas.',
-      );
-    }
-
-    return ListView.builder(
-      padding: const EdgeInsets.fromLTRB(16, 0, 16, 88),
-      itemCount: entries.length,
-      itemBuilder: (context, i) {
-        final entry = entries[i];
-        return GiciCard(
-          onTap: canManage ? () => onEdit(entry) : null,
-          child: Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 12, vertical: 8),
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade50,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Text(
-                  _formatTime(entry.eventAt),
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w800,
-                    fontSize: 16,
-                  ),
-                ),
-              ),
-              const SizedBox(width: 14),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    StatusPill(
-                      label: _bowelTypeLabel(entry.eventType),
-                      color: const Color(0xFF4DB6AC),
-                      small: true,
-                    ),
-                    if (entry.consistency != null &&
-                        entry.consistency!.isNotEmpty) ...[
-                      const SizedBox(height: 4),
-                      Text(
-                        'Consistencia: ${entry.consistency}',
-                        style: TextStyle(
-                          fontSize: 13,
-                          color: Colors.grey.shade600,
-                        ),
-                      ),
-                    ],
-                    if (entry.notes != null &&
-                        entry.notes!.isNotEmpty) ...[
-                      const SizedBox(height: 4),
-                      Text(
-                        entry.notes!,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.grey.shade500,
-                        ),
-                      ),
-                    ],
-                  ],
-                ),
-              ),
-              if (canManage)
-                Icon(
-                  Icons.edit_rounded,
-                  size: 18,
-                  color: Colors.grey.shade300,
-                ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  String _bowelTypeLabel(String type) {
-    switch (type) {
-      case 'diaper_change':
-        return 'Panal';
-      case 'toilet':
-        return 'WC';
-      default:
-        return type;
-    }
   }
 }

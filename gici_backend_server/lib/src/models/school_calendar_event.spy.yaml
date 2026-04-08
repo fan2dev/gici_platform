@@ -1,0 +1,27 @@
+# School calendar event (holidays, excursions, meetings, etc.)
+
+class: SchoolCalendarEvent
+
+table: school_calendar_event
+
+fields:
+  id: UuidValue?, defaultPersist=random
+  organizationId: UuidValue
+  title: String
+  description: String?
+  eventDate: DateTime
+  endDate: DateTime?
+  eventType: String
+  isRecurring: bool
+  createdByUserId: UuidValue
+  createdAt: DateTime
+  updatedAt: DateTime
+  deletedAt: DateTime?
+
+indexes:
+  cal_org_idx:
+    fields: organizationId
+  cal_date_idx:
+    fields: eventDate
+  cal_type_idx:
+    fields: eventType

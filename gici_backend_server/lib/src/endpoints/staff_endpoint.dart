@@ -54,7 +54,7 @@ class StaffEndpoint extends Endpoint {
     );
   }
 
-  /// Create a new staff or admin user.
+  /// Create a new user (staff, admin, other_staff, or guardian).
   Future<AppUser> createStaffUser(
     Session session, {
     required String email,
@@ -68,6 +68,7 @@ class StaffEndpoint extends Endpoint {
     _accessControl.requireRole(actor, allowedRoles: [
       'platform_super_admin',
       'organization_admin',
+      'staff',
     ]);
     final orgId = actor.organizationId!;
 
@@ -132,5 +133,88 @@ class StaffEndpoint extends Endpoint {
     );
 
     return updated;
+  }
+
+  /// Assign a classroom permission to a staff user.
+  Future<StaffClassroomPermission> assignClassroomPermission(
+    Session session, {
+    required UuidValue userId,
+    required UuidValue classroomId,
+    required String role,
+  }) async {
+    final actor = await getAuthenticatedUser(session);
+    _accessControl.requireRole(actor, allowedRoles: [
+      'platform_super_admin',
+      'organization_admin',
+    ]);
+    final orgId = actor.organizationId!;
+
+    final permission = await _staffService.assignClassroomPermission(
+      session,
+      organizationId: orgId,
+      userId: userId,
+      classroomId: classroomId,
+      role: role,
+    );
+
+    await _activityLog.log(
+      session,
+      organizationId: orgId,
+      userId: actor.id!,
+      action: 'classroom_permission_assigned',
+      entityType: 'staff_classroom_permission',
+      entityId: permission.id?.toString(),
+    );
+
+    return permission;
+  }
+
+  /// Remove a classroom permission from a staff user.
+  Future<void> removeClassroomPermission(
+    Session session, {
+    required UuidValue userId,
+    required UuidValue classroomId,
+  }) async {
+    final actor = await getAuthenticatedUser(session);
+    _accessControl.requireRole(actor, allowedRoles: [
+      'platform_super_admin',
+      'organization_admin',
+    ]);
+    final orgId = actor.organizationId!;
+
+    await _staffService.removeClassroomPermission(
+      session,
+      organizationId: orgId,
+      userId: userId,
+      classroomId: classroomId,
+    );
+
+    await _activityLog.log(
+      session,
+      organizationId: orgId,
+      userId: actor.id!,
+      action: 'classroom_permission_removed',
+      entityType: 'staff_classroom_permission',
+      entityId: '${userId}_$classroomId',
+    );
+  }
+
+  /// List classroom permissions. If userId is provided, filters to that user.
+  Future<List<StaffClassroomPermission>> listStaffPermissions(
+    Session session, {
+    UuidValue? userId,
+  }) async {
+    final actor = await getAuthenticatedUser(session);
+    _accessControl.requireRole(actor, allowedRoles: [
+      'platform_super_admin',
+      'organization_admin',
+    ]);
+    final orgId = actor.organizationId!;
+
+    return _staffService.listStaffPermissions(
+      session,
+      organizationId: orgId,
+      userId: userId,
+    );
   }
 }

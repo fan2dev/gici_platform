@@ -1,23 +1,33 @@
 import 'package:flutter/material.dart';
 
+import '../config/app_config.dart';
+
 /// Modern 2026 design system for GICI Platform.
 /// Clean, spacious, with depth through subtle shadows and layered surfaces.
 class AppTheme {
   AppTheme._();
 
   static ThemeData light(Color seedColor) {
-    final scheme = ColorScheme.fromSeed(
+    final baseScheme = ColorScheme.fromSeed(
       seedColor: seedColor,
       brightness: Brightness.light,
+    );
+
+    // Force the actual seed color as primary instead of Material 3's diluted version
+    final scheme = baseScheme.copyWith(
+      primary: seedColor,
+      onPrimary: Colors.white,
+      primaryContainer: Color.lerp(seedColor, Colors.white, 0.85)!,
+      onPrimaryContainer: seedColor,
     );
 
     return ThemeData(
       useMaterial3: true,
       colorScheme: scheme,
-      scaffoldBackgroundColor: const Color(0xFFF5F5F7),
+      scaffoldBackgroundColor: AppConfig.current.surfaceColor,
 
       // Typography — clean, modern, readable
-      fontFamily: '.SF Pro Display',
+      fontFamily: 'Nunito',
       textTheme: const TextTheme(
         displayLarge: TextStyle(fontSize: 34, fontWeight: FontWeight.w800, letterSpacing: -1.0, height: 1.15),
         displayMedium: TextStyle(fontSize: 28, fontWeight: FontWeight.w700, letterSpacing: -0.8, height: 1.2),
@@ -40,7 +50,7 @@ class AppTheme {
       appBarTheme: AppBarTheme(
         elevation: 0,
         scrolledUnderElevation: 0,
-        backgroundColor: const Color(0xFFF5F5F7).withValues(alpha: 0.85),
+        backgroundColor: AppConfig.current.surfaceColor.withValues(alpha: 0.85),
         surfaceTintColor: Colors.transparent,
         centerTitle: false,
         titleTextStyle: TextStyle(
@@ -56,7 +66,7 @@ class AppTheme {
         elevation: 0,
         margin: EdgeInsets.zero,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(24),
         ),
         color: Colors.white,
         surfaceTintColor: Colors.transparent,
@@ -128,7 +138,7 @@ class AppTheme {
       // Chips — rounded pills
       chipTheme: ChipThemeData(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
         labelStyle: const TextStyle(fontWeight: FontWeight.w600, fontSize: 12),
         side: BorderSide.none,
       ),

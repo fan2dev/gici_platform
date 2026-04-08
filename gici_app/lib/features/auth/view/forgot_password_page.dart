@@ -46,7 +46,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       _isLoading = false;
       _codeSent = true;
       _isError = false;
-      _message = 'Se ha enviado un codigo de verificacion a tu email.';
+      _message = 'Se ha enviado un código de verificación a tu email.';
     });
   }
 
@@ -69,7 +69,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     if (success && mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Text('Contrasena actualizada. Inicia sesion.'),
+          content: const Text('Contraseña actualizada. Inicia sesión.'),
           behavior: SnackBarBehavior.floating,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
@@ -343,7 +343,7 @@ class _ForgotPasswordCard extends StatelessWidget {
                   foregroundColor: colorScheme.primary,
                 ),
                 child: const Text(
-                  'Volver al inicio de sesion',
+                  'Volver al inicio de sesión',
                   style: TextStyle(fontWeight: FontWeight.w500),
                 ),
               ),

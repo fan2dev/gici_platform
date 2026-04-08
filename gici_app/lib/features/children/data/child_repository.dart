@@ -65,4 +65,34 @@ class ChildRepository {
       childId: childId,
     );
   }
+
+  Future<ChildGuardianRelation> linkGuardian({
+    required UuidValue childId,
+    required String email,
+    required String firstName,
+    required String lastName,
+    required String relation,
+    String? phone,
+    String? password,
+    bool isPrimary = false,
+  }) {
+    return _client.child.linkGuardian(
+      childId: childId,
+      email: email,
+      firstName: firstName,
+      lastName: lastName,
+      relation: relation,
+      phone: phone,
+      password: password,
+      isPrimary: isPrimary,
+    );
+  }
+
+  Future<List<ChildGuardianRelation>> listGuardians({
+    required UuidValue childId,
+  }) {
+    return _client.child.listGuardians(
+      childId: childId,
+    );
+  }
 }

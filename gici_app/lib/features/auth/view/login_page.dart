@@ -151,7 +151,7 @@ class _LoginCard extends StatelessWidget {
               ),
               const SizedBox(height: 4),
               Text(
-                'Inicia sesion en tu centro',
+                'Inicia sesión en tu centro',
                 style: theme.textTheme.bodyMedium?.copyWith(
                   color: Colors.grey.shade600,
                 ),
@@ -198,7 +198,7 @@ class _LoginCard extends StatelessWidget {
                 controller: passwordController,
                 obscureText: obscurePassword,
                 decoration: InputDecoration(
-                  hintText: 'Contrasena',
+                  hintText: 'Contraseña',
                   prefixIcon: Icon(
                     Icons.lock_outlined,
                     color: Colors.grey.shade500,
@@ -302,7 +302,7 @@ class _LoginCard extends StatelessWidget {
                             color: Colors.white,
                           ),
                         )
-                      : const Text('Iniciar sesion'),
+                      : const Text('Iniciar sesión'),
                 ),
               ),
 

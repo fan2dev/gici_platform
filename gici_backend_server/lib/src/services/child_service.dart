@@ -43,6 +43,7 @@ class ChildService {
       emergencyContactName: null,
       emergencyContactPhone: null,
       enrollmentDate: now,
+      menuType: null,
       status: 'active',
       createdAt: now,
       updatedAt: now,

@@ -7,9 +7,9 @@ const borreguetConfig = AppConfig(
   appName: 'El Borreguet',
   bundleId: 'com.elborreguet.app',
   apiUrl: 'http://localhost:8080/',
-  seedColor: Color(0xFFD32F2F),         // Red primary
+  seedColor: Color(0xFFCC0000),         // Ferrari red primary
   secondaryColor: Color(0xFF616161),     // Grey secondary
-  accentColor: Color(0xFFFF5252),        // Bright red accent
-  surfaceColor: Color(0xFFFAFAFA),       // Light grey surface
+  accentColor: Color(0xFFFF0000),        // Bright Ferrari red accent
+  surfaceColor: Color(0xFFFFF0F0),       // Warmer pink surface
   logoAsset: null,
 );

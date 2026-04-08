@@ -27,6 +27,9 @@ abstract class Child
     this.emergencyContactName,
     this.emergencyContactPhone,
     this.enrollmentDate,
+    this.transportEnabled,
+    this.busRoute,
+    this.menuType,
     required this.status,
     required this.createdAt,
     required this.updatedAt,
@@ -47,6 +50,9 @@ abstract class Child
     String? emergencyContactName,
     String? emergencyContactPhone,
     DateTime? enrollmentDate,
+    bool? transportEnabled,
+    String? busRoute,
+    String? menuType,
     required String status,
     required DateTime createdAt,
     required DateTime updatedAt,
@@ -77,6 +83,9 @@ abstract class Child
           ? null
           : _i1.DateTimeJsonExtension.fromJson(
               jsonSerialization['enrollmentDate']),
+      transportEnabled: jsonSerialization['transportEnabled'] as bool?,
+      busRoute: jsonSerialization['busRoute'] as String?,
+      menuType: jsonSerialization['menuType'] as String?,
       status: jsonSerialization['status'] as String,
       createdAt:
           _i1.DateTimeJsonExtension.fromJson(jsonSerialization['createdAt']),
@@ -119,6 +128,12 @@ abstract class Child
 
   DateTime? enrollmentDate;
 
+  bool? transportEnabled;
+
+  String? busRoute;
+
+  String? menuType;
+
   String status;
 
   DateTime createdAt;
@@ -147,6 +162,9 @@ abstract class Child
     String? emergencyContactName,
     String? emergencyContactPhone,
     DateTime? enrollmentDate,
+    bool? transportEnabled,
+    String? busRoute,
+    String? menuType,
     String? status,
     DateTime? createdAt,
     DateTime? updatedAt,
@@ -170,6 +188,9 @@ abstract class Child
       if (emergencyContactPhone != null)
         'emergencyContactPhone': emergencyContactPhone,
       if (enrollmentDate != null) 'enrollmentDate': enrollmentDate?.toJson(),
+      if (transportEnabled != null) 'transportEnabled': transportEnabled,
+      if (busRoute != null) 'busRoute': busRoute,
+      if (menuType != null) 'menuType': menuType,
       'status': status,
       'createdAt': createdAt.toJson(),
       'updatedAt': updatedAt.toJson(),
@@ -195,6 +216,9 @@ abstract class Child
       if (emergencyContactPhone != null)
         'emergencyContactPhone': emergencyContactPhone,
       if (enrollmentDate != null) 'enrollmentDate': enrollmentDate?.toJson(),
+      if (transportEnabled != null) 'transportEnabled': transportEnabled,
+      if (busRoute != null) 'busRoute': busRoute,
+      if (menuType != null) 'menuType': menuType,
       'status': status,
       'createdAt': createdAt.toJson(),
       'updatedAt': updatedAt.toJson(),
@@ -249,6 +273,9 @@ class _ChildImpl extends Child {
     String? emergencyContactName,
     String? emergencyContactPhone,
     DateTime? enrollmentDate,
+    bool? transportEnabled,
+    String? busRoute,
+    String? menuType,
     required String status,
     required DateTime createdAt,
     required DateTime updatedAt,
@@ -267,6 +294,9 @@ class _ChildImpl extends Child {
           emergencyContactName: emergencyContactName,
           emergencyContactPhone: emergencyContactPhone,
           enrollmentDate: enrollmentDate,
+          transportEnabled: transportEnabled,
+          busRoute: busRoute,
+          menuType: menuType,
           status: status,
           createdAt: createdAt,
           updatedAt: updatedAt,
@@ -291,6 +321,9 @@ class _ChildImpl extends Child {
     Object? emergencyContactName = _Undefined,
     Object? emergencyContactPhone = _Undefined,
     Object? enrollmentDate = _Undefined,
+    Object? transportEnabled = _Undefined,
+    Object? busRoute = _Undefined,
+    Object? menuType = _Undefined,
     String? status,
     DateTime? createdAt,
     DateTime? updatedAt,
@@ -315,6 +348,10 @@ class _ChildImpl extends Child {
           : this.emergencyContactPhone,
       enrollmentDate:
           enrollmentDate is DateTime? ? enrollmentDate : this.enrollmentDate,
+      transportEnabled:
+          transportEnabled is bool? ? transportEnabled : this.transportEnabled,
+      busRoute: busRoute is String? ? busRoute : this.busRoute,
+      menuType: menuType is String? ? menuType : this.menuType,
       status: status ?? this.status,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
@@ -373,6 +410,18 @@ class ChildTable extends _i1.Table<_i1.UuidValue?> {
       'enrollmentDate',
       this,
     );
+    transportEnabled = _i1.ColumnBool(
+      'transportEnabled',
+      this,
+    );
+    busRoute = _i1.ColumnString(
+      'busRoute',
+      this,
+    );
+    menuType = _i1.ColumnString(
+      'menuType',
+      this,
+    );
     status = _i1.ColumnString(
       'status',
       this,
@@ -415,6 +464,12 @@ class ChildTable extends _i1.Table<_i1.UuidValue?> {
 
   late final _i1.ColumnDateTime enrollmentDate;
 
+  late final _i1.ColumnBool transportEnabled;
+
+  late final _i1.ColumnString busRoute;
+
+  late final _i1.ColumnString menuType;
+
   late final _i1.ColumnString status;
 
   late final _i1.ColumnDateTime createdAt;
@@ -438,6 +493,9 @@ class ChildTable extends _i1.Table<_i1.UuidValue?> {
         emergencyContactName,
         emergencyContactPhone,
         enrollmentDate,
+        transportEnabled,
+        busRoute,
+        menuType,
         status,
         createdAt,
         updatedAt,

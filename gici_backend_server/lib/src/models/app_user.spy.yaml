@@ -14,6 +14,9 @@ fields:
   lastName: String
   phone: String?
   avatarUrl: String?
+  dni: String?
+  address: String?
+  gender: String?
   role: String
   isActive: bool
   emailVerified: bool

@@ -4,7 +4,7 @@ import 'package:uuid/uuid_value.dart';
 
 import '../data/auth_repository.dart';
 
-enum AppRole { platformSuperAdmin, organizationAdmin, staff, guardian }
+enum AppRole { platformSuperAdmin, organizationAdmin, staff, otherStaff, guardian }
 
 class AuthState extends Equatable {
   const AuthState({
@@ -54,13 +54,16 @@ class AuthState extends Equatable {
   bool get isStaffOrAbove =>
       role == AppRole.platformSuperAdmin ||
       role == AppRole.organizationAdmin ||
-      role == AppRole.staff;
+      role == AppRole.staff ||
+      role == AppRole.otherStaff;
 
   bool get isAdmin =>
       role == AppRole.platformSuperAdmin ||
       role == AppRole.organizationAdmin;
 
   bool get isGuardian => role == AppRole.guardian;
+
+  bool get isOtherStaff => role == AppRole.otherStaff;
 
   String get displayName {
     if (firstName != null && lastName != null) return '$firstName $lastName';
@@ -198,6 +201,8 @@ class AuthCubit extends Cubit<AuthState> {
         return AppRole.organizationAdmin;
       case 'staff':
         return AppRole.staff;
+      case 'other_staff':
+        return AppRole.otherStaff;
       case 'guardian':
       default:
         return AppRole.guardian;

@@ -40,24 +40,25 @@ class GiciCard extends StatelessWidget {
                 ),
               ],
             ),
-            child: Row(
-              children: [
-                if (accentColor != null)
-                  Container(
-                    width: 4,
-                    constraints: const BoxConstraints(minHeight: 60),
-                    decoration: BoxDecoration(
-                      color: accentColor,
-                      borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(20),
-                        bottomLeft: Radius.circular(20),
+            child: IntrinsicHeight(
+              child: Row(
+                children: [
+                  if (accentColor != null)
+                    Container(
+                      width: 4,
+                      decoration: BoxDecoration(
+                        color: accentColor,
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(20),
+                          bottomLeft: Radius.circular(20),
+                        ),
                       ),
                     ),
+                  Expanded(
+                    child: Padding(padding: padding, child: child),
                   ),
-                Expanded(
-                  child: Padding(padding: padding, child: child),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

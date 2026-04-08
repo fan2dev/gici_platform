@@ -11,7 +11,8 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod/serverpod.dart' as _i1;
 import 'menu_entry.dart' as _i2;
-import 'notification_record.dart' as _i3;
+import 'school_calendar_event.dart' as _i3;
+import 'notification_record.dart' as _i4;
 
 abstract class DashboardSummary
     implements _i1.SerializableModel, _i1.ProtocolSerialization {
@@ -22,6 +23,7 @@ abstract class DashboardSummary
     required this.unreadNotifications,
     required this.pendingRequests,
     required this.todayMenuEntries,
+    required this.todayEvents,
     required this.recentNotifications,
   });
 
@@ -32,7 +34,8 @@ abstract class DashboardSummary
     required int unreadNotifications,
     required int pendingRequests,
     required List<_i2.MenuEntry> todayMenuEntries,
-    required List<_i3.NotificationRecord> recentNotifications,
+    required List<_i3.SchoolCalendarEvent> todayEvents,
+    required List<_i4.NotificationRecord> recentNotifications,
   }) = _DashboardSummaryImpl;
 
   factory DashboardSummary.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -45,9 +48,13 @@ abstract class DashboardSummary
       todayMenuEntries: (jsonSerialization['todayMenuEntries'] as List)
           .map((e) => _i2.MenuEntry.fromJson((e as Map<String, dynamic>)))
           .toList(),
+      todayEvents: (jsonSerialization['todayEvents'] as List)
+          .map((e) =>
+              _i3.SchoolCalendarEvent.fromJson((e as Map<String, dynamic>)))
+          .toList(),
       recentNotifications: (jsonSerialization['recentNotifications'] as List)
           .map((e) =>
-              _i3.NotificationRecord.fromJson((e as Map<String, dynamic>)))
+              _i4.NotificationRecord.fromJson((e as Map<String, dynamic>)))
           .toList(),
     );
   }
@@ -64,7 +71,9 @@ abstract class DashboardSummary
 
   List<_i2.MenuEntry> todayMenuEntries;
 
-  List<_i3.NotificationRecord> recentNotifications;
+  List<_i3.SchoolCalendarEvent> todayEvents;
+
+  List<_i4.NotificationRecord> recentNotifications;
 
   /// Returns a shallow copy of this [DashboardSummary]
   /// with some or all fields replaced by the given arguments.
@@ -76,7 +85,8 @@ abstract class DashboardSummary
     int? unreadNotifications,
     int? pendingRequests,
     List<_i2.MenuEntry>? todayMenuEntries,
-    List<_i3.NotificationRecord>? recentNotifications,
+    List<_i3.SchoolCalendarEvent>? todayEvents,
+    List<_i4.NotificationRecord>? recentNotifications,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -88,6 +98,7 @@ abstract class DashboardSummary
       'pendingRequests': pendingRequests,
       'todayMenuEntries':
           todayMenuEntries.toJson(valueToJson: (v) => v.toJson()),
+      'todayEvents': todayEvents.toJson(valueToJson: (v) => v.toJson()),
       'recentNotifications':
           recentNotifications.toJson(valueToJson: (v) => v.toJson()),
     };
@@ -103,6 +114,8 @@ abstract class DashboardSummary
       'pendingRequests': pendingRequests,
       'todayMenuEntries':
           todayMenuEntries.toJson(valueToJson: (v) => v.toJsonForProtocol()),
+      'todayEvents':
+          todayEvents.toJson(valueToJson: (v) => v.toJsonForProtocol()),
       'recentNotifications':
           recentNotifications.toJson(valueToJson: (v) => v.toJsonForProtocol()),
     };
@@ -122,7 +135,8 @@ class _DashboardSummaryImpl extends DashboardSummary {
     required int unreadNotifications,
     required int pendingRequests,
     required List<_i2.MenuEntry> todayMenuEntries,
-    required List<_i3.NotificationRecord> recentNotifications,
+    required List<_i3.SchoolCalendarEvent> todayEvents,
+    required List<_i4.NotificationRecord> recentNotifications,
   }) : super._(
           childrenCount: childrenCount,
           classroomsCount: classroomsCount,
@@ -130,6 +144,7 @@ class _DashboardSummaryImpl extends DashboardSummary {
           unreadNotifications: unreadNotifications,
           pendingRequests: pendingRequests,
           todayMenuEntries: todayMenuEntries,
+          todayEvents: todayEvents,
           recentNotifications: recentNotifications,
         );
 
@@ -144,7 +159,8 @@ class _DashboardSummaryImpl extends DashboardSummary {
     int? unreadNotifications,
     int? pendingRequests,
     List<_i2.MenuEntry>? todayMenuEntries,
-    List<_i3.NotificationRecord>? recentNotifications,
+    List<_i3.SchoolCalendarEvent>? todayEvents,
+    List<_i4.NotificationRecord>? recentNotifications,
   }) {
     return DashboardSummary(
       childrenCount: childrenCount ?? this.childrenCount,
@@ -154,6 +170,8 @@ class _DashboardSummaryImpl extends DashboardSummary {
       pendingRequests: pendingRequests ?? this.pendingRequests,
       todayMenuEntries: todayMenuEntries ??
           this.todayMenuEntries.map((e0) => e0.copyWith()).toList(),
+      todayEvents:
+          todayEvents ?? this.todayEvents.map((e0) => e0.copyWith()).toList(),
       recentNotifications: recentNotifications ??
           this.recentNotifications.map((e0) => e0.copyWith()).toList(),
     );

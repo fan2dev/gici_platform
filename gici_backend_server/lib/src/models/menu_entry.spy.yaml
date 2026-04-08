@@ -1,4 +1,4 @@
-# Daily menu entry
+# Daily menu entry — supports multiple menu tracks (normal, menu2/triturado)
 
 class: MenuEntry
 
@@ -8,10 +8,10 @@ fields:
   id: UuidValue?, defaultPersist=random
   organizationId: UuidValue
   menuDate: DateTime
+  menuTrack: String
   mealType: String
   title: String
   description: String?
-  classroomId: UuidValue?
   createdByUserId: UuidValue
   createdAt: DateTime
   updatedAt: DateTime
@@ -24,3 +24,5 @@ indexes:
     fields: menuDate
   menu_org_date_idx:
     fields: organizationId, menuDate
+  menu_track_idx:
+    fields: menuTrack

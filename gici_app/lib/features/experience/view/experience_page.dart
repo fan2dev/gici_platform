@@ -4,7 +4,10 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../../app/widgets/error_state.dart';
+import '../../../app/widgets/gici_card.dart';
 import '../../../app/widgets/loading_state.dart';
+import '../../../app/widgets/section_header.dart';
+import '../../../app/widgets/status_pill.dart';
 import '../../../core/di/injection.dart';
 import '../../auth/cubit/auth_cubit.dart';
 import '../cubit/experience_cubit.dart';
@@ -32,18 +35,25 @@ class _ExperienceView extends StatelessWidget {
     final canManageMenu = auth.isStaffOrAbove;
 
     return Scaffold(
+      backgroundColor: const Color(0xFFF5F5F7),
       appBar: AppBar(
-        title: const Text('Centro'),
+        title: const Text(
+          'Centro',
+          style: TextStyle(fontWeight: FontWeight.w700),
+        ),
+        backgroundColor: Colors.white,
+        surfaceTintColor: Colors.white,
+        elevation: 0,
         leading: IconButton(
-          onPressed: () => context.go('/dashboard'),
+          onPressed: () => context.go('/direccion'),
           icon: const Icon(Icons.arrow_back),
         ),
       ),
       floatingActionButton: canManageMenu
-          ? FloatingActionButton.extended(
+          ? FloatingActionButton(
               onPressed: () => _showMenuEntryForm(context),
-              icon: const Icon(Icons.restaurant_menu),
-              label: const Text('Nuevo menu'),
+              backgroundColor: Theme.of(context).colorScheme.primary,
+              child: const Icon(Icons.restaurant_menu, color: Colors.white),
             )
           : null,
       body: BlocBuilder<ExperienceCubit, ExperienceState>(
@@ -65,158 +75,203 @@ class _ExperienceView extends StatelessWidget {
               children: [
                 // Center info card
                 if (state.centerInfo != null) ...[
-                  Text(
-                    'Informacion del centro',
-                    style: Theme.of(context).textTheme.titleMedium,
+                  const SectionHeader(
+                    title: 'Información del centro',
+                    icon: '\u{1F3EB}',
                   ),
-                  const SizedBox(height: 8),
-                  Card(
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              CircleAvatar(
-                                radius: 24,
-                                child: Text(
-                                  state.centerInfo!.name.isNotEmpty
-                                      ? state.centerInfo!.name[0]
-                                          .toUpperCase()
-                                      : '?',
-                                  style: const TextStyle(fontSize: 20),
-                                ),
-                              ),
-                              const SizedBox(width: 12),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      state.centerInfo!.name,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleLarge,
-                                    ),
-                                    Text(
-                                      state.centerInfo!.slug,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodySmall
-                                          ?.copyWith(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .outline,
-                                          ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
+                  GiciCard(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          state.centerInfo!.name,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w800,
+                            fontSize: 18,
                           ),
-                          const Divider(height: 24),
-                          _InfoRow(
-                            icon: Icons.email_outlined,
-                            label: 'Email',
-                            value: state.centerInfo!.contactEmail,
+                        ),
+                        Text(
+                          state.centerInfo!.slug,
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.grey.shade500,
                           ),
-                        ],
-                      ),
+                        ),
+                        const SizedBox(height: 16),
+                        _InfoRow(
+                          emoji: '\u2709\uFE0F',
+                          label: 'Email',
+                          value: state.centerInfo!.contactEmail,
+                        ),
+                      ],
                     ),
                   ),
                 ],
 
-                const SizedBox(height: 24),
+                const SizedBox(height: 8),
 
                 // Onboarding section
-                Text(
-                  'Onboarding',
-                  style: Theme.of(context).textTheme.titleMedium,
+                const SectionHeader(
+                  title: 'Configuración inicial',
+                  icon: '\u{1F680}',
                 ),
-                const SizedBox(height: 8),
-                Card(
-                  child: ListTile(
-                    leading: CircleAvatar(
-                      backgroundColor: state.isOnboardingComplete
-                          ? Colors.green
-                          : Colors.orange,
-                      child: Icon(
-                        state.isOnboardingComplete
-                            ? Icons.check
-                            : Icons.pending,
-                        color: Colors.white,
+                GiciCard(
+                  accentColor: state.isOnboardingComplete
+                      ? Colors.green
+                      : Colors.orange,
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 44,
+                        height: 44,
+                        decoration: BoxDecoration(
+                          color: state.isOnboardingComplete
+                              ? Colors.green.withValues(alpha: 0.1)
+                              : Colors.orange.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Icon(
+                          state.isOnboardingComplete
+                              ? Icons.check_circle
+                              : Icons.pending,
+                          color: state.isOnboardingComplete
+                              ? Colors.green
+                              : Colors.orange,
+                          size: 22,
+                        ),
                       ),
-                    ),
-                    title: Text(
-                      state.isOnboardingComplete
-                          ? 'Onboarding completado'
-                          : 'Onboarding pendiente',
-                    ),
-                    subtitle: Text(
-                      state.isOnboardingComplete
-                          ? 'Completado el ${state.onboardingState!.completedAt!.toIso8601String().substring(0, 10)}'
-                          : 'Acepta los terminos para completar',
-                    ),
-                    trailing: !state.isOnboardingComplete
-                        ? FilledButton(
-                            onPressed: () => context
-                                .read<ExperienceCubit>()
-                                .completeOnboarding(),
-                            child: const Text('Completar'),
-                          )
-                        : null,
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              state.isOnboardingComplete
+                                  ? 'Configuración completada'
+                                  : 'Configuración pendiente',
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w700,
+                                fontSize: 14,
+                              ),
+                            ),
+                            const SizedBox(height: 2),
+                            Text(
+                              state.isOnboardingComplete
+                                  ? 'Completado el ${state.onboardingState!.completedAt!.toIso8601String().substring(0, 10)}'
+                                  : 'Acepta los términos para completar',
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.grey.shade500,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      if (!state.isOnboardingComplete)
+                        FilledButton(
+                          onPressed: () => context
+                              .read<ExperienceCubit>()
+                              .completeOnboarding(),
+                          style: FilledButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(100),
+                            ),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 8),
+                          ),
+                          child: const Text('Completar',
+                              style: TextStyle(fontSize: 12)),
+                        ),
+                    ],
                   ),
                 ),
 
-                const SizedBox(height: 24),
-
-                // Menu section
-                Row(
-                  children: [
-                    Text(
-                      'Menu diario',
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                    const Spacer(),
-                    if (state.menuEntries.isNotEmpty)
-                      Text(
-                        '${state.menuEntries.length} entradas',
-                        style:
-                            Theme.of(context).textTheme.bodySmall,
-                      ),
-                  ],
-                ),
                 const SizedBox(height: 8),
 
-                if (state.menuEntries.isEmpty)
-                  Card(
-                    child: Padding(
-                      padding: const EdgeInsets.all(24),
-                      child: Column(
-                        children: [
-                          Icon(
-                            Icons.restaurant_outlined,
-                            size: 48,
-                            color: Theme.of(context)
-                                .colorScheme
-                                .outline,
+                // Menu editor link (admin only)
+                if (canManageMenu) ...[
+                  const SectionHeader(
+                    title: 'Gesti\u00f3n de men\u00fas',
+                    icon: '\u{1F4CB}',
+                  ),
+                  GiciCard(
+                    onTap: () => context.go('/menu-editor'),
+                    accentColor: const Color(0xFFFB8C00),
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 44,
+                          height: 44,
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFFB8C00).withValues(alpha: 0.1),
+                            borderRadius: BorderRadius.circular(12),
                           ),
-                          const SizedBox(height: 8),
-                          Text(
-                            'No hay entradas de menu',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.copyWith(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .outline,
+                          child: const Icon(
+                            Icons.calendar_month_rounded,
+                            color: Color(0xFFFB8C00),
+                            size: 22,
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        const Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Editor de men\u00fas mensuales',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 14,
                                 ),
+                              ),
+                              SizedBox(height: 2),
+                              Text(
+                                'Subir y editar men\u00fas por mes',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
+                        ),
+                        const Icon(Icons.chevron_right, color: Colors.grey),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                ],
+
+                // Menu section
+                SectionHeader(
+                  title: 'Men\u00fa diario',
+                  icon: '\u{1F37D}\uFE0F',
+                  action: state.menuEntries.isNotEmpty
+                      ? StatusPill(
+                          label: '${state.menuEntries.length} entradas',
+                          small: true,
+                        )
+                      : null,
+                ),
+
+                if (state.menuEntries.isEmpty)
+                  GiciCard(
+                    child: Column(
+                      children: [
+                        Icon(
+                          Icons.restaurant_outlined,
+                          size: 40,
+                          color: Colors.grey.shade300,
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          'No hay entradas de menú',
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: Colors.grey.shade500,
+                          ),
+                        ),
+                      ],
                     ),
                   )
                 else
@@ -224,6 +279,8 @@ class _ExperienceView extends StatelessWidget {
                     context,
                     state.menuEntries,
                   ),
+
+                const SizedBox(height: 80),
               ],
             ),
           );
@@ -259,39 +316,72 @@ class _ExperienceView extends StatelessWidget {
 
       widgets.add(
         Padding(
-          padding: const EdgeInsets.only(top: 8, bottom: 4),
+          padding: const EdgeInsets.only(top: 12, bottom: 8),
           child: Text(
             formattedDate,
-            style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                  color: Theme.of(context).colorScheme.primary,
-                ),
+            style: TextStyle(
+              fontWeight: FontWeight.w700,
+              fontSize: 13,
+              color: Theme.of(context).colorScheme.primary,
+            ),
           ),
         ),
       );
 
       for (final entry in dateEntries) {
         widgets.add(
-          Card(
-            child: ListTile(
-              leading: CircleAvatar(
-                child: Icon(_mealIcon(entry.mealType)),
-              ),
-              title: Text(entry.title),
-              subtitle: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    _mealLabel(entry.mealType),
-                    style: Theme.of(context).textTheme.bodySmall,
+          GiciCard(
+            child: Row(
+              children: [
+                Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: _mealColor(entry.mealType).withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(12),
                   ),
-                  if (entry.description != null &&
-                      entry.description!.isNotEmpty)
-                    Text(
-                      entry.description!,
-                      style: Theme.of(context).textTheme.bodySmall,
+                  child: Center(
+                    child: Text(
+                      _mealEmoji(entry.mealType),
+                      style: const TextStyle(fontSize: 18),
                     ),
-                ],
-              ),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        entry.title,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 14,
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        _mealLabel(entry.mealType),
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.grey.shade500,
+                        ),
+                      ),
+                      if (entry.description != null &&
+                          entry.description!.isNotEmpty) ...[
+                        const SizedBox(height: 2),
+                        Text(
+                          entry.description!,
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.grey.shade400,
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+              ],
             ),
           ),
         );
@@ -301,29 +391,52 @@ class _ExperienceView extends StatelessWidget {
     return widgets;
   }
 
-  IconData _mealIcon(String mealType) {
+  String _mealEmoji(String mealType) {
     switch (mealType) {
       case 'breakfast':
-        return Icons.free_breakfast;
+        return '\u{1F963}';
       case 'lunch':
-        return Icons.lunch_dining;
+        return '\u{1F37D}\uFE0F';
       case 'snack':
-        return Icons.cookie;
+        return '\u{1F34E}';
       case 'dinner':
-        return Icons.dinner_dining;
+        return '\u{1F37D}\uFE0F';
       default:
-        return Icons.restaurant;
+        return '\u{1F374}';
+    }
+  }
+
+  Color _mealColor(String mealType) {
+    switch (mealType) {
+      case 'breakfast':
+        return Colors.orange;
+      case 'lunch':
+        return Colors.green;
+      case 'snack':
+        return Colors.purple;
+      case 'dinner':
+        return Colors.blue;
+      default:
+        return Colors.grey;
     }
   }
 
   String _mealLabel(String mealType) {
     switch (mealType) {
+      case 'bottle':
+        return 'Biberón';
       case 'breakfast':
         return 'Desayuno';
       case 'lunch':
-        return 'Almuerzo';
+        return 'Comida';
+      case 'lunch_first':
+        return 'Primer plato';
+      case 'lunch_second':
+        return 'Segundo plato';
       case 'snack':
         return 'Merienda';
+      case 'dessert':
+        return 'Postre';
       case 'dinner':
         return 'Cena';
       default:
@@ -334,7 +447,8 @@ class _ExperienceView extends StatelessWidget {
   void _showMenuEntryForm(BuildContext context) {
     final titleController = TextEditingController();
     final descriptionController = TextEditingController();
-    String mealType = 'lunch';
+    String mealType = 'lunch_first';
+    String menuTrack = 'normal';
 
     showDialog<void>(
       context: context,
@@ -342,47 +456,72 @@ class _ExperienceView extends StatelessWidget {
         return StatefulBuilder(
           builder: (dialogContext, setDialogState) {
             return AlertDialog(
-              title: const Text('Nueva entrada de menu'),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20)),
+              title: const Text(
+                'Nueva entrada de men\u00fa',
+                style: TextStyle(fontWeight: FontWeight.w700),
+              ),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   TextField(
                     controller: titleController,
-                    decoration: const InputDecoration(
-                      labelText: 'Titulo *',
+                    decoration: InputDecoration(
+                      labelText: 'T\u00edtulo *',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
                     ),
                   ),
                   const SizedBox(height: 12),
                   TextField(
                     controller: descriptionController,
-                    decoration: const InputDecoration(
-                      labelText: 'Descripcion',
+                    decoration: InputDecoration(
+                      labelText: 'Descripci\u00f3n',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
                     ),
                     maxLines: 2,
                   ),
                   const SizedBox(height: 12),
                   DropdownButtonFormField<String>(
-                    value: mealType,
-                    decoration: const InputDecoration(
-                      labelText: 'Tipo de comida',
+                    value: menuTrack,
+                    decoration: InputDecoration(
+                      labelText: 'Tipo de men\u00fa',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
                     ),
                     items: const [
                       DropdownMenuItem(
-                        value: 'breakfast',
-                        child: Text('Desayuno'),
-                      ),
+                          value: 'normal', child: Text('Men\u00fa Normal')),
                       DropdownMenuItem(
-                        value: 'lunch',
-                        child: Text('Almuerzo'),
+                          value: 'menu2', child: Text('Men\u00fa 2 (Triturado)')),
+                    ],
+                    onChanged: (v) {
+                      if (v != null) {
+                        setDialogState(() => menuTrack = v);
+                      }
+                    },
+                  ),
+                  const SizedBox(height: 12),
+                  DropdownButtonFormField<String>(
+                    value: mealType,
+                    decoration: InputDecoration(
+                      labelText: 'Tipo de comida',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16),
                       ),
+                    ),
+                    items: const [
                       DropdownMenuItem(
-                        value: 'snack',
-                        child: Text('Merienda'),
-                      ),
+                          value: 'lunch_first', child: Text('Primer plato')),
                       DropdownMenuItem(
-                        value: 'dinner',
-                        child: Text('Cena'),
-                      ),
+                          value: 'lunch_second', child: Text('Segundo plato')),
+                      DropdownMenuItem(
+                          value: 'dessert', child: Text('Postre')),
                     ],
                     onChanged: (v) {
                       if (v != null) {
@@ -409,9 +548,15 @@ class _ExperienceView extends StatelessWidget {
                               descriptionController.text.trim().isEmpty
                                   ? null
                                   : descriptionController.text.trim(),
+                          menuTrack: menuTrack,
                         );
                     Navigator.of(dialogContext).pop();
                   },
+                  style: FilledButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(100),
+                    ),
+                  ),
                   child: const Text('Crear'),
                 ),
               ],
@@ -425,34 +570,39 @@ class _ExperienceView extends StatelessWidget {
 
 class _InfoRow extends StatelessWidget {
   const _InfoRow({
-    required this.icon,
+    required this.emoji,
     required this.label,
     required this.value,
   });
 
-  final IconData icon;
+  final String emoji;
   final String label;
   final String value;
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Icon(icon, size: 18, color: Theme.of(context).colorScheme.outline),
-        const SizedBox(width: 8),
-        Text(
-          '$label: ',
-          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: Theme.of(context).colorScheme.outline,
-              ),
-        ),
-        Expanded(
-          child: Text(
-            value,
-            style: Theme.of(context).textTheme.bodyMedium,
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        children: [
+          Text(emoji, style: const TextStyle(fontSize: 16)),
+          const SizedBox(width: 10),
+          Text(
+            '$label: ',
+            style: TextStyle(
+              fontSize: 13,
+              color: Colors.grey.shade500,
+              fontWeight: FontWeight.w500,
+            ),
           ),
-        ),
-      ],
+          Expanded(
+            child: Text(
+              value,
+              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

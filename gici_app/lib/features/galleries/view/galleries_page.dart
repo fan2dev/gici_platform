@@ -52,7 +52,7 @@ class _GalleriesView extends StatelessWidget {
           backgroundColor: const Color(0xFFF5F5F7),
           appBar: AppBar(
             title: const Text(
-              'Galerias',
+              'Galerías',
               style: TextStyle(fontWeight: FontWeight.w700),
             ),
             backgroundColor: Colors.white,
@@ -88,13 +88,13 @@ class _GalleriesView extends StatelessWidget {
             if (state.galleries.isEmpty) {
               return EmptyState(
                 icon: Icons.photo_library_outlined,
-                message: 'No hay galerias',
+                message: 'No hay galerías',
                 action: canManage
                     ? FilledButton.icon(
                         onPressed: () =>
                             _showCreateDialog(context),
                         icon: const Icon(Icons.add),
-                        label: const Text('Crear galeria'),
+                        label: const Text('Crear galería'),
                         style: FilledButton.styleFrom(
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(100),
@@ -150,7 +150,7 @@ class _GalleriesView extends StatelessWidget {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20)),
               title: const Text(
-                'Nueva galeria',
+                'Nueva galería',
                 style: TextStyle(fontWeight: FontWeight.w700),
               ),
               content: Column(
@@ -159,7 +159,7 @@ class _GalleriesView extends StatelessWidget {
                   TextField(
                     controller: titleController,
                     decoration: InputDecoration(
-                      labelText: 'Titulo *',
+                      labelText: 'Título *',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(16),
                       ),
@@ -169,7 +169,7 @@ class _GalleriesView extends StatelessWidget {
                   TextField(
                     controller: descriptionController,
                     decoration: InputDecoration(
-                      labelText: 'Descripcion',
+                      labelText: 'Descripción',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(16),
                       ),
@@ -188,7 +188,7 @@ class _GalleriesView extends StatelessWidget {
                     items: const [
                       DropdownMenuItem(
                         value: 'organization',
-                        child: Text('Organizacion'),
+                        child: Text('Organización'),
                       ),
                       DropdownMenuItem(
                         value: 'classroom',
@@ -253,6 +253,9 @@ class _GalleryCard extends StatelessWidget {
       'organization' => ('Todos', Colors.blue),
       'classroom' => ('Aula', Colors.orange),
       'child' => ('Alumno', Colors.purple),
+      'all' => ('Público', Colors.blue),
+      'staff' => ('Solo personal', Colors.teal),
+      'guardian' => ('Familias', Colors.deepPurple),
       _ => (gallery.audienceType as String, Colors.grey),
     };
 
@@ -299,10 +302,7 @@ class _GalleryCard extends StatelessWidget {
                 child: Icon(
                   Icons.photo_library_outlined,
                   size: 28,
-                  color: colors[colorIndex]
-                      .withValues(alpha: 1.0)
-                      .withRed(
-                          (colors[colorIndex].r * 0.6 * 255).toInt()),
+                  color: Colors.grey.shade400,
                 ),
               ),
               Expanded(
@@ -369,7 +369,7 @@ class _GalleryDetailView extends StatelessWidget {
       backgroundColor: const Color(0xFFF5F5F7),
       appBar: AppBar(
         title: Text(
-          gallery?.title ?? 'Galeria',
+          gallery?.title ?? 'Galería',
           style: const TextStyle(fontWeight: FontWeight.w700),
         ),
         backgroundColor: Colors.white,
@@ -386,7 +386,7 @@ class _GalleryDetailView extends StatelessWidget {
           : items.isEmpty
               ? const EmptyState(
                   icon: Icons.photo_outlined,
-                  message: 'Esta galeria no tiene fotos',
+                  message: 'Esta galería no tiene fotos',
                 )
               : GridView.builder(
                   padding: const EdgeInsets.all(16),
